@@ -1,15 +1,17 @@
 # Design work
 
-The active work is a serif extension of Noto Serif Hentaigana using Noto Serif JP
-components. GenSeki Hentaigana Gothic covers the complete sans target, including
+The active work is a unified serif font containing Noto Serif JP's full repertoire
+and historical kana. GenSeki Hentaigana Gothic covers the complete sans target, including
 all seven Unicode 18 additions. Its released Regular and Bold fonts serve as
 the sans option.
 
-## First serif proof
+## Unified Regular proof
 
-`scripts/serif.py` builds one static Regular font. The 290 historical outlines
-from Noto Serif Hentaigana remain unchanged. Noto Serif JP supplies the existing
-digraphs U+309F and U+30FF and components for the seventeen missing forms:
+`scripts/serif.py` builds one static Regular font with 17,033 encoded characters.
+All 17,923 glyphs from Noto Serif JP, their horizontal and vertical metrics and
+their original layout rules remain intact. The 290 historical outlines from Noto
+Serif Hentaigana remain unchanged. Noto Serif JP supplies the existing digraphs
+U+309F and U+30FF and components for the seventeen missing forms:
 
 - Hiragana WU combines KE strokes with HO's upper bar.
 - Hiragana KOTO uses TO's bowl with a newly drawn upper curve.
@@ -26,10 +28,17 @@ family name. `build/serif/sources.json` records the construction of each additio
 The new joins, spacing, reduced stroke weight and NE/WI terminals require visual
 review before expanding to further weights.
 
-Combining dakuten and handakuten have explicit anchors on all 309 base forms.
-Vertical substitutions select separate mark glyphs and anchors to keep the
-marks beside the base. This does not depend on optional vertical kerning.
-The font supplies 1000-unit vertical advances and zero advances for marks.
+The 307 historical forms absent from JP have explicit dakuten and handakuten
+anchors. A contextual `ccmp` substitution selects Hentaigana's mark outlines only
+after those historical bases. Vertical substitutions select separate marks and
+anchors. Modern Japanese retains JP's composition, positioning and vertical
+substitutions, including the vertical form of ゟ. The historical forms have
+1000-unit vertical advances; their marks have zero advances. JP's line metrics
+remain unchanged.
+
+Only historical glyphs and their mark outlines are imported from Hentaigana.
+Its Latin glyphs and unrelated substitutions are excluded. This avoids duplicate
+Latin coverage and preserves the JP font's ordinary text behaviour.
 
 ## Sans study
 
@@ -81,8 +90,8 @@ visual review.
 
 ## Font behaviour
 
-Each encoded historical character has direct cmap coverage. The supplement is
-paired with a normal Japanese text font. The first proof does not introduce
+Each encoded historical character has direct cmap coverage in the same font as
+the Japanese text. The proof does not introduce
 optional `hist` or `hlig` conversion of ordinary kana sequences.
 
 The four new digraphs have compatibility decompositions to ordinary kana
@@ -91,5 +100,14 @@ ALTERNATE WI have no decomposition to their ordinary counterparts.
 
 `scripts/check_serif.py` checks dakuten and handakuten attachment, horizontal and
 vertical advances, small-kana positioning, all target code points and preservation
-of the original historical outlines. Browser rendering and visual inspection
-complement the shaping checks.
+of the original historical outlines. It also compares every JP glyph and metric,
+variation sequences, line metrics and 70 Japanese layout cases against the pinned
+JP source. Browser rendering and visual inspection complement the shaping checks.
+
+## Remaining design work
+
+Review the seventeen provisional forms against historical specimens, especially
+KOTO's upper curve, the TOKI/TOTE joins and NE/WI terminals. Check their weight
+beside ordinary kana at reading sizes before deriving further weights. The
+CJK-encoded kana ligatures U+2A708, U+2CEFF, U+2CF00 and U+2CF02 need a separate
+source and design audit; they are outside the current 309-character inventory.

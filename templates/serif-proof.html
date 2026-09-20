@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Japanese text and historical kana · Serif Regular proof</title>
+<style>
+{{CSS}}
+*{box-sizing:border-box}
+body{margin:0;background:#f7f5ef;color:#28322e;font:16px/1.65 system-ui,sans-serif}
+main{max-width:1280px;margin:auto;padding:30px}
+h1{font-size:30px;line-height:1.25}h2{font-size:21px;margin-top:36px}
+a{color:#215d46}small{display:block;font-size:11px}
+.specimen{font-family:Proof; font-weight:400;font-synthesis:none}
+.sample{padding:24px;background:white;border:1px solid #ccd1c8}
+.text{font-size:38px;line-height:1.8}.glyph{font-size:64px;line-height:1.8}
+.mixed{font-size:34px;line-height:2}.vertical{writing-mode:vertical-rl;min-height:180px}
+.columns{display:flex;gap:36px;justify-content:flex-end;min-height:300px}
+.grid{font-size:36px;line-height:2;overflow-wrap:anywhere;letter-spacing:4px}
+.note{padding:15px;background:#e7ece3;border-left:3px solid #5d7553}
+table{border-collapse:collapse;width:100%;background:white}
+th,td{padding:16px;border:1px solid #ccd1c8}th{width:25%;text-align:left;font-size:14px}
+label{display:block;margin:20px 0}.scroll{overflow:auto}
+details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px}
+[contenteditable]:focus{outline:2px solid #5d7553;outline-offset:4px}
+@media(max-width:650px){main{padding:18px}.mixed{font-size:26px}.text{font-size:30px}}
+</style>
+<main>
+<h1>Japanese text and historical kana</h1>
+<p>Unified serif · Regular · version 0.002 · Unicode 18</p>
+<p>One font contains Noto Serif JP’s full 16,726-character repertoire and 307 additional historical kana: 17,033 encoded characters in total. All 286 hentaigana and all seven Unicode 18 kana additions are included.</p>
+<p class="note">Seventeen forms are provisional. Their joins, proportions and stroke weight need typographic review. “HK Serif Proof” is a temporary font-menu identifier. Regular is the only available weight.</p>
+<p><a href="HKSerifProof-Regular.ttf">Installable TTF</a> · <a href="HKSerifProof-Regular.woff2">Webfont</a> · <a href="OFL.txt">OFL 1.1 licence</a> · <a href="sources.json">Outline provenance</a></p>
+<h2>Mixed text</h2>
+<p>These samples use the unified font. Click the paragraph to try other text.</p>
+<div id="mixed" class="sample mixed specimen" lang="ja" contenteditable="true" spellcheck="false" aria-label="Editable Japanese and historical kana sample">かなの歴史を読む。𛀀・𛀁・𛄟・𛄠・𛄡・𛄢<br>合略仮名：ゟ ヿ 𛄣 𛄤 𛄥 𛄦 𛄧 𛄨<br>小書き仮名：𛅒 𛅦 𛅨　変体仮名：𛀂 𛀋 𛀙 𛁛<br>「日本語」、ひらがな・カタカナ。2026 / Kana</div>
+<h2>Vertical text</h2>
+<div class="sample columns text specimen" lang="ja">
+<div id="vertical" class="vertical">「かなの歴史」<br>あ𛄤い・あ𛄣い<br>あ𛅨い・あゟい</div>
+<div id="marks" class="vertical">𛀂゙・𛄤゙・𛅨゙<br>𛀂゚・𛄤゚・𛅨゚</div>
+</div>
+<h2>Seventeen provisional forms</h2>
+<label>Preview size <input id="size" type="range" min="24" max="96" value="64"> <output id="value">64 px</output></label>
+<div class="scroll"><table lang="ja"><thead><tr><th>Character</th><th>Outline</th><th>Horizontal</th><th>Vertical</th><th>Mark positioning</th></tr></thead><tbody>{{ROWS}}</tbody></table></div>
+<p>Mark samples exercise positioning; they do not imply that every combination is linguistically used. Small kana have separate positions for vertical text.</p>
+<h2>All 286 hentaigana</h2>
+<p id="historical" class="sample grid specimen" lang="ja">{{ALL}}</p>
+<h2>Coverage and licence</h2>
+<p>The historical inventory contains 309 characters: 286 hentaigana, 11 other letters and digraphs in Kana Supplement and Kana Extended-A, ten small kana, and ゟ and ヿ. The base uses Japanese regional glyph forms. This build does not include the whole Chinese and Korean repertoires or the CJK-encoded kana ligatures U+2A708, U+2CEFF, U+2CF00 and U+2CF02.</p>
+<p>The font derives from Noto Serif JP and Noto Serif Hentaigana and is licensed under SIL OFL 1.1. New forms use Noto components and original drawing. No outline data was extracted from Unicode charts.</p>
+<details><summary>Copyright notices and SIL Open Font License</summary><pre>{{LICENSE}}</pre></details>
+</main>
+<script>
+document.querySelector('#size').addEventListener('input', event => {
+  document.querySelectorAll('.glyph').forEach(el => el.style.fontSize = event.target.value + 'px');
+  document.querySelector('#value').textContent = event.target.value + ' px';
+});
+</script>
+</html>

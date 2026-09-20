@@ -1,14 +1,16 @@
 # Kana type design
 
-A Noto-derived serif extension for historical Japanese kana, developed separately
-from Kureedo. The family name is undecided. GenSeki Hentaigana Gothic already
-supplies the complete sans repertoire, so the current work concentrates on the
-17 characters missing from Noto Serif JP and Noto Serif Hentaigana together.
+A unified serif font for Japanese text and historical kana, developed separately
+from Kureedo. Noto Serif JP supplies the full Japanese base; Noto Serif Hentaigana
+supplies 290 historical forms. Seventeen provisional forms complete the
+309-character historical inventory, including all seven Unicode 18 kana additions.
+The font contains 17,033 encoded characters. GenSeki Hentaigana Gothic supplies
+the complete sans target.
 
-The first Regular outline proof covers all 309 target characters. It retains
-Noto Serif Hentaigana's 290 historical outlines, adds 17 provisional forms, and
-imports the two existing JP digraphs. The internal family identifier is
-`HK Serif Proof`; the outlines need typographic review before release.
+The current build is a static Regular proof, version 0.002. Its temporary font-menu
+identifier is `HK Serif Proof`; the family name is undecided. The new outlines
+need typographic review before release. Japanese regional forms are used for
+shared ideographs. Full Chinese and Korean repertoires are outside this build.
 The [font survey](research/existing-fonts.md) and the earlier sans study remain
 available as research.
 
@@ -21,16 +23,18 @@ After installing the dependencies and fetching the pinned sources below:
 .venv/bin/python scripts/check_serif.py
 ```
 
-`build/serif/serif-proof.html` embeds the fonts and shows every addition beside
-Noto Serif JP, with horizontal, vertical and combining-mark samples. The same
+`build/serif/serif-proof.html` embeds the unified font and shows mixed Japanese
+and historical text, with horizontal, vertical and combining-mark samples. The same
 folder contains the installable `HKSerifProof-Regular.ttf`, WOFF2, outline
-provenance and validation results. Only Regular is built. New shapes use Noto
+provenance, `OFL.txt` and validation results. Only Regular is built. New shapes use Noto
 components, including a newly drawn upper curve for hiragana KOTO.
 
-Checks cover all 309 encoded forms, preservation of the 290 original historical
-outlines and advances, ten vertical small-kana forms, 1,236 mark-shaping cases,
-and matching TTF/WOFF2 output. These checks establish font behaviour; they do
-not establish finished type design.
+Checks cover all 309 historical characters, preservation of the 290 original
+historical outlines, all 17,923 JP glyphs and their metrics, JP variation sequences,
+70 Japanese layout comparisons, ten vertical small-kana forms, 1,228 historical
+mark-shaping cases and matching TTF/WOFF2 output. The two existing JP digraphs
+retain their original mark behaviour. These checks establish font behaviour;
+the provisional outlines still require visual review.
 
 ## Sources
 
@@ -102,7 +106,10 @@ create a new font family.
 
 ## Licence
 
-Source fonts and derived outlines use SIL OFL 1.1. Each upstream notice is in
-`sources/upstream/<family>/OFL.txt` and is embedded in the HTML proof. Unicode
+Source fonts and derived outlines use SIL OFL 1.1. The combined `OFL.txt` and font
+metadata preserve the Google, Adobe and Noto Project copyright notices from the
+source packages and binaries. [Licence details](research/licensing.md) cover
+redistribution and font naming. Each upstream notice is in
+`sources/upstream/<family>/OFL.txt`. Unicode
 data uses the notice in `sources/Unicode-LICENSE.txt`. Project scripts use the
 MIT licence in `LICENSE-scripts.txt`.

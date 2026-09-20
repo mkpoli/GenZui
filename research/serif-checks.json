@@ -1,9 +1,19 @@
 {
+  "font_version": "Version 0.002",
+  "ttf_sha256": "a2a08808080723526d9944c97ce736d75bc4927b667ac5f3d5643edcce5b4c0d",
+  "woff2_sha256": "e26aa31229b5793461646a7d9009eb87b579ec8566aa9eafc4712f6b12f2308d",
+  "encoded_characters": 17033,
+  "unchanged_jp_characters": 16726,
+  "unchanged_jp_glyphs_and_metrics": 17923,
+  "jp_shaping_regression_cases": 70,
+  "jp_variation_sequences_preserved": true,
   "target_characters": 309,
   "unchanged_historical_outlines": 290,
   "new_unicode18": 7,
   "small_vertical_alternates": 10,
-  "mark_shaping_cases": 1236,
+  "mark_shaping_cases": 1228,
   "woff2_matches_ttf": true,
+  "single_embedded_font": true,
+  "copyright_notices_preserved": true,
   "status": "passed"
 }

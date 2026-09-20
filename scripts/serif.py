@@ -1,11 +1,11 @@
-"""Build the first static serif extension proof from pinned Noto outlines."""
+"""Build a unified Japanese and historical-kana Regular proof from pinned Noto."""
 import base64
 import copy
 import html
 import json
 
 from fontTools import subset
-from fontTools.otlLib.builder import buildAnchor, buildMarkBasePosSubtable
+from fontTools.otlLib.builder import buildAnchor, buildCoverage, buildMarkBasePosSubtable
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.cu2quPen import Cu2QuPen
 from fontTools.pens.recordingPen import RecordingPen
@@ -28,6 +28,20 @@ SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
          0x1B168: 0x1B121}
 PROVENANCE = {}
+
+
+def import_glyph(font, source, name):
+    """Keep donor names and component references separate from the JP glyphs."""
+    target = 'hist.' + name
+    if target in font['glyf']:
+        return target
+    outline = copy.deepcopy(source['glyf'][name])
+    if outline.isComposite():
+        for component in outline.components:
+            component.glyphName = import_glyph(font, source, component.glyphName)
+    add(font, target, outline)
+    font['hmtx'][target] = source['hmtx'][name]
+    return target
 
 
 def instance(family, weight, points=None):
@@ -161,16 +175,44 @@ def add_feature(font, table_tag, feature_tag, lookup):
     table.ScriptList.ScriptCount = len(table.ScriptList.ScriptRecord)
 
 
-def layout(font, vertical, points):
+def layout(font, donor, vertical, points):
     cmap = font.getBestCmap()
-    marks = {}
+    bases = {cmap[cp] for cp in points} | set(vertical.values())
+    marks, mark_mapping = {}, {}
     for cp in (0x3099, 0x309A):
-        name = cmap[cp]
+        name = import_glyph(font, donor, donor.getBestCmap()[cp])
+        mark_mapping[cmap[cp]] = name
         vname = add(font, name+'.vert', copy.deepcopy(font['glyf'][name]))
         font['hmtx'][vname] = font['hmtx'][name]
         vertical[name] = vname
         marks[name] = (0, buildAnchor(0, 0))
         marks[vname] = (1, buildAnchor(0, 0))
+
+    # Use the donor marks only after a historical base. Ordinary JP text keeps
+    # its original marks, composition, anchors and vertical substitutions.
+    single = otTables.Lookup()
+    single.LookupType, single.LookupFlag = 1, 0
+    sub = otTables.SingleSubst()
+    sub.mapping = mark_mapping
+    single.SubTable, single.SubTableCount = [sub], 1
+    lookups = font['GSUB'].table.LookupList
+    substitution_index = len(lookups.Lookup)
+    lookups.Lookup.append(single)
+    lookups.LookupCount = len(lookups.Lookup)
+    context = otTables.ChainContextSubst()
+    context.Format = 3
+    context.BacktrackGlyphCount = context.InputGlyphCount = 1
+    context.BacktrackCoverage = [buildCoverage(bases, font.getReverseGlyphMap())]
+    context.InputCoverage = [buildCoverage(mark_mapping, font.getReverseGlyphMap())]
+    context.LookAheadGlyphCount, context.LookAheadCoverage = 0, []
+    record = otTables.SubstLookupRecord()
+    record.SequenceIndex, record.LookupListIndex = 0, substitution_index
+    context.SubstCount, context.SubstLookupRecord = 1, [record]
+    lookup = otTables.Lookup()
+    lookup.LookupType, lookup.LookupFlag = 6, 0
+    lookup.SubTable, lookup.SubTableCount = [context], 1
+    add_feature(font, 'GSUB', 'ccmp', lookup)
+
     lookup = otTables.Lookup()
     lookup.LookupType, lookup.LookupFlag = 1, 0
     sub = otTables.SingleSubst()
@@ -178,7 +220,6 @@ def layout(font, vertical, points):
     lookup.SubTable, lookup.SubTableCount = [sub], 1
     add_feature(font, 'GSUB', 'vert', lookup)
     add_feature(font, 'GSUB', 'vrt2', copy.deepcopy(lookup))
-    bases = ({cmap[cp] for cp in points} | set(vertical.values())) - set(marks)
     anchors = {}
     for name in bases:
         g = font['glyf'][name]
@@ -193,19 +234,10 @@ def layout(font, vertical, points):
     classes = font['GDEF'].table.GlyphClassDef.classDefs
     classes.update({name: 1 for name in bases})
     classes.update({name: 3 for name in marks})
-    font['vhea'] = newTable('vhea')
-    v = font['vhea']
-    v.tableVersion, v.ascent, v.descent, v.lineGap = 0x00010000, 500, -500, 0
-    v.advanceHeightMax, v.minTopSideBearing, v.minBottomSideBearing = 1000, 0, 0
-    v.yMaxExtent = 1000
-    v.caretSlopeRise, v.caretSlopeRun, v.caretOffset = 0, 1, 0
-    v.reserved1 = v.reserved2 = v.reserved3 = v.reserved4 = 0
-    v.metricDataFormat, v.numberOfVMetrics = 0, len(font.getGlyphOrder())
-    font['vmtx'] = newTable('vmtx')
-    font['vmtx'].metrics = {
-        name: (0 if name in marks else 1000, 880 - getattr(font['glyf'][name], 'yMax', 0))
-        for name in font.getGlyphOrder()
-    }
+    for name in font.getGlyphOrder():
+        if name not in font['vmtx'].metrics:
+            font['vmtx'][name] = (0 if name in marks else 1000,
+                                880 - getattr(font['glyf'][name], 'yMax', 0))
     # Includes the highest positioned mark; Windows must not clip it.
     top = max(font['glyf'][name].yMax + 252 for name in bases)
     font['OS/2'].usWinAscent = max(font['OS/2'].usWinAscent, top)
@@ -213,14 +245,18 @@ def layout(font, vertical, points):
 
 def build():
     verify()
+    PROVENANCE.clear()
     OUT.mkdir(parents=True, exist_ok=True)
-    jp_points = set(range(0x3041, 0x3100)) | {0x5B50, 0x4E95}
-    jp = instance('NotoSerifJP', 400, jp_points)
+    font = jp = instance('NotoSerifJP', 400)
     heavier = instance('NotoSerifJP', 500, set(SMALL.values()) - {0x1B121})
     h_heavier = instance('NotoSerifHentaigana', 500, {0x1B121})
-    font = instance('NotoSerifHentaigana', 400)
-    original = font.getBestCmap()
-    originals = set(original)
+    donor = instance('NotoSerifHentaigana', 400)
+    originals = set(font.getBestCmap())
+    points = {ord(item['character']) for item in repertoire()}
+    historical = points - originals
+    cmap_add = {cp: import_glyph(font, donor, donor.getBestCmap()[cp])
+                for cp in sorted(historical & set(donor.getBestCmap()))}
+    retained = len(cmap_add)
     def part(ch, indices=None):
         return contours(jp, ord(ch), indices)
     stem = part('ト', [0])
@@ -237,7 +273,6 @@ def build():
         0x1B126: [fit(part('ヨ'), (95,-30,550,705)), fit(stem, (615,70,710,680)), fit(stem, (795,-40,895,760))],
         0x1B127: [fit(part('子'), (125,-40,875,760))],
         0x1B128: [fit(part('井'), (125,-40,875,760))],
-        0x309F: [part('ゟ')], 0x30FF: [part('ヿ')],
     }
     descriptions = {
         0x1B11F: 'Noto Serif JP KE strokes with the upper bar from HO; loop-free WU construction.',
@@ -247,8 +282,6 @@ def build():
         0x1B126: 'Noto Serif JP YO with two upright stems derived from TO.',
         0x1B127: 'Noto Serif JP U+5B50 fitted to the kana body.',
         0x1B128: 'Noto Serif JP U+4E95 fitted to the kana body.',
-        0x309F: 'Noto Serif JP U+309F, unchanged outline.',
-        0x30FF: 'Noto Serif JP U+30FF, unchanged outline.',
     }
     vertical = {}
     for cp, source_cp in SMALL.items():
@@ -257,30 +290,35 @@ def build():
         # literal reduction of Regular; positioning follows JP small kana.
         recipes[cp] = [transform(contours(source, source_cp), (.72,0,0,.72,140,-25))]
         descriptions[cp] = f'Noto Serif {"Hentaigana" if cp == 0x1B168 else "JP"} U+{source_cp:04X}, weight 500, scale 0.72.'
-    cmap_add = {}
     for cp, parts in sorted(recipes.items()):
-        name = f'u{cp:05X}'
+        name = f'hist.u{cp:05X}'
         add(font, name, glyph(parts))
         cmap_add[cp] = name
         if cp in SMALL:
             vertical[name] = add(font, name+'.vert', glyph([transform(p, (1,0,0,1,140,190)) for p in parts]))
         PROVENANCE[f'U+{cp:04X}'] = descriptions[cp]
     for table in font['cmap'].tables:
-        if table.isUnicode() and table.format != 14:
-            table.cmap.update({cp: name for cp, name in cmap_add.items() if cp <= (0xFFFF if table.format == 4 else 0x10FFFF)})
-    points = {ord(item['character']) for item in repertoire()}
-    layout(font, vertical, points)
-    for nid in (1,2,3,4,5,6,16,17,18,21,22,25):
+        if table.isUnicode() and table.format in (4, 12):
+            table.cmap.update({cp: name for cp, name in cmap_add.items()
+                               if cp <= (0xFFFF if table.format == 4 else 0x10FFFF)})
+    layout(font, donor, vertical, historical)
+    notices = []
+    for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
+        notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
+        notices.append(notice)
+        notices.extend(record.toUnicode() for record in source['name'].names if record.nameID == 0)
+    notices = '\n'.join(dict.fromkeys(notices))
+    for nid in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,21,22,25):
         font['name'].removeNames(nameID=nid)
-    for nid, value in {1:FAMILY, 2:'Regular', 3:'0.001;HKSerifProof-Regular',
-                       4:FAMILY+' Regular', 5:'Version 0.001', 6:'HKSerifProof-Regular',
+    for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:'0.002;HKSerifProof-Regular',
+                       4:FAMILY+' Regular', 5:'Version 0.002', 6:'HKSerifProof-Regular',
                        16:FAMILY,17:'Regular',
-                       10:'Outline proof derived from Noto Serif Hentaigana and Noto Serif JP. New forms require typographic review.'}.items():
+                       10:'Japanese text and historical kana derived from Noto Serif JP and Noto Serif Hentaigana. Regular outline proof; new forms require typographic review.',
+                       13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
+                       14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
-    notices = '\n'.join((ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
-                        for family in ('NotoSerifJP','NotoSerifHentaigana'))
-    font['name'].setName(notices,0,3,1,0x409)
-    font['head'].fontRevision = 0.001
+    font['head'].fontRevision = 0.002
+    font['OS/2'].achVendID = 'NONE'
     font['OS/2'].usWeightClass = 400
     font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~33) | 64
     font['head'].macStyle = 0
@@ -289,52 +327,49 @@ def build():
     font.save(OUT/'HKSerifProof-Regular.ttf')
     font.flavor = 'woff2'
     font.save(OUT/'HKSerifProof-Regular.woff2')
-    jp.save(OUT/'JP-Regular.ttf')
-    jp.flavor = 'woff2'
-    jp.save(OUT/'JP-Regular.woff2')
-    (OUT/'sources.json').write_text(json.dumps({'status':'outline proof','weight':400,
-        'target_characters':len(points),'retained_historical':len(points & originals),
+    licence = (ROOT/'sources/upstream/NotoSerifJP/OFL.txt').read_text().split('\n\n', 1)[1]
+    (OUT/'OFL.txt').write_text(notices+'\n\n'+licence)
+    (OUT/'sources.json').write_text(json.dumps({'status':'unified outline proof','weight':400,
+        'version':'0.002','base':'Noto Serif JP','base_characters':len(originals),
+        'encoded_characters':len(font.getBestCmap()),
+        'target_characters':len(points),'retained_historical':retained,
         'added':PROVENANCE,'small_vertical_offset':[140,190]},ensure_ascii=False,indent=2)+'\n')
+    for file in ('JP-Regular.ttf', 'JP-Regular.woff2'):
+        (OUT/file).unlink(missing_ok=True)
     proof()
-    print('Built Regular serif proof: 309 target characters, 19 additions (17 gaps and two existing JP digraphs).')
+    print(f'Built unified Regular: {len(font.getBestCmap()):,} encoded characters, all 309 historical targets, 17 provisional forms.')
 
 
 def proof():
     rows = []
     for item in repertoire():
-        if item['codepoint'] not in PROVENANCE: continue
+        if item['codepoint'] not in PROVENANCE:
+            continue
         ch = item['character']
         rows.append(f'<tr><th>{item["codepoint"]}<small>{item["name"]}</small></th>'
-                    f'<td class="glyph">{ch}</td><td class="text">あ{ch}い<br>ア{ch}イ</td>'
-                    f'<td class="vertical text">あ{ch}い</td><td class="glyph">{ch}\u3099 {ch}\u309a</td></tr>')
-    fonts = {name:base64.b64encode((OUT/file).read_bytes()).decode()
-             for name,file in [('Proof','HKSerifProof-Regular.woff2'),('Context','JP-Regular.woff2')]}
-    css = ''.join(f'@font-face{{font-family:{name};src:url(data:font/woff2;base64,{data}) format("woff2")}}'
-                  for name,data in fonts.items())
-    page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Serif kana extension — first outline proof</title><style>{{CSS}}
-*{box-sizing:border-box}body{margin:0;background:#f7f5ef;color:#28322e;font:16px/1.6 system-ui,sans-serif}main{max-width:1250px;margin:auto;padding:30px}h1{font-size:30px;line-height:1.2}h2{font-size:21px;margin-top:32px}table{border-collapse:collapse;width:100%;background:white}th,td{padding:18px;border:1px solid #ccd1c8}th{width:25%;text-align:left;font-size:14px}small{display:block;font-size:11px}.glyph{font:64px/1.8 Proof}.text{font:38px/1.8 Context,Proof}.vertical{writing-mode:vertical-rl;min-height:190px}.grid{font:36px/1.9 Proof;overflow-wrap:anywhere;letter-spacing:4px}a{color:#215d46}label{display:block;margin:20px 0}.scroll{overflow:auto}details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px}.note{padding:15px;background:#e7ece3;border-left:3px solid #5d7553}
-</style><main><h1>Serif kana extension</h1><p>Regular · first outline proof · Unicode 18</p>
-<p>All 309 target characters are encoded: 286 hentaigana and 23 other historical kana. Noto Serif Hentaigana supplies 290 forms. The 19 additions below include 17 missing forms and the two existing Noto Serif JP digraphs.</p>
-<p class="note">The new forms are provisional. Inspect their joins, proportions and stroke weight beside modern kana. “HK Serif Proof” is a temporary font-menu identifier. The project family name is undecided.</p>
-<p><a href="HKSerifProof-Regular.ttf">Installable Regular TTF</a> · <a href="HKSerifProof-Regular.woff2">Webfont</a> · <a href="sources.json">Outline provenance</a></p>
-<label>Preview size <input id="size" type="range" min="24" max="96" value="64"> <output id="value">64 px</output></label>
-<div class="scroll"><table lang="ja"><thead><tr><th>Character</th><th>Outline</th><th>Horizontal</th><th>Vertical</th><th>Mark positioning</th></tr></thead><tbody>{{ROWS}}</tbody></table></div>
-<p>Mark samples exercise positioning; they do not imply that every combination is linguistically used. Small kana have separate positions for vertical text. New outlines use Noto components; no outline data was extracted from Unicode charts.</p>
-<h2>All 286 hentaigana</h2><p class="grid" lang="ja">{{ALL}}</p>
-<h2>Licences</h2>{{LICENSES}}</main><script>document.querySelector('#size').addEventListener('input',event=>{document.querySelectorAll('.glyph').forEach(el=>el.style.fontSize=event.target.value+'px');document.querySelector('#value').textContent=event.target.value+' px'});</script></html>'''
-    licenses = ''.join('<details><summary>'+family+'</summary><pre>'+html.escape((ROOT/'sources/upstream'/family/'OFL.txt').read_text())+'</pre></details>' for family in ('NotoSerifJP','NotoSerifHentaigana'))
-    page = page.replace('{{ROWS}}',''.join(rows)).replace('{{ALL}}',''.join(chr(cp) for cp in range(0x1B001,0x1B11F))).replace('{{LICENSES}}',licenses).replace('{{CSS}}',css)
+                    f'<td class="glyph specimen">{ch}</td><td class="text specimen">あ{ch}い<br>ア{ch}イ</td>'
+                    f'<td><div class="vertical text specimen">あ{ch}い</div></td>'
+                    f'<td class="glyph specimen">{ch}\u3099 {ch}\u309a</td></tr>')
+    data = base64.b64encode((OUT/'HKSerifProof-Regular.woff2').read_bytes()).decode()
+    css = f'@font-face{{font-family:Proof;src:url(data:font/woff2;base64,{data}) format("woff2");font-weight:400}}'
+    page = (ROOT/'templates/serif-proof.html').read_text()
+    replacements = {
+        '{{CSS}}': css, '{{ROWS}}': ''.join(rows),
+        '{{ALL}}': ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)),
+        '{{LICENSE}}': html.escape((OUT/'OFL.txt').read_text()),
+    }
+    for token, value in replacements.items():
+        page = page.replace(token, value)
     (OUT/'serif-proof.html').write_text(page)
-    font = ImageFont.truetype(str(OUT/'HKSerifProof-Regular.ttf'),130)
-    label = ImageFont.truetype('DejaVuSans.ttf',18)
-    cps = [int(k[2:],16) for k in PROVENANCE if int(k[2:],16)>0xFFFF]
-    image = Image.new('RGB',(1200,850),'#f7f5ef')
+    font = ImageFont.truetype(str(OUT/'HKSerifProof-Regular.ttf'), 130)
+    label = ImageFont.truetype('DejaVuSans.ttf', 18)
+    cps = [int(k[2:], 16) for k in PROVENANCE]
+    image = Image.new('RGB', (1200, 850), '#f7f5ef')
     draw = ImageDraw.Draw(image)
     for i, cp in enumerate(cps):
-        x,y=(i%6)*200,(i//6)*265
-        draw.text((x+18,y+16),f'U+{cp:04X}',font=label,fill='#28322e')
-        draw.text((x+28,y+45),chr(cp),font=font,fill='#182620')
+        x, y = (i % 6)*200, (i // 6)*265
+        draw.text((x+18, y+16), f'U+{cp:04X}', font=label, fill='#28322e')
+        draw.text((x+28, y+45), chr(cp), font=font, fill='#182620')
     image.save(OUT/'serif-proof.png')
 
 

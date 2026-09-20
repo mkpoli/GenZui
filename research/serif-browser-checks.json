@@ -1,17 +1,150 @@
 {
-  "method": "Windows headless browsers with temporary profiles, embedded WOFF2 load for all 309 characters, screenshot; Vivaldi --disable-vivaldi",
+  "method": "Windows headless browsers with isolated profiles; CSS.getPlatformFontsForNode for mixed text, vertical text, marks, all historical targets and TTF; screenshots",
   "results": [
     {
       "browser": "chrome",
-      "font_status": "passed",
-      "screenshot": true,
-      "ots_error": false
+      "version": "153.0.8010.37",
+      "font_faces": [
+        {
+          "family": "Proof",
+          "status": "loaded"
+        },
+        {
+          "family": "ProofTTF",
+          "status": "loaded"
+        }
+      ],
+      "actual_fonts": {
+        "#historical": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 286
+          }
+        ],
+        "#mixed": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 91
+          }
+        ],
+        "#all-targets": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 309
+          }
+        ],
+        "#ttf-targets": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 317
+          }
+        ],
+        "#marks": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 16
+          }
+        ],
+        "#vertical": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 21
+          }
+        ]
+      },
+      "ots_error": false,
+      "owned_processes_stopped": true,
+      "status": "passed"
     },
     {
       "browser": "vivaldi",
-      "font_status": "passed",
-      "screenshot": true,
-      "ots_error": false
+      "version": "8.2.4133.68",
+      "font_faces": [
+        {
+          "family": "Proof",
+          "status": "loaded"
+        },
+        {
+          "family": "ProofTTF",
+          "status": "loaded"
+        }
+      ],
+      "actual_fonts": {
+        "#historical": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 286
+          }
+        ],
+        "#mixed": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 91
+          }
+        ],
+        "#all-targets": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 309
+          }
+        ],
+        "#ttf-targets": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 317
+          }
+        ],
+        "#marks": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 16
+          }
+        ],
+        "#vertical": [
+          {
+            "familyName": "HK Serif Proof",
+            "postScriptName": "HKSerifProof-Regular",
+            "isCustomFont": true,
+            "glyphCount": 21
+          }
+        ]
+      },
+      "ots_error": false,
+      "owned_processes_stopped": true,
+      "status": "passed"
+    },
+    {
+      "browser": "firefox",
+      "version": "154.0.1",
+      "method": "Windows headless screenshot with isolated profile; font load status and all 309 target characters shown",
+      "ots_error": false,
+      "owned_processes_stopped": true,
+      "visual_review": "passed: both fonts loaded; all 309 historical characters, mixed text and vertical marks rendered without boxes",
+      "status": "passed"
     }
-  ]
+  ],
+  "ttf_sha256": "a2a08808080723526d9944c97ce736d75bc4927b667ac5f3d5643edcce5b4c0d",
+  "woff2_sha256": "e26aa31229b5793461646a7d9009eb87b579ec8566aa9eafc4712f6b12f2308d"
 }
