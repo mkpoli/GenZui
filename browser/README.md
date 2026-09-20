@@ -37,8 +37,19 @@ Use `historical-kana-fallback.user.js` with
 
 1. Open Tampermonkey's **Create a new script** editor.
 2. Replace the template with the entire userscript, then save with **Ctrl+S**.
-3. Enable **Allow User Scripts** in the extension's browser settings if requested
-   by Tampermonkey. Reload the affected web pages.
+3. Open Tampermonkey's extension details and enable **Allow User Scripts**
+   (**ユーザースクリプトを許可**). Check this even when the extension and script
+   are already enabled. Permit site access for the pages where it should run.
+4. Reload the affected web pages. Tampermonkey's popup should list the script
+   as running on the page.
+
+A red × on Tampermonkey with a “some URLs are restricted” tooltip indicates
+an execution restriction. If **Allow User Scripts** is already on, toggle it
+off and on again, then reload. See the
+[execution-permission instructions](https://www.tampermonkey.net/faq.php?locale=en&q=Q209)
+and the [matching Vivaldi report](https://github.com/Tampermonkey/tampermonkey/issues/2844).
+The local setup page's **Preview kana fallback** button runs a standalone test;
+its success does not establish that Tampermonkey can execute on websites.
 
 The script appends a local font face to text elements containing historical kana.
 Its Unicode ranges restrict that face to historical kana and their combining
@@ -61,3 +72,23 @@ For a site under your control, an explicit CSS stack is simpler:
 
 The userscript uses the project's MIT licence. Font licences remain with their
 respective upstream projects.
+
+## Windows Terminal, Codex and Herdr
+
+Windows Terminal 1.21 and later accepts a comma-separated font fallback list.
+Append `GenSeki Hentaigana Gothic` to the existing `profiles.defaults.font.face`
+value in Windows Terminal's JSON settings. For example:
+
+```json
+"font": {
+  "face": "FiraCode Nerd Font Mono, GenSeki Hentaigana Gothic"
+}
+```
+
+Profiles with their own `font.face` override need the same addition. Existing
+profiles inherit the default when they have no override. If the font change does
+not appear in an existing window, open a new terminal window. The font must be
+installed in Windows; installing it only in WSL does not supply it to the Windows
+renderer. Herdr and Codex pass Unicode text to that renderer.
+
+Reference: [Microsoft's font fallback announcement](https://devblogs.microsoft.com/commandline/windows-terminal-preview-1-21-release/#font-fallback).

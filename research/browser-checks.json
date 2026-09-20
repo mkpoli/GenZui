@@ -83,5 +83,32 @@
       }
     }
   },
-  "firefox": "Temporary-profile screenshot verified the six font.name-list preferences: existing hentaigana, seven Unicode 18 additions, and combining marks. Applied these lists to the active installation profile user.js; restart required."
+  "firefox": "Temporary-profile screenshot verified the six font.name-list preferences: existing hentaigana, seven Unicode 18 additions, and combining marks. Applied these lists to the active installation profile user.js; restart required.",
+  "wikipedia_toki": {
+    "url": "https://ja.wikipedia.org/wiki/%E3%81%A8%E3%81%8D_(%E4%BB%AE%E5%90%8D)",
+    "method": "Windows Vivaldi temporary profile, userscript injected at document start with GM_addStyle shim, CSS.getPlatformFontsForNode after fonts ready",
+    "script_version": "0.1.0",
+    "bold": [
+      {
+        "familyName": "GenSeki Hentaigana Gothic",
+        "postScriptName": "GenSekiHentaiganaGothic-Bold",
+        "isCustomFont": false,
+        "glyphCount": 1
+      }
+    ],
+    "regular": [
+      {
+        "familyName": "GenSeki Hentaigana Gothic",
+        "postScriptName": "GenSekiHentaiganaGothic",
+        "isCustomFont": false,
+        "glyphCount": 1
+      }
+    ],
+    "limitation": "Direct injection verifies the userscript and local font. It does not establish that the personal Tampermonkey profile has execution permission."
+  },
+  "windows_terminal": {
+    "version": "1.24.11911.0",
+    "configured_font_face": "FiraCode Nerd Font Mono, GenSeki Hentaigana Gothic",
+    "verified": "Settings parse correctly; all existing profiles inherit the default font; Herdr buffer retains U+1B124 without replacement characters. Native terminal pixels have not been inspected."
+  }
 }
