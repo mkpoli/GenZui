@@ -16,10 +16,17 @@ that font's weight-200 outlines:
   stroke with flat terminals. This removes most contrast; intersections, short
   branches and terminal directions require individual inspection.
 
-Neither operation establishes finished sans designs. Retained loops, disconnected
-strokes and enclosed spaces need comparison with the upstream forms, followed by
-manual edits. The small proof set is the basis for choosing the stroke treatment
-before developing the rest of the repertoire.
+Neither operation establishes finished sans designs. B's uniform stroke treatment
+is the preferred direction, but its connections need revision. Incidental cursive
+connecting strokes may be omitted where the character remains identifiable.
+Junctions need deliberate contour construction; tracing every skeleton branch
+produces short spurs and crowded joins.
+
+[Existing sans fonts](existing-fonts.md) provide direct comparisons. Noto Sans
+Hentaigana has editable upstream sources. GenSeki Hentaigana Gothic supplies a
+released, fully encoded repertoire, drawing on Shokaki and Sukima. Evaluate these
+outlines before expanding the automatic B treatment to the remaining characters.
+Shokaki's U+1B060 and U+1B08B are useful examples of deliberate stroke separation.
 
 The skeleton calculation uses scikit-image's CPU implementation on sixteen
 1200-by-1250 masks, processed sequentially. It has no GPU implementation in this
@@ -27,8 +34,10 @@ build. The scripts perform no model inference.
 
 ## New outlines
 
-The seven Unicode 18 additions require separately constructed serif and sans
-outlines. Native Noto components provide stroke shapes, proportions and terminals.
+The seven Unicode 18 additions need outlines matched to each family. GenSeki
+Hentaigana Gothic 1.201 already supplies sans outlines for all seven under OFL;
+their proportions and construction need comparison with Noto Sans JP. Native
+Noto components provide stroke shapes, proportions and terminals for further work.
 Unicode chart glyphs and the following proposals document character identity and
 historical structure; their embedded font data is not an outline source.
 

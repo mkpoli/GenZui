@@ -4,8 +4,10 @@ A pair of Noto-derived serif and sans fonts for historical Japanese kana.
 The family name is undecided. Both families target the same historical repertoire,
 including all 286 Unicode hentaigana and the seven kana introduced in Unicode 18.0.
 
-The current material consists of a source coverage audit and sixteen experimental
-sans forms. Production fonts and the Unicode 18 outlines are still to be drawn.
+The current material consists of a source coverage audit, sixteen experimental
+sans forms, and a [survey of existing hentaigana fonts](research/existing-fonts.md).
+Production fonts have not been built. Noto Sans Hentaigana source and the released
+GenSeki Hentaigana Gothic provide further outline sources to evaluate.
 
 ## Sources
 
