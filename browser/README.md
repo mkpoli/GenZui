@@ -43,11 +43,28 @@ Use `historical-kana-fallback.user.js` with
 4. Reload the affected web pages. Tampermonkey's popup should list the script
    as running on the page.
 
-A red × on Tampermonkey with a “some URLs are restricted” tooltip indicates
-an execution restriction. If **Allow User Scripts** is already on, toggle it
+A red × on Tampermonkey with a “some URLs are restricted” tooltip refers to
+the current tab. Check it on the affected website; browser settings pages do
+not permit userscripts. If **Allow User Scripts** is already on, toggle it
 off and on again, then reload. See the
 [execution-permission instructions](https://www.tampermonkey.net/faq.php?locale=en&q=Q209)
 and the [matching Vivaldi report](https://github.com/Tampermonkey/tampermonkey/issues/2844).
+
+If the restriction persists on websites, change Tampermonkey's injection mode:
+
+1. Open **Dashboard → Settings** (**ダッシュボード → 設定**).
+2. Set **Config mode** (**設定のモード**) to **Advanced** (**上級者**).
+3. Under **Security** (**セキュリティ**), set **Content Script API**
+   (**コンテンツ スクリプト API**) to **UserScripts API Dynamic**
+   (**ユーザー スクリプト API Dynamic**).
+4. Click **Save** (**保存**), then reload the website.
+
+This resolved the red × and U+1B124 tofu on Japanese Wikipedia in Vivaldi
+8.2.4133.68 with Tampermonkey 5.5.0. The default mode failed to register its
+scripts even with execution permission enabled. A script can appear in the
+popup because it matches the page while its injection is failing.
+See [Tampermonkey's injection-mode documentation](https://www.tampermonkey.net/documentation.php?locale=en&q=content_script_api).
+
 The local setup page's **Preview kana fallback** button runs a standalone test;
 its success does not establish that Tampermonkey can execute on websites.
 

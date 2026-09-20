@@ -110,5 +110,59 @@
     "version": "1.24.11911.0",
     "configured_font_face": "FiraCode Nerd Font Mono, GenSeki Hentaigana Gothic",
     "verified": "Settings parse correctly; all existing profiles inherit the default font; Herdr buffer retains U+1B124 without replacement characters. Native terminal pixels have not been inspected."
+  },
+  "tampermonkey_vivaldi": {
+    "date": "2026-09-20",
+    "vivaldi_version": "8.2.4133.68",
+    "tampermonkey_version": "5.5.0",
+    "url": "https://ja.wikipedia.org/wiki/%E3%81%A8%E3%81%8D_(%E4%BB%AE%E5%90%8D)",
+    "permissions_verified": {
+      "user_scripts_enabled": true,
+      "withholding_permissions": false,
+      "host_access": "<all_urls>"
+    },
+    "default_mode_failure": {
+      "method": "Isolated Windows Vivaldi profile with the installed Tampermonkey extension loaded through CDP; execution permission enabled through browser settings API.",
+      "registered_scripts": 0,
+      "registration_error": "No changes to loaded scripts would result from this operation.",
+      "toolbar_title": "Some URLs are restricted by your browser or a setting!"
+    },
+    "workaround": {
+      "setting": "runtime_content_mode",
+      "value": "userscripts-dynamic",
+      "label": "UserScripts API Dynamic"
+    },
+    "personal_profile_verification": "User confirmed that after saving UserScripts API Dynamic and reloading Wikipedia, the red cross disappeared and U+1B124 displayed correctly.",
+    "dynamic_mode_verification": {
+      "method": "Isolated Windows Vivaldi profile with Tampermonkey 5.5.0; userscript 0.1.0 installed through Tampermonkey editor API, execution permission enabled through browser settings API, injection mode changed through Tampermonkey settings API; no direct userscript injection.",
+      "registered_scripts": 4,
+      "bold": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic-Bold",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ],
+      "regular": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ],
+      "font_faces": [
+        {
+          "family": "Historical Kana Local Fallback",
+          "status": "loaded"
+        },
+        {
+          "family": "Historical Kana Local Fallback",
+          "status": "loaded"
+        }
+      ],
+      "result": "U+1B124 uses the installed GenSeki Regular and Bold fonts on the live Wikipedia page."
+    }
   }
 }
