@@ -1,0 +1,17 @@
+{
+  "method": "Windows headless browsers with temporary profiles, embedded WOFF2 load for all 309 characters, screenshot; Vivaldi --disable-vivaldi",
+  "results": [
+    {
+      "browser": "chrome",
+      "font_status": "passed",
+      "screenshot": true,
+      "ots_error": false
+    },
+    {
+      "browser": "vivaldi",
+      "font_status": "passed",
+      "screenshot": true,
+      "ots_error": false
+    }
+  ]
+}

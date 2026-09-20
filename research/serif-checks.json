@@ -1,0 +1,9 @@
+{
+  "target_characters": 309,
+  "unchanged_historical_outlines": 290,
+  "new_unicode18": 7,
+  "small_vertical_alternates": 10,
+  "mark_shaping_cases": 1236,
+  "woff2_matches_ttf": true,
+  "status": "passed"
+}

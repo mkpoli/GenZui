@@ -1,8 +1,35 @@
 # Design work
 
-The serif family follows Noto Serif JP and Noto Serif Hentaigana. The sans family
-follows Noto Sans JP, with a distinct sans outline for every hentaigana. Serif
-fallback does not satisfy the sans coverage target.
+The active work is a serif extension of Noto Serif Hentaigana using Noto Serif JP
+components. GenSeki Hentaigana Gothic covers the complete sans target, including
+all seven Unicode 18 additions. Its released Regular and Bold fonts serve as
+the sans option.
+
+## First serif proof
+
+`scripts/serif.py` builds one static Regular font. The 290 historical outlines
+from Noto Serif Hentaigana remain unchanged. Noto Serif JP supplies the existing
+digraphs U+309F and U+30FF and components for the seventeen missing forms:
+
+- Hiragana WU combines KE strokes with HO's upper bar.
+- Hiragana KOTO uses TO's bowl with a newly drawn upper curve.
+- Katakana TOKI and TOTE combine a TO stem with KI or TE.
+- Katakana YORI combines YO with two upright stems.
+- Alternate NE and WI use U+5B50 and U+4E95 fitted to the kana body. Their kanji
+  terminals need further comparison with the kana style.
+- Ten small forms use weight-500 source outlines at 72% scale. Their vertical
+  forms move 140 units right and 190 units up. Small archaic YE uses the existing
+  Noto Serif Hentaigana archaic YE outline.
+
+The internal font-menu identifier is `HK Serif Proof`. It is not a proposed
+family name. `build/serif/sources.json` records the construction of each addition.
+The new joins, spacing, reduced stroke weight and NE/WI terminals require visual
+review before expanding to further weights.
+
+Combining dakuten and handakuten have explicit anchors on all 309 base forms.
+Vertical substitutions select separate mark glyphs and anchors to keep the
+marks beside the base. This does not depend on optional vertical kerning.
+The font supplies 1000-unit vertical advances and zero advances for marks.
 
 ## Sans study
 
@@ -34,7 +61,7 @@ build. The scripts perform no model inference.
 
 ## New outlines
 
-The seven Unicode 18 additions need outlines matched to each family. GenSeki
+The seven Unicode 18 additions need serif outlines. GenSeki
 Hentaigana Gothic 1.201 already supplies sans outlines for all seven under OFL;
 their proportions and construction need comparison with Noto Sans JP. Native
 Noto components provide stroke shapes, proportions and terminals for further work.
@@ -48,22 +75,21 @@ historical structure; their embedded font data is not an outline source.
 - [Unicode 18 Small Kana Extension](https://www.unicode.org/charts/PDF/Unicode-18.0/U180-1B130.pdf):
   SMALL ARCHAIC YE, used for Marshallese transliteration.
 
-Hiragana ARCHAIC WU and the historical small kana absent from the source fonts
-also need outlines. Small kana must follow each JP family's small-letter scale,
-stroke weight and vertical position.
+Hiragana ARCHAIC WU and the historical small kana are included in the first
+serif proof. Their stroke weight and vertical positions remain part of the
+visual review.
 
 ## Font behaviour
 
-Each encoded historical character needs direct cmap coverage. Ordinary kana
-retain their default forms. Optional `hist`/character-variant substitutions can
-select alternate NE and WI; optional `hlig` substitutions can select digraphs
-from ordinary kana sequences. These features must not alter the stored text.
+Each encoded historical character has direct cmap coverage. The supplement is
+paired with a normal Japanese text font. The first proof does not introduce
+optional `hist` or `hlig` conversion of ordinary kana sequences.
 
 The four new digraphs have compatibility decompositions to ordinary kana
 sequences. NFKC can therefore erase that encoding distinction. ALTERNATE NE and
 ALTERNATE WI have no decomposition to their ordinary counterparts.
 
-Production checks must cover dakuten and handakuten attachment, horizontal and
-vertical advance, small-kana positioning, clipping, all target code points, and
-preservation of the JP source's default forms. These checks are broader than the
-current unmarked-form proof checks.
+`scripts/check_serif.py` checks dakuten and handakuten attachment, horizontal and
+vertical advances, small-kana positioning, all target code points and preservation
+of the original historical outlines. Browser rendering and visual inspection
+complement the shaping checks.

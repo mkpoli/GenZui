@@ -1,13 +1,36 @@
 # Kana type design
 
-A pair of Noto-derived serif and sans fonts for historical Japanese kana.
-The family name is undecided. Both families target the same historical repertoire,
-including all 286 Unicode hentaigana and the seven kana introduced in Unicode 18.0.
+A Noto-derived serif extension for historical Japanese kana, developed separately
+from Kureedo. The family name is undecided. GenSeki Hentaigana Gothic already
+supplies the complete sans repertoire, so the current work concentrates on the
+17 characters missing from Noto Serif JP and Noto Serif Hentaigana together.
 
-The current material consists of a source coverage audit, sixteen experimental
-sans forms, and a [survey of existing hentaigana fonts](research/existing-fonts.md).
-Production fonts have not been built. Noto Sans Hentaigana source and the released
-GenSeki Hentaigana Gothic provide further outline sources to evaluate.
+The first Regular outline proof covers all 309 target characters. It retains
+Noto Serif Hentaigana's 290 historical outlines, adds 17 provisional forms, and
+imports the two existing JP digraphs. The internal family identifier is
+`HK Serif Proof`; the outlines need typographic review before release.
+The [font survey](research/existing-fonts.md) and the earlier sans study remain
+available as research.
+
+## Build the serif proof
+
+After installing the dependencies and fetching the pinned sources below:
+
+```sh
+.venv/bin/python scripts/serif.py
+.venv/bin/python scripts/check_serif.py
+```
+
+`build/serif/serif-proof.html` embeds the fonts and shows every addition beside
+Noto Serif JP, with horizontal, vertical and combining-mark samples. The same
+folder contains the installable `HKSerifProof-Regular.ttf`, WOFF2, outline
+provenance and validation results. Only Regular is built. New shapes use Noto
+components, including a newly drawn upper curve for hiragana KOTO.
+
+Checks cover all 309 encoded forms, preservation of the 290 original historical
+outlines and advances, ten vertical small-kana forms, 1,236 mark-shaping cases,
+and matching TTF/WOFF2 output. These checks establish font behaviour; they do
+not establish finished type design.
 
 ## Sources
 
