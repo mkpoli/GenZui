@@ -1,0 +1,71 @@
+{
+  "unicode_version": "18.0.0",
+  "files": [
+    {
+      "path": "sources/upstream/NotoSansJP/NotoSansJP[wght].ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/66a36c8c94b1a5d992ee4e7f392fccfe4945767c/ofl/notosansjp/NotoSansJP%5Bwght%5D.ttf",
+      "sha256": "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f",
+      "size": 9589900
+    },
+    {
+      "path": "sources/upstream/NotoSansJP/OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/66a36c8c94b1a5d992ee4e7f392fccfe4945767c/ofl/notosansjp/OFL.txt",
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "size": 4388
+    },
+    {
+      "path": "sources/upstream/NotoSerifJP/NotoSerifJP[wght].ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/notoserifjp/NotoSerifJP%5Bwght%5D.ttf",
+      "sha256": "2fd527ba12b6a44ec30d796d633360da0aeba6c5d4af1304ce12bb4dc15a7dfc",
+      "size": 13574352
+    },
+    {
+      "path": "sources/upstream/NotoSerifJP/OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/notoserifjp/OFL.txt",
+      "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6",
+      "size": 4350
+    },
+    {
+      "path": "sources/upstream/NotoSerifHentaigana/NotoSerifHentaigana[wght].ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/notoserifhentaigana/NotoSerifHentaigana%5Bwght%5D.ttf",
+      "sha256": "94d31f3669977a8464d7f4c6597a2c0bacab636e70548e1a3184ffc7e0a5abf1",
+      "size": 454624
+    },
+    {
+      "path": "sources/upstream/NotoSerifHentaigana/OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5/ofl/notoserifhentaigana/OFL.txt",
+      "sha256": "4061fdf96d90c8337d66506bbc240e0e1b5a58132967842ab831f6c76e821a28",
+      "size": 4386
+    },
+    {
+      "path": "data/unicode/UnicodeData.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt",
+      "sha256": "0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950",
+      "size": 2243593
+    },
+    {
+      "path": "data/unicode/DerivedAge.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/DerivedAge.txt",
+      "sha256": "58b04334e3a31f9612694bbc3f6bff4a302b7d424565bca9c47e30aa74f8dbac",
+      "size": 142568
+    },
+    {
+      "path": "data/unicode/Blocks.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/Blocks.txt",
+      "sha256": "a58f8d322f3c5e254f9f97b1cbf76a454a7e02de6ac35619a5e4f27aaabfd553",
+      "size": 11906
+    },
+    {
+      "path": "data/unicode/VerticalOrientation.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/VerticalOrientation.txt",
+      "sha256": "0803e09669d7aa7137de678e55b848bd418c6632694fa1b05f0b40941103c748",
+      "size": 192064
+    },
+    {
+      "path": "sources/Unicode-LICENSE.txt",
+      "url": "https://www.unicode.org/license.txt",
+      "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+      "size": 1995
+    }
+  ]
+}

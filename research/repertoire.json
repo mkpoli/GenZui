@@ -1,0 +1,4351 @@
+{
+  "unicode_version": "18.0.0",
+  "families": [
+    "NotoSansJP",
+    "NotoSerifJP",
+    "NotoSerifHentaigana"
+  ],
+  "groups": {
+    "bmp-digraph": 2,
+    "historic-kana": 11,
+    "hentaigana": 286,
+    "small-kana": 10
+  },
+  "unicode18": [
+    "U+1B123",
+    "U+1B124",
+    "U+1B125",
+    "U+1B126",
+    "U+1B127",
+    "U+1B128",
+    "U+1B168"
+  ],
+  "characters": [
+    {
+      "codepoint": "U+309F",
+      "character": "ゟ",
+      "name": "HIRAGANA DIGRAPH YORI",
+      "age": "3.2",
+      "group": "bmp-digraph",
+      "decomposition": "<vertical> 3088 308A",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": true,
+        "NotoSerifJP": true,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+30FF",
+      "character": "ヿ",
+      "name": "KATAKANA DIGRAPH KOTO",
+      "age": "3.2",
+      "group": "bmp-digraph",
+      "decomposition": "<vertical> 30B3 30C8",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": true,
+        "NotoSerifJP": true,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B000",
+      "character": "𛀀",
+      "name": "KATAKANA LETTER ARCHAIC E",
+      "age": "6.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B001",
+      "character": "𛀁",
+      "name": "HIRAGANA LETTER ARCHAIC YE",
+      "age": "6.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B002",
+      "character": "𛀂",
+      "name": "HENTAIGANA LETTER A-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B003",
+      "character": "𛀃",
+      "name": "HENTAIGANA LETTER A-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B004",
+      "character": "𛀄",
+      "name": "HENTAIGANA LETTER A-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B005",
+      "character": "𛀅",
+      "name": "HENTAIGANA LETTER A-WO",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B006",
+      "character": "𛀆",
+      "name": "HENTAIGANA LETTER I-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B007",
+      "character": "𛀇",
+      "name": "HENTAIGANA LETTER I-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B008",
+      "character": "𛀈",
+      "name": "HENTAIGANA LETTER I-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B009",
+      "character": "𛀉",
+      "name": "HENTAIGANA LETTER I-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00A",
+      "character": "𛀊",
+      "name": "HENTAIGANA LETTER U-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00B",
+      "character": "𛀋",
+      "name": "HENTAIGANA LETTER U-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00C",
+      "character": "𛀌",
+      "name": "HENTAIGANA LETTER U-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00D",
+      "character": "𛀍",
+      "name": "HENTAIGANA LETTER U-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00E",
+      "character": "𛀎",
+      "name": "HENTAIGANA LETTER U-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B00F",
+      "character": "𛀏",
+      "name": "HENTAIGANA LETTER E-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B010",
+      "character": "𛀐",
+      "name": "HENTAIGANA LETTER E-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B011",
+      "character": "𛀑",
+      "name": "HENTAIGANA LETTER E-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B012",
+      "character": "𛀒",
+      "name": "HENTAIGANA LETTER E-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B013",
+      "character": "𛀓",
+      "name": "HENTAIGANA LETTER E-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B014",
+      "character": "𛀔",
+      "name": "HENTAIGANA LETTER O-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B015",
+      "character": "𛀕",
+      "name": "HENTAIGANA LETTER O-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B016",
+      "character": "𛀖",
+      "name": "HENTAIGANA LETTER O-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B017",
+      "character": "𛀗",
+      "name": "HENTAIGANA LETTER KA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B018",
+      "character": "𛀘",
+      "name": "HENTAIGANA LETTER KA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B019",
+      "character": "𛀙",
+      "name": "HENTAIGANA LETTER KA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01A",
+      "character": "𛀚",
+      "name": "HENTAIGANA LETTER KA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01B",
+      "character": "𛀛",
+      "name": "HENTAIGANA LETTER KA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01C",
+      "character": "𛀜",
+      "name": "HENTAIGANA LETTER KA-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01D",
+      "character": "𛀝",
+      "name": "HENTAIGANA LETTER KA-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01E",
+      "character": "𛀞",
+      "name": "HENTAIGANA LETTER KA-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B01F",
+      "character": "𛀟",
+      "name": "HENTAIGANA LETTER KA-9",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B020",
+      "character": "𛀠",
+      "name": "HENTAIGANA LETTER KA-10",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B021",
+      "character": "𛀡",
+      "name": "HENTAIGANA LETTER KA-11",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B022",
+      "character": "𛀢",
+      "name": "HENTAIGANA LETTER KA-KE",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B023",
+      "character": "𛀣",
+      "name": "HENTAIGANA LETTER KI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B024",
+      "character": "𛀤",
+      "name": "HENTAIGANA LETTER KI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B025",
+      "character": "𛀥",
+      "name": "HENTAIGANA LETTER KI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B026",
+      "character": "𛀦",
+      "name": "HENTAIGANA LETTER KI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B027",
+      "character": "𛀧",
+      "name": "HENTAIGANA LETTER KI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B028",
+      "character": "𛀨",
+      "name": "HENTAIGANA LETTER KI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B029",
+      "character": "𛀩",
+      "name": "HENTAIGANA LETTER KI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02A",
+      "character": "𛀪",
+      "name": "HENTAIGANA LETTER KI-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02B",
+      "character": "𛀫",
+      "name": "HENTAIGANA LETTER KU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02C",
+      "character": "𛀬",
+      "name": "HENTAIGANA LETTER KU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02D",
+      "character": "𛀭",
+      "name": "HENTAIGANA LETTER KU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02E",
+      "character": "𛀮",
+      "name": "HENTAIGANA LETTER KU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B02F",
+      "character": "𛀯",
+      "name": "HENTAIGANA LETTER KU-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B030",
+      "character": "𛀰",
+      "name": "HENTAIGANA LETTER KU-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B031",
+      "character": "𛀱",
+      "name": "HENTAIGANA LETTER KU-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B032",
+      "character": "𛀲",
+      "name": "HENTAIGANA LETTER KE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B033",
+      "character": "𛀳",
+      "name": "HENTAIGANA LETTER KE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B034",
+      "character": "𛀴",
+      "name": "HENTAIGANA LETTER KE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B035",
+      "character": "𛀵",
+      "name": "HENTAIGANA LETTER KE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B036",
+      "character": "𛀶",
+      "name": "HENTAIGANA LETTER KE-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B037",
+      "character": "𛀷",
+      "name": "HENTAIGANA LETTER KE-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B038",
+      "character": "𛀸",
+      "name": "HENTAIGANA LETTER KO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B039",
+      "character": "𛀹",
+      "name": "HENTAIGANA LETTER KO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03A",
+      "character": "𛀺",
+      "name": "HENTAIGANA LETTER KO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03B",
+      "character": "𛀻",
+      "name": "HENTAIGANA LETTER KO-KI",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03C",
+      "character": "𛀼",
+      "name": "HENTAIGANA LETTER SA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03D",
+      "character": "𛀽",
+      "name": "HENTAIGANA LETTER SA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03E",
+      "character": "𛀾",
+      "name": "HENTAIGANA LETTER SA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B03F",
+      "character": "𛀿",
+      "name": "HENTAIGANA LETTER SA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B040",
+      "character": "𛁀",
+      "name": "HENTAIGANA LETTER SA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B041",
+      "character": "𛁁",
+      "name": "HENTAIGANA LETTER SA-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B042",
+      "character": "𛁂",
+      "name": "HENTAIGANA LETTER SA-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B043",
+      "character": "𛁃",
+      "name": "HENTAIGANA LETTER SA-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B044",
+      "character": "𛁄",
+      "name": "HENTAIGANA LETTER SI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B045",
+      "character": "𛁅",
+      "name": "HENTAIGANA LETTER SI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B046",
+      "character": "𛁆",
+      "name": "HENTAIGANA LETTER SI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B047",
+      "character": "𛁇",
+      "name": "HENTAIGANA LETTER SI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B048",
+      "character": "𛁈",
+      "name": "HENTAIGANA LETTER SI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B049",
+      "character": "𛁉",
+      "name": "HENTAIGANA LETTER SI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04A",
+      "character": "𛁊",
+      "name": "HENTAIGANA LETTER SU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04B",
+      "character": "𛁋",
+      "name": "HENTAIGANA LETTER SU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04C",
+      "character": "𛁌",
+      "name": "HENTAIGANA LETTER SU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04D",
+      "character": "𛁍",
+      "name": "HENTAIGANA LETTER SU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04E",
+      "character": "𛁎",
+      "name": "HENTAIGANA LETTER SU-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B04F",
+      "character": "𛁏",
+      "name": "HENTAIGANA LETTER SU-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B050",
+      "character": "𛁐",
+      "name": "HENTAIGANA LETTER SU-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B051",
+      "character": "𛁑",
+      "name": "HENTAIGANA LETTER SU-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B052",
+      "character": "𛁒",
+      "name": "HENTAIGANA LETTER SE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B053",
+      "character": "𛁓",
+      "name": "HENTAIGANA LETTER SE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B054",
+      "character": "𛁔",
+      "name": "HENTAIGANA LETTER SE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B055",
+      "character": "𛁕",
+      "name": "HENTAIGANA LETTER SE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B056",
+      "character": "𛁖",
+      "name": "HENTAIGANA LETTER SE-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B057",
+      "character": "𛁗",
+      "name": "HENTAIGANA LETTER SO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B058",
+      "character": "𛁘",
+      "name": "HENTAIGANA LETTER SO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B059",
+      "character": "𛁙",
+      "name": "HENTAIGANA LETTER SO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05A",
+      "character": "𛁚",
+      "name": "HENTAIGANA LETTER SO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05B",
+      "character": "𛁛",
+      "name": "HENTAIGANA LETTER SO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05C",
+      "character": "𛁜",
+      "name": "HENTAIGANA LETTER SO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05D",
+      "character": "𛁝",
+      "name": "HENTAIGANA LETTER SO-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05E",
+      "character": "𛁞",
+      "name": "HENTAIGANA LETTER TA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B05F",
+      "character": "𛁟",
+      "name": "HENTAIGANA LETTER TA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B060",
+      "character": "𛁠",
+      "name": "HENTAIGANA LETTER TA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B061",
+      "character": "𛁡",
+      "name": "HENTAIGANA LETTER TA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B062",
+      "character": "𛁢",
+      "name": "HENTAIGANA LETTER TI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B063",
+      "character": "𛁣",
+      "name": "HENTAIGANA LETTER TI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B064",
+      "character": "𛁤",
+      "name": "HENTAIGANA LETTER TI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B065",
+      "character": "𛁥",
+      "name": "HENTAIGANA LETTER TI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B066",
+      "character": "𛁦",
+      "name": "HENTAIGANA LETTER TI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B067",
+      "character": "𛁧",
+      "name": "HENTAIGANA LETTER TI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B068",
+      "character": "𛁨",
+      "name": "HENTAIGANA LETTER TI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B069",
+      "character": "𛁩",
+      "name": "HENTAIGANA LETTER TU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06A",
+      "character": "𛁪",
+      "name": "HENTAIGANA LETTER TU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06B",
+      "character": "𛁫",
+      "name": "HENTAIGANA LETTER TU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06C",
+      "character": "𛁬",
+      "name": "HENTAIGANA LETTER TU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06D",
+      "character": "𛁭",
+      "name": "HENTAIGANA LETTER TU-TO",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06E",
+      "character": "𛁮",
+      "name": "HENTAIGANA LETTER TE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B06F",
+      "character": "𛁯",
+      "name": "HENTAIGANA LETTER TE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B070",
+      "character": "𛁰",
+      "name": "HENTAIGANA LETTER TE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B071",
+      "character": "𛁱",
+      "name": "HENTAIGANA LETTER TE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B072",
+      "character": "𛁲",
+      "name": "HENTAIGANA LETTER TE-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B073",
+      "character": "𛁳",
+      "name": "HENTAIGANA LETTER TE-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B074",
+      "character": "𛁴",
+      "name": "HENTAIGANA LETTER TE-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B075",
+      "character": "𛁵",
+      "name": "HENTAIGANA LETTER TE-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B076",
+      "character": "𛁶",
+      "name": "HENTAIGANA LETTER TE-9",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B077",
+      "character": "𛁷",
+      "name": "HENTAIGANA LETTER TO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B078",
+      "character": "𛁸",
+      "name": "HENTAIGANA LETTER TO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B079",
+      "character": "𛁹",
+      "name": "HENTAIGANA LETTER TO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07A",
+      "character": "𛁺",
+      "name": "HENTAIGANA LETTER TO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07B",
+      "character": "𛁻",
+      "name": "HENTAIGANA LETTER TO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07C",
+      "character": "𛁼",
+      "name": "HENTAIGANA LETTER TO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07D",
+      "character": "𛁽",
+      "name": "HENTAIGANA LETTER TO-RA",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07E",
+      "character": "𛁾",
+      "name": "HENTAIGANA LETTER NA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B07F",
+      "character": "𛁿",
+      "name": "HENTAIGANA LETTER NA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B080",
+      "character": "𛂀",
+      "name": "HENTAIGANA LETTER NA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B081",
+      "character": "𛂁",
+      "name": "HENTAIGANA LETTER NA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B082",
+      "character": "𛂂",
+      "name": "HENTAIGANA LETTER NA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B083",
+      "character": "𛂃",
+      "name": "HENTAIGANA LETTER NA-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B084",
+      "character": "𛂄",
+      "name": "HENTAIGANA LETTER NA-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B085",
+      "character": "𛂅",
+      "name": "HENTAIGANA LETTER NA-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B086",
+      "character": "𛂆",
+      "name": "HENTAIGANA LETTER NA-9",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B087",
+      "character": "𛂇",
+      "name": "HENTAIGANA LETTER NI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B088",
+      "character": "𛂈",
+      "name": "HENTAIGANA LETTER NI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B089",
+      "character": "𛂉",
+      "name": "HENTAIGANA LETTER NI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08A",
+      "character": "𛂊",
+      "name": "HENTAIGANA LETTER NI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08B",
+      "character": "𛂋",
+      "name": "HENTAIGANA LETTER NI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08C",
+      "character": "𛂌",
+      "name": "HENTAIGANA LETTER NI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08D",
+      "character": "𛂍",
+      "name": "HENTAIGANA LETTER NI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08E",
+      "character": "𛂎",
+      "name": "HENTAIGANA LETTER NI-TE",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B08F",
+      "character": "𛂏",
+      "name": "HENTAIGANA LETTER NU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B090",
+      "character": "𛂐",
+      "name": "HENTAIGANA LETTER NU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B091",
+      "character": "𛂑",
+      "name": "HENTAIGANA LETTER NU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B092",
+      "character": "𛂒",
+      "name": "HENTAIGANA LETTER NE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B093",
+      "character": "𛂓",
+      "name": "HENTAIGANA LETTER NE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B094",
+      "character": "𛂔",
+      "name": "HENTAIGANA LETTER NE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B095",
+      "character": "𛂕",
+      "name": "HENTAIGANA LETTER NE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B096",
+      "character": "𛂖",
+      "name": "HENTAIGANA LETTER NE-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B097",
+      "character": "𛂗",
+      "name": "HENTAIGANA LETTER NE-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B098",
+      "character": "𛂘",
+      "name": "HENTAIGANA LETTER NE-KO",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B099",
+      "character": "𛂙",
+      "name": "HENTAIGANA LETTER NO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09A",
+      "character": "𛂚",
+      "name": "HENTAIGANA LETTER NO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09B",
+      "character": "𛂛",
+      "name": "HENTAIGANA LETTER NO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09C",
+      "character": "𛂜",
+      "name": "HENTAIGANA LETTER NO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09D",
+      "character": "𛂝",
+      "name": "HENTAIGANA LETTER NO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09E",
+      "character": "𛂞",
+      "name": "HENTAIGANA LETTER HA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B09F",
+      "character": "𛂟",
+      "name": "HENTAIGANA LETTER HA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A0",
+      "character": "𛂠",
+      "name": "HENTAIGANA LETTER HA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A1",
+      "character": "𛂡",
+      "name": "HENTAIGANA LETTER HA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A2",
+      "character": "𛂢",
+      "name": "HENTAIGANA LETTER HA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A3",
+      "character": "𛂣",
+      "name": "HENTAIGANA LETTER HA-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A4",
+      "character": "𛂤",
+      "name": "HENTAIGANA LETTER HA-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A5",
+      "character": "𛂥",
+      "name": "HENTAIGANA LETTER HA-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A6",
+      "character": "𛂦",
+      "name": "HENTAIGANA LETTER HA-9",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A7",
+      "character": "𛂧",
+      "name": "HENTAIGANA LETTER HA-10",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A8",
+      "character": "𛂨",
+      "name": "HENTAIGANA LETTER HA-11",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0A9",
+      "character": "𛂩",
+      "name": "HENTAIGANA LETTER HI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AA",
+      "character": "𛂪",
+      "name": "HENTAIGANA LETTER HI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AB",
+      "character": "𛂫",
+      "name": "HENTAIGANA LETTER HI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AC",
+      "character": "𛂬",
+      "name": "HENTAIGANA LETTER HI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AD",
+      "character": "𛂭",
+      "name": "HENTAIGANA LETTER HI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AE",
+      "character": "𛂮",
+      "name": "HENTAIGANA LETTER HI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0AF",
+      "character": "𛂯",
+      "name": "HENTAIGANA LETTER HI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B0",
+      "character": "𛂰",
+      "name": "HENTAIGANA LETTER HU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B1",
+      "character": "𛂱",
+      "name": "HENTAIGANA LETTER HU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B2",
+      "character": "𛂲",
+      "name": "HENTAIGANA LETTER HU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B3",
+      "character": "𛂳",
+      "name": "HENTAIGANA LETTER HE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B4",
+      "character": "𛂴",
+      "name": "HENTAIGANA LETTER HE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B5",
+      "character": "𛂵",
+      "name": "HENTAIGANA LETTER HE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B6",
+      "character": "𛂶",
+      "name": "HENTAIGANA LETTER HE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B7",
+      "character": "𛂷",
+      "name": "HENTAIGANA LETTER HE-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B8",
+      "character": "𛂸",
+      "name": "HENTAIGANA LETTER HE-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0B9",
+      "character": "𛂹",
+      "name": "HENTAIGANA LETTER HE-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BA",
+      "character": "𛂺",
+      "name": "HENTAIGANA LETTER HO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BB",
+      "character": "𛂻",
+      "name": "HENTAIGANA LETTER HO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BC",
+      "character": "𛂼",
+      "name": "HENTAIGANA LETTER HO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BD",
+      "character": "𛂽",
+      "name": "HENTAIGANA LETTER HO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BE",
+      "character": "𛂾",
+      "name": "HENTAIGANA LETTER HO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0BF",
+      "character": "𛂿",
+      "name": "HENTAIGANA LETTER HO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C0",
+      "character": "𛃀",
+      "name": "HENTAIGANA LETTER HO-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C1",
+      "character": "𛃁",
+      "name": "HENTAIGANA LETTER HO-8",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C2",
+      "character": "𛃂",
+      "name": "HENTAIGANA LETTER MA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C3",
+      "character": "𛃃",
+      "name": "HENTAIGANA LETTER MA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C4",
+      "character": "𛃄",
+      "name": "HENTAIGANA LETTER MA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C5",
+      "character": "𛃅",
+      "name": "HENTAIGANA LETTER MA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C6",
+      "character": "𛃆",
+      "name": "HENTAIGANA LETTER MA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C7",
+      "character": "𛃇",
+      "name": "HENTAIGANA LETTER MA-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C8",
+      "character": "𛃈",
+      "name": "HENTAIGANA LETTER MA-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0C9",
+      "character": "𛃉",
+      "name": "HENTAIGANA LETTER MI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CA",
+      "character": "𛃊",
+      "name": "HENTAIGANA LETTER MI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CB",
+      "character": "𛃋",
+      "name": "HENTAIGANA LETTER MI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CC",
+      "character": "𛃌",
+      "name": "HENTAIGANA LETTER MI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CD",
+      "character": "𛃍",
+      "name": "HENTAIGANA LETTER MI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CE",
+      "character": "𛃎",
+      "name": "HENTAIGANA LETTER MI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0CF",
+      "character": "𛃏",
+      "name": "HENTAIGANA LETTER MI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D0",
+      "character": "𛃐",
+      "name": "HENTAIGANA LETTER MU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D1",
+      "character": "𛃑",
+      "name": "HENTAIGANA LETTER MU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D2",
+      "character": "𛃒",
+      "name": "HENTAIGANA LETTER MU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D3",
+      "character": "𛃓",
+      "name": "HENTAIGANA LETTER MU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D4",
+      "character": "𛃔",
+      "name": "HENTAIGANA LETTER ME-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D5",
+      "character": "𛃕",
+      "name": "HENTAIGANA LETTER ME-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D6",
+      "character": "𛃖",
+      "name": "HENTAIGANA LETTER ME-MA",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D7",
+      "character": "𛃗",
+      "name": "HENTAIGANA LETTER MO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D8",
+      "character": "𛃘",
+      "name": "HENTAIGANA LETTER MO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0D9",
+      "character": "𛃙",
+      "name": "HENTAIGANA LETTER MO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DA",
+      "character": "𛃚",
+      "name": "HENTAIGANA LETTER MO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DB",
+      "character": "𛃛",
+      "name": "HENTAIGANA LETTER MO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DC",
+      "character": "𛃜",
+      "name": "HENTAIGANA LETTER MO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DD",
+      "character": "𛃝",
+      "name": "HENTAIGANA LETTER YA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DE",
+      "character": "𛃞",
+      "name": "HENTAIGANA LETTER YA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0DF",
+      "character": "𛃟",
+      "name": "HENTAIGANA LETTER YA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E0",
+      "character": "𛃠",
+      "name": "HENTAIGANA LETTER YA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E1",
+      "character": "𛃡",
+      "name": "HENTAIGANA LETTER YA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E2",
+      "character": "𛃢",
+      "name": "HENTAIGANA LETTER YA-YO",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E3",
+      "character": "𛃣",
+      "name": "HENTAIGANA LETTER YU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E4",
+      "character": "𛃤",
+      "name": "HENTAIGANA LETTER YU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E5",
+      "character": "𛃥",
+      "name": "HENTAIGANA LETTER YU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E6",
+      "character": "𛃦",
+      "name": "HENTAIGANA LETTER YU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E7",
+      "character": "𛃧",
+      "name": "HENTAIGANA LETTER YO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E8",
+      "character": "𛃨",
+      "name": "HENTAIGANA LETTER YO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0E9",
+      "character": "𛃩",
+      "name": "HENTAIGANA LETTER YO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0EA",
+      "character": "𛃪",
+      "name": "HENTAIGANA LETTER YO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0EB",
+      "character": "𛃫",
+      "name": "HENTAIGANA LETTER YO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0EC",
+      "character": "𛃬",
+      "name": "HENTAIGANA LETTER YO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0ED",
+      "character": "𛃭",
+      "name": "HENTAIGANA LETTER RA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0EE",
+      "character": "𛃮",
+      "name": "HENTAIGANA LETTER RA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0EF",
+      "character": "𛃯",
+      "name": "HENTAIGANA LETTER RA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F0",
+      "character": "𛃰",
+      "name": "HENTAIGANA LETTER RA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F1",
+      "character": "𛃱",
+      "name": "HENTAIGANA LETTER RI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F2",
+      "character": "𛃲",
+      "name": "HENTAIGANA LETTER RI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F3",
+      "character": "𛃳",
+      "name": "HENTAIGANA LETTER RI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F4",
+      "character": "𛃴",
+      "name": "HENTAIGANA LETTER RI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F5",
+      "character": "𛃵",
+      "name": "HENTAIGANA LETTER RI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F6",
+      "character": "𛃶",
+      "name": "HENTAIGANA LETTER RI-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F7",
+      "character": "𛃷",
+      "name": "HENTAIGANA LETTER RI-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F8",
+      "character": "𛃸",
+      "name": "HENTAIGANA LETTER RU-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0F9",
+      "character": "𛃹",
+      "name": "HENTAIGANA LETTER RU-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FA",
+      "character": "𛃺",
+      "name": "HENTAIGANA LETTER RU-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FB",
+      "character": "𛃻",
+      "name": "HENTAIGANA LETTER RU-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FC",
+      "character": "𛃼",
+      "name": "HENTAIGANA LETTER RU-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FD",
+      "character": "𛃽",
+      "name": "HENTAIGANA LETTER RU-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FE",
+      "character": "𛃾",
+      "name": "HENTAIGANA LETTER RE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B0FF",
+      "character": "𛃿",
+      "name": "HENTAIGANA LETTER RE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B100",
+      "character": "𛄀",
+      "name": "HENTAIGANA LETTER RE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B101",
+      "character": "𛄁",
+      "name": "HENTAIGANA LETTER RE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B102",
+      "character": "𛄂",
+      "name": "HENTAIGANA LETTER RO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B103",
+      "character": "𛄃",
+      "name": "HENTAIGANA LETTER RO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B104",
+      "character": "𛄄",
+      "name": "HENTAIGANA LETTER RO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B105",
+      "character": "𛄅",
+      "name": "HENTAIGANA LETTER RO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B106",
+      "character": "𛄆",
+      "name": "HENTAIGANA LETTER RO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B107",
+      "character": "𛄇",
+      "name": "HENTAIGANA LETTER RO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B108",
+      "character": "𛄈",
+      "name": "HENTAIGANA LETTER WA-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B109",
+      "character": "𛄉",
+      "name": "HENTAIGANA LETTER WA-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10A",
+      "character": "𛄊",
+      "name": "HENTAIGANA LETTER WA-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10B",
+      "character": "𛄋",
+      "name": "HENTAIGANA LETTER WA-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10C",
+      "character": "𛄌",
+      "name": "HENTAIGANA LETTER WA-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10D",
+      "character": "𛄍",
+      "name": "HENTAIGANA LETTER WI-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10E",
+      "character": "𛄎",
+      "name": "HENTAIGANA LETTER WI-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B10F",
+      "character": "𛄏",
+      "name": "HENTAIGANA LETTER WI-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B110",
+      "character": "𛄐",
+      "name": "HENTAIGANA LETTER WI-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B111",
+      "character": "𛄑",
+      "name": "HENTAIGANA LETTER WI-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B112",
+      "character": "𛄒",
+      "name": "HENTAIGANA LETTER WE-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B113",
+      "character": "𛄓",
+      "name": "HENTAIGANA LETTER WE-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B114",
+      "character": "𛄔",
+      "name": "HENTAIGANA LETTER WE-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B115",
+      "character": "𛄕",
+      "name": "HENTAIGANA LETTER WE-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B116",
+      "character": "𛄖",
+      "name": "HENTAIGANA LETTER WO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B117",
+      "character": "𛄗",
+      "name": "HENTAIGANA LETTER WO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B118",
+      "character": "𛄘",
+      "name": "HENTAIGANA LETTER WO-3",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B119",
+      "character": "𛄙",
+      "name": "HENTAIGANA LETTER WO-4",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11A",
+      "character": "𛄚",
+      "name": "HENTAIGANA LETTER WO-5",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11B",
+      "character": "𛄛",
+      "name": "HENTAIGANA LETTER WO-6",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11C",
+      "character": "𛄜",
+      "name": "HENTAIGANA LETTER WO-7",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11D",
+      "character": "𛄝",
+      "name": "HENTAIGANA LETTER N-MU-MO-1",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11E",
+      "character": "𛄞",
+      "name": "HENTAIGANA LETTER N-MU-MO-2",
+      "age": "10.0",
+      "group": "hentaigana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B11F",
+      "character": "𛄟",
+      "name": "HIRAGANA LETTER ARCHAIC WU",
+      "age": "14.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B120",
+      "character": "𛄠",
+      "name": "KATAKANA LETTER ARCHAIC YI",
+      "age": "14.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B121",
+      "character": "𛄡",
+      "name": "KATAKANA LETTER ARCHAIC YE",
+      "age": "14.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B122",
+      "character": "𛄢",
+      "name": "KATAKANA LETTER ARCHAIC WU",
+      "age": "14.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": true
+      }
+    },
+    {
+      "codepoint": "U+1B123",
+      "character": "𛄣",
+      "name": "HIRAGANA DIGRAPH KOTO",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "<vertical> 3053 3068",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B124",
+      "character": "𛄤",
+      "name": "KATAKANA DIGRAPH TOKI",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "<vertical> 30C8 30AD",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B125",
+      "character": "𛄥",
+      "name": "KATAKANA DIGRAPH TOTE",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "<vertical> 30C8 30C6",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B126",
+      "character": "𛄦",
+      "name": "KATAKANA DIGRAPH YORI",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "<vertical> 30E8 30EA",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B127",
+      "character": "𛄧",
+      "name": "KATAKANA LETTER ALTERNATE NE",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B128",
+      "character": "𛄨",
+      "name": "KATAKANA LETTER ALTERNATE WI",
+      "age": "18.0",
+      "group": "historic-kana",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B132",
+      "character": "𛄲",
+      "name": "HIRAGANA LETTER SMALL KO",
+      "age": "15.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B150",
+      "character": "𛅐",
+      "name": "HIRAGANA LETTER SMALL WI",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B151",
+      "character": "𛅑",
+      "name": "HIRAGANA LETTER SMALL WE",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B152",
+      "character": "𛅒",
+      "name": "HIRAGANA LETTER SMALL WO",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B155",
+      "character": "𛅕",
+      "name": "KATAKANA LETTER SMALL KO",
+      "age": "15.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B164",
+      "character": "𛅤",
+      "name": "KATAKANA LETTER SMALL WI",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B165",
+      "character": "𛅥",
+      "name": "KATAKANA LETTER SMALL WE",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B166",
+      "character": "𛅦",
+      "name": "KATAKANA LETTER SMALL WO",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B167",
+      "character": "𛅧",
+      "name": "KATAKANA LETTER SMALL N",
+      "age": "12.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1B168",
+      "character": "𛅨",
+      "name": "KATAKANA LETTER SMALL ARCHAIC YE",
+      "age": "18.0",
+      "group": "small-kana",
+      "decomposition": "",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Preserve the exact upstream licence bytes recorded in the source manifest.
+sources/upstream/**/OFL.txt -whitespace
