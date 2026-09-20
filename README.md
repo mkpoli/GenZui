@@ -70,6 +70,13 @@ loops, intersections and denser constructions. `build/proof/preview.png` shows
 eight of them. The study construction is recorded in `build/proof/sources.json`
 and [research/design.md](research/design.md).
 
+## Windows browsers
+
+[Browser setup](browser/README.md) describes Firefox fallback preferences and the
+Chrome/Vivaldi userscript. Build its local setup page with
+`python3 scripts/browser_setup.py`. The helper uses installed fonts and does not
+create a new font family.
+
 ## Licence
 
 Source fonts and derived outlines use SIL OFL 1.1. Each upstream notice is in

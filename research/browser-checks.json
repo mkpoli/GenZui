@@ -1,0 +1,87 @@
+{
+  "date": "2026-09-20",
+  "method": "Windows browsers with temporary profiles; CSS.getPlatformFontsForNode; Vivaldi headless with --disable-vivaldi; userscript injected with a local GM_addStyle shim",
+  "chromium_results": {
+    "chrome": {
+      "all_293": {
+        "fonts": {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 293
+        }
+      },
+      "dynamic_mixed_text": {
+        "fonts": [
+          {
+            "familyName": "GenSeki Hentaigana Gothic",
+            "postScriptName": "GenSekiHentaiganaGothic",
+            "isCustomFont": false,
+            "glyphCount": 1
+          },
+          {
+            "familyName": "Arial",
+            "postScriptName": "ArialMT",
+            "isCustomFont": false,
+            "glyphCount": 3
+          },
+          {
+            "familyName": "Noto Sans JP",
+            "postScriptName": "Noto-Sans-JP",
+            "isCustomFont": false,
+            "glyphCount": 4
+          }
+        ]
+      },
+      "bold": {
+        "fonts": {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic-Bold",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      }
+    },
+    "vivaldi": {
+      "all_293": {
+        "fonts": {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 293
+        }
+      },
+      "dynamic_mixed_text": {
+        "fonts": [
+          {
+            "familyName": "GenSeki Hentaigana Gothic",
+            "postScriptName": "GenSekiHentaiganaGothic",
+            "isCustomFont": false,
+            "glyphCount": 1
+          },
+          {
+            "familyName": "Arial",
+            "postScriptName": "ArialMT",
+            "isCustomFont": false,
+            "glyphCount": 3
+          },
+          {
+            "familyName": "Noto Sans JP",
+            "postScriptName": "Noto-Sans-JP",
+            "isCustomFont": false,
+            "glyphCount": 4
+          }
+        ]
+      },
+      "bold": {
+        "fonts": {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic-Bold",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      }
+    }
+  },
+  "firefox": "Temporary-profile screenshot verified the six font.name-list preferences: existing hentaigana, seven Unicode 18 additions, and combining marks. Applied these lists to the active installation profile user.js; restart required."
+}
