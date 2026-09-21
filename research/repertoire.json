@@ -7,13 +7,16 @@
   ],
   "groups": {
     "phonetic-mark": 2,
+    "ideographic-description": 5,
     "bmp-digraph": 2,
     "compatibility-kana": 1,
     "minnan-tone": 13,
     "historic-kana": 11,
     "hentaigana": 286,
     "small-kana": 10,
-    "cjk-kana-ligature": 4
+    "tally-mark": 5,
+    "cjk-kana-ligature": 4,
+    "historical-kanji": 1
   },
   "unicode18": [
     "U+1B123",
@@ -54,6 +57,62 @@
       }
     },
     {
+      "codepoint": "U+2FFC",
+      "character": "⿼",
+      "name": "IDEOGRAPHIC DESCRIPTION CHARACTER SURROUND FROM RIGHT",
+      "age": "15.1",
+      "group": "ideographic-description",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2FFD",
+      "character": "⿽",
+      "name": "IDEOGRAPHIC DESCRIPTION CHARACTER SURROUND FROM LOWER RIGHT",
+      "age": "15.1",
+      "group": "ideographic-description",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2FFE",
+      "character": "⿾",
+      "name": "IDEOGRAPHIC DESCRIPTION CHARACTER HORIZONTAL REFLECTION",
+      "age": "15.1",
+      "group": "ideographic-description",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2FFF",
+      "character": "⿿",
+      "name": "IDEOGRAPHIC DESCRIPTION CHARACTER ROTATION",
+      "age": "15.1",
+      "group": "ideographic-description",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
       "codepoint": "U+309F",
       "character": "ゟ",
       "name": "HIRAGANA DIGRAPH YORI",
@@ -78,6 +137,20 @@
       "upstream": {
         "NotoSansJP": true,
         "NotoSerifJP": true,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+31EF",
+      "character": "㇯",
+      "name": "IDEOGRAPHIC DESCRIPTION CHARACTER SUBTRACTION",
+      "age": "15.1",
+      "group": "ideographic-description",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
         "NotoSerifHentaigana": false
       }
     },
@@ -4576,6 +4649,76 @@
       }
     },
     {
+      "codepoint": "U+1D372",
+      "character": "𝍲",
+      "name": "IDEOGRAPHIC TALLY MARK ONE",
+      "age": "11.0",
+      "group": "tally-mark",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1D373",
+      "character": "𝍳",
+      "name": "IDEOGRAPHIC TALLY MARK TWO",
+      "age": "11.0",
+      "group": "tally-mark",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1D374",
+      "character": "𝍴",
+      "name": "IDEOGRAPHIC TALLY MARK THREE",
+      "age": "11.0",
+      "group": "tally-mark",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1D375",
+      "character": "𝍵",
+      "name": "IDEOGRAPHIC TALLY MARK FOUR",
+      "age": "11.0",
+      "group": "tally-mark",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1D376",
+      "character": "𝍶",
+      "name": "IDEOGRAPHIC TALLY MARK FIVE",
+      "age": "11.0",
+      "group": "tally-mark",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
       "codepoint": "U+2A708",
       "character": "𪜈",
       "name": "CJK UNIFIED IDEOGRAPH-2A708",
@@ -4627,6 +4770,21 @@
       "label": "HIRAGANA DIGRAPH NARI",
       "age": "10.0",
       "group": "cjk-kana-ligature",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+5344",
+      "character": "卄",
+      "name": "CJK UNIFIED IDEOGRAPH-5344",
+      "label": "TWENTY · 卄",
+      "age": "1.1",
+      "group": "historical-kanji",
       "decomposition": "",
       "vertical_orientation": "U",
       "upstream": {

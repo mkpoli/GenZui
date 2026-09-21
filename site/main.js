@@ -16,7 +16,7 @@
   const character = item => String.fromCodePoint(item.cp);
   const origins = {
     jp: 'Noto Serif JP', hentaigana: 'Noto Serif Hentaigana',
-     genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana',
+     genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana', cjk: 'Noto Serif CJK JP',
   };
   const filters = {
     historical: item => item.group !== 'base',
@@ -25,6 +25,7 @@
     small: item => item.group === 'small-kana',
     minnan: item => ['minnan-tone', 'phonetic-mark'].includes(item.group),
     ligatures: item => item.group !== 'base' && (item.label.includes('DIGRAPH') || item.group === 'cjk-kana-ligature'),
+    honkoku: item => ['historical-kanji', 'tally-mark', 'ideographic-description'].includes(item.group),
     all: () => true,
   };
   let filter = 'historical';
@@ -184,6 +185,7 @@
   });
 
   const presets = {
+    honkoku: '卄日　廿日　卅日\n𝍲 𝍳 𝍴 𝍵 𝍶　正\n⿼ ⿽ ⿾ ⿿ ㇯',
     mixed: '春はあけぼの。\nかなのかたちを読む。\nあ𛀂 い𛀆 う𛀋 え𛀁 お𛀕',
     reading: '春はあけぼの。\nやうやう白くなりゆく山ぎは。\n文字を読み、ことばをたどる。',
     historical: 'あ 𛀂 𛀃 𛀄 𛀅\nい 𛀆 𛀇 𛀈 𛀉\nう 𛀊 𛀋 𛀌 𛀍 𛀎',
@@ -234,6 +236,11 @@
     loaded = true; typeStatus();
   }).catch(() => { loadFailed = true; typeStatus(); });
 
+  const initialPreset = new URLSearchParams(location.search).get('sample');
+  if (Object.hasOwn(presets, initialPreset)) {
+    $('#preset').value = initialPreset; setPreset();
+    if (initialPreset === 'honkoku') filter = 'honkoku';
+  }
   renderInventory();
   updateInspector(selected);
   typeStatus();

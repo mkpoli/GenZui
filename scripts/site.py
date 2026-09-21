@@ -87,7 +87,7 @@ def build():
     provenance = json.loads((FONT_OUT/'sources.json').read_text())
     entries = character_data(font, audit, provenance)
     source_counts = dict(Counter(e['source'] for e in entries))
-    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 22, 'frb': 15}
+    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32, 'frb': 15, 'cjk': 1}
     assert len(entries) == checks['encoded_characters']
     data = {'version': VERSION, 'family': FAMILY, 'characters': entries,
             'counts': source_counts, 'total': len(entries),
@@ -123,7 +123,7 @@ def build():
     for name in (STEM+'.ttf', STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
                  'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
                  'FRB-OFL.txt', 'FRB-README.md',
-                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json'):
+                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt'):
         shutil.copyfile(FONT_OUT/name, downloads/name)
     (OUT/'README.txt').write_text(
         'GenZui Serif specimen site\n\nOpen index.html in a current browser.\n'

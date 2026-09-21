@@ -27,7 +27,7 @@ def package():
     files = [STEM+'.ttf', STEM+'.woff2', 'README.txt', 'Install-GenZui.ps1',
              'serif-proof.html', 'serif-proof.png', 'OFL.txt', 'NOTICE.txt',
              'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
-             'FRB-OFL.txt', 'FRB-README.md',
+             'FRB-OFL.txt', 'FRB-README.md', 'NotoSerifCJK-OFL.txt',
              'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'source-manifest.json',
              'sources.json', 'checks.json', 'browser-checks.json', 'kana-coverage.json']
     (ROOT/'dist').mkdir(exist_ok=True)

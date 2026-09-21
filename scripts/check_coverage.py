@@ -5,6 +5,7 @@ import json
 from fontTools.ttLib import TTFont
 from repertoire import CJK_KANA, MINNAN_MARKS, properties
 from sources import ROOT, verify
+from honkoku import HONKOKU, TALLIES
 
 KANA_BLOCKS = ('Hiragana', 'Katakana', 'Katakana Phonetic Extensions',
                'Kana Extended-B', 'Kana Supplement', 'Kana Extended-A',
@@ -32,6 +33,9 @@ def check_coverage(path):
         'Script plus Script_Extensions': all_points,
         'CJK-encoded kana ligatures': set(CJK_KANA),
         'Minnan combining marks': set(MINNAN_MARKS),
+        'Honkoku additions': set(HONKOKU),
+        'Ideographic tally marks': set(TALLIES),
+        'Ideographic description characters': set(range(0x2FF0, 0x3000)) | {0x31EF},
     })
     with TTFont(path) as font:
         covered = set(font.getBestCmap())

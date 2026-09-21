@@ -5,6 +5,7 @@ from collections import Counter
 from fontTools.ttLib import TTFont
 
 from sources import ROOT, verify
+from honkoku import TALLIES, NEW_IDCS
 
 FAMILIES = ("NotoSansJP", "NotoSerifJP", "NotoSerifHentaigana")
 CJK_KANA = {
@@ -41,7 +42,11 @@ def repertoire():
     for line in (ROOT / "data/unicode/UnicodeData.txt").read_text().splitlines():
         fields = line.split(";")
         cp, name = int(fields[0], 16), fields[1]
-        if cp in MINNAN_TONES:
+        if cp in TALLIES:
+            group = "tally-mark"
+        elif cp in NEW_IDCS:
+            group = "ideographic-description"
+        elif cp in MINNAN_TONES:
             group = "minnan-tone"
         elif cp in MINNAN_MARKS:
             group = "phonetic-mark"
@@ -63,11 +68,11 @@ def repertoire():
             "decomposition": fields[5], "vertical_orientation": orientation[cp],
         })
     # UnicodeData represents these ideograph blocks as First/Last ranges.
-    for cp, label in CJK_KANA.items():
+    for cp, label in (CJK_KANA | {0x5344: "TWENTY · 卄"}).items():
         result.append({
             "codepoint": f"U+{cp:04X}", "character": chr(cp),
             "name": f"CJK UNIFIED IDEOGRAPH-{cp:04X}", "label": label,
-            "age": ages[cp], "group": "cjk-kana-ligature",
+            "age": ages[cp], "group": "historical-kanji" if cp == 0x5344 else "cjk-kana-ligature",
             "decomposition": "", "vertical_orientation": orientation[cp],
         })
     assert len({item["codepoint"] for item in result}) == len(result)

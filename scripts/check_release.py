@@ -65,7 +65,7 @@ def check():
     with ZipFile(OUT/'downloads'/f'{STEM}-{VERSION}.zip') as z:
         assert z.testzip() is None
         assert hashlib.sha256(z.read(STEM+'.ttf')).hexdigest()==checks['ttf_sha256']
-        assert {'OFL.txt','NOTICE.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
+        assert {'OFL.txt','NOTICE.txt','FRB-OFL.txt','NotoSerifCJK-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
         coverage=json.loads(z.read('kana-coverage.json'))
         assert coverage['font_sha256']==checks['ttf_sha256']
         assert coverage['coverage']['Script plus Script_Extensions']=={
@@ -74,8 +74,8 @@ def check():
     assert Image.open(OUT/'media/genzui-social.png').size==(1200,630)
     assert Image.open(OUT/'media/genzui-social-2x.png').size==(2400,1260)
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
-    assert data['total']==17053 and len(data['characters'])==17053
-    assert sum(c['source']=='genzui' for c in data['characters'])==22
+    assert data['total']==17064 and len(data['characters'])==17064
+    assert sum(c['source']=='genzui' for c in data['characters'])==32
     report={'version':VERSION,'font_sha256':checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
             'font_bytes_unchanged':True,'status':'passed'}

@@ -2,13 +2,14 @@ GenZui Serif / 源萃明朝（げんずい）
 Regular, version {{VERSION}}
 
 One font for Japanese text and historical kana:
-  17,053 encoded characters from the Noto Serif JP base and kana additions
+  17,064 encoded characters from the Noto Serif JP base and kana additions
   13 Minnan tone letters with overline and dot-below support
   286 hentaigana
   All seven Unicode 18 kana additions
   Four CJK-encoded kana ligatures: U+2A708, U+2CEFF, U+2CF00, U+2CF02
   All 763 characters in Unicode 18's Hiragana/Katakana Script and Script_Extensions
-  329 historical characters, support marks and compatibility kana in the inventory
+  卄, five ideographic tally marks and all 17 ideographic-description characters
+  340 historical characters and transcription symbols in the inventory
 
 INSTALL ON WINDOWS
 
@@ -42,7 +43,7 @@ with an opening diagonal, a rounded low shoulder and a lighter rising exit,
 aligned to the kana baseline.
 Regular is the available weight;
 bold text may be synthesized by the application. Shared ideographs use Japanese
-regional forms. Chinese and Korean coverage is limited to the Noto Serif JP base.
+regional forms. Chinese and Korean coverage follows the Noto Serif JP base, with 卄 added from Noto Serif CJK JP.
 
 Minnan tone letters come from FRB Taiwanese Kana. Vertical tone placement
 supports one to four fullwidth kana at default advance and zero letter spacing.
@@ -60,7 +61,8 @@ SOURCES AND LICENCES
 
 Noto Serif JP and Noto Serif Hentaigana supply the base and historical outlines
 under SIL OFL 1.1. FRB Taiwanese Kana supplies 13 tone letters and two marks
-under OFL 1.1; its original licence and README are included. The combined font
+under OFL 1.1; its original licence and README are included. Noto Serif CJK JP supplies 卄; its original OFL is included as NotoSerifCJK-OFL.txt.
+The combined font
 is distributed under SIL OFL 1.1. Jigmo2 supplied the NARI outline in comparison
 fonts through 0.102 under CC0; its licence and notices accompany the comparisons.
 See OFL.txt and NOTICE.txt.

@@ -5,8 +5,11 @@ GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Seri
 and Unicode 18.0 additions. Version **0.112** contains **17,053 encoded characters**
 in one Regular weight.
 
-Version 0.112 reduces TOKI and TOTE beside TOMO and adds ㌬ SQUARE PAATU;
-[proportion notes](research/refinements-0.112.md) describe the changes.
+The 0.113 development build adds **11 transcription characters**: 卄,
+five ideographic tally marks (𝍲𝍳𝍴𝍵𝍶), and five ideographic-description
+symbols (⿼⿽⿾⿿㇯). It contains **17,064 encoded characters**.
+[Construction notes](research/honkoku-0.113.md) describe their sources and coverage.
+The download links below serve the published 0.112 release.
 
 [Try the font](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -55,7 +58,7 @@ This is an encoding check; historical variants and arbitrary combining-mark
 sequences need separate typographic assessment.
 
 Shared ideographs retain Japanese regional forms. Chinese and Korean coverage
-is limited to the Noto Serif JP base. Regular is the available weight.
+follows the Noto Serif JP base, with 卄 added in the development build. Regular is the available weight.
 
 ### Two WU forms
 
@@ -80,7 +83,8 @@ or custom spacing require application-level positioning.
 | [Noto Serif JP](https://github.com/google/fonts/tree/main/ofl/notoserifjp) | Japanese base and kana components; 16,726 encoded characters |
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
-| GenZui | 21 historical kana constructions and SQUARE PAATU, from Noto components and original drawing |
+| [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄, added in 0.113 from the full Japanese CJK font |
+| GenZui | 21 historical kana constructions, SQUARE PAATU and ten transcription symbols, from Noto components and original drawing |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui's constructions
 in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
@@ -104,10 +108,10 @@ python3 -m venv .venv
 .venv/bin/python scripts/check_serif.py
 ```
 
-Outputs are in `build/serif/`. The checks cover the 329 historical characters, support marks and compatibility kana, preservation of upstream glyphs and metrics, Japanese layout,
+Outputs are in `build/serif/`. The checks cover 340 historical characters and transcription symbols, preservation of upstream glyphs and metrics, Japanese layout,
 vertical small kana, combining marks, Minnan tones, WU variants and TTF/WOFF2 parity.
 The historical glyph constructions are in `scripts/serif_forms.py`; squared kana
-are in `scripts/compatibility.py`. `scripts/check_coverage.py` checks the pinned
+are in `scripts/compatibility.py`; transcription additions are in `scripts/honkoku.py`. `scripts/check_coverage.py` checks the pinned
 Unicode Script and Script_Extensions properties as part of font validation.
 
 Release packaging uses `scripts/package_serif.py`. It requires passing Chrome,
@@ -121,7 +125,7 @@ report. The packager verifies the TTF and WOFF2 hashes against that report; a
 modified font requires new browser validation.
 
 ```sh
-cp research/browser-checks-0.112.json build/serif/browser-checks.json
+cp research/browser-checks-0.113.json build/serif/browser-checks.json
 .venv/bin/python scripts/package_serif.py
 bun install --frozen-lockfile
 bun run release:build

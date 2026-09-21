@@ -1,7 +1,7 @@
 {
-  "version": "0.112",
-  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
-  "gallery_sha256": "3efb39e212735541d2caac7641f8a471d8cf11f016f735e697ae94c9ae55cc8d",
+  "version": "0.113",
+  "ttf_sha256": "212ed1f1935365d64d713d4729cd97b2afd7a9b463b8c66dc9c32269b0e909f7",
+  "gallery_sha256": "70d68c657f14a6100efb89d76c59d65aca31989de14444942f627744beb5043a",
   "all_reading_characters_covered": 53,
   "proof_font_count": 2,
   "proof_outlines_and_metrics_match_full_font": true,

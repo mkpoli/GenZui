@@ -134,6 +134,18 @@
       "url": "https://www.unicode.org/Public/18.0.0/ucd/ScriptExtensions.txt",
       "sha256": "5c9d34a922f687726f2a8bcf57d49f905987e51f1b21b58c95a00fbe255cec23",
       "size": 21145
+    },
+    {
+      "path": "sources/upstream/NotoSerifCJKjp/NotoSerifCJKjp-Regular.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/OTF/Japanese/NotoSerifCJKjp-Regular.otf",
+      "sha256": "d9854c7a8ef170b5a7932558856fd64eb8de0b007cd823fed6f9f514ad2803d3",
+      "size": 24573864
+    },
+    {
+      "path": "sources/upstream/NotoSerifCJKjp/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/LICENSE",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "size": 4301
     }
   ]
 }
