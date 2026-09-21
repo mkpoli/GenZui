@@ -146,6 +146,12 @@
       "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/LICENSE",
       "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
       "size": 4301
+    },
+    {
+      "path": "data/unicode/DerivedNumericType.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/extracted/DerivedNumericType.txt",
+      "sha256": "3dade4d96bd00d71b10022bf70b370090f3ca947f977ad4dc2854e06c4d074f6",
+      "size": 22001
     }
   ]
 }

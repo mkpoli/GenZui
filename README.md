@@ -1,15 +1,17 @@
 # 源萃明朝 GenZui Serif
 
 GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Serif JP**,
-**Noto Serif Hentaigana** and **FRB Taiwanese Kana**, with drawn historical kana
-and Unicode 18.0 additions. Version **0.112** contains **17,053 encoded characters**
+**Noto Serif Hentaigana**, **Noto Serif CJK JP** and **FRB Taiwanese Kana**, with drawn historical kana
+and Unicode 18.0 additions. Version **0.113** contains **17,064 encoded characters**
 in one Regular weight.
 
-The 0.113 development build adds **11 transcription characters**: 卄,
+Version 0.113 supplies eleven further characters: 卄,
 five ideographic tally marks (𝍲𝍳𝍴𝍵𝍶), and five ideographic-description
-symbols (⿼⿽⿾⿿㇯). It contains **17,064 encoded characters**.
+symbols (⿼⿽⿾⿿㇯).
 [Construction notes](research/honkoku-0.113.md) describe their sources and coverage.
-The download links below serve the published 0.112 release.
+The specimen has separate collections for [Han numerals](https://genzui.mkpo.li/?sample=numerals#specimen),
+[ideographic tally marks](https://genzui.mkpo.li/?sample=tallies#specimen) and
+[ideographic description characters](https://genzui.mkpo.li/?sample=ideographic-description#specimen).
 
 [Try the font](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -20,12 +22,12 @@ The download links below serve the published 0.112 release.
 
 - **Desktop:** [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf).
   Open the file and select **Install**, then choose **GenZui Serif / 源萃明朝** in your app.
-- **Complete package:** [version 0.112 ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.112.zip),
+- **Complete package:** [version 0.113 ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.113.zip),
   with TTF, WOFF2, an offline specimen, installation instructions and licences.
 - **Web:** load the versioned stylesheet and set the font family:
 
 ```html
-<link rel="stylesheet" href="https://genzui.mkpo.li/v0.112/genzui.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/v0.113/genzui.css">
 ```
 
 ```css
@@ -53,12 +55,12 @@ and Small Kana Extension blocks. A broader check of the Hiragana/Katakana script
 properties and script extensions covers **all 763 characters**, including halfwidth kana, enclosed kana, squared
 katakana and shared marks. Version 0.112 fills the last gap, **㌬ U+332C SQUARE PAATU**,
 using native Noto squared-katakana components in horizontal and vertical forms.
-See the [coverage audit](research/kana-coverage-0.112.json).
+See the [coverage audit](research/kana-coverage-0.113.json).
 This is an encoding check; historical variants and arbitrary combining-mark
 sequences need separate typographic assessment.
 
 Shared ideographs retain Japanese regional forms. Chinese and Korean coverage
-follows the Noto Serif JP base, with 卄 added in the development build. Regular is the available weight.
+follows the Noto Serif JP base, with 卄 from Noto Serif CJK JP. Regular is the available weight.
 
 ### Two WU forms
 

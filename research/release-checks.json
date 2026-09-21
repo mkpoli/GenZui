@@ -4,6 +4,12 @@
   "local_links_checked": 41,
   "public_gallery_forms": 21,
   "release_files_checked": 48,
+  "inventory_collections": {
+    "han-numeral": 80,
+    "tally-mark": 5,
+    "ideographic-description": 17
+  },
+  "extended_kana_characters": 329,
   "font_bytes_unchanged": true,
   "status": "passed"
 }

@@ -11,6 +11,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 from fontTools.ttLib import TTFont
 from repertoire import properties
+from honkoku import TALLIES
 from serif import FAMILY, OUT as FONT_OUT, STEM, VERSION
 from sources import ROOT, verify
 from refinement_proof import build_comparison
@@ -20,11 +21,16 @@ from design_gallery import build_gallery
 
 OUT = ROOT / 'build/site'
 
+KANA_GROUPS = {'hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph',
+               'cjk-kana-ligature', 'minnan-tone', 'phonetic-mark', 'compatibility-kana'}
+
 
 def character_data(font, audit, provenance):
     cmap = font.getBestCmap()
     historic = {ord(c['character']): c for c in audit['characters']}
     ages = properties('DerivedAge.txt')
+    numeric = properties('DerivedNumericType.txt')
+    scripts = properties('Scripts.txt')
     blocks, starts = [], []
     for line in (ROOT/'data/unicode/Blocks.txt').read_text().splitlines():
         line = line.split('#', 1)[0].strip()
@@ -60,9 +66,12 @@ def character_data(font, audit, provenance):
         h = historic.get(cp)
         key = f'U+{cp:04X}'
         source = provenance['source_kinds'][key] if h else 'jp'
+        group = ('han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
+                 'ideographic-description' if 0x2FF0 <= cp <= 0x2FFF or cp == 0x31EF else
+                 'tally-mark' if cp in TALLIES else h['group'] if h else 'base')
         entries.append({'cp': cp, 'name': name, 'category': category,
                         'block': blocks[index][2], 'age': ages[cp],
-                        'source': source, 'group': h['group'] if h else 'base',
+                        'source': source, 'group': group,
                         'label': h.get('label', name) if h else name,
                         'provisional': source == 'genzui',
                         'description': provenance['added'].get(key, '')})
@@ -91,12 +100,13 @@ def build():
     assert len(entries) == checks['encoded_characters']
     data = {'version': VERSION, 'family': FAMILY, 'characters': entries,
             'counts': source_counts, 'total': len(entries),
-            'historical': sum(e['group'] != 'base' for e in entries)}
+            'historical': sum(e['group'] in KANA_GROUPS for e in entries)}
     OUT.mkdir(parents=True, exist_ok=True)
     font_data = base64.b64encode((FONT_OUT/(STEM+'.woff2')).read_bytes()).decode()
     page = (ROOT/'site/index.html').read_text()
     replacement = {
         '{{FONT}}': font_data,
+        '{{NUMERAL_COUNT}}': str(sum(e['group'] == 'han-numeral' for e in entries)),
         '{{CSS}}': (ROOT/'site/style.css').read_text(),
         '{{JS}}': (ROOT/'site/main.js').read_text(),
         '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),

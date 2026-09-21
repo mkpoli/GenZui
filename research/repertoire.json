@@ -16,7 +16,7 @@
     "small-kana": 10,
     "tally-mark": 5,
     "cjk-kana-ligature": 4,
-    "historical-kanji": 1
+    "han-numeral": 1
   },
   "unicode18": [
     "U+1B123",
@@ -4784,7 +4784,7 @@
       "name": "CJK UNIFIED IDEOGRAPH-5344",
       "label": "TWENTY · 卄",
       "age": "1.1",
-      "group": "historical-kanji",
+      "group": "han-numeral",
       "decomposition": "",
       "vertical_orientation": "U",
       "upstream": {

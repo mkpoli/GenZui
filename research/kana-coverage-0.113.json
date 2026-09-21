@@ -39,6 +39,12 @@
       "url": "https://www.unicode.org/Public/18.0.0/ucd/ScriptExtensions.txt",
       "sha256": "5c9d34a922f687726f2a8bcf57d49f905987e51f1b21b58c95a00fbe255cec23",
       "size": 21145
+    },
+    {
+      "path": "data/unicode/DerivedNumericType.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/extracted/DerivedNumericType.txt",
+      "sha256": "3dade4d96bd00d71b10022bf70b370090f3ca947f977ad4dc2854e06c4d074f6",
+      "size": 22001
     }
   ],
   "coverage": {
@@ -97,9 +103,9 @@
       "covered": 2,
       "missing": []
     },
-    "Honkoku additions": {
-      "total": 11,
-      "covered": 11,
+    "CJK numeral twenty (U+5344)": {
+      "total": 1,
+      "covered": 1,
       "missing": []
     },
     "Ideographic tally marks": {

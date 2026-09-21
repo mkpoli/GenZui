@@ -23,9 +23,12 @@ The complete set of **17 ideographic-description characters** is now covered:
 U+2FF0–U+2FFF and U+31EF. These display as visible operators; the font does not
 compose a new character from an ideographic description sequence.
 
-The specimen’s **Honkoku additions** sample and character filter isolate the
-new entries. The sample supports both writing directions. Each entry identifies
-its source, and the Noto Serif CJK JP filter isolates the imported 卄.
+The specimen includes **Han numerals**, **Ideographic tally marks** and
+**Ideographic description characters**. Each collection includes the related
+characters from the Noto base. The numeral collection contains 80 supported
+characters with Unicode Han script and a numeric type, including Suzhou numerals.
+All three samples support horizontal and vertical writing. Each entry identifies
+its outline source.
 
 ## Sources
 
@@ -50,6 +53,6 @@ layout rules and variation sequences, the eleven additions in both writing
 directions, progressive tally strokes and TTF/WOFF2 shaping parity.
 [Browser font checks](browser-checks-0.113.json) cover all 340 inventory targets
 in Chrome, Vivaldi and Firefox. [Specimen interaction checks](site-browser-checks-0.113.json)
-exercise the honkoku permalink, all source assignments, filtering, samples and
+exercise the three collection permalinks, source filtering, pagination, samples and
 writing-direction controls in those three browsers. Reports identify the exact
 font bytes tested.

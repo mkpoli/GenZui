@@ -72,7 +72,7 @@ def repertoire():
         result.append({
             "codepoint": f"U+{cp:04X}", "character": chr(cp),
             "name": f"CJK UNIFIED IDEOGRAPH-{cp:04X}", "label": label,
-            "age": ages[cp], "group": "historical-kanji" if cp == 0x5344 else "cjk-kana-ligature",
+            "age": ages[cp], "group": "han-numeral" if cp == 0x5344 else "cjk-kana-ligature",
             "decomposition": "", "vertical_orientation": orientation[cp],
         })
     assert len({item["codepoint"] for item in result}) == len(result)

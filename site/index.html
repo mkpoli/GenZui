@@ -63,7 +63,7 @@
       <div class="section-heading"><h2 id="specimen-title">Try the typeface.</h2><p>Choose a sample, or type your own text.</p></div>
       <div class="typesetter">
         <div class="type-controls">
-          <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="honkoku">Honkoku additions</option></select></label>
+          <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="numerals">Han numerals</option><option value="tallies">Ideographic tally marks</option><option value="ideographic-description">Ideographic description characters</option></select></label>
           <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="type-size">48 px</output></span><input id="type-size" type="range" min="20" max="112" value="48" step="1"></label>
           <label class="range-control spacing-control"><span class="control-label">SPACING <output id="spacing-value" for="type-spacing">0 em</output></span><input id="type-spacing" type="range" min="0" max="20" value="0" step="1"></label>
           <div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
@@ -87,21 +87,23 @@
 
     <section class="section wrap" id="characters" aria-labelledby="characters-title">
       <div class="section-label"><span>03 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
-      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse 340 historical/support characters, or the entire font.<br>Select a character to see its encoding, source and design status.</p></div>
+      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse by character type, or search all 17,064 characters.<br>Select a character to see its encoding, source and design status.</p></div>
       <p class="small-note">All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/kana-coverage.json">Coverage audit</a>. Unencoded historical variants and arbitrary combining sequences fall outside this count.</p>
-      <p class="small-note">New in {{VERSION}}: <span class="face" lang="ja">卄 𝍲𝍳𝍴𝍵𝍶 ⿼⿽⿾⿿㇯</span>. <a href="?sample=honkoku#specimen">Try the honkoku additions</a>. Description symbols display as characters; they do not assemble a new glyph from the following components.</p>
+      <p class="small-note">Try <a href="?sample=numerals#specimen">Han numerals</a>, <a href="?sample=tallies#specimen">ideographic tally marks</a> or <a href="?sample=ideographic-description#specimen">ideographic description characters</a>. Description characters display as visible operators; they do not assemble a new glyph from the following components.</p>
       <div class="inventory-tools">
         <label class="search-box"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="8.3" cy="8.3" r="5.8"/><path d="m12.6 12.6 4.6 4.6"/></svg><span class="sr-only">Search characters</span><input id="character-search" type="search" placeholder="Character, name, or U+1B124" autocomplete="off" spellcheck="false"></label>
         <label class="source-filter"><span class="sr-only">Filter by outline source</span><select id="source-filter"><option value="all">All sources</option><option value="jp">Noto Serif JP</option><option value="hentaigana">Noto Serif Hentaigana</option><option value="frb">FRB Taiwanese Kana</option><option value="genzui">GenZui constructions</option><option value="cjk">Noto Serif CJK JP</option></select></label>
       </div>
       <div class="inventory-filters" role="group" aria-label="Character collections">
-        <button type="button" data-filter="historical" aria-pressed="true">Historical & support <span>340</span></button>
+        <button type="button" data-filter="historical" aria-pressed="true">Extended kana <span>329</span></button>
         <button type="button" data-filter="hentaigana" aria-pressed="false">Hentaigana <span>286</span></button>
         <button type="button" data-filter="unicode18" aria-pressed="false">Unicode 18 <span>7</span></button>
         <button type="button" data-filter="small" aria-pressed="false">Small kana <span>10</span></button>
         <button type="button" data-filter="ligatures" aria-pressed="false">Ligatures <span>10</span></button>
         <button type="button" data-filter="minnan" aria-pressed="false">Minnan <span>15</span></button>
-        <button type="button" data-filter="honkoku" aria-pressed="false">Honkoku additions <span>11</span></button>
+        <button type="button" data-filter="numerals" aria-pressed="false">Han numerals <span>{{NUMERAL_COUNT}}</span></button>
+        <button type="button" data-filter="tallies" aria-pressed="false">Ideographic tallies <span>5</span></button>
+        <button type="button" data-filter="ideographic-description" aria-pressed="false">Ideographic description <span>17</span></button>
         <button type="button" data-filter="all" aria-pressed="false">Entire font <span>17,064</span></button>
       </div>
       <div class="inventory-meta"><span id="result-count" aria-live="polite"></span><span>SELECT A GLYPH TO INSPECT</span></div>
