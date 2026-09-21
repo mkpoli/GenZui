@@ -1,12 +1,12 @@
 {
-  "version": "0.111",
-  "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
-  "gallery_sha256": "c82551cccc2798d5c20692b1f992efb4cc8848f1e76abde562e62c6a80b01a94",
+  "version": "0.112",
+  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
+  "gallery_sha256": "2fa0aa708c7d7c60117758721fe8b76c143d0bccc3c85fe478af1ade84b9dd84",
   "all_reading_characters_covered": 53,
   "proof_font_count": 2,
   "proof_outlines_and_metrics_match_full_font": true,
   "curved_wu_default_unchanged": true,
   "minnan_preserves_hooked_alternate": true,
-  "full_repertoire_unchanged_count": 17052,
+  "full_repertoire_unchanged_count": 17050,
   "status": "passed"
 }

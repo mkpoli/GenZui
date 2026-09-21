@@ -1,7 +1,7 @@
 """Regular historical forms, drawn in a 1000-unit em with baseline at zero.
 
 Native components supply the stroke vocabulary. New joins, returns and bars
-are drawn explicitly; TOMO has a uniform optical reduction. GenSeki/Sukima and published historical specimens inform the
+are drawn explicitly; TOMO, TOTE and TOKI have uniform optical reductions. GenSeki/Sukima and published historical specimens inform the
 structure, without copying their outlines. TOMO, alternate NE and alternate WI
 use Noto's Mincho kana stroke vocabulary.
 """
@@ -16,6 +16,7 @@ REVISION_0107 = (0x2A708, 0x2CEFF, 0x2CF02, 0x2CF00)
 REVISION_0108 = (0x2CEFF, 0x1B127, 0x1B128)
 REVISION_0109 = (0x1B127, 0x1B128)
 REVISION_0110 = ()  # Only the unencoded Hooked WU alternate changes.
+REVISION_0112 = (0x1B124, 0x1B125)
 REVISION_0111 = ()  # Only the unencoded Hooked WU alternate changes.
 REVISION_0106 = (0x2A708, 0x1B123, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
 REVISION_0105 = (0x2A708, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
@@ -317,6 +318,11 @@ def refinements(part, transform):
     }
     # Reduce both TOMO components together, preserving their shared proportion.
     forms[0x2A708] = [transform(p, (.92, 0, 0, .92, 40, 29.2)) for p in forms[0x2A708]]
+    # Match TOMO's optical footprint around the same (500, 365) centre.
+    # TOKI has denser crossing strokes and uses a slightly smaller size.
+    for cp, scale in ((0x1B125, .92), (0x1B124, .90)):
+        forms[cp] = [transform(p, (scale, 0, 0, scale,
+                                  500*(1-scale), 365*(1-scale))) for p in forms[cp]]
     forms[0x1B123] = balanced_koto(forms[0x1B123])
     return forms
 
@@ -324,8 +330,8 @@ def refinements(part, transform):
 DESCRIPTIONS = {
     0x1B11F: 'Curved WU preserves the native KE descent. Stylistic set 1 keeps the upper outward bow and carries its weight through a compact rounded return, set farther right.',
     0x1B123: 'KOTO E: a lower upper curve shifted left, with a longer rising right stroke and a shallow Noto TO bowl.',
-    0x1B124: 'Noto TO stem and KI diagonal moved left and made more upright; joined crossbars retain their span.',
-    0x1B125: 'Unscaled Noto Serif JP TO stem and TE strokes with a newly drawn connecting bar.',
+    0x1B124: 'Noto TO stem and an upright KI diagonal with joined crossbars, at 90% optical size beside TOMO and TOTE.',
+    0x1B125: 'Noto Serif JP TO stem and TE strokes with a drawn connecting bar, at 92% optical size beside TOMO.',
     0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and full-weight RI descending stroke.',
     0x1B127: 'A modulated upper bar and lighter return above a hooked stem. The middle crossbar sits halfway between its 0.107 and 0.108 positions.',
     0x1B128: 'Noto WI bars join a NA-derived left descent and the native right stem. Stem spacing is halfway between 0.107 and 0.108; stroke weights are preserved.',

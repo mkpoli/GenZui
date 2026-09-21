@@ -3,8 +3,8 @@
 FORM_DESCRIPTIONS = {
     0x1B11F: 'Archaic hiragana WU has a curved default derived from KE. Stylistic set 1 selects an outward-bowed stem with a compact hook. Both stems begin within the upper bar.',
     0x1B123: 'KOTO combines a TE-derived upper curve with a shallow TO bowl and a rising right stroke.',
-    0x1B124: 'TOKI joins a TO stem to KI crossbars and a slanted upright, using Mincho kana strokes.',
-    0x1B125: 'TOTE combines the native TO stem and TE strokes with a drawn connecting bar.',
+    0x1B124: 'TOKI joins a TO stem to KI crossbars and a slanted upright, at a slightly smaller optical size than TOMO and TOTE.',
+    0x1B125: 'TOTE combines TO and TE strokes with a drawn connecting bar. Its optical width matches TOMO.',
     0x1B126: 'YORI combines a native RI entry with drawn YO bars and a full-weight RI descent.',
     0x1B127: 'Alternate NE uses an angular upper turn, a modulated crossbar and a hooked stem.',
     0x1B128: 'Alternate WI joins Noto WI bars to a NA-derived left descent and the native right stem.',
