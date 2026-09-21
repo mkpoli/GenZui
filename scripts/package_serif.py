@@ -23,12 +23,13 @@ def package():
     # A BOM allows Windows PowerShell 5.1 to read Japanese text correctly.
     (OUT/'Install-GenZui.ps1').write_text((ROOT/'scripts/install_windows.ps1').read_text(), encoding='utf-8-sig')
     shutil.copyfile(ROOT/'LICENSE-scripts.txt', OUT/'LICENSE-scripts.txt')
+    shutil.copyfile(ROOT/'research'/f'kana-coverage-{VERSION}.json', OUT/'kana-coverage.json')
     files = [STEM+'.ttf', STEM+'.woff2', 'README.txt', 'Install-GenZui.ps1',
              'serif-proof.html', 'serif-proof.png', 'OFL.txt', 'NOTICE.txt',
              'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
              'FRB-OFL.txt', 'FRB-README.md',
              'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'source-manifest.json',
-             'sources.json', 'checks.json', 'browser-checks.json']
+             'sources.json', 'checks.json', 'browser-checks.json', 'kana-coverage.json']
     (ROOT/'dist').mkdir(exist_ok=True)
     archive = ROOT/'dist'/f'{STEM}-{VERSION}.zip'
     with ZipFile(archive, 'w', compression=ZIP_DEFLATED) as z:

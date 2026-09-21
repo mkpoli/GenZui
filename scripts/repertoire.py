@@ -51,6 +51,8 @@ def repertoire():
             group = "historic-kana"
         elif 0x1B130 <= cp <= 0x1B16F:
             group = "small-kana"
+        elif cp == 0x332C:
+            group = "compatibility-kana"
         elif cp in (0x309F, 0x30FF):
             group = "bmp-digraph"
         else:

@@ -21,6 +21,7 @@ from repertoire import MINNAN_MARKS, MINNAN_TONES, font_path, repertoire
 from minnan import import_forms as import_minnan, layout as layout_minnan
 from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, hooked_wu, refinements
 from sources import ROOT, verify
+from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 
 OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
@@ -248,7 +249,7 @@ def build():
     donor = instance('NotoSerifHentaigana', 400)
     originals = set(font.getBestCmap())
     points = {ord(item['character']) for item in repertoire()}
-    historical = points - originals
+    historical = points - originals - {PAATU}
     cmap_add = {cp: import_glyph(font, donor, donor.getBestCmap()[cp])
                 for cp in sorted(historical & set(donor.getBestCmap()))}
     retained = len(cmap_add)
@@ -295,6 +296,8 @@ def build():
          if r.FeatureTag == 'ss01').Feature.FeatureParams = params
     layout(font, donor, vertical, historical-minnan_points, [alternate])
     layout_minnan(font, add, add_feature)
+    add_paatu(font, add, glyph, add_feature)
+    PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
         notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
@@ -307,7 +310,7 @@ def build():
     for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:VERSION+';'+STEM,
                        4:FAMILY+' Regular', 5:'Version '+VERSION, 6:STEM,
                        16:FAMILY,17:'Regular',
-                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Development build; twenty-one constructed forms and a hooked WU stylistic alternate require typographic review.',
+                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes twenty-one historical kana constructions, SQUARE PAATU and a hooked WU stylistic alternate.',
                        13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
                        14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
@@ -330,6 +333,7 @@ def build():
         'GenZui Serif / 源萃明朝 (げんずい)\n\n'
         'Noto Serif JP: full Japanese base and historical-kana construction components.\n'
         'GenZui: twenty-one constructed forms using Noto kana components and original drawing.\n'
+        'GenZui: SQUARE PAATU uses native Noto Serif JP squared-katakana components.\n'
         'WU has a curved default and a hooked stylistic alternate (ss01).\n'
         'Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.\n'
         'The Google, Adobe and Noto Project notices are retained in OFL.txt.\n'
@@ -362,7 +366,7 @@ def build():
         'version':VERSION,'base':'Noto Serif JP','base_characters':len(originals),
         'encoded_characters':len(font.getBestCmap()),
         'target_characters':len(points),'retained_historical':retained,
-        'provisional_forms':len(recipes),
+        'provisional_forms':len(recipes), 'compatibility_forms':1,
         'stylistic_sets':{'ss01':{'name':'Hooked WU','codepoint':'U+1B11F',
             'default':'curved','alternate':'hooked','glyph':alternate}},
         'minnan_source_forms':len(minnan_points),
@@ -384,7 +388,7 @@ def build():
         'revision_0106':[f'U+{cp:04X}' for cp in REVISION_0106],
         'revision_0105':[f'U+{cp:04X}' for cp in REVISION_0105],
         'source_kinds':{f'U+{cp:04X}':('jp' if cp in originals else
-            'genzui' if cp in recipes else 'frb' if cp in minnan_points else
+            'genzui' if cp in recipes or cp == PAATU else 'frb' if cp in minnan_points else
             'hentaigana') for cp in sorted(points)}},ensure_ascii=False,indent=2)+'\n')
     for file in ('JP-Regular.ttf', 'JP-Regular.woff2', 'HKSerifProof-Regular.ttf',
                  'HKSerifProof-Regular.woff2', 'Hentaigana-Regular.ttf',
@@ -405,7 +409,11 @@ def proof():
         source = ('FRB Taiwanese Kana · adapted layout' if ord(ch) in (*MINNAN_TONES, *MINNAN_MARKS) else
                   'GenZui / Noto components · provisional')
         picture, horizontal, vertical, marks = ch, f'あ{ch}い<br>ア{ch}イ', f'あ{ch}い', f'{ch}\u3099 {ch}\u309a'
-        if ord(ch) in MINNAN_TONES:
+        if ord(ch) == PAATU:
+            horizontal = vertical = '㌫㌬㌭'
+            marks = 'パーツ'
+            source = 'GenZui / Noto squared-katakana components'
+        elif ord(ch) in MINNAN_TONES:
             horizontal = vertical = f'チア{ch}'
             marks = f'チ\u0305\u0323ア{ch}'
         elif ord(ch) in MINNAN_MARKS:

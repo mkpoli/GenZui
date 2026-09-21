@@ -122,6 +122,18 @@
       "url": "https://raw.githubusercontent.com/ctrlcctrlv/FRBTaiwaneseKana/5c367e9ee5aefd54b5c9c9e996705f0561fe3d15/features.fea",
       "sha256": "25155397143c2e13570d47da0d0c2b3183697cf27b3054465730b598684217b9",
       "size": 2897
+    },
+    {
+      "path": "data/unicode/Scripts.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/Scripts.txt",
+      "sha256": "0071fd81b6aeae25f6e8bce8efec3066a6476a91b49bdb2f52dc76e817862a6a",
+      "size": 196089
+    },
+    {
+      "path": "data/unicode/ScriptExtensions.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/ScriptExtensions.txt",
+      "sha256": "5c9d34a922f687726f2a8bcf57d49f905987e51f1b21b58c95a00fbe255cec23",
+      "size": 21145
     }
   ]
 }

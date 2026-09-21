@@ -8,6 +8,7 @@
   "groups": {
     "phonetic-mark": 2,
     "bmp-digraph": 2,
+    "compatibility-kana": 1,
     "minnan-tone": 13,
     "historic-kana": 11,
     "hentaigana": 286,
@@ -77,6 +78,20 @@
       "upstream": {
         "NotoSansJP": true,
         "NotoSerifJP": true,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+332C",
+      "character": "㌬",
+      "name": "SQUARE PAATU",
+      "age": "1.1",
+      "group": "compatibility-kana",
+      "decomposition": "<square> 30D1 30FC 30C4",
+      "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
         "NotoSerifHentaigana": false
       }
     },

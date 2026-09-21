@@ -133,7 +133,7 @@ def build_gallery(public=False):
     before = TTFont(io.BytesIO(raw))
     after = TTFont(OUT/(STEM+'.ttf'), recalcTimestamp=False)
     sources = json.loads((OUT/'sources.json').read_text())
-    own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui'}
+    own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui' and int(cp[2:],16) != 0x332C}
     assert own == set(DESCRIPTIONS) | set(SMALL) and len(own) == 21
     order = [*REVIEW_FORMS, *sorted(own-set(REVIEW_FORMS))]
     cards = []
