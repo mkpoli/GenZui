@@ -2,7 +2,7 @@
 
 Install GenSeki Hentaigana Gothic Regular and Bold from the
 [official release](https://github.com/MihailJP/GenSekiHentaiganaGothic/releases).
-Version 1.201 covers the project's 309-character inventory, including all 286
+Version 1.201 covers the project's 313-character inventory, including all 286
 hentaigana and the seven Unicode 18 kana additions.
 
 Installing a font does not establish a universal fallback order. Applications
@@ -68,11 +68,15 @@ See [Tampermonkey's injection-mode documentation](https://www.tampermonkey.net/d
 The local setup page's **Preview kana fallback** button runs a standalone test;
 its success does not establish that Tampermonkey can execute on websites.
 
-The script appends a local font face to text elements containing historical kana.
-Its Unicode ranges restrict that face to historical kana and their combining
-marks. Fonts already named by the page retain priority. Ordinary text continues
-to use the page's existing font stack. Newly inserted text and input values are
-handled as well. Password inputs are excluded.
+Version 0.2.0 puts a local font face first in text elements containing historical
+kana. Its Unicode ranges restrict that face to historical kana and their combining
+marks. Ordinary text continues to use the page's existing font stack. Newly
+inserted text and input values are handled as well. Password inputs are excluded.
+
+Earlier versions appended the face after the page's fonts. In Vivaldi, a preceding
+`sans-serif` could select Noto Sans JP's missing-glyph face without loading GenSeki.
+This affected all ten characters in Japanese Wikipedia's Small Kana Extension
+chart. Replace the existing script with version 0.2.0 and reload affected pages.
 
 The script makes no network requests. It runs on HTTP and HTTPS pages and uses
 the installed Regular and Bold fonts. It does not affect browser interface pages,

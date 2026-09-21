@@ -1,0 +1,369 @@
+{
+  "version": "0.109",
+  "ttf_sha256": "bf9ab34dff3e3ff9c2a4f1170c937aa4e694b5d3f3d744ec29817cf1991aaf26",
+  "iteration": {
+    "baseline": "0.108",
+    "changed_outlines": [
+      "U+1B127",
+      "U+1B128"
+    ],
+    "retained_forms_unchanged": [
+      "U+1B124",
+      "U+1B125",
+      "U+1B126",
+      "U+2A708",
+      "U+2CF00",
+      "U+2CF02",
+      "U+2CEFF"
+    ],
+    "koto_matches_accepted_E": true,
+    "curved_wu_default_unchanged": true,
+    "hooked_wu_stem_units": 62,
+    "hooked_midstem_rightward_shift_units": 61.5,
+    "hooked_wu_y_min": -58,
+    "stem_centres_high_to_low": {
+      "heights": [
+        610,
+        580,
+        550,
+        380,
+        350,
+        320,
+        290,
+        260,
+        230,
+        200,
+        170,
+        140,
+        110
+      ],
+      "before": [
+        680.5,
+        680.5,
+        680.0,
+        673.5,
+        672.5,
+        670.5,
+        669.5,
+        667.5,
+        665.5,
+        663.5,
+        661.0,
+        658.5,
+        655.5
+      ],
+      "after": [
+        698.0,
+        705.5,
+        712.5,
+        733.5,
+        734.0,
+        733.5,
+        731.5,
+        728.5,
+        724.5,
+        718.5,
+        711.5,
+        703.5,
+        693.5
+      ]
+    },
+    "hooked_stem_bow_units": 38.34000000000003,
+    "hooked_stem_slopes": [
+      -0.25,
+      -0.23333333333333334,
+      -0.12352941176470589,
+      -0.016666666666666666,
+      0.016666666666666666,
+      0.06666666666666667,
+      0.1,
+      0.13333333333333333,
+      0.2,
+      0.23333333333333334,
+      0.26666666666666666,
+      0.3333333333333333
+    ],
+    "hooked_curvature_is_continuous": true,
+    "ne_crossbar_raise_units": -25.0,
+    "ne_midpoint_error_units": 0.0,
+    "wi_midpoint_errors_units": [
+      0.25,
+      0.0
+    ],
+    "wi_stem_spacing_reduction_units": -35.5,
+    "wi_stem_widths": {
+      "before": [
+        59,
+        54
+      ],
+      "after": [
+        58,
+        54
+      ]
+    },
+    "hiragana_nari_upper_unchanged": true,
+    "katakana_nari_upper_unchanged": true,
+    "katakana_nari_lower_ink_ratio": 1.0,
+    "katakana_nari_entry_units": 49,
+    "katakana_nari_body_units": 68,
+    "hiragana_nari_terminal_units": 65,
+    "tomo_top_envelope_samples": 52,
+    "tomo_max_top_deviation_units": 1,
+    "reading_size_connectivity": [
+      {
+        "codepoint": "U+2A708",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 24,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 32,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 40,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 64,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 128,
+        "components": 1
+      }
+    ],
+    "status": "passed"
+  },
+  "wu_stylistic_set": {
+    "feature": "ss01",
+    "ui_name": "Hooked WU",
+    "default": "curved",
+    "alternate": "hooked",
+    "right_contour_top_units": 729,
+    "mark_cases": 40,
+    "only_wu_changes_in_full_repertoire": true,
+    "raster_connectivity": [
+      {
+        "size_px": 32,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 32,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": true,
+        "components": 2
+      }
+    ],
+    "status": "passed"
+  },
+  "status": "passed"
+}

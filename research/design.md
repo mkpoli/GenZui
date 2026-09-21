@@ -1,34 +1,47 @@
 # Design work
 
-The active work is a unified serif font containing Noto Serif JP's full repertoire
-and historical kana. GenSeki Hentaigana Gothic covers the complete sans target, including
-all seven Unicode 18 additions. Its released Regular and Bold fonts serve as
+GenZui Serif / 源萃明朝 is a unified serif font containing Noto Serif JP's full repertoire
+and historical kana. GenSeki Hentaigana Gothic covers the original 309-character
+sans inventory, including all seven Unicode 18 additions. Its released Regular and Bold fonts serve as
 the sans option.
 
 ## Unified Regular proof
 
-`scripts/serif.py` builds one static Regular font with 17,033 encoded characters.
+`scripts/serif.py` builds one static Regular font with 17,052 encoded characters.
 All 17,923 glyphs from Noto Serif JP, their horizontal and vertical metrics and
 their original layout rules remain intact. The 290 historical outlines from Noto
 Serif Hentaigana remain unchanged. Noto Serif JP supplies the existing digraphs
-U+309F and U+30FF and components for the seventeen missing forms:
+U+309F and U+30FF and components for the constructed forms:
 
-- Hiragana WU combines KE strokes with HO's upper bar.
-- Hiragana KOTO uses TO's bowl with a newly drawn upper curve.
-- Katakana TOKI and TOTE combine a TO stem with KI or TE.
-- Katakana YORI combines YO with two upright stems.
-- Alternate NE and WI use U+5B50 and U+4E95 fitted to the kana body. Their kanji
-  terminals need further comparison with the kana style.
+- Hiragana WU defaults to a native KE-derived curved descent. Stylistic set 1
+  selects quieter crossbars and one broad outward arc flowing through a compact drawn return.
+  Both stems begin inside the upper bar.
+- Hiragana KOTO uses accepted candidate E: a lower upper curve shifted left,
+  a longer rising right stroke and a shallower TO bowl.
+- Katakana TOKI and TOTE share an unscaled TO stem; their connecting bars are
+  drawn individually. KI moves left with a slight shear to reduce its lean;
+  TE retains its native strokes.
+- Katakana YORI uses newly drawn YO bars, the native short RI stroke and a
+  redrawn, full-weight curved RI descent.
+- TOMO, alternate NE and alternate WI use native Mincho kana components and
+  newly drawn joins and returns.
+- SHITE and katakana NARI have redrawn Mincho outlines.
 - Ten small forms use weight-500 source outlines at 72% scale. Their vertical
   forms move 140 units right and 190 units up. Small archaic YE uses the existing
   Noto Serif Hentaigana archaic YE outline.
 
-The internal font-menu identifier is `HK Serif Proof`. It is not a proposed
-family name. `build/serif/sources.json` records the construction of each addition.
-The new joins, spacing, reduced stroke weight and NE/WI terminals require visual
+Hiragana NARI retains the Japanese JMJ reference’s long diagonal. Native ん
+supplies its brush entry, weight variation and rounded foot. Its low wave uses
+the rounded finish of え and ends at −32. The gallery includes printed NARI references from 1899 and 1902.
+Forms under review compare against 0.110; accepted forms appear once.
+[The 0.111 notes](refinements-0.111.md) describe the construction and sources.
+
+The font-menu name is `GenZui Serif`, localized as `源萃明朝` in Japanese.
+The family reading is げんずい. `build/serif/sources.json` records each addition.
+The new joins, spacing and stroke treatment require visual
 review before expanding to further weights.
 
-The 307 historical forms absent from JP have explicit dakuten and handakuten
+The 311 historical forms absent from JP have explicit dakuten and handakuten
 anchors. A contextual `ccmp` substitution selects Hentaigana's mark outlines only
 after those historical bases. Vertical substitutions select separate marks and
 anchors. Modern Japanese retains JP's composition, positioning and vertical
@@ -39,6 +52,20 @@ remain unchanged.
 Only historical glyphs and their mark outlines are imported from Hentaigana.
 Its Latin glyphs and unrelated substitutions are excluded. This avoids duplicate
 Latin coverage and preserves the JP font's ordinary text behaviour.
+
+## Minnan kana
+
+FRB Taiwanese Kana supplies 13 tone letters and U+0305/U+0323. The outlines
+retain the donor’s em and weight; cubic curves are converted to TrueType curves.
+New anchors position the marks above and below full and small katakana. Small
+overlines are narrower without changing their thickness.
+
+In horizontal text tones advance 500 units. After one to four fullwidth kana in
+vertical text, contextual forms have zero advance and sit beside the group.
+Isolated tones keep their own 1000-unit vertical cell. Default fullwidth metrics
+and zero letter spacing are required; longer groups and custom spacing need
+application-level positioning. [The 0.102 notes](refinements-0.102.md) give the
+references and specimen.
 
 ## Sans study
 
@@ -106,8 +133,8 @@ JP source. Browser rendering and visual inspection complement the shaping checks
 
 ## Remaining design work
 
-Review the seventeen provisional forms against historical specimens, especially
-KOTO's upper curve, the TOKI/TOTE joins and NE/WI terminals. Check their weight
-beside ordinary kana at reading sizes before deriving further weights. The
-CJK-encoded kana ligatures U+2A708, U+2CEFF, U+2CF00 and U+2CF02 need a separate
-source and design audit; they are outside the current 309-character inventory.
+Review the twenty-one provisional forms beside ordinary kana at reading sizes before
+deriving further weights. The 0.101 comparison page covers the redrawn joins,
+stroke proportions and baseline adjustment. The current inventory contains 328
+historical characters and support marks, including the four CJK-encoded ligatures
+and the Minnan additions.

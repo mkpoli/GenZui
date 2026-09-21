@@ -1,28 +1,32 @@
-"""Build a unified Japanese and historical-kana Regular proof from pinned Noto."""
+"""Build GenZui Serif from pinned Noto and FRB sources with drawn kana."""
 import base64
 import copy
 import html
 import json
+import shutil
 
 from fontTools import subset
 from fontTools.otlLib.builder import buildAnchor, buildCoverage, buildMarkBasePosSubtable
-from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.cu2quPen import Cu2QuPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
-from fontTools.svgLib.path import parse_path
 from fontTools.ttLib import TTFont, newTable
 from fontTools.ttLib.tables import otTables
 from fontTools.varLib.instancer import instantiateVariableFont
 from PIL import Image, ImageDraw, ImageFont
 import pathops
 
-from repertoire import font_path, repertoire
+from repertoire import MINNAN_MARKS, MINNAN_TONES, font_path, repertoire
+from minnan import import_forms as import_minnan, layout as layout_minnan
+from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, hooked_wu, refinements
 from sources import ROOT, verify
 
 OUT = ROOT / 'build/serif'
-FAMILY = 'HK Serif Proof'
+FAMILY = 'GenZui Serif'
+FAMILY_JA = '源萃明朝'
+STEM = 'GenZuiSerif-Regular'
+VERSION = '0.111'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B152: 0x3092, 0x1B155: 0x30B3, 0x1B164: 0x30F0,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
@@ -76,15 +80,6 @@ def transform(outline, matrix):
     result = RecordingPen()
     outline.replay(TransformPen(result, matrix))
     return result
-
-
-def fit(outline, box):
-    bounds = BoundsPen(None)
-    outline.replay(bounds)
-    x0, y0, x1, y1 = bounds.bounds
-    a, b, c, d = box
-    sx, sy = (c-a)/(x1-x0), (d-b)/(y1-y0)
-    return transform(outline, (sx, 0, 0, sy, a-sx*x0, b-sy*y0))
 
 
 def glyph(parts):
@@ -175,9 +170,9 @@ def add_feature(font, table_tag, feature_tag, lookup):
     table.ScriptList.ScriptCount = len(table.ScriptList.ScriptRecord)
 
 
-def layout(font, donor, vertical, points):
+def layout(font, donor, vertical, points, alternates=()):
     cmap = font.getBestCmap()
-    bases = {cmap[cp] for cp in points} | set(vertical.values())
+    bases = {cmap[cp] for cp in points} | set(vertical.values()) | set(alternates)
     marks, mark_mapping = {}, {}
     for cp in (0x3099, 0x309A):
         name = import_glyph(font, donor, donor.getBestCmap()[cp])
@@ -257,32 +252,16 @@ def build():
     cmap_add = {cp: import_glyph(font, donor, donor.getBestCmap()[cp])
                 for cp in sorted(historical & set(donor.getBestCmap()))}
     retained = len(cmap_add)
+    minnan_points = set(MINNAN_TONES) | set(MINNAN_MARKS)
+    cmap_add.update(import_minnan(font, add))
+    for cp in minnan_points:
+        PROVENANCE[f'U+{cp:04X}'] = ('FRB Taiwanese Kana outline; GenZui kana mark attachment.'
+            if cp in MINNAN_MARKS else 'FRB Taiwanese Kana outline; 500-unit horizontal advance and contextual vertical placement.')
     def part(ch, indices=None):
         return contours(jp, ord(ch), indices)
-    stem = part('ト', [0])
-    connector = RecordingPen()
-    parse_path('M230 770 C330 704 530 755 661 767 C715 776 730 734 677 719 '
-               'C532 683 452 619 453 555 C454 511 474 481 496 460 L470 440 '
-               'C409 493 393 554 424 609 C464 677 554 704 599 721 '
-               'C437 698 296 691 230 770 Z', connector)
-    recipes = {
-        0x1B11F: [part('け', [0, 1]), transform(part('け', [2]), (1,0,0,1,0,-65)), part('ほ', [3])],
-        0x1B123: [part('と', [0]), connector],
-        0x1B124: [fit(stem, (135,-40,275,760)), fit(part('キ'), (270,-40,905,760))],
-        0x1B125: [fit(stem, (135,-40,275,760)), fit(part('テ'), (235,-40,905,760))],
-        0x1B126: [fit(part('ヨ'), (95,-30,550,705)), fit(stem, (615,70,710,680)), fit(stem, (795,-40,895,760))],
-        0x1B127: [fit(part('子'), (125,-40,875,760))],
-        0x1B128: [fit(part('井'), (125,-40,875,760))],
-    }
-    descriptions = {
-        0x1B11F: 'Noto Serif JP KE strokes with the upper bar from HO; loop-free WU construction.',
-        0x1B123: 'Noto Serif JP TO bowl with a newly drawn upper KOTO curve.',
-        0x1B124: 'Noto Serif JP TO stem beside KI.',
-        0x1B125: 'Noto Serif JP TO stem beside TE.',
-        0x1B126: 'Noto Serif JP YO with two upright stems derived from TO.',
-        0x1B127: 'Noto Serif JP U+5B50 fitted to the kana body.',
-        0x1B128: 'Noto Serif JP U+4E95 fitted to the kana body.',
-    }
+    recipes = {}
+    recipes.update(refinements(part, transform))
+    descriptions = dict(DESCRIPTIONS)
     vertical = {}
     for cp, source_cp in SMALL.items():
         source = h_heavier if cp == 0x1B168 else heavier
@@ -301,70 +280,157 @@ def build():
         if table.isUnicode() and table.format in (4, 12):
             table.cmap.update({cp: name for cp, name in cmap_add.items()
                                if cp <= (0xFFFF if table.format == 4 else 0x10FFFF)})
-    layout(font, donor, vertical, historical)
+    alternate = add(font, 'hist.u1B11F.ss01', glyph(hooked_wu(part, transform)))
+    sub = otTables.SingleSubst()
+    sub.mapping = {cmap_add[0x1B11F]: alternate}
+    lookup = otTables.Lookup()
+    lookup.LookupType, lookup.LookupFlag = 1, 0
+    lookup.SubTable, lookup.SubTableCount = [sub], 1
+    add_feature(font, 'GSUB', 'ss01', lookup)
+    params = otTables.FeatureParamsStylisticSet()
+    params.Version = 0
+    params.UINameID = font['name'].addName('Hooked WU')
+    font['name'].setName('うの鉤形', params.UINameID, 3, 1, 0x411)
+    next(r for r in font['GSUB'].table.FeatureList.FeatureRecord
+         if r.FeatureTag == 'ss01').Feature.FeatureParams = params
+    layout(font, donor, vertical, historical-minnan_points, [alternate])
+    layout_minnan(font, add, add_feature)
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
         notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
         notices.append(notice)
         notices.extend(record.toUnicode() for record in source['name'].names if record.nameID == 0)
     notices = '\n'.join(dict.fromkeys(notices))
+    notices += '\n' + (ROOT/'sources/upstream/FRBTaiwaneseKana/LICENSE.txt').read_text().split('\n\n')[0]
     for nid in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,21,22,25):
         font['name'].removeNames(nameID=nid)
-    for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:'0.002;HKSerifProof-Regular',
-                       4:FAMILY+' Regular', 5:'Version 0.002', 6:'HKSerifProof-Regular',
+    for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:VERSION+';'+STEM,
+                       4:FAMILY+' Regular', 5:'Version '+VERSION, 6:STEM,
                        16:FAMILY,17:'Regular',
-                       10:'Japanese text and historical kana derived from Noto Serif JP and Noto Serif Hentaigana. Regular outline proof; new forms require typographic review.',
+                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Development build; twenty-one constructed forms and a hooked WU stylistic alternate require typographic review.',
                        13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
                        14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
-    font['head'].fontRevision = 0.002
+    for nid, value in {1:FAMILY_JA, 2:'Regular', 4:FAMILY_JA+' Regular',
+                       16:FAMILY_JA, 17:'Regular'}.items():
+        font['name'].setName(value,nid,3,1,0x411)
+    font['head'].fontRevision = float(VERSION)
     font['OS/2'].achVendID = 'NONE'
     font['OS/2'].usWeightClass = 400
     font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~33) | 64
     font['head'].macStyle = 0
     for tag in ('STAT','DSIG'):
         if tag in font: del font[tag]
-    font.save(OUT/'HKSerifProof-Regular.ttf')
+    font.save(OUT/(STEM+'.ttf'))
     font.flavor = 'woff2'
-    font.save(OUT/'HKSerifProof-Regular.woff2')
+    font.save(OUT/(STEM+'.woff2'))
     licence = (ROOT/'sources/upstream/NotoSerifJP/OFL.txt').read_text().split('\n\n', 1)[1]
     (OUT/'OFL.txt').write_text(notices+'\n\n'+licence)
-    (OUT/'sources.json').write_text(json.dumps({'status':'unified outline proof','weight':400,
-        'version':'0.002','base':'Noto Serif JP','base_characters':len(originals),
+    (OUT/'NOTICE.txt').write_text(
+        'GenZui Serif / 源萃明朝 (げんずい)\n\n'
+        'Noto Serif JP: full Japanese base and historical-kana construction components.\n'
+        'GenZui: twenty-one constructed forms using Noto kana components and original drawing.\n'
+        'WU has a curved default and a hooked stylistic alternate (ss01).\n'
+        'Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.\n'
+        'The Google, Adobe and Noto Project notices are retained in OFL.txt.\n'
+        'https://github.com/google/fonts/tree/main/ofl/notoserifjp\n'
+        'https://github.com/notofonts/hentaigana\n\n'
+        'FRB Taiwanese Kana by Fredrick R. Brennan, SIL OFL 1.1:\n'
+        '13 Minnan tone letters and U+0305/U+0323 combining marks.\n'
+        'GenZui supplies kana attachment and contextual vertical tone placement.\n'
+        'https://github.com/ctrlcctrlv/FRBTaiwaneseKana\n'
+        'See FRB-OFL.txt and FRB-README.md.\n\n'
+        'Jigmo2, 2025-09-12, by Koichi Kamichi and GlyphWiki contributors:\n'
+        'Historical comparison fonts through 0.102 use its U+2CF02 outline.\n'
+        'The current font replaces that outline with a GenZui drawing.\n'
+        'The source outline is dedicated under CC0 1.0.\n'
+        'See Jigmo-CC0.txt, Jigmo-README.txt and Jigmo-THANKS.txt.\n'
+        'https://kamichikoichi.github.io/jigmo/\n\n'
+        'The combined GenZui font is distributed under SIL OFL 1.1.\n'
+        'The CC0 dedication of the original Jigmo material remains in effect.\n'
+        'Upstream authors do not endorse this derivative.\n'
+    )
+    shutil.copyfile(ROOT/'sources/manifest.json', OUT/'source-manifest.json')
+    shutil.copyfile(ROOT/'sources/Unicode-LICENSE.txt', OUT/'Unicode-LICENSE.txt')
+    for source, dest in (('LICENSE.txt', 'Jigmo-CC0.txt'), ('README.txt', 'Jigmo-README.txt'),
+                         ('THANKS.txt', 'Jigmo-THANKS.txt')):
+        shutil.copyfile(ROOT/'sources/upstream/Jigmo'/source, OUT/dest)
+    for source, dest in (('LICENSE.txt', 'FRB-OFL.txt'), ('README.md', 'FRB-README.md')):
+        shutil.copyfile(ROOT/'sources/upstream/FRBTaiwaneseKana'/source, OUT/dest)
+    (OUT/'sources.json').write_text(json.dumps({'family':FAMILY,'family_ja':FAMILY_JA,
+        'reading':'げんずい','status':'development build','weight':400,
+        'version':VERSION,'base':'Noto Serif JP','base_characters':len(originals),
         'encoded_characters':len(font.getBestCmap()),
         'target_characters':len(points),'retained_historical':retained,
-        'added':PROVENANCE,'small_vertical_offset':[140,190]},ensure_ascii=False,indent=2)+'\n')
-    for file in ('JP-Regular.ttf', 'JP-Regular.woff2'):
+        'provisional_forms':len(recipes),
+        'stylistic_sets':{'ss01':{'name':'Hooked WU','codepoint':'U+1B11F',
+            'default':'curved','alternate':'hooked','glyph':alternate}},
+        'minnan_source_forms':len(minnan_points),
+        'added':PROVENANCE,'small_vertical_offset':[140,190],
+        'revised_forms':[f'U+{cp:04X}' for cp in REVISED],
+        'revision_0103':[f'U+{cp:04X}' for cp in REVISION_0103],
+        'revision_0104':[f'U+{cp:04X}' for cp in REVISION_0104],
+        'revision_0107':[f'U+{cp:04X}' for cp in REVISION_0107],
+        'revision_0108':[f'U+{cp:04X}' for cp in REVISION_0108],
+        'revision_0109':[f'U+{cp:04X}' for cp in REVISION_0109],
+        'revision_0110':[f'U+{cp:04X}' for cp in REVISION_0110],
+        'alternate_revision_0110':['U+1B11F/ss01'],
+        'revision_0111':[f'U+{cp:04X}' for cp in REVISION_0111],
+        'alternate_revision_0111':['U+1B11F/ss01'],
+        'alternate_revision_0109':['U+1B11F/ss01'],
+        'alternate_revision_0108':['U+1B11F/ss01'],
+        'alternate_revision_0107':['U+1B11F/ss01'],
+        'revision_0106':[f'U+{cp:04X}' for cp in REVISION_0106],
+        'revision_0105':[f'U+{cp:04X}' for cp in REVISION_0105],
+        'source_kinds':{f'U+{cp:04X}':('jp' if cp in originals else
+            'genzui' if cp in recipes else 'frb' if cp in minnan_points else
+            'hentaigana') for cp in sorted(points)}},ensure_ascii=False,indent=2)+'\n')
+    for file in ('JP-Regular.ttf', 'JP-Regular.woff2', 'HKSerifProof-Regular.ttf',
+                 'HKSerifProof-Regular.woff2', 'Hentaigana-Regular.ttf',
+                 'checks.json', 'browser-checks.json'):
         (OUT/file).unlink(missing_ok=True)
     proof()
-    print(f'Built unified Regular: {len(font.getBestCmap()):,} encoded characters, all 309 historical targets, 17 provisional forms.')
+    print(f'Built {FAMILY} {VERSION}: {len(font.getBestCmap()):,} encoded characters, {len(points)} historical targets, {len(recipes)} provisional forms.')
 
 
 def proof():
+    provenance = PROVENANCE or json.loads((OUT/'sources.json').read_text())['added']
     rows = []
     for item in repertoire():
-        if item['codepoint'] not in PROVENANCE:
+        if item['codepoint'] not in provenance:
             continue
         ch = item['character']
-        rows.append(f'<tr><th>{item["codepoint"]}<small>{item["name"]}</small></th>'
-                    f'<td class="glyph specimen">{ch}</td><td class="text specimen">あ{ch}い<br>ア{ch}イ</td>'
-                    f'<td><div class="vertical text specimen">あ{ch}い</div></td>'
-                    f'<td class="glyph specimen">{ch}\u3099 {ch}\u309a</td></tr>')
-    data = base64.b64encode((OUT/'HKSerifProof-Regular.woff2').read_bytes()).decode()
+        label = item.get('label', item['name'])
+        source = ('FRB Taiwanese Kana · adapted layout' if ord(ch) in (*MINNAN_TONES, *MINNAN_MARKS) else
+                  'GenZui / Noto components · provisional')
+        picture, horizontal, vertical, marks = ch, f'あ{ch}い<br>ア{ch}イ', f'あ{ch}い', f'{ch}\u3099 {ch}\u309a'
+        if ord(ch) in MINNAN_TONES:
+            horizontal = vertical = f'チア{ch}'
+            marks = f'チ\u0305\u0323ア{ch}'
+        elif ord(ch) in MINNAN_MARKS:
+            picture = f'チ{ch}'
+            horizontal = vertical = f'ウ{ch}ゥ{ch}'
+            marks = 'チ\u0305\u0323'
+        rows.append(f'<tr><th>{item["codepoint"]}<small>{label}</small><small>{source}</small></th>'
+                    f'<td class="glyph specimen">{picture}</td><td class="text specimen">{horizontal}</td>'
+                    f'<td><div class="vertical text specimen">{vertical}</div></td>'
+                    f'<td class="glyph specimen">{marks}</td></tr>')
+    data = base64.b64encode((OUT/(STEM+'.woff2')).read_bytes()).decode()
     css = f'@font-face{{font-family:Proof;src:url(data:font/woff2;base64,{data}) format("woff2");font-weight:400}}'
     page = (ROOT/'templates/serif-proof.html').read_text()
     replacements = {
         '{{CSS}}': css, '{{ROWS}}': ''.join(rows),
+        '{{VERSION}}': VERSION,
         '{{ALL}}': ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)),
         '{{LICENSE}}': html.escape((OUT/'OFL.txt').read_text()),
     }
     for token, value in replacements.items():
         page = page.replace(token, value)
     (OUT/'serif-proof.html').write_text(page)
-    font = ImageFont.truetype(str(OUT/'HKSerifProof-Regular.ttf'), 130)
+    font = ImageFont.truetype(str(OUT/(STEM+'.ttf')), 130)
     label = ImageFont.truetype('DejaVuSans.ttf', 18)
-    cps = [int(k[2:], 16) for k in PROVENANCE]
-    image = Image.new('RGB', (1200, 850), '#f7f5ef')
+    cps = sorted(int(k[2:], 16) for k in provenance)
+    image = Image.new('RGB', (1200, ((len(cps)+5)//6)*265), '#f7f5ef')
     draw = ImageDraw.Draw(image)
     for i, cp in enumerate(cps):
         x, y = (i % 6)*200, (i // 6)*265

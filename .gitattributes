@@ -1,2 +1,3 @@
-# Preserve the exact upstream licence bytes recorded in the source manifest.
-sources/upstream/**/OFL.txt -whitespace
+# Preserve pinned upstream bytes, including original line endings.
+sources/upstream/** -text -whitespace
+research/baselines/Jigmo-CC0.txt -text -whitespace

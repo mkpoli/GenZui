@@ -1,0 +1,236 @@
+{
+  "baseline": "0.104",
+  "changed_outlines": [
+    "U+1B11F",
+    "U+1B127",
+    "U+1B128",
+    "U+2A708",
+    "U+2CEFF",
+    "U+2CF00",
+    "U+2CF02"
+  ],
+  "accepted_forms_unchanged": [
+    "U+1B123",
+    "U+1B124",
+    "U+1B125",
+    "U+1B126"
+  ],
+  "curved_wu_unchanged": true,
+  "hooked_wu_stem_units": 62,
+  "hooked_wu_y_min": -58,
+  "tomo_top_envelope_samples": 52,
+  "tomo_max_top_deviation_units": 1,
+  "reading_size_connectivity": [
+    {
+      "codepoint": "U+2A708",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2A708",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2A708",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2A708",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2A708",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2A708",
+      "size_px": 128,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF00",
+      "size_px": 128,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B123",
+      "size_px": 128,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 24,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 32,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 40,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 48,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 64,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "size_px": 128,
+      "components": 2
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+2CF02",
+      "size_px": 128,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B127",
+      "size_px": 128,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 24,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 32,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 40,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 48,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 64,
+      "components": 1
+    },
+    {
+      "codepoint": "U+1B128",
+      "size_px": 128,
+      "components": 1
+    }
+  ],
+  "status": "passed"
+}

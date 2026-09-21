@@ -1,0 +1,56 @@
+{
+  "fonts": {
+    ".before .context": [
+      {
+        "familyName": "GenZui Serif",
+        "postScriptName": "GenZuiSerif-Regular",
+        "isCustomFont": true,
+        "glyphCount": 7
+      }
+    ],
+    ".after .context": [
+      {
+        "familyName": "GenZui Serif",
+        "postScriptName": "GenZuiSerif-Regular",
+        "isCustomFont": true,
+        "glyphCount": 7
+      }
+    ]
+  },
+  "layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1425
+    },
+    {
+      "width": 768,
+      "scrollWidth": 753
+    },
+    {
+      "width": 390,
+      "scrollWidth": 375
+    },
+    {
+      "width": 320,
+      "scrollWidth": 305
+    }
+  ],
+  "checks": [
+    "ten comparison cards",
+    "twenty outline drawings",
+    "both fonts loaded",
+    "current version shown",
+    "drawing size control",
+    "reading size control",
+    "vertical reading samples",
+    "hide guides",
+    "no page overflow"
+  ],
+  "browser": "vivaldi",
+  "version": "8.2.4133.68",
+  "status": "passed",
+  "owned_processes_stopped": true,
+  "date": "2026-09-21",
+  "page_sha256": "c3a78a25e5ac69697d889850f61c8af9108461b5e7e96d756468d04aa39373c5",
+  "visual_review": "Desktop, Mincho katakana comparisons and mobile screenshots inspected."
+}

@@ -1,0 +1,142 @@
+"""Build the offline GenZui specimen site from the checked font and Unicode data."""
+import base64
+import hashlib
+import html
+import json
+import shutil
+from bisect import bisect_right
+from collections import Counter
+import unicodedata
+from zipfile import ZIP_DEFLATED, ZipFile
+
+from fontTools.ttLib import TTFont
+from repertoire import properties
+from serif import FAMILY, OUT as FONT_OUT, STEM, VERSION
+from sources import ROOT, verify
+from refinement_proof import build_comparison
+from browser_setup import build as build_browser_setup
+from minnan_proof import build_study
+from design_gallery import build_gallery
+
+OUT = ROOT / 'build/site'
+
+
+def character_data(font, audit, provenance):
+    cmap = font.getBestCmap()
+    historic = {ord(c['character']): c for c in audit['characters']}
+    ages = properties('DerivedAge.txt')
+    blocks, starts = [], []
+    for line in (ROOT/'data/unicode/Blocks.txt').read_text().splitlines():
+        line = line.split('#', 1)[0].strip()
+        if line:
+            extent, label = (s.strip() for s in line.split(';'))
+            first, last = (int(s, 16) for s in extent.split('..'))
+            blocks.append((first, last, label)); starts.append(first)
+    names, ranges, first_range = {}, [], None
+    for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines():
+        fields = line.split(';'); cp = int(fields[0], 16)
+        if fields[1].endswith(', First>'):
+            first_range = (cp, fields[2], fields[1])
+        elif fields[1].endswith(', Last>'):
+            ranges.append((first_range[0], cp, first_range[1], first_range[2]))
+        elif cp in cmap:
+            names[cp] = (fields[1], fields[2])
+    for first, last, category, range_name in ranges:
+        for cp in (c for c in cmap if first <= c <= last):
+            if range_name.startswith('<CJK Ideograph'):
+                name = f'CJK UNIFIED IDEOGRAPH-{cp:04X}'
+            elif range_name.startswith('<Hangul Syllable'):
+                name = unicodedata.name(chr(cp))  # Stable algorithmic names.
+            else:
+                assert category == 'Co', range_name
+                name = f'PRIVATE USE-{cp:04X}'
+            names[cp] = (name, category)
+    entries = []
+    for cp in sorted(cmap):
+        assert cp in names, f'Missing Unicode name: U+{cp:04X}'
+        name, category = names[cp]
+        index = bisect_right(starts, cp)-1
+        assert index >= 0 and cp <= blocks[index][1]
+        h = historic.get(cp)
+        key = f'U+{cp:04X}'
+        source = provenance['source_kinds'][key] if h else 'jp'
+        entries.append({'cp': cp, 'name': name, 'category': category,
+                        'block': blocks[index][2], 'age': ages[cp],
+                        'source': source, 'group': h['group'] if h else 'base',
+                        'label': h.get('label', name) if h else name,
+                        'provisional': source == 'genzui',
+                        'description': provenance['added'].get(key, '')})
+    return entries
+
+
+def build():
+    verify()
+    checks = json.loads((FONT_OUT/'checks.json').read_text())
+    assert checks['status'] == 'passed' and checks['family'] == FAMILY
+    package = ROOT/'dist'/f'{STEM}-{VERSION}.zip'
+    assert package.is_file(), 'Build the checked font package before the site.'
+    for ext in ('ttf', 'woff2'):
+        assert hashlib.sha256((FONT_OUT/(STEM+'.'+ext)).read_bytes()).hexdigest() == checks[ext+'_sha256']
+    with ZipFile(package) as z:
+        assert z.testzip() is None
+        for ext in ('ttf', 'woff2'):
+            assert hashlib.sha256(z.read(STEM+'.'+ext)).hexdigest() == checks[ext+'_sha256'], 'Rebuild the font package: its font bytes are stale.'
+    font = TTFont(FONT_OUT/(STEM+'.ttf'))
+    # Use the audited source assignments in addition to the Unicode inventory.
+    audit = json.loads((ROOT/'research/repertoire.json').read_text())
+    provenance = json.loads((FONT_OUT/'sources.json').read_text())
+    entries = character_data(font, audit, provenance)
+    source_counts = dict(Counter(e['source'] for e in entries))
+    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 21, 'frb': 15}
+    assert len(entries) == checks['encoded_characters']
+    data = {'version': VERSION, 'family': FAMILY, 'characters': entries,
+            'counts': source_counts, 'total': len(entries),
+            'historical': sum(e['group'] != 'base' for e in entries)}
+    OUT.mkdir(parents=True, exist_ok=True)
+    font_data = base64.b64encode((FONT_OUT/(STEM+'.woff2')).read_bytes()).decode()
+    page = (ROOT/'site/index.html').read_text()
+    replacement = {
+        '{{FONT}}': font_data,
+        '{{CSS}}': (ROOT/'site/style.css').read_text(),
+        '{{JS}}': (ROOT/'site/main.js').read_text(),
+        '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),
+        '{{VERSION}}': html.escape(VERSION),
+        '{{FONT_SIZE}}': f'{(FONT_OUT/(STEM+".ttf")).stat().st_size/1048576:.1f}',
+    }
+    for token, value in replacement.items():
+        page = page.replace(token, value)
+    assert all(token not in page for token in replacement)
+    assert '/home/' not in page
+    (OUT/'index.html').write_text(page)
+    (OUT/'refinements.html').write_text(build_comparison())
+    (OUT/'minnan.html').write_text(build_study())
+    (OUT/'gallery.html').write_text(build_gallery())
+    shutil.copytree(build_browser_setup(), OUT/'browser', dirs_exist_ok=True)
+    downloads = OUT/'downloads'; downloads.mkdir(exist_ok=True)
+    for old in downloads.glob(STEM+'-*.zip'):
+        if old.name != package.name:
+            old.unlink()
+    shutil.copyfile(package, downloads/package.name)
+    for name in (STEM+'.ttf', STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
+                 'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
+                 'FRB-OFL.txt', 'FRB-README.md',
+                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt'):
+        shutil.copyfile(FONT_OUT/name, downloads/name)
+    (OUT/'README.txt').write_text(
+        'GenZui Serif specimen site\n\nOpen index.html in a current browser.\n'
+        'The page embeds the font and its full character inventory and works offline.\n'
+        'Keep the downloads folder beside index.html for the download links.\n'
+        'Only deliberate source links navigate to external websites.\n'
+        'Font, Unicode data and script licences are included in downloads.\n'
+    )
+    archive = ROOT/'dist'/f'GenZui-Specimen-{VERSION}.zip'
+    with ZipFile(archive, 'w', ZIP_DEFLATED) as z:
+        for file in sorted(OUT.rglob('*')):
+            if file.is_file(): z.write(file, file.relative_to(OUT))
+    with ZipFile(archive) as z:
+        assert z.testzip() is None
+    print(f'Built offline specimen: {len(entries):,} searchable characters; {data["historical"]} historical targets.')
+
+
+if __name__ == '__main__':
+    build()

@@ -1,0 +1,4 @@
+源萃明朝（GenZui Serif）を公開しました。Noto Serif JPを基に、変体仮名286字、Unicode 18の仮名、合略仮名、閩南語の声調文字を収録しています。TTF・WOFF2、SIL OFL 1.1。
+
+字形一覧と試し組みはこちら。
+https://genzui.mkpo.li/

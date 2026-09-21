@@ -17,50 +17,66 @@
       "actual_fonts": {
         "#historical": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 286
           }
         ],
+        "#minnan-vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
         "#mixed": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 91
+            "glyphCount": 105
+          }
+        ],
+        "#minnan": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
           }
         ],
         "#all-targets": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 309
+            "glyphCount": 330
           }
         ],
         "#ttf-targets": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 317
+            "glyphCount": 338
           }
         ],
         "#marks": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 16
           }
         ],
         "#vertical": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 21
+            "glyphCount": 28
           }
         ]
       },
@@ -84,50 +100,66 @@
       "actual_fonts": {
         "#historical": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 286
           }
         ],
+        "#minnan-vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
         "#mixed": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 91
+            "glyphCount": 105
+          }
+        ],
+        "#minnan": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
           }
         ],
         "#all-targets": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 309
+            "glyphCount": 330
           }
         ],
         "#ttf-targets": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 317
+            "glyphCount": 338
           }
         ],
         "#marks": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 16
           }
         ],
         "#vertical": [
           {
-            "familyName": "HK Serif Proof",
-            "postScriptName": "HKSerifProof-Regular",
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 21
+            "glyphCount": 28
           }
         ]
       },
@@ -137,14 +169,28 @@
     },
     {
       "browser": "firefox",
-      "version": "154.0.1",
-      "method": "Windows headless screenshot with isolated profile; font load status and all 309 target characters shown",
-      "ots_error": false,
+      "status": "passed",
+      "result": {
+        "status": "passed",
+        "target_count": 328,
+        "fonts": [
+          {
+            "family": "ProbeTTF",
+            "status": "loaded"
+          },
+          {
+            "family": "ProbeWOFF2",
+            "status": "loaded"
+          }
+        ],
+        "raster_equivalence": true
+      },
+      "version": "156.0",
       "owned_processes_stopped": true,
-      "visual_review": "passed: both fonts loaded; all 309 historical characters, mixed text and vertical marks rendered without boxes",
-      "status": "passed"
+      "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+      "woff2_sha256": "fade95809d5da44b18d2ecfa6fa105ff3c2205bd79e646bb78cc48faff998406"
     }
   ],
-  "ttf_sha256": "a2a08808080723526d9944c97ce736d75bc4927b667ac5f3d5643edcce5b4c0d",
-  "woff2_sha256": "e26aa31229b5793461646a7d9009eb87b579ec8566aa9eafc4712f6b12f2308d"
+  "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+  "woff2_sha256": "fade95809d5da44b18d2ecfa6fa105ff3c2205bd79e646bb78cc48faff998406"
 }

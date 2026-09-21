@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Historical kana font fallback
 // @namespace    urn:historical-kana:font-fallback
-// @version      0.1.0
+// @version      0.2.0
 // @license      MIT
-// @description  Fill historical kana gaps using the installed GenSeki Hentaigana Gothic font.
+// @description  Display historical kana using installed GenSeki Hentaigana Gothic, restricted to their Unicode ranges.
 // @match        https://*/*
 // @match        http://*/*
 // @grant        GM_addStyle
@@ -41,7 +41,9 @@
     if (element.closest('script, style, noscript, template')) return;
     const original = getComputedStyle(element).fontFamily;
     if (original.includes(family)) return;
-    element.style.setProperty('font-family', `${original}, "${family}"`, 'important');
+    // A generic family can select a missing-glyph face before later fonts.
+    // The Unicode range keeps this priority limited to historical kana.
+    element.style.setProperty('font-family', `"${family}", ${original}`, 'important');
   }
 
   function visit(root) {

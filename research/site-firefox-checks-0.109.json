@@ -1,0 +1,161 @@
+{
+  "version": "156.0",
+  "pages": {
+    "minnan": {
+      "checks": [
+        "13 tone letters",
+        "one current proof font",
+        "curved context uses current font",
+        "hooked context uses current font",
+        "curved has default features",
+        "hooked enables ss01",
+        "distinct WU outlines",
+        "no horizontal overflow"
+      ],
+      "fonts": [
+        {
+          "family": "GenZui",
+          "status": "loaded"
+        }
+      ]
+    },
+    "gallery": {
+      "checks": [
+        "11 drawn forms initially",
+        "21 constructions total",
+        "unique character cards",
+        "both proof fonts loaded",
+        "three revised forms including hooked WU",
+        "ten small adaptations",
+        "all constructions visible",
+        "both writing directions on every sample",
+        "vertical writing mode",
+        "horizontal writing mode",
+        "accepted 1b123 displayed once",
+        "accepted 1b124 displayed once",
+        "accepted 1b125 displayed once",
+        "accepted 1b126 displayed once",
+        "accepted 2a708 displayed once",
+        "accepted 2cf00 displayed once",
+        "accepted 2ceff displayed once",
+        "superseded KOTO studies removed",
+        "KOTO context includes TO and WO",
+        "TOMO beside TOKI and TOTE in both modes",
+        "native stroke studies for TOMO and NARI",
+        "curved WU default",
+        "curved WU shown once",
+        "fixed WU feature assignments",
+        "hooked selection description",
+        "hooked WU uses matching features in both versions",
+        "hooked outline selected",
+        "hooked overlay matches selected form",
+        "other revised overlays visible",
+        "u1b127 swaps drawing and both contexts",
+        "u1b127 keeps comparison position",
+        "u1b127 restores current",
+        "u1b128 swaps drawing and both contexts",
+        "u1b128 keeps comparison position",
+        "u1b128 restores current",
+        "u1b11f swaps drawing and both contexts",
+        "u1b11f keeps comparison position",
+        "swapped WU stays hooked",
+        "u1b11f restores current",
+        "return to curved clears previous state",
+        "guides hide",
+        "size changes both directions",
+        "two historical NARI scans",
+        "current download",
+        "no page overflow",
+        "fallback active on ordinary text",
+        "fixed WU and native references retain GenZui",
+        "u1b127 swaps text with fallback active",
+        "u1b127 restores text with fallback active",
+        "u1b128 swaps text with fallback active",
+        "u1b128 restores text with fallback active",
+        "u1b11f swaps text with fallback active",
+        "fallback preserves old hooked feature",
+        "u1b11f restores text with fallback active",
+        "fallback preserves new hooked feature",
+        "u1b123 single specimen keeps GenZui",
+        "u1b124 single specimen keeps GenZui",
+        "u1b125 single specimen keeps GenZui",
+        "u1b126 single specimen keeps GenZui",
+        "u1b132 single specimen keeps GenZui",
+        "u1b150 single specimen keeps GenZui",
+        "u1b151 single specimen keeps GenZui",
+        "u1b152 single specimen keeps GenZui",
+        "u1b155 single specimen keeps GenZui",
+        "u1b164 single specimen keeps GenZui",
+        "u1b165 single specimen keeps GenZui",
+        "u1b166 single specimen keeps GenZui",
+        "u1b167 single specimen keeps GenZui",
+        "u1b168 single specimen keeps GenZui",
+        "u2a708 single specimen keeps GenZui",
+        "u2ceff single specimen keeps GenZui",
+        "u2cf00 single specimen keeps GenZui",
+        "u2cf02 single specimen keeps GenZui",
+        "fallback still active elsewhere"
+      ],
+      "fonts": [
+        {
+          "family": "GenZui",
+          "status": "loaded"
+        },
+        {
+          "family": "Previous",
+          "status": "loaded"
+        }
+      ]
+    },
+    "index": {
+      "checks": [
+        "initial historical count",
+        "initial page bounded",
+        "seven Unicode 18 cards",
+        "Unicode 18 filtering",
+        "code point lookup",
+        "construction status",
+        "all hentaigana",
+        "pagination",
+        "all ten ligatures",
+        "all ten small kana",
+        "15 Minnan forms",
+        "overline context",
+        "full font count",
+        "literal multi-character lookup",
+        "ASCII character lookup",
+        "CJK ligature source",
+        "redrawn NARI source",
+        "21 constructions",
+        "full JP base",
+        "empty search",
+        "copy selected character",
+        "Minnan preset",
+        "typesetter preset",
+        "size control",
+        "spacing control",
+        "vertical writing",
+        "missing character indication",
+        "reset specimen",
+        "no horizontal page overflow",
+        "local download links"
+      ],
+      "fonts": [
+        {
+          "family": "GenZui",
+          "status": "loaded"
+        },
+        {
+          "family": "GenZuiTTFProbe",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  "status": "passed",
+  "owned_processes_stopped": true,
+  "font_version": "0.109",
+  "ttf_sha256": "bf9ab34dff3e3ff9c2a4f1170c937aa4e694b5d3f3d744ec29817cf1991aaf26",
+  "gallery_sha256": "82269046aaa44ab52f00dd7e7566fe3e0760fd3d955e9aed5ecd4cbf0e017854",
+  "minnan_sha256": "a5ec128957cac6bfcf5d59b8362c69a0e16ad8187ec1ee3ebc378ec8f0745605"
+}

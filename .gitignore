@@ -1,6 +1,9 @@
 .venv/
 __pycache__/
 sources/upstream/*/*.ttf
+sources/upstream/*/*.otf
 data/unicode/*.txt
 build/
 dist/
+node_modules/
+.wrangler/

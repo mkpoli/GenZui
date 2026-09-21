@@ -1,0 +1,13 @@
+{
+  "version": "0.102",
+  "ttf_sha256": "e572eb0a040ccde158d54ecb9798efbd39759bab01cac675c4f815494105c082",
+  "changed_existing_outlines": [
+    "U+1B11F"
+  ],
+  "unchanged_existing_outlines": 17036,
+  "added_characters": 15,
+  "unicode18_hiragana_katakana_name_audit": {
+    "characters": 350,
+    "missing": []
+  }
+}

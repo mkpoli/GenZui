@@ -7,8 +7,13 @@ import re
 
 import uharfbuzz as hb
 from fontTools.ttLib import TTFont
-from serif import FAMILY, OUT, SMALL, instance
-from repertoire import repertoire
+from serif import FAMILY, FAMILY_JA, STEM, VERSION, OUT, SMALL, instance
+from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
+from check_refinements import check_refinements
+from check_minnan import check_minnan
+from check_variants import check_variants
+from check_iteration import check_iteration
+from sources import ROOT
 
 
 def serialized(font):
@@ -48,7 +53,7 @@ def boxes(font, shaped):
 
 
 def check():
-    path = OUT/'HKSerifProof-Regular.ttf'
+    path = OUT/(STEM+'.ttf')
     data = path.read_bytes()
     font, engine = TTFont(path), shaper(data)
     cmap, chars = font.getBestCmap(), repertoire()
@@ -58,8 +63,13 @@ def check():
     original = TTFont(io.BytesIO(serialized(instance('NotoSerifHentaigana', 400))))
     source_cmap, jp_cmap = original.getBestCmap(), jp.getBestCmap()
 
-    assert len(cmap) == 17033
+    assert len(cmap) == 17052
     assert set(cmap) == set(jp_cmap) | {ord(item['character']) for item in chars}
+    named_kana = {int(fields[0], 16)
+                  for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines()
+                  if (fields := line.split(';')) and
+                  ('HIRAGANA' in fields[1] or 'KATAKANA' in fields[1])}
+    assert named_kana <= set(cmap), [f'U+{cp:04X}' for cp in sorted(named_kana-set(cmap))]
     assert all(cmap[cp] == name for cp, name in jp_cmap.items())
     assert font.getGlyphOrder()[:len(jp.getGlyphOrder())] == jp.getGlyphOrder()
     for name in jp.getGlyphOrder():
@@ -108,6 +118,8 @@ def check():
             assert glyph.getCoordinates(font['glyf']) == original['glyf'][old_name].getCoordinates(original['glyf']), name
             assert font['hmtx'][name] == original['hmtx'][old_name], name
             retained += 1
+        if cp in (*MINNAN_TONES, *MINNAN_MARKS):
+            continue  # Tone-letter metrics and phonetic marks have their own checks.
         horizontal, vertical = shape(engine, ch), shape(engine, ch, 'ttb')
         assert len(horizontal) == len(vertical) == 1, name
         assert horizontal[0][:3] == (font.getGlyphID(name), 1000, 0), name
@@ -124,7 +136,7 @@ def check():
                     continue
                 # Latin/unknown script runs model engines that predate the
                 # Unicode assignment of a historical base.
-                for script in ('Latn', 'Zzzz', 'Hira', 'Kana'):
+                for script in ('Latn', 'Zzzz', 'Hira', 'Kana', 'Hani'):
                     assert shape(engine, ch+mark, direction, script=script) == shaped, (name, script)
                 assert len(shaped) == 2 and all(v[0] for v in shaped), (name, direction)
                 assert shaped[1][1:3] == (0, 0), (name, direction)
@@ -146,15 +158,23 @@ def check():
             mixed = shape(engine, text, direction)
             assert mixed[-1:] == shape(jp_engine, text[-2:], direction), (text, direction)
 
-    web = TTFont(OUT/'HKSerifProof-Regular.woff2')
+    web = TTFont(OUT/(STEM+'.woff2'))
     web.flavor = None
     web_engine = shaper(serialized(web))
     assert web.getBestCmap() == cmap
     for direction in ('ltr', 'ttb'):
         for text in samples + [''.join(item['character']+mark for item in chars)
                                for mark in ('\u3099', '\u309a')]:
-            assert shape(engine, text, direction) == shape(web_engine, text, direction)
+            for features in (None, {'ss01': True}):
+                assert shape(engine, text, direction, features) == shape(web_engine, text, direction, features)
     assert font['name'].getDebugName(1) == FAMILY
+    for nid in (1, 16):
+        assert font['name'].getName(nid, 3, 1, 0x409).toUnicode() == FAMILY
+        assert font['name'].getName(nid, 3, 1, 0x411).toUnicode() == FAMILY_JA
+    assert font['name'].getDebugName(6) == STEM
+    assert font['name'].getDebugName(5) == 'Version '+VERSION
+    assert not any('HKSerifProof' in r.toUnicode() or 'HK Serif Proof' in r.toUnicode()
+                   for r in font['name'].names)
     assert font['OS/2'].usWeightClass == 400
     assert 'fvar' not in font
     licence = (OUT/'OFL.txt').read_text()
@@ -167,17 +187,27 @@ def check():
     assert '/home/' not in page
     embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', page)
     assert len(embedded) == 1
-    assert base64.b64decode(embedded[0]) == (OUT/'HKSerifProof-Regular.woff2').read_bytes()
-    assert page.count('<tr>') == 18 and 'LETTER SMALL KO' in page
-    assert retained == 290 and len(chars) == 309
+    assert base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
+    assert page.count('<tr>') == 37 and 'LETTER SMALL KO' in page
+    assert retained == 290 and len(chars) == 328
+    assert 'CC0 1.0 Universal' in (OUT/'Jigmo-CC0.txt').read_text()
+    assert 'Fredrick R. Brennan' in licence
+    assert 'Fredrick R. Brennan' in font['name'].getDebugName(0)
+    assert 'SIL OPEN FONT LICENSE Version 1.1' in (OUT/'FRB-OFL.txt').read_text()
     report = {
         'font_version': font['name'].getDebugName(5),
         'ttf_sha256': hashlib.sha256(data).hexdigest(),
-        'woff2_sha256': hashlib.sha256((OUT/'HKSerifProof-Regular.woff2').read_bytes()).hexdigest(),
+        'woff2_sha256': hashlib.sha256((OUT/(STEM+'.woff2')).read_bytes()).hexdigest(),
+        'family': FAMILY, 'family_ja': FAMILY_JA, 'localized_names_verified': True,
         'encoded_characters': len(cmap), 'unchanged_jp_characters': len(jp_cmap),
         'unchanged_jp_glyphs_and_metrics': len(jp.getGlyphOrder()),
         'jp_shaping_regression_cases': jp_cases, 'jp_variation_sequences_preserved': True,
         'target_characters': len(chars), 'unchanged_historical_outlines': retained,
+        'unicode_named_hiragana_katakana_covered': len(named_kana),
+        'outline_refinements':check_refinements(path, font),
+        'iteration':check_iteration(path, font),
+        'wu_stylistic_set':check_variants(path, font, engine, shape, boxes),
+        'minnan_and_wu': check_minnan(path, font, engine, shape, boxes),
         'new_unicode18': sum(item['age'] == '18.0' for item in chars),
         'small_vertical_alternates': len(SMALL), 'mark_shaping_cases': marks_tested,
         'woff2_matches_ttf': True, 'single_embedded_font': True,

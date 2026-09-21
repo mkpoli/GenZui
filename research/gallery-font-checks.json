@@ -1,0 +1,12 @@
+{
+  "version": "0.111",
+  "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+  "gallery_sha256": "c82551cccc2798d5c20692b1f992efb4cc8848f1e76abde562e62c6a80b01a94",
+  "all_reading_characters_covered": 53,
+  "proof_font_count": 2,
+  "proof_outlines_and_metrics_match_full_font": true,
+  "curved_wu_default_unchanged": true,
+  "minnan_preserves_hooked_alternate": true,
+  "full_repertoire_unchanged_count": 17052,
+  "status": "passed"
+}

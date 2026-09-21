@@ -7,6 +7,14 @@ from fontTools.ttLib import TTFont
 from sources import ROOT, verify
 
 FAMILIES = ("NotoSansJP", "NotoSerifJP", "NotoSerifHentaigana")
+CJK_KANA = {
+    0x2A708: "KATAKANA DIGRAPH TOMO",
+    0x2CEFF: "KATAKANA DIGRAPH NARI",
+    0x2CF00: "KATAKANA DIGRAPH SHITE",
+    0x2CF02: "HIRAGANA DIGRAPH NARI",
+}
+MINNAN_TONES = (*range(0x1AFF0, 0x1AFF4), *range(0x1AFF5, 0x1AFFC), 0x1AFFD, 0x1AFFE)
+MINNAN_MARKS = (0x0305, 0x0323)
 
 
 def font_path(family):
@@ -33,7 +41,11 @@ def repertoire():
     for line in (ROOT / "data/unicode/UnicodeData.txt").read_text().splitlines():
         fields = line.split(";")
         cp, name = int(fields[0], 16), fields[1]
-        if 0x1B001 <= cp <= 0x1B11E:
+        if cp in MINNAN_TONES:
+            group = "minnan-tone"
+        elif cp in MINNAN_MARKS:
+            group = "phonetic-mark"
+        elif 0x1B001 <= cp <= 0x1B11E:
             group = "hentaigana"
         elif cp == 0x1B000 or 0x1B11F <= cp <= 0x1B128:
             group = "historic-kana"
@@ -48,6 +60,15 @@ def repertoire():
             "age": ages[cp], "group": group,
             "decomposition": fields[5], "vertical_orientation": orientation[cp],
         })
+    # UnicodeData represents these ideograph blocks as First/Last ranges.
+    for cp, label in CJK_KANA.items():
+        result.append({
+            "codepoint": f"U+{cp:04X}", "character": chr(cp),
+            "name": f"CJK UNIFIED IDEOGRAPH-{cp:04X}", "label": label,
+            "age": ages[cp], "group": "cjk-kana-ligature",
+            "decomposition": "", "vertical_orientation": orientation[cp],
+        })
+    assert len({item["codepoint"] for item in result}) == len(result)
     return result
 
 

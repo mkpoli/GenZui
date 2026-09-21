@@ -66,6 +66,62 @@
       "url": "https://www.unicode.org/license.txt",
       "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
       "size": 1995
+    },
+    {
+      "path": "sources/upstream/Jigmo/Jigmo2.ttf",
+      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
+      "archive_member": "Jigmo2.ttf",
+      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
+      "sha256": "5da3582efe77e22073b86b3b86b556d7111148a76b957cfb53318a91da2efff0",
+      "size": 35661996
+    },
+    {
+      "path": "sources/upstream/Jigmo/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
+      "archive_member": "LICENSE.txt",
+      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
+      "sha256": "437ca31a127c9f1b191ff9a42bb563e5f7e414ae819006dca4635d9fb34aeb94",
+      "size": 7171
+    },
+    {
+      "path": "sources/upstream/Jigmo/README.txt",
+      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
+      "archive_member": "README.txt",
+      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
+      "sha256": "9e21785d64d317da46f270c33f464be36ef20d1bfa30f07f5de27a1d1567162f",
+      "size": 6885
+    },
+    {
+      "path": "sources/upstream/Jigmo/THANKS.txt",
+      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
+      "archive_member": "THANKS.txt",
+      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
+      "sha256": "e50087723cb3b8fbfaca220398b15014ec0073104449b97fc1f60485331921f6",
+      "size": 1574
+    },
+    {
+      "path": "sources/upstream/FRBTaiwaneseKana/FRBTaiwaneseKana.otf",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/FRBTaiwaneseKana/5c367e9ee5aefd54b5c9c9e996705f0561fe3d15/FRBTaiwaneseKana.otf",
+      "sha256": "5bb824c8560e4c25c4a58be3a6f82efae51c709acf1ce7504bf8bf88109f930e",
+      "size": 62420
+    },
+    {
+      "path": "sources/upstream/FRBTaiwaneseKana/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/FRBTaiwaneseKana/5c367e9ee5aefd54b5c9c9e996705f0561fe3d15/LICENSE.txt",
+      "sha256": "8bb6c69bcf103302539bd3bb96a0267df8f61dbc1b9384b95d494d53f3626f44",
+      "size": 4459
+    },
+    {
+      "path": "sources/upstream/FRBTaiwaneseKana/README.md",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/FRBTaiwaneseKana/5c367e9ee5aefd54b5c9c9e996705f0561fe3d15/README.md",
+      "sha256": "0dec692190b3292e80ecab58d32d5d110738d6e14eaa6035d27257f15af6486c",
+      "size": 2280
+    },
+    {
+      "path": "sources/upstream/FRBTaiwaneseKana/features.fea",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/FRBTaiwaneseKana/5c367e9ee5aefd54b5c9c9e996705f0561fe3d15/features.fea",
+      "sha256": "25155397143c2e13570d47da0d0c2b3183697cf27b3054465730b598684217b9",
+      "size": 2897
     }
   ]
 }

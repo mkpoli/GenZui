@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Japanese text and historical kana · Serif Regular proof</title>
+<title>源萃明朝 · GenZui Serif</title>
 <style>
 {{CSS}}
 *{box-sizing:border-box}
@@ -25,28 +25,35 @@ details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px}
 @media(max-width:650px){main{padding:18px}.mixed{font-size:26px}.text{font-size:30px}}
 </style>
 <main>
-<h1>Japanese text and historical kana</h1>
-<p>Unified serif · Regular · version 0.002 · Unicode 18</p>
-<p>One font contains Noto Serif JP’s full 16,726-character repertoire and 307 additional historical kana: 17,033 encoded characters in total. All 286 hentaigana and all seven Unicode 18 kana additions are included.</p>
-<p class="note">Seventeen forms are provisional. Their joins, proportions and stroke weight need typographic review. “HK Serif Proof” is a temporary font-menu identifier. Regular is the only available weight.</p>
-<p><a href="HKSerifProof-Regular.ttf">Installable TTF</a> · <a href="HKSerifProof-Regular.woff2">Webfont</a> · <a href="OFL.txt">OFL 1.1 licence</a> · <a href="sources.json">Outline provenance</a></p>
+<h1 class="specimen"><ruby lang="ja">源萃<rt>げんずい</rt></ruby>明朝 · GenZui Serif</h1>
+<p>Japanese text and historical kana · Regular · {{VERSION}} development build · Unicode 18</p>
+<p>One font contains Noto Serif JP’s full 16,726-character repertoire and 326 additional historical kana and support marks: 17,052 encoded characters in total. All 286 hentaigana, all seven Unicode 18 kana additions, and the four kana ligatures encoded in CJK blocks are included.</p>
+<p class="note">Twenty-one constructed forms are provisional. Their joins, proportions and stroke weight need typographic review. Regular is the only available weight. The installed family appears as “GenZui Serif” or “源萃明朝”, depending on the application’s language.</p>
+<p><a href="GenZuiSerif-Regular.ttf">Installable TTF</a> · <a href="GenZuiSerif-Regular.woff2">Webfont</a> · <a href="OFL.txt">OFL 1.1 licence</a> · <a href="sources.json">Outline provenance</a></p>
 <h2>Mixed text</h2>
 <p>These samples use the unified font. Click the paragraph to try other text.</p>
-<div id="mixed" class="sample mixed specimen" lang="ja" contenteditable="true" spellcheck="false" aria-label="Editable Japanese and historical kana sample">かなの歴史を読む。𛀀・𛀁・𛄟・𛄠・𛄡・𛄢<br>合略仮名：ゟ ヿ 𛄣 𛄤 𛄥 𛄦 𛄧 𛄨<br>小書き仮名：𛅒 𛅦 𛅨　変体仮名：𛀂 𛀋 𛀙 𛁛<br>「日本語」、ひらがな・カタカナ。2026 / Kana</div>
+<div id="mixed" class="sample mixed specimen" lang="ja" contenteditable="true" spellcheck="false" aria-label="Editable Japanese and historical kana sample">かなの歴史を読む。𛀀・𛀁・𛄟・𛄠・𛄡・𛄢<br>合略仮名：ゟ ヿ 𛄣 𛄤 𛄥 𛄦 𪜈 𬻿 𬼀 𬼂<br>片仮名の異体：𛄧 𛄨　小書き仮名：𛅒 𛅦 𛅨<br>変体仮名：𛀂 𛀋 𛀙 𛁛<br>「日本語」、ひらがな・カタカナ。2026 / Kana</div>
 <h2>Vertical text</h2>
 <div class="sample columns text specimen" lang="ja">
-<div id="vertical" class="vertical">「かなの歴史」<br>あ𛄤い・あ𛄣い<br>あ𛅨い・あゟい</div>
+<div id="vertical" class="vertical">「かなの歴史」<br>あ𛄤い・あ𛄣い<br>あ𛅨い・あゟい<br>𪜈・𬻿・𬼀・𬼂</div>
 <div id="marks" class="vertical">𛀂゙・𛄤゙・𛅨゙<br>𛀂゚・𛄤゚・𛅨゚</div>
 </div>
-<h2>Seventeen provisional forms</h2>
+<h2>Constructed forms and Minnan additions</h2>
 <label>Preview size <input id="size" type="range" min="24" max="96" value="64"> <output id="value">64 px</output></label>
 <div class="scroll"><table lang="ja"><thead><tr><th>Character</th><th>Outline</th><th>Horizontal</th><th>Vertical</th><th>Mark positioning</th></tr></thead><tbody>{{ROWS}}</tbody></table></div>
 <p>Mark samples exercise positioning; they do not imply that every combination is linguistically used. Small kana have separate positions for vertical text.</p>
+<h2>Minnan kana</h2>
+<p id="minnan" class="sample text specimen" lang="ja">チ̅ァム𚿵 チ̅ァム𚿵 チ̣̅ア𚿷<br>ウ̅ ゥ̅ オ̅ ォ̅</p>
+<div id="minnan-vertical" class="sample vertical text specimen" lang="ja">チ̅ァム𚿵<br>チ̣̅ア𚿷</div>
+<p>Vertical tones support groups of one to four kana at default fullwidth advance and zero letter spacing. Separate ruby annotations at syllable boundaries. Longer groups need application-level positioning.</p>
+<h2>WU stylistic alternate</h2>
+<p>The curved form is the default. Enable stylistic set 1, “Hooked WU”, for the bowed stem and short return.</p>
+<p class="sample text specimen" lang="ja">Default: け𛄟ほ<br><span style="font-feature-settings: 'ss01' 1">ss01: け𛄟ほ</span></p>
 <h2>All 286 hentaigana</h2>
 <p id="historical" class="sample grid specimen" lang="ja">{{ALL}}</p>
 <h2>Coverage and licence</h2>
-<p>The historical inventory contains 309 characters: 286 hentaigana, 11 other letters and digraphs in Kana Supplement and Kana Extended-A, ten small kana, and ゟ and ヿ. The base uses Japanese regional glyph forms. This build does not include the whole Chinese and Korean repertoires or the CJK-encoded kana ligatures U+2A708, U+2CEFF, U+2CF00 and U+2CF02.</p>
-<p>The font derives from Noto Serif JP and Noto Serif Hentaigana and is licensed under SIL OFL 1.1. New forms use Noto components and original drawing. No outline data was extracted from Unicode charts.</p>
+<p>The historical inventory contains 328 characters: 286 hentaigana, 11 other letters and digraphs in Kana Supplement and Kana Extended-A, ten small kana, ゟ and ヿ, four CJK-encoded kana ligatures, 13 Minnan tone letters and two support marks. Shared ideographs use Japanese regional forms. Chinese and Korean coverage is limited to the Noto Serif JP base.</p>
+<p>GenZui Serif combines Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana (SIL OFL 1.1). Constructed forms use Noto kana components and original drawing. The combined font is distributed under SIL OFL 1.1. <a href="NOTICE.txt">Source credits</a> · <a href="Jigmo-CC0.txt">Jigmo CC0 dedication</a></p>
 <details><summary>Copyright notices and SIL Open Font License</summary><pre>{{LICENSE}}</pre></details>
 </main>
 <script>

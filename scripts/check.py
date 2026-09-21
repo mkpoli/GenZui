@@ -13,7 +13,7 @@ from sources import ROOT, verify
 def check():
     verify()
     chars = repertoire()
-    assert len(chars) == 309
+    assert len(chars) == 328
     assert sum(c["group"] == "hentaigana" for c in chars) == 286
     expected_new = {0x1B123, 0x1B124, 0x1B125, 0x1B126, 0x1B127, 0x1B128, 0x1B168}
     assert {ord(c["character"]) for c in chars if c["age"] == "18.0"} == expected_new
@@ -80,7 +80,7 @@ def check():
     assert page.count("<section>") == len(SAMPLES)
     assert "/home/" not in page
     assert "SIL OPEN FONT LICENSE" in page
-    print("Checks passed: pinned sources, 309-character audit, all seven Unicode 18 additions,")
+    print("Checks passed: pinned sources, 328-character audit, all seven Unicode 18 additions,")
     print("16 distinct study forms, TTF/WOFF2 equivalence, HarfBuzz horizontal/vertical shaping, embedded licences.")
 
 

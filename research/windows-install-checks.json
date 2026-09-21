@@ -1,0 +1,24 @@
+{
+  "runs": [
+    {
+      "run": 1,
+      "installer": {
+        "family": "GenZui Serif",
+        "family_ja": "源萃明朝",
+        "installed": true,
+        "version": "Version 0.111",
+        "sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+        "registry_verified": true,
+        "windows_font_collection_verified": true,
+        "resolved_font_bytes_verified": true,
+        "previous_file_removed": true,
+        "added_resources": 2
+      },
+      "unrelated_registrations_preserved": 589
+    }
+  ],
+  "status": "passed",
+  "date": "2026-09-21",
+  "version": "0.111",
+  "installer_sha256": "4765884b6c65e9367993d2c17ec58e96946b3293a7c14c6a2f18fdb0bef7b896"
+}

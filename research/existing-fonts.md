@@ -18,6 +18,20 @@ NINJAL's font remains available from its [official download page](https://cid.ni
 It is an IPAmj Mincho subset containing the 286 hentaigana, licensed under Apache
 2.0. Its listed version is 1.01, dated December 2018.
 
+## Serif gap source
+
+[Jigmo](https://kamichikoichi.github.io/jigmo/), released 12 September 2025,
+provides three Mincho fonts under CC0 1.0. The Jigmo2 binary was inspected for
+U+2A708, U+2CEFF, U+2CF00 and U+2CF02: all four have nonempty outlines and
+1024-unit horizontal and vertical advances. GenZui 0.100 imported these four
+characters. Version 0.101 retains the baseline-adjusted hiragana NARI and redraws
+the other three with Mincho kana strokes. The pinned archive and its CC0 dedication,
+README and contributor notices are recorded in `sources/manifest.json`.
+
+The separate Jigmo font covers archaic WU and nine historical small kana. The
+GenZui constructions retain Noto components for consistency with the JP base.
+Jigmo's 2025 release does not cover the seven Unicode 18 additions.
+
 ## Source verification
 
 The GenSeki Regular binary from the official

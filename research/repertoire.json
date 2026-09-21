@@ -6,10 +6,13 @@
     "NotoSerifHentaigana"
   ],
   "groups": {
+    "phonetic-mark": 2,
     "bmp-digraph": 2,
+    "minnan-tone": 13,
     "historic-kana": 11,
     "hentaigana": 286,
-    "small-kana": 10
+    "small-kana": 10,
+    "cjk-kana-ligature": 4
   },
   "unicode18": [
     "U+1B123",
@@ -21,6 +24,34 @@
     "U+1B168"
   ],
   "characters": [
+    {
+      "codepoint": "U+0305",
+      "character": "̅",
+      "name": "COMBINING OVERLINE",
+      "age": "1.1",
+      "group": "phonetic-mark",
+      "decomposition": "",
+      "vertical_orientation": "R",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+0323",
+      "character": "̣",
+      "name": "COMBINING DOT BELOW",
+      "age": "1.1",
+      "group": "phonetic-mark",
+      "decomposition": "",
+      "vertical_orientation": "R",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
     {
       "codepoint": "U+309F",
       "character": "ゟ",
@@ -46,6 +77,188 @@
       "upstream": {
         "NotoSansJP": true,
         "NotoSerifJP": true,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF0",
+      "character": "𚿰",
+      "name": "KATAKANA LETTER MINNAN TONE-2",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF1",
+      "character": "𚿱",
+      "name": "KATAKANA LETTER MINNAN TONE-3",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF2",
+      "character": "𚿲",
+      "name": "KATAKANA LETTER MINNAN TONE-4",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF3",
+      "character": "𚿳",
+      "name": "KATAKANA LETTER MINNAN TONE-5",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF5",
+      "character": "𚿵",
+      "name": "KATAKANA LETTER MINNAN TONE-7",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF6",
+      "character": "𚿶",
+      "name": "KATAKANA LETTER MINNAN TONE-8",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF7",
+      "character": "𚿷",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-1",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF8",
+      "character": "𚿸",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-2",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFF9",
+      "character": "𚿹",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-3",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFFA",
+      "character": "𚿺",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-4",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFFB",
+      "character": "𚿻",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-5",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFFD",
+      "character": "𚿽",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-7",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+1AFFE",
+      "character": "𚿾",
+      "name": "KATAKANA LETTER MINNAN NASALIZED TONE-8",
+      "age": "14.0",
+      "group": "minnan-tone",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
         "NotoSerifHentaigana": false
       }
     },
@@ -4341,6 +4554,66 @@
       "group": "small-kana",
       "decomposition": "",
       "vertical_orientation": "Tu",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2A708",
+      "character": "𪜈",
+      "name": "CJK UNIFIED IDEOGRAPH-2A708",
+      "label": "KATAKANA DIGRAPH TOMO",
+      "age": "5.2",
+      "group": "cjk-kana-ligature",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2CEFF",
+      "character": "𬻿",
+      "name": "CJK UNIFIED IDEOGRAPH-2CEFF",
+      "label": "KATAKANA DIGRAPH NARI",
+      "age": "10.0",
+      "group": "cjk-kana-ligature",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2CF00",
+      "character": "𬼀",
+      "name": "CJK UNIFIED IDEOGRAPH-2CF00",
+      "label": "KATAKANA DIGRAPH SHITE",
+      "age": "10.0",
+      "group": "cjk-kana-ligature",
+      "decomposition": "",
+      "vertical_orientation": "U",
+      "upstream": {
+        "NotoSansJP": false,
+        "NotoSerifJP": false,
+        "NotoSerifHentaigana": false
+      }
+    },
+    {
+      "codepoint": "U+2CF02",
+      "character": "𬼂",
+      "name": "CJK UNIFIED IDEOGRAPH-2CF02",
+      "label": "HIRAGANA DIGRAPH NARI",
+      "age": "10.0",
+      "group": "cjk-kana-ligature",
+      "decomposition": "",
+      "vertical_orientation": "U",
       "upstream": {
         "NotoSansJP": false,
         "NotoSerifJP": false,
