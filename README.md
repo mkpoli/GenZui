@@ -82,11 +82,11 @@ or custom spacing require application-level positioning.
 
 | Source | Contribution |
 | --- | --- |
-| [Noto Serif JP](https://github.com/google/fonts/tree/main/ofl/notoserifjp) | Japanese base and kana components; 16,726 encoded characters |
+| [Noto Serif JP](https://github.com/google/fonts/tree/main/ofl/notoserifjp) | Japanese subset of Noto Serif CJK; 16,726 encoded characters and kana components |
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
-| [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄, added in 0.113 from the full Japanese CJK font |
-| GenZui | 21 historical kana constructions, SQUARE PAATU and ten transcription symbols, from Noto components and original drawing |
+| [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms |
+| [GenZui constructions](https://genzui.mkpo.li/?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU and ten transcription symbols, from Noto components and original drawing |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui's constructions
 in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
