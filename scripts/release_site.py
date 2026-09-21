@@ -112,12 +112,11 @@ def build():
     page = page.replace('Regular · {{VERSION}} development build', 'Regular · {{VERSION}}')
     page = page.replace(f'{VERSION} development build', VERSION)
     page = page.replace('Review GenZui’s constructions', 'See GenZui’s constructions')
-    web = (f'<p>Webfont: <a href="v{VERSION}/genzui.css">version {VERSION} CSS</a>. '
-           'Use the family <code>GenZui Serif</code>. '
-           '<a href="media/genzui-social.png" download>Release image</a> · '
-           '<a href="announcement-ja.txt">Announcement</a></p>')
-    page = page.replace('Includes the fonts, installation instructions and source credits.</p>',
-                        'Includes the fonts, installation instructions and source credits.</p>'+web)
+    web = (f'<details class="webfont-usage"><summary>Use GenZui on your website</summary>'
+           f'<p>Load the <a href="v{VERSION}/genzui.css">version {VERSION} stylesheet</a>, then set the font family:</p>'
+           f'<pre><code>&lt;link rel="stylesheet" href="{URL}/v{VERSION}/genzui.css"&gt;\n\n'
+           'body {\n  font-family: "GenZui Serif", serif;\n}</code></pre></details>')
+    page = page.replace('<!-- webfont-usage -->', web)
     structured = {'@context':'https://schema.org', '@type':'WebSite',
                   'name':'GenZui Serif / 源萃明朝', 'url':URL+'/', 'description':DESCRIPTION,
                   'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}

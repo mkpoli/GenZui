@@ -102,6 +102,9 @@ def build():
         '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),
         '{{VERSION}}': html.escape(VERSION),
         '{{FONT_SIZE}}': f'{(FONT_OUT/(STEM+".ttf")).stat().st_size/1048576:.1f}',
+        '{{ZIP_SIZE}}': f'{package.stat().st_size/1048576:.1f}',
+        '{{WEBFONT_SIZE}}': f'{(FONT_OUT/(STEM+".woff2")).stat().st_size/1048576:.1f}',
+        '{{WEBFONT_USAGE}}': '<!-- webfont-usage -->',
     }
     for token, value in replacement.items():
         page = page.replace(token, value)
