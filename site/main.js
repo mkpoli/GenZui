@@ -16,15 +16,18 @@
   const character = item => String.fromCodePoint(item.cp);
   const origins = {
     jp: 'Noto Serif JP', hentaigana: 'Noto Serif Hentaigana',
-     genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana',
+     genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana', cjk: 'Noto Serif CJK JP',
   };
   const filters = {
-    historical: item => item.group !== 'base',
+    historical: item => ['hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph', 'cjk-kana-ligature', 'minnan-tone', 'phonetic-mark', 'compatibility-kana'].includes(item.group),
     hentaigana: item => item.group === 'hentaigana',
     unicode18: item => item.group !== 'base' && item.age === '18.0',
     small: item => item.group === 'small-kana',
     minnan: item => ['minnan-tone', 'phonetic-mark'].includes(item.group),
     ligatures: item => item.group !== 'base' && (item.label.includes('DIGRAPH') || item.group === 'cjk-kana-ligature'),
+    numerals: item => item.group === 'han-numeral',
+    tallies: item => item.group === 'tally-mark',
+    'ideographic-description': item => item.group === 'ideographic-description',
     all: () => true,
   };
   let filter = 'historical';
@@ -184,6 +187,9 @@
   });
 
   const presets = {
+    numerals: '〇一二三四五六七八九十\n廿 卄 卅 卌　百千万億兆\n壱弐参拾　〡〢〣〤〥〦〧〨〩',
+    tallies: '𝍲 𝍳 𝍴 𝍵 𝍶\n一 正',
+    'ideographic-description': '⿰ ⿱ ⿲ ⿳ ⿴ ⿵\n⿶ ⿷ ⿸ ⿹ ⿺ ⿻\n⿼ ⿽ ⿾ ⿿ ㇯',
     mixed: '春はあけぼの。\nかなのかたちを読む。\nあ𛀂 い𛀆 う𛀋 え𛀁 お𛀕',
     reading: '春はあけぼの。\nやうやう白くなりゆく山ぎは。\n文字を読み、ことばをたどる。',
     historical: 'あ 𛀂 𛀃 𛀄 𛀅\nい 𛀆 𛀇 𛀈 𛀉\nう 𛀊 𛀋 𛀌 𛀍 𛀎',
@@ -234,6 +240,11 @@
     loaded = true; typeStatus();
   }).catch(() => { loadFailed = true; typeStatus(); });
 
+  const initialPreset = new URLSearchParams(location.search).get('sample');
+  if (Object.hasOwn(presets, initialPreset)) {
+    $('#preset').value = initialPreset; setPreset();
+    if (['numerals', 'tallies', 'ideographic-description'].includes(initialPreset)) filter = initialPreset;
+  }
   renderInventory();
   updateInspector(selected);
   typeStatus();

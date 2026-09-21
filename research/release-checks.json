@@ -1,9 +1,15 @@
 {
-  "version": "0.112",
-  "font_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "version": "0.113",
+  "font_sha256": "212ed1f1935365d64d713d4729cd97b2afd7a9b463b8c66dc9c32269b0e909f7",
   "local_links_checked": 41,
   "public_gallery_forms": 21,
-  "release_files_checked": 43,
+  "release_files_checked": 48,
+  "inventory_collections": {
+    "han-numeral": 80,
+    "tally-mark": 5,
+    "ideographic-description": 17
+  },
+  "extended_kana_characters": 329,
   "font_bytes_unchanged": true,
   "status": "passed"
 }

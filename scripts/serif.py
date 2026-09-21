@@ -22,12 +22,13 @@ from minnan import import_forms as import_minnan, layout as layout_minnan
 from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, hooked_wu, refinements
 from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
+from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
 
 OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
 FAMILY_JA = '源萃明朝'
 STEM = 'GenZuiSerif-Regular'
-VERSION = '0.112'
+VERSION = '0.113'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B152: 0x3092, 0x1B155: 0x30B3, 0x1B164: 0x30F0,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
@@ -249,7 +250,7 @@ def build():
     donor = instance('NotoSerifHentaigana', 400)
     originals = set(font.getBestCmap())
     points = {ord(item['character']) for item in repertoire()}
-    historical = points - originals - {PAATU}
+    historical = points - originals - {PAATU} - set(HONKOKU)
     cmap_add = {cp: import_glyph(font, donor, donor.getBestCmap()[cp])
                 for cp in sorted(historical & set(donor.getBestCmap()))}
     retained = len(cmap_add)
@@ -298,11 +299,15 @@ def build():
     layout_minnan(font, add, add_feature)
     add_paatu(font, add, glyph, add_feature)
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
+    add_honkoku(font, add, glyph, contours, transform)
+    PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
         notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
         notices.append(notice)
         notices.extend(record.toUnicode() for record in source['name'].names if record.nameID == 0)
+    with TTFont(CJK_SOURCE) as cjk:
+        notices.extend(record.toUnicode() for record in cjk['name'].names if record.nameID == 0)
     notices = '\n'.join(dict.fromkeys(notices))
     notices += '\n' + (ROOT/'sources/upstream/FRBTaiwaneseKana/LICENSE.txt').read_text().split('\n\n')[0]
     for nid in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,21,22,25):
@@ -310,7 +315,7 @@ def build():
     for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:VERSION+';'+STEM,
                        4:FAMILY+' Regular', 5:'Version '+VERSION, 6:STEM,
                        16:FAMILY,17:'Regular',
-                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes twenty-one historical kana constructions, SQUARE PAATU and a hooked WU stylistic alternate.',
+                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes historical kana constructions, SQUARE PAATU, transcription symbols and a hooked WU stylistic alternate.',
                        13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
                        14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
@@ -333,6 +338,9 @@ def build():
         'GenZui Serif / 源萃明朝 (げんずい)\n\n'
         'Noto Serif JP: full Japanese base and historical-kana construction components.\n'
         'GenZui: twenty-one constructed forms using Noto kana components and original drawing.\n'
+        'Noto Serif CJK JP: U+5344 (卄), converted to TrueType curves.\n'
+        'https://github.com/notofonts/noto-cjk/tree/main/Serif\n'
+        'GenZui: five ideographic tally marks and five ideographic-description symbols.\n'
         'GenZui: SQUARE PAATU uses native Noto Serif JP squared-katakana components.\n'
         'WU has a curved default and a hooked stylistic alternate (ss01).\n'
         'Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.\n'
@@ -354,6 +362,7 @@ def build():
         'The CC0 dedication of the original Jigmo material remains in effect.\n'
         'Upstream authors do not endorse this derivative.\n'
     )
+    shutil.copyfile(CJK_SOURCE.parent/'OFL.txt', OUT/'NotoSerifCJK-OFL.txt')
     shutil.copyfile(ROOT/'sources/manifest.json', OUT/'source-manifest.json')
     shutil.copyfile(ROOT/'sources/Unicode-LICENSE.txt', OUT/'Unicode-LICENSE.txt')
     for source, dest in (('LICENSE.txt', 'Jigmo-CC0.txt'), ('README.txt', 'Jigmo-README.txt'),
@@ -367,6 +376,7 @@ def build():
         'encoded_characters':len(font.getBestCmap()),
         'target_characters':len(points),'retained_historical':retained,
         'provisional_forms':len(recipes), 'compatibility_forms':1,
+        'honkoku_forms':len(HONKOKU), 'honkoku_constructions':10,
         'stylistic_sets':{'ss01':{'name':'Hooked WU','codepoint':'U+1B11F',
             'default':'curved','alternate':'hooked','glyph':alternate}},
         'minnan_source_forms':len(minnan_points),
@@ -388,7 +398,8 @@ def build():
         'revision_0106':[f'U+{cp:04X}' for cp in REVISION_0106],
         'revision_0105':[f'U+{cp:04X}' for cp in REVISION_0105],
         'source_kinds':{f'U+{cp:04X}':('jp' if cp in originals else
-            'genzui' if cp in recipes or cp == PAATU else 'frb' if cp in minnan_points else
+            'cjk' if cp == 0x5344 else
+            'genzui' if cp in recipes or cp == PAATU or cp in HONKOKU else 'frb' if cp in minnan_points else
             'hentaigana') for cp in sorted(points)}},ensure_ascii=False,indent=2)+'\n')
     for file in ('JP-Regular.ttf', 'JP-Regular.woff2', 'HKSerifProof-Regular.ttf',
                  'HKSerifProof-Regular.woff2', 'Hentaigana-Regular.ttf',
@@ -409,7 +420,13 @@ def proof():
         source = ('FRB Taiwanese Kana · adapted layout' if ord(ch) in (*MINNAN_TONES, *MINNAN_MARKS) else
                   'GenZui / Noto components · provisional')
         picture, horizontal, vertical, marks = ch, f'あ{ch}い<br>ア{ch}イ', f'あ{ch}い', f'{ch}\u3099 {ch}\u309a'
-        if ord(ch) == PAATU:
+        if ord(ch) in HONKOKU:
+            source = 'Noto Serif CJK JP' if ord(ch) == 0x5344 else 'GenZui / Noto components'
+            horizontal = vertical = ('廿卄卅' if ord(ch) == 0x5344 else
+                ''.join(chr(cp) for cp in TALLIES) if ord(ch) in TALLIES else
+                '⿷'+ch+'⿺')
+            marks = ch
+        elif ord(ch) == PAATU:
             horizontal = vertical = '㌫㌬㌭'
             marks = 'パーツ'
             source = 'GenZui / Noto squared-katakana components'

@@ -108,7 +108,7 @@ def build():
     (OUT/'assets'/name).write_bytes(raw)
     page = page[:match.start()]+f'<script id="font-data" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
     page = page.replace('<h3>A development build</h3>', '<h3>Historical letterforms</h3>')
-    page = page.replace('The 21 constructed forms remain provisional.', 'The 21 constructed forms are modern reconstructions of historical letterforms.')
+    page = page.replace('The constructed outlines remain provisional.', 'GenZui supplies historical letterforms and transcription symbols using Noto components and original drawing.')
     page = page.replace('Regular · {{VERSION}} development build', 'Regular · {{VERSION}}')
     page = page.replace(f'{VERSION} development build', VERSION)
     page = page.replace('Review GenZui’s constructions', 'See GenZui’s constructions')

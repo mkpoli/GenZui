@@ -65,7 +65,7 @@ def check():
     with ZipFile(OUT/'downloads'/f'{STEM}-{VERSION}.zip') as z:
         assert z.testzip() is None
         assert hashlib.sha256(z.read(STEM+'.ttf')).hexdigest()==checks['ttf_sha256']
-        assert {'OFL.txt','NOTICE.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
+        assert {'OFL.txt','NOTICE.txt','FRB-OFL.txt','NotoSerifCJK-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
         coverage=json.loads(z.read('kana-coverage.json'))
         assert coverage['font_sha256']==checks['ttf_sha256']
         assert coverage['coverage']['Script plus Script_Extensions']=={
@@ -74,10 +74,19 @@ def check():
     assert Image.open(OUT/'media/genzui-social.png').size==(1200,630)
     assert Image.open(OUT/'media/genzui-social-2x.png').size==(2400,1260)
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
-    assert data['total']==17053 and len(data['characters'])==17053
-    assert sum(c['source']=='genzui' for c in data['characters'])==22
+    assert data['total']==17064 and len(data['characters'])==17064
+    assert data['historical']==329
+    groups = {name: {c['cp'] for c in data['characters'] if c['group']==name}
+              for name in ('han-numeral','tally-mark','ideographic-description')}
+    assert len(groups['han-numeral'])==80 and {0x5344,0x5EFF,0x5345} <= groups['han-numeral']
+    assert groups['tally-mark']==set(range(0x1D372,0x1D377))
+    assert groups['ideographic-description']==set(range(0x2FF0,0x3000))|{0x31EF}
+    assert 'Honkoku additions' not in home and 'sample=honkoku' not in home
+    assert sum(c['source']=='genzui' for c in data['characters'])==32
     report={'version':VERSION,'font_sha256':checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
+            'inventory_collections':{name:len(points) for name,points in groups.items()},
+            'extended_kana_characters':data['historical'],
             'font_bytes_unchanged':True,'status':'passed'}
     (ROOT/'research/release-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))

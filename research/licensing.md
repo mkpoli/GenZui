@@ -6,6 +6,7 @@ The exact files and their SHA-256 hashes are pinned in `sources/manifest.json`.
 | Source | Material used | Copyright notices retained |
 | --- | --- | --- |
 | Noto Serif JP | Full Regular base and components for new kana | Google (package OFL header); Adobe (font metadata) |
+| Noto Serif CJK JP 2.003 | 卄 U+5344, converted from CFF to TrueType curves | Adobe (font metadata) |
 | Noto Serif Hentaigana | 290 historical forms, combining marks and small archaic YE components | The Noto Project Authors |
 | FRB Taiwanese Kana | 13 Minnan tone letters and two combining marks | Fredrick R. Brennan |
 | Jigmo2, 2025-09-12 | U+2CF02 in historical comparison fonts through 0.102 | Koichi Kamichi and GlyphWiki contributors (credited in NOTICE.txt) |
@@ -15,6 +16,9 @@ metadata in `OFL.txt` and the derived font's name table. The proof page includes
 the combined licence. The original package licences remain in
 `sources/upstream/<family>/OFL.txt`. Jigmo's archive supplies `LICENSE.txt`
 (CC0), `README.txt` and `THANKS.txt`; all three accompany the distribution.
+Noto Serif CJK JP’s original licence accompanies the distribution as
+`NotoSerifCJK-OFL.txt`; its Adobe copyright notice is retained in the combined
+OFL file and font metadata.
 FRB’s original licence and README accompany the distribution as `FRB-OFL.txt`
 and `FRB-README.md`. Its pinned source is
 [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana).
@@ -57,7 +61,7 @@ named family can combine compatible OFL sources while retaining their notices.
 
 ## Coverage and release status
 
-The proof contains the full pinned Noto Serif JP repertoire plus all 328 characters
-in the historical inventory. It uses Japanese regional glyph forms and supplies
-Regular only. Twenty-one provisional outlines need typographic review. All four CJK-encoded kana are now GenZui constructions. These coverage and design limits are independent
+The 0.113 proof contains 17,064 encoded characters, including the full pinned
+Noto Serif JP repertoire and all 340 historical/transcription inventory entries. It uses Japanese regional glyph forms and supplies
+Regular only. Constructed outlines are identified separately in the specimen. All four CJK-encoded kana are now GenZui constructions. These coverage and design limits are independent
 of the licence permissions.

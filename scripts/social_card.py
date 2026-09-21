@@ -25,7 +25,7 @@ def build_card(destination):
     text(435, 64, 'Unicode 18.0', 17, green, True)
     text(58, 222, '源萃明朝', 116)
     text(65, 275, 'げんずい', 24, muted)
-    text(60, 369, '17,053', 46, green)
+    text(60, 369, '17,064', 46, green)
     text(357, 369, '286', 46, green)
     text(62, 401, 'CHARACTERS', 14, muted, True)
     text(360, 401, 'HENTAIGANA', 14, muted, True)

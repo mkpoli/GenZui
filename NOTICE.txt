@@ -2,6 +2,9 @@ GenZui Serif / 源萃明朝 (げんずい)
 
 Noto Serif JP: full Japanese base and historical-kana construction components.
 GenZui: twenty-one constructed forms using Noto kana components and original drawing.
+Noto Serif CJK JP: U+5344 (卄), converted to TrueType curves.
+https://github.com/notofonts/noto-cjk/tree/main/Serif
+GenZui: five ideographic tally marks and five ideographic-description symbols.
 GenZui: SQUARE PAATU uses native Noto Serif JP squared-katakana components.
 WU has a curved default and a hooked stylistic alternate (ss01).
 Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.
