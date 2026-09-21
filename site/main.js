@@ -185,6 +185,10 @@
   $('#browse-unicode').addEventListener('click', () => {
     $('#character-search').value = ''; $('#source-filter').value = 'all'; chooseFilter('unicode18');
   });
+  $('#browse-constructions').addEventListener('click', event => {
+    if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    $('#character-search').value = ''; $('#source-filter').value = 'genzui'; chooseFilter('all');
+  });
 
   const presets = {
     numerals: '〇一二三四五六七八九十\n廿 卄 卅 卌　百千万億兆\n壱弐参拾　〡〢〣〤〥〦〧〨〩',
@@ -240,7 +244,13 @@
     loaded = true; typeStatus();
   }).catch(() => { loadFailed = true; typeStatus(); });
 
-  const initialPreset = new URLSearchParams(location.search).get('sample');
+  const params = new URLSearchParams(location.search);
+  const initialSource = params.get('source');
+  if (Object.hasOwn(origins, initialSource)) {
+    $('#source-filter').value = initialSource;
+    filter = 'all';
+  }
+  const initialPreset = params.get('sample');
   if (Object.hasOwn(presets, initialPreset)) {
     $('#preset').value = initialPreset; setPreset();
     if (['numerals', 'tallies', 'ideographic-description'].includes(initialPreset)) filter = initialPreset;
