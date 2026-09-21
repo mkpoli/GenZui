@@ -26,6 +26,6 @@ directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.111/genzui.css`) and a current alias (`/genzui.css`).
 
 The release image uses the distributed font's glyphs. Its text alternative is:
-“源萃明朝 / GenZui Serif. Six historical kana: KOTO, TOKI, TOMO, hentaigana A-1,
-alternate NE and alternate WI. 286 hentaigana; Unicode 18 kana support. Regular,
-TTF and WOFF2, SIL OFL 1.1. genzui.mkpo.li.”
+“源萃明朝 / GenZui Serif. Six historical kana: KOTO, TOKI, TOMO, TOTE,
+alternate NE and alternate WI. 17,052 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP,
+Noto Serif Hentaigana and FRB Taiwanese Kana. genzui.mkpo.li.”

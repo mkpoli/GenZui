@@ -22,17 +22,21 @@ def build_card(destination):
 
     rect((628, 0, 1200, 630), green)
     text(58, 64, 'GENZUI SERIF', 20, green, True)
+    text(435, 64, 'Unicode 18.0', 17, green, True)
     text(58, 222, '源萃明朝', 116)
     text(65, 275, 'げんずい', 24, muted)
-    text(60, 364, '変体仮名・合略仮名・古形仮名', 26)
-    text(60, 405, 'Unicode 18の仮名に対応', 24, green)
-    rect((60, 465, 570, 466), '#cdd7cb')
-    text(60, 509, '286字の変体仮名', 23)
-    text(60, 544, 'Regular / TTF / WOFF2 / SIL OFL 1.1', 17, muted, True)
+    text(60, 369, '17,052', 46, green)
+    text(357, 369, '286', 46, green)
+    text(62, 401, 'CHARACTERS', 14, muted, True)
+    text(360, 401, 'HENTAIGANA', 14, muted, True)
+    rect((60, 434, 570, 435), '#cdd7cb')
+    text(60, 465, 'BASED ON', 12, muted, True)
+    text(60, 494, 'Noto Serif JP · Noto Serif Hentaigana', 17, ink, True)
+    text(60, 521, 'FRB Taiwanese Kana', 17, ink, True)
     text(60, 589, 'genzui.mkpo.li', 24, green, True)
 
     points = [('𛄣', 'KOTO'), ('𛄤', 'TOKI'), ('𪜈', 'TOMO'),
-              ('𛀂', 'A–1'), ('𛄧', 'NE'), ('𛄨', 'WI')]
+              ('𛄥', 'TOTE'), ('𛄧', 'NE'), ('𛄨', 'WI')]
     for i, (character, label) in enumerate(points):
         x, y = 666+(i%3)*174, 238+(i//3)*232
         text(x, y, character, 142, '#f4f6ed')

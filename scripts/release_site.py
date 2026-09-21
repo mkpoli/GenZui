@@ -26,7 +26,7 @@ def metadata(page, route, title, description):
     page = re.sub(r'<meta name="description"[^>]*>', '', page)
     route = route.removesuffix('.html')
     page = page.replace('href="index.html', 'href="./').replace('href="gallery.html', 'href="gallery').replace('href="minnan.html', 'href="minnan')
-    image_alt = '源萃明朝 / GenZui Serif. Six historical kana in the released font: KOTO, TOKI, TOMO, hentaigana A-1, alternate NE and alternate WI.'
+    image_alt = '源萃明朝 / GenZui Serif. Six historical kana in the released font: KOTO, TOKI, TOMO, TOTE, alternate NE and alternate WI.'
     tags = [f'<link rel="canonical" href="{URL}{route}">',
             '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
             f'<meta name="description" content="{html.escape(description, quote=True)}">',
