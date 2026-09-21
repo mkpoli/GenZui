@@ -5,6 +5,9 @@ GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Seri
 and Unicode 18.0 additions. Version **0.111** contains **17,052 encoded characters**
 in one Regular weight.
 
+The 0.112 development revision reduces TOKI and TOTE beside TOMO;
+[proportion notes](research/refinements-0.112.md) describe the changes.
+
 [Try the font](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
 [Download TTF](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) ·
@@ -110,13 +113,13 @@ contains those reports and the font validation results.
 
 ## Build the specimen website
 
-To use the published font for site development, prepare the Python environment
-and download the pinned sources as above, then extract the checked release:
+After building and checking the font above, package it with the matching browser
+report. The packager verifies the TTF and WOFF2 hashes against that report; a
+modified font requires new browser validation.
 
 ```sh
-.venv/bin/python -m zipfile -e releases/v0.111/GenZuiSerif-Regular-0.111.zip build/serif
-mkdir -p dist
-cp releases/v0.111/GenZuiSerif-Regular-0.111.zip dist/
+cp research/browser-checks-0.112.json build/serif/browser-checks.json
+.venv/bin/python scripts/package_serif.py
 bun install --frozen-lockfile
 bun run release:build
 .venv/bin/python scripts/check_release.py

@@ -1,9 +1,41 @@
 {
-  "version": "0.111",
-  "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+  "version": "0.112",
+  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
   "results": [
     {
       "fonts": {
+        "#u1b124 .current .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b125 .current .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b124 .before .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b125 .before .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
         ".wu-fixed.curved": [
           {
             "familyName": "GenZui Serif",
@@ -12,28 +44,12 @@
             "glyphCount": 1
           }
         ],
-        "#u1b11f .before .reading": [
-          {
-            "familyName": "GenZui Serif",
-            "postScriptName": "GenZuiSerif-Regular",
-            "isCustomFont": true,
-            "glyphCount": 6
-          }
-        ],
         ".wu-fixed.hooked": [
           {
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 1
-          }
-        ],
-        "#u1b11f .current .reading": [
-          {
-            "familyName": "GenZui Serif",
-            "postScriptName": "GenZuiSerif-Regular",
-            "isCustomFont": true,
-            "glyphCount": 6
           }
         ]
       },
@@ -60,15 +76,14 @@
         "21 constructions total",
         "unique character cards",
         "both proof fonts loaded",
-        "only hooked WU revised",
+        "only TOKI and TOTE revised",
         "ten small adaptations",
         "all constructions visible",
         "both writing directions on every sample",
         "vertical writing mode",
         "horizontal writing mode",
+        "accepted 1b11f displayed once",
         "accepted 1b123 displayed once",
-        "accepted 1b124 displayed once",
-        "accepted 1b125 displayed once",
         "accepted 1b126 displayed once",
         "accepted 2a708 displayed once",
         "accepted 2cf00 displayed once",
@@ -77,20 +92,24 @@
         "superseded KOTO studies removed",
         "KOTO context includes TO and WO",
         "TOMO beside TOKI and TOTE in both modes",
+        "1b124 with TOMO in both directions",
+        "1b125 with TOMO in both directions",
         "native stroke studies for TOMO and NARI",
         "curved WU default",
         "curved WU shown once",
         "fixed WU feature assignments",
         "hooked selection description",
-        "hooked WU uses matching features in both versions",
+        "hooked WU in both writing directions",
         "hooked outline selected",
-        "hooked overlay matches selected form",
+        "previous TOKI and TOTE overlays visible",
         "native WU hook references",
         "retained NE shown once",
-        "u1b11f swaps drawing and both contexts",
-        "u1b11f keeps comparison position",
-        "swapped WU stays hooked",
-        "u1b11f restores current",
+        "u1b124 swaps drawing and both contexts",
+        "u1b124 keeps comparison position",
+        "u1b124 restores current",
+        "u1b125 swaps drawing and both contexts",
+        "u1b125 keeps comparison position",
+        "u1b125 restores current",
         "return to curved clears previous state",
         "guides hide",
         "size changes both directions",
@@ -99,13 +118,12 @@
         "no page overflow",
         "fallback active on ordinary text",
         "fixed WU and native references retain GenZui",
-        "u1b11f swaps text with fallback active",
-        "fallback preserves old hooked feature",
-        "u1b11f restores text with fallback active",
-        "fallback preserves new hooked feature",
+        "u1b124 swaps text with fallback active",
+        "u1b124 restores text with fallback active",
+        "u1b125 swaps text with fallback active",
+        "u1b125 restores text with fallback active",
+        "u1b11f single specimen keeps GenZui",
         "u1b123 single specimen keeps GenZui",
-        "u1b124 single specimen keeps GenZui",
-        "u1b125 single specimen keeps GenZui",
         "u1b126 single specimen keeps GenZui",
         "u1b127 single specimen keeps GenZui",
         "u1b128 single specimen keeps GenZui",
@@ -131,6 +149,38 @@
     },
     {
       "fonts": {
+        "#u1b124 .current .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b125 .current .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b124 .before .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#u1b125 .before .reading": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
         ".wu-fixed.curved": [
           {
             "familyName": "GenZui Serif",
@@ -139,28 +189,12 @@
             "glyphCount": 1
           }
         ],
-        "#u1b11f .before .reading": [
-          {
-            "familyName": "GenZui Serif",
-            "postScriptName": "GenZuiSerif-Regular",
-            "isCustomFont": true,
-            "glyphCount": 6
-          }
-        ],
         ".wu-fixed.hooked": [
           {
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
             "glyphCount": 1
-          }
-        ],
-        "#u1b11f .current .reading": [
-          {
-            "familyName": "GenZui Serif",
-            "postScriptName": "GenZuiSerif-Regular",
-            "isCustomFont": true,
-            "glyphCount": 6
           }
         ]
       },
@@ -187,15 +221,14 @@
         "21 constructions total",
         "unique character cards",
         "both proof fonts loaded",
-        "only hooked WU revised",
+        "only TOKI and TOTE revised",
         "ten small adaptations",
         "all constructions visible",
         "both writing directions on every sample",
         "vertical writing mode",
         "horizontal writing mode",
+        "accepted 1b11f displayed once",
         "accepted 1b123 displayed once",
-        "accepted 1b124 displayed once",
-        "accepted 1b125 displayed once",
         "accepted 1b126 displayed once",
         "accepted 2a708 displayed once",
         "accepted 2cf00 displayed once",
@@ -204,20 +237,24 @@
         "superseded KOTO studies removed",
         "KOTO context includes TO and WO",
         "TOMO beside TOKI and TOTE in both modes",
+        "1b124 with TOMO in both directions",
+        "1b125 with TOMO in both directions",
         "native stroke studies for TOMO and NARI",
         "curved WU default",
         "curved WU shown once",
         "fixed WU feature assignments",
         "hooked selection description",
-        "hooked WU uses matching features in both versions",
+        "hooked WU in both writing directions",
         "hooked outline selected",
-        "hooked overlay matches selected form",
+        "previous TOKI and TOTE overlays visible",
         "native WU hook references",
         "retained NE shown once",
-        "u1b11f swaps drawing and both contexts",
-        "u1b11f keeps comparison position",
-        "swapped WU stays hooked",
-        "u1b11f restores current",
+        "u1b124 swaps drawing and both contexts",
+        "u1b124 keeps comparison position",
+        "u1b124 restores current",
+        "u1b125 swaps drawing and both contexts",
+        "u1b125 keeps comparison position",
+        "u1b125 restores current",
         "return to curved clears previous state",
         "guides hide",
         "size changes both directions",
@@ -226,13 +263,12 @@
         "no page overflow",
         "fallback active on ordinary text",
         "fixed WU and native references retain GenZui",
-        "u1b11f swaps text with fallback active",
-        "fallback preserves old hooked feature",
-        "u1b11f restores text with fallback active",
-        "fallback preserves new hooked feature",
+        "u1b124 swaps text with fallback active",
+        "u1b124 restores text with fallback active",
+        "u1b125 swaps text with fallback active",
+        "u1b125 restores text with fallback active",
+        "u1b11f single specimen keeps GenZui",
         "u1b123 single specimen keeps GenZui",
-        "u1b124 single specimen keeps GenZui",
-        "u1b125 single specimen keeps GenZui",
         "u1b126 single specimen keeps GenZui",
         "u1b127 single specimen keeps GenZui",
         "u1b128 single specimen keeps GenZui",
@@ -262,15 +298,14 @@
         "21 constructions total",
         "unique character cards",
         "both proof fonts loaded",
-        "only hooked WU revised",
+        "only TOKI and TOTE revised",
         "ten small adaptations",
         "all constructions visible",
         "both writing directions on every sample",
         "vertical writing mode",
         "horizontal writing mode",
+        "accepted 1b11f displayed once",
         "accepted 1b123 displayed once",
-        "accepted 1b124 displayed once",
-        "accepted 1b125 displayed once",
         "accepted 1b126 displayed once",
         "accepted 2a708 displayed once",
         "accepted 2cf00 displayed once",
@@ -279,20 +314,24 @@
         "superseded KOTO studies removed",
         "KOTO context includes TO and WO",
         "TOMO beside TOKI and TOTE in both modes",
+        "1b124 with TOMO in both directions",
+        "1b125 with TOMO in both directions",
         "native stroke studies for TOMO and NARI",
         "curved WU default",
         "curved WU shown once",
         "fixed WU feature assignments",
         "hooked selection description",
-        "hooked WU uses matching features in both versions",
+        "hooked WU in both writing directions",
         "hooked outline selected",
-        "hooked overlay matches selected form",
+        "previous TOKI and TOTE overlays visible",
         "native WU hook references",
         "retained NE shown once",
-        "u1b11f swaps drawing and both contexts",
-        "u1b11f keeps comparison position",
-        "swapped WU stays hooked",
-        "u1b11f restores current",
+        "u1b124 swaps drawing and both contexts",
+        "u1b124 keeps comparison position",
+        "u1b124 restores current",
+        "u1b125 swaps drawing and both contexts",
+        "u1b125 keeps comparison position",
+        "u1b125 restores current",
         "return to curved clears previous state",
         "guides hide",
         "size changes both directions",
@@ -301,13 +340,12 @@
         "no page overflow",
         "fallback active on ordinary text",
         "fixed WU and native references retain GenZui",
-        "u1b11f swaps text with fallback active",
-        "fallback preserves old hooked feature",
-        "u1b11f restores text with fallback active",
-        "fallback preserves new hooked feature",
+        "u1b124 swaps text with fallback active",
+        "u1b124 restores text with fallback active",
+        "u1b125 swaps text with fallback active",
+        "u1b125 restores text with fallback active",
+        "u1b11f single specimen keeps GenZui",
         "u1b123 single specimen keeps GenZui",
-        "u1b124 single specimen keeps GenZui",
-        "u1b125 single specimen keeps GenZui",
         "u1b126 single specimen keeps GenZui",
         "u1b127 single specimen keeps GenZui",
         "u1b128 single specimen keeps GenZui",
@@ -343,5 +381,5 @@
       "owned_processes_stopped": true
     }
   ],
-  "gallery_sha256": "c82551cccc2798d5c20692b1f992efb4cc8848f1e76abde562e62c6a80b01a94"
+  "gallery_sha256": "2fa0aa708c7d7c60117758721fe8b76c143d0bccc3c85fe478af1ade84b9dd84"
 }

@@ -1,0 +1,133 @@
+{
+  "version": "0.112",
+  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
+  "iteration": {
+    "baseline": "0.111",
+    "changed_outlines": [
+      "U+1B124",
+      "U+1B125"
+    ],
+    "unchanged_glyphs": 18315,
+    "all_other_outlines_and_metrics_unchanged": true,
+    "wu_variants_unchanged": true,
+    "fullwidth_advances_and_vertical_origins_preserved": true,
+    "width_ratios": {
+      "U+1B124": 0.899880810488677,
+      "U+1B125": 0.9201430274135876
+    },
+    "bounds": {
+      "TOMO": [
+        138,
+        -7,
+        908,
+        727
+      ],
+      "TOTE": [
+        138,
+        -20,
+        910,
+        726
+      ],
+      "TOKI": [
+        146,
+        -1,
+        901,
+        719
+      ]
+    },
+    "reading_size_connectivity": [
+      {
+        "codepoint": "U+1B124",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 24,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 32,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 40,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 64,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 128,
+        "components": 1
+      }
+    ],
+    "status": "passed"
+  },
+  "status": "passed"
+}

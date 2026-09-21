@@ -11,21 +11,23 @@ from fontTools.ttLib import TTFont
 
 from refinement_proof import NAMES
 from serif import OUT, SMALL, STEM, VERSION
-from serif_forms import DESCRIPTIONS, REVISION_0111, wu_alternate
+from serif_forms import DESCRIPTIONS, REVISION_0112, wu_alternate
 from sources import ROOT
 
 REFERENCES = {0x1B124:'トキ', 0x2A708:'トモ', 0x1B123:'こと', 0x2CEFF:'シリ',
               0x2CF02:'んえへ', 0x2CF00:'シノ', 0x1B11F:'けほ', 0x1B125:'トテ',
               0x1B126:'ヨリ', 0x1B127:'ネヰ', 0x1B128:'ナヰ'}
 
-REVIEW_FORMS = (*REVISION_0111, 0x1B11F)
+REVIEW_FORMS = REVISION_0112
 
-APPROVED = {0x1B123, 0x1B124, 0x1B125, 0x1B126, 0x2A708, 0x2CF00, 0x2CEFF, 0x1B128}
+APPROVED = {0x1B11F, 0x1B123, 0x1B126, 0x2A708, 0x2CF00, 0x2CEFF, 0x1B128}
 
 
 def contexts(cp):
     hira = cp in (0x1B11F,0x1B123,0x2CF02,0x1B132,0x1B150,0x1B151,0x1B152)
-    if cp == 0x2A708:
+    if cp in (0x1B124, 0x1B125):
+        lines = ['𪜈𛄥𛄤', 'ア'+chr(cp)+'イ', 'トモテキ']
+    elif cp == 0x2A708:
         lines = ['𛄤𪜈𛄥', 'ト𪜈モ', 'ア𪜈イ']
     elif cp == 0x2CF02:
         lines = ['ん𬼂え', 'へ𬼂へ', 'あ𬼂い']
@@ -125,8 +127,8 @@ def webfont(font, points):
 
 def build_gallery(public=False):
     folder = ROOT/'research/baselines'
-    raw = (folder/'GenZui-0.110-gallery.woff2').read_bytes()
-    manifest = json.loads((folder/'gallery-0.110.json').read_text())
+    raw = (folder/'GenZui-0.111-gallery.woff2').read_bytes()
+    manifest = json.loads((folder/'gallery-0.111.json').read_text())
     assert hashlib.sha256(raw).hexdigest() == manifest['subset_woff2_sha256']
     before = TTFont(io.BytesIO(raw))
     after = TTFont(OUT/(STEM+'.ttf'), recalcTimestamp=False)
@@ -159,9 +161,9 @@ def build_gallery(public=False):
                          f'<div class="sample-heading"><h3>GenZui · {VERSION}</h3></div>'
                          + drawing(after,cp)+contexts(cp)+'</div></div>')
         else:
-            specimens = (f'<div class="pair"><div class="sample before"><div class="sample-heading"><h3>Previous · 0.110</h3></div>{drawing(before,cp)}{contexts(cp)}</div>'
+            specimens = (f'<div class="pair"><div class="sample before"><div class="sample-heading"><h3>Previous · 0.111</h3></div>{drawing(before,cp)}{contexts(cp)}</div>'
                          f'<div class="sample current"><div class="sample-heading"><h3>GenZui · <span class="version-label" aria-live="polite">{VERSION}</span></h3>'
-                         f'<button type="button" class="swap" aria-pressed="false" data-current="{VERSION}" data-previous="0.110">Swap to 0.110</button></div>'
+                         f'<button type="button" class="swap" aria-pressed="false" data-current="{VERSION}" data-previous="0.111">Swap to 0.111</button></div>'
                          f'{comparison(after,cp,before)}</div></div>')
         source_note = note if public else sources['added'][f'U+{cp:04X}']
         cards.append(f'''<article class="glyph-card" id="u{cp:x}" data-kind="{group}" data-revised="{str(cp in REVIEW_FORMS).lower()}">
@@ -171,7 +173,7 @@ def build_gallery(public=False):
 <details><summary>Construction & references</summary><div class="reference"><span class="current native" lang="ja">{ref}</span><p>Stroke reference · Noto Serif {'Hentaigana' if cp==0x1B168 else 'JP'}<br>{html.escape(source_note)}</p></div><div class="reference-links"><a href="https://www.unicode.org/charts/PDF/Unicode-18.0/U180-{chart}.pdf">Unicode character chart</a>{history}</div>{stroke_references(after,cp)}{historical_reference(cp)}</details></article>''')
     current = webfont(after, before.getBestCmap())
     page = (ROOT/'templates'/('gallery-public.html' if public else 'gallery.html')).read_text()
-    for key, value in {'{{VERSION}}':VERSION, '{{CARDS}}':''.join(cards),
+    for key, value in {'{{VERSION}}':VERSION, '{{REVISED_COUNT}}':str(len(REVIEW_FORMS)), '{{CARDS}}':''.join(cards),
         '{{WU_CONTEXT}}':contexts(0x1B11F),
         '{{FONT}}':base64.b64encode(current).decode(), '{{BEFORE_FONT}}':base64.b64encode(raw).decode(),
         '{{CSS}}':(ROOT/'site/gallery.css').read_text(), '{{JS}}':(ROOT/'site/gallery.js').read_text()}.items():
