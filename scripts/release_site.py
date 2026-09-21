@@ -24,6 +24,8 @@ DESCRIPTION = 'GenZui Serif / 源萃明朝: a Noto Serif JP derivative with 286 
 
 def metadata(page, route, title, description):
     page = re.sub(r'<meta name="description"[^>]*>', '', page)
+    route = route.removesuffix('.html')
+    page = page.replace('href="index.html', 'href="./').replace('href="gallery.html', 'href="gallery').replace('href="minnan.html', 'href="minnan')
     image_alt = '源萃明朝 / GenZui Serif. Six historical kana in the released font: KOTO, TOKI, TOMO, hentaigana A-1, alternate NE and alternate WI.'
     tags = [f'<link rel="canonical" href="{URL}{route}">',
             '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
@@ -132,7 +134,7 @@ def build():
     (OUT/'favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect width="1000" height="1000" rx="170" fill="#214e3c"/><path fill="#f7f8f2" transform="translate(80 804) scale(.84 -.84)" d="'+pen.getCommands()+'"/></svg>')
     (OUT/'404.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Page not found — GenZui Serif</title><style>body{max-width:36em;margin:15vh auto;padding:24px;background:#f7f8f2;color:#25382e;font:18px/1.6 system-ui}a{color:#214e3c}</style><h1>Page not found.</h1><p><a href="/">Return to GenZui Serif</a></p></html>')
     (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+URL+'/sitemap.xml\n')
-    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/gallery.html', '/minnan.html'])+'</urlset>')
+    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/gallery', '/minnan'])+'</urlset>')
     (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
     (OUT/'_redirects').write_text('/index.html / 301\n')
     build_card(OUT/'media')

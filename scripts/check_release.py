@@ -43,6 +43,7 @@ def check():
             target=OUT/parts.path.lstrip('/') if parts.path.startswith('/') else p.parent/unquote(parts.path)
             assert target.resolve().is_relative_to(OUT.resolve()),(name,link)
             if target.is_dir():target=target/'index.html'
+            elif not target.is_file() and not target.suffix:target=target.with_suffix('.html')
             assert target.is_file(),(name,link)
             count+=1
     for route in ('index.html','gallery.html','minnan.html'):

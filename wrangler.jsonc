@@ -7,7 +7,7 @@
   "assets": {
     "directory": "./build/release",
     "not_found_handling": "404-page",
-    "html_handling": "none"
+    "html_handling": "auto-trailing-slash"
   },
   "routes": [{ "pattern": "genzui.mkpo.li", "custom_domain": true }]
 }
