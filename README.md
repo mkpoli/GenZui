@@ -1,23 +1,94 @@
-# 源萃 GenZui
+# 源萃明朝 GenZui Serif
 
-Public specimen and downloads: https://genzui.mkpo.li/. Related typeface: [Kureedo](https://kureedo.mkpo.li/).
+GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Serif JP**,
+**Noto Serif Hentaigana** and **FRB Taiwanese Kana**, with drawn historical kana
+and Unicode 18.0 additions. Version **0.111** contains **17,052 encoded characters**
+in one Regular weight.
 
-GenZui (源萃, げんずい) combines established fonts with historical kana extensions.
-The serif family is **GenZui Serif / 源萃明朝**. Noto Serif JP supplies the full
-Japanese base; Noto Serif Hentaigana supplies 290 historical forms. FRB Taiwanese Kana supplies 13 Minnan tone letters and two
-combining marks. Twenty-one provisional constructions complete the 328-character
-historical and support-mark inventory, including all seven Unicode 18
-kana additions. The font contains 17,052 encoded characters.
+[Try the font](https://genzui.mkpo.li/) ·
+[Design gallery](https://genzui.mkpo.li/gallery) ·
+[Download TTF](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) ·
+[Releases](https://github.com/mkpoli/GenZui/releases)
 
-Version 0.111 is the first public release, available as a static Regular font. Historical katakana use
-Mincho kana strokes. The twenty-one constructed forms need typographic
-review before a stable release. Shared ideographs use
-Japanese regional forms; Chinese and Korean coverage is limited to the JP base.
-GenSeki Hentaigana Gothic serves as the existing sans companion. The
-[font survey](research/existing-fonts.md) documents the alternatives and the
-sans study. GenZui is developed separately from Kureedo.
+## Download and use
 
-## Build GenZui Serif
+- **Desktop:** [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf).
+  Open the file and select **Install**, then choose **GenZui Serif / 源萃明朝** in your app.
+- **Complete package:** [version 0.111 ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.111.zip),
+  with TTF, WOFF2, an offline specimen, installation instructions and licences.
+- **Web:** load the versioned stylesheet and set the font family:
+
+```html
+<link rel="stylesheet" href="https://genzui.mkpo.li/v0.111/genzui.css">
+```
+
+```css
+body {
+  font-family: "GenZui Serif", serif;
+}
+```
+
+The font is free for personal and commercial use under [SIL OFL 1.1](OFL.txt).
+Installing it makes it available to apps; browser fallback depends on the website
+and browser settings. [Browser setup](browser/README.md) covers historical-kana fallback.
+
+## Character coverage
+
+- 286 hentaigana, with outlines from Noto Serif Hentaigana.
+- All seven Unicode 18.0 kana additions: 𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨.
+- Ten encoded kana ligatures, including 𪜈 TOMO, 𬻿 katakana NARI,
+  𬼀 SHITE and 𬼂 hiragana NARI.
+- Small kana, the 16 Katakana Phonetic Extensions used for Ainu, and older kana forms.
+- 13 Minnan tone letters, with overline and dot-below support.
+
+The font covers every assigned character in Unicode 18.0's Hiragana, Katakana,
+Katakana Phonetic Extensions, Kana Supplement, Kana Extended-A, Kana Extended-B
+and Small Kana Extension blocks. A broader check of the Hiragana/Katakana script
+properties and script extensions covers **762 of 763 characters**; the missing
+character is **㌬ U+332C SQUARE PAATU**. See the [coverage audit](research/kana-coverage-0.111.json).
+This is an encoding check; historical variants and arbitrary combining-mark
+sequences need separate typographic assessment.
+
+Shared ideographs retain Japanese regional forms. Chinese and Korean coverage
+is limited to the Noto Serif JP base. Regular is the available weight.
+
+### Two WU forms
+
+𛄟 U+1B11F has a curved descent by default. OpenType stylistic set 1 (`ss01`,
+“Hooked WU”) selects the hooked alternate without changing the character encoding.
+
+```css
+.hooked-wu {
+  font-feature-settings: "ss01" 1;
+}
+```
+
+The [Minnan specimen](https://genzui.mkpo.li/minnan) demonstrates tone placement,
+combining marks, ruby and both WU forms. Vertical tone placement supports one to
+four fullwidth kana at default advance and zero letter spacing; longer groups
+or custom spacing require application-level positioning.
+
+## Sources
+
+| Source | Contribution |
+| --- | --- |
+| [Noto Serif JP](https://github.com/google/fonts/tree/main/ofl/notoserifjp) | Japanese base and kana components; 16,726 encoded characters |
+| [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
+| [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
+| GenZui | 21 constructions from Noto components and original drawing |
+
+The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui's constructions
+in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
+record glyph references and construction details. The [font survey](research/existing-fonts.md)
+covers other hentaigana fonts, including GenSeki Hentaigana Gothic.
+
+Related project: **[Kureedo / クレード](https://kureedo.mkpo.li/)**, a Klee One
+derivative with historical katakana and Ainu kana.
+
+## Build the font
+
+Python 3.12 is supported. Source fonts and Unicode data are pinned by URL and
+SHA-256 in `sources/manifest.json`; they are downloaded by `sources.py`.
 
 ```sh
 python3 -m venv .venv
@@ -28,129 +99,45 @@ python3 -m venv .venv
 .venv/bin/python scripts/check_serif.py
 ```
 
-`build/serif/` contains `GenZuiSerif-Regular.ttf`, its WOFF2 counterpart, the
-self-contained `serif-proof.html`, outline provenance, licences and validation
-results. The specimen includes editable mixed text, vertical text, combining
-marks, all hentaigana and a table of the constructed forms, NARI and Minnan additions.
+Outputs are in `build/serif/`. The checks cover the 328 historical characters and
+support marks, preservation of upstream glyphs and metrics, Japanese layout,
+vertical small kana, combining marks, Minnan tones, WU variants and TTF/WOFF2 parity.
+The historical glyph constructions are in `scripts/serif_forms.py`.
 
-Checks cover all 328 historical characters and support marks, preservation of the 290 original
-historical outlines, all 17,923 JP glyphs and their metrics, JP variation
-sequences, 70 Japanese layout comparisons, ten vertical small-kana forms,
-1,244 historical mark-shaping cases, the redrawn NARI baseline, both WU variants, localized
-family names and matching TTF/WOFF2 output. Minnan checks cover 195 vertical tone
-cases and 88 combining-mark cases. The two existing JP digraphs retain
-their original mark behaviour. These checks establish font behaviour; the
-provisional outlines still require typographic review.
+Release packaging uses `scripts/package_serif.py`. It requires passing Chrome,
+Vivaldi and Firefox reports for the exact font bytes. The published ZIP already
+contains those reports and the font validation results.
 
-After Windows browser validation, `.venv/bin/python scripts/package_serif.py`
-produces `dist/GenZuiSerif-Regular-0.105.zip`. It includes fonts, an offline
-specimen, licences, provenance, validation reports and an optional per-user
-Windows installer. Packaging requires passing Chrome, Vivaldi and Firefox
-reports for the exact font bytes.
+## Build the specimen website
 
-## Specimen site
+To use the published font for site development, prepare the Python environment
+and download the pinned sources as above, then extract the checked release:
 
-After packaging the font, run `.venv/bin/python scripts/site.py` and open
-`build/site/index.html`. The page embeds the font and works offline. It includes
-an editable horizontal/vertical specimen, a searchable inventory of all 17,052
-encoded characters, source details and provisional-outline labels. Filters
-isolate the hentaigana, Unicode 18 additions, small kana, ligatures and Minnan letters and marks.
+```sh
+.venv/bin/python -m zipfile -e releases/v0.111/GenZuiSerif-Regular-0.111.zip build/serif
+mkdir -p dist
+cp releases/v0.111/GenZuiSerif-Regular-0.111.zip dist/
+bun install --frozen-lockfile
+bun run release:build
+.venv/bin/python scripts/check_release.py
+```
 
-`gallery.html` isolates the 11 drawn forms and ten small optical adaptations.
-Accepted forms appear once; forms under review have 0.110 comparisons, swapping,
-overlays and Noto stroke references. Every specimen has horizontal and vertical
-context. KOTO uses accepted candidate E. WU defaults to the curved form;
-OpenType stylistic set 1 (`ss01`, “Hooked WU”) selects the hooked form.
-Both WU forms retain U+1B11F; the selector compares the same form across versions.
-TOMO appears between TOKI and TOTE, with native kana references for its nearby
-stroke entries.
-Run `scripts/check_gallery.py` after the site build to verify the embedded fonts.
-[The 0.111 notes](research/refinements-0.111.md) document the outlines and sources.
+The public site is generated in `build/release/`. Edit `site/`, `templates/` and
+`scripts/release_site.py`. `build/site/` contains the offline development specimen
+with glyph comparisons; the public gallery shows the released forms.
+[Deployment notes](release/README.md) describe the Cloudflare configuration.
 
-`minnan.html` demonstrates tone placement, combining marks, ruby and both WU forms.
-[The 0.102 notes](research/refinements-0.102.md) describe the Minnan layout limits.
+## Licences and credits
 
-`refinements.html` compares the ten revised forms with 0.100, with reading-size
-and vertical-text controls. [Revision notes](research/refinements-0.101.md)
-describe their construction and the references used.
+- **Font outlines and font binaries:** [SIL OFL 1.1](OFL.txt).
+- **Project scripts and installer:** [MIT](LICENSE-scripts.txt).
+- **Unicode data:** [Unicode licence](sources/Unicode-LICENSE.txt).
+- **Historical comparison material from Jigmo:** CC0 1.0; see
+  [Jigmo's licence](sources/upstream/Jigmo/LICENSE.txt).
+- **Historical printed specimens:** public-domain scans, with
+  [bibliographic references](research/specimens/README.md).
 
-`dist/GenZui-Specimen-0.111.zip` contains the specimen pages and the font downloads.
-Keep the `downloads/` directory beside `index.html`. Edit the HTML, CSS and
-JavaScript in `site/`, then rebuild; character data comes from the checked font
-and pinned Unicode files. Windows Chrome, Vivaldi and Firefox interaction
-results are recorded in `research/site-browser-checks.json`.
-
-## Sources and coverage
-
-| Source | Role | Historical targets covered |
-| --- | --- | ---: |
-| Noto Serif JP | Full Japanese base and construction components | 2 |
-| Noto Serif Hentaigana | Hentaigana outlines and historical forms | 290 |
-| FRB Taiwanese Kana | Minnan tone letters and two combining marks | 15 |
-| GenZui constructions | Noto components and original drawing | 21 |
-
-The repertoire in `research/repertoire.json` contains 286 hentaigana, 11 other
-letters and digraphs in Kana Supplement and Kana Extended-A, ten small kana,
-ゟ and ヿ, four CJK-encoded kana ligatures, 13 Minnan tone letters and two
-combining marks. Those four are 𪜈 TOMO (U+2A708),
-𬻿 katakana NARI (U+2CEFF), 𬼀 SHITE (U+2CF00), and 𬼂 hiragana NARI (U+2CF02).
-Their identities are documented in
-[L2/24-150](https://www.unicode.org/L2/L2024/24150-three-kana-ligatures.pdf).
-
-CODH's [hentaigana page](https://codh.rois.ac.jp/char-shape/hentaigana/) presents
-both NINJAL's font and Noto Serif Hentaigana. The hentaigana outline source here
-is [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana), under OFL 1.1.
-The comparison fonts through 0.102 use [Jigmo2](https://kamichikoichi.github.io/jigmo/)
-for hiragana NARI under CC0 1.0; the current outline is a GenZui drawing. No NINJAL outlines or scanned specimen images are embedded.
-
-### Unicode 18 additions
-
-| Code point | Character |
-| --- | --- |
-| U+1B123 | Hiragana digraph KOTO |
-| U+1B124 | Katakana digraph TOKI |
-| U+1B125 | Katakana digraph TOTE |
-| U+1B126 | Katakana digraph YORI |
-| U+1B127 | Katakana letter ALTERNATE NE |
-| U+1B128 | Katakana letter ALTERNATE WI |
-| U+1B168 | Katakana letter SMALL ARCHAIC YE |
-
-These seven use GenZui constructions. Character names, ages, decompositions and
-vertical orientation come from the pinned Unicode 18.0.0 data files.
-
-References: [Kana Extended-A chart](https://www.unicode.org/charts/PDF/Unicode-18.0/U180-1B100.pdf),
-[Small Kana Extension chart](https://www.unicode.org/charts/PDF/Unicode-18.0/U180-1B130.pdf).
-
-## Reproducibility
-
-`sources/manifest.json` pins fonts to Git commits and records every source file's
-SHA-256. Jigmo files are extracted from its pinned release archive, with both
-archive and member checksums verified. A cached source with an unexpected
-checksum causes a build error.
-
-The sixteen-character sans study is built with `scripts/proof.py` and checked
-with `scripts/check.py`. Its construction methods are documented in
-[research/design.md](research/design.md). Noto Sans JP supplies the sans context.
-
-## Windows
-
-Double-click the TTF and choose **Install**, or run the package's
-`Install-GenZui.ps1` from PowerShell. The installed family appears as **GenZui
-Serif** or **源萃明朝**, depending on the application's language. Reopen an
-application if its font list does not update.
-
-[Browser setup](browser/README.md) covers the existing GenSeki fallback for
-Firefox, Chrome, Vivaldi and Windows Terminal. Installing GenZui makes the family
-available but does not establish a universal fallback order. On a page you
-control, use `font-family: "GenZui Serif", "源萃明朝", serif` to select it.
-
-## Licence
-
-The combined font uses SIL OFL 1.1. Noto and FRB Taiwanese Kana use OFL 1.1;
-Jigmo2 uses CC0 1.0.
-`OFL.txt` and font metadata retain the Google, Adobe and Noto Project copyright
-notices, together with Fredrick R. Brennan’s FRB copyright. `NOTICE.txt` credits the outline sources. Jigmo's CC0 text, README and
-contributor notices accompany the distribution. Its original CC0 dedication
-remains in effect. [Licence details](research/licensing.md) document reuse.
-Unicode data uses `sources/Unicode-LICENSE.txt`. Project scripts and the Windows
-installer use the MIT licence in `LICENSE-scripts.txt`.
+[NOTICE.txt](NOTICE.txt) credits the source projects. Original notices accompany
+the fonts and remain under `sources/upstream/`. Jigmo supplied the NARI outline
+in comparison fonts through 0.102; the released NARI is a GenZui drawing.
+Further details are in the [licensing notes](research/licensing.md).

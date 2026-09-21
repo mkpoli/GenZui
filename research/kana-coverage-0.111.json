@@ -1,0 +1,71 @@
+{
+  "font_version": "0.111",
+  "unicode_version": "18.0.0",
+  "font_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+  "scope": "Encoded character coverage; does not establish every historical glyph variant or combining sequence.",
+  "sources": [
+    "https://www.unicode.org/Public/18.0.0/ucd/Scripts.txt",
+    "https://www.unicode.org/Public/18.0.0/ucd/ScriptExtensions.txt",
+    "https://www.unicode.org/Public/18.0.0/ucd/Blocks.txt",
+    "https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt"
+  ],
+  "coverage": {
+    "Hiragana": {
+      "total": 93,
+      "covered": 93,
+      "missing": []
+    },
+    "Katakana": {
+      "total": 96,
+      "covered": 96,
+      "missing": []
+    },
+    "Katakana Phonetic Extensions": {
+      "total": 16,
+      "covered": 16,
+      "missing": []
+    },
+    "Kana Extended-B": {
+      "total": 13,
+      "covered": 13,
+      "missing": []
+    },
+    "Kana Supplement": {
+      "total": 256,
+      "covered": 256,
+      "missing": []
+    },
+    "Kana Extended-A": {
+      "total": 41,
+      "covered": 41,
+      "missing": []
+    },
+    "Small Kana Extension": {
+      "total": 10,
+      "covered": 10,
+      "missing": []
+    },
+    "Script Hiragana or Katakana": {
+      "total": 709,
+      "covered": 708,
+      "missing": [
+        {
+          "cp": "U+332C",
+          "char": "㌬",
+          "name": "SQUARE PAATU"
+        }
+      ]
+    },
+    "Script plus Script_Extensions": {
+      "total": 763,
+      "covered": 762,
+      "missing": [
+        {
+          "cp": "U+332C",
+          "char": "㌬",
+          "name": "SQUARE PAATU"
+        }
+      ]
+    }
+  }
+}

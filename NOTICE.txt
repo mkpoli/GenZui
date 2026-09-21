@@ -1,0 +1,26 @@
+GenZui Serif / 源萃明朝 (げんずい)
+
+Noto Serif JP: full Japanese base and historical-kana construction components.
+GenZui: twenty-one constructed forms using Noto kana components and original drawing.
+WU has a curved default and a hooked stylistic alternate (ss01).
+Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.
+The Google, Adobe and Noto Project notices are retained in OFL.txt.
+https://github.com/google/fonts/tree/main/ofl/notoserifjp
+https://github.com/notofonts/hentaigana
+
+FRB Taiwanese Kana by Fredrick R. Brennan, SIL OFL 1.1:
+13 Minnan tone letters and U+0305/U+0323 combining marks.
+GenZui supplies kana attachment and contextual vertical tone placement.
+https://github.com/ctrlcctrlv/FRBTaiwaneseKana
+See sources/upstream/FRBTaiwaneseKana/OFL.txt and README.md.
+
+Jigmo2, 2025-09-12, by Koichi Kamichi and GlyphWiki contributors:
+Historical comparison fonts through 0.102 use its U+2CF02 outline.
+The current font replaces that outline with a GenZui drawing.
+The source outline is dedicated under CC0 1.0.
+See sources/upstream/Jigmo/LICENSE.txt, README.txt and THANKS.txt.
+https://kamichikoichi.github.io/jigmo/
+
+The combined GenZui font is distributed under SIL OFL 1.1.
+The CC0 dedication of the original Jigmo material remains in effect.
+Upstream authors do not endorse this derivative.
