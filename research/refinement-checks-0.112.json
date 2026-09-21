@@ -1,6 +1,131 @@
 {
-  "version": "0.112",
-  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
+  "font_version": "Version 0.112",
+  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "woff2_sha256": "d64b8e3bf50bf14e3605cf1e3c3b8fa4b92a6493f63cfbb8b0e66ce5c3aaa49b",
+  "family": "GenZui Serif",
+  "family_ja": "\u6e90\u8403\u660e\u671d",
+  "localized_names_verified": true,
+  "encoded_characters": 17053,
+  "unchanged_jp_characters": 16726,
+  "unchanged_jp_glyphs_and_metrics": 17923,
+  "jp_shaping_regression_cases": 70,
+  "jp_variation_sequences_preserved": true,
+  "target_characters": 329,
+  "unchanged_historical_outlines": 290,
+  "unicode_named_hiragana_katakana_covered": 350,
+  "outline_refinements": {
+    "connectivity_checks": [
+      {
+        "codepoint": "U+1B123",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B126",
+        "size_px": 48,
+        "components": 3
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B126",
+        "size_px": 128,
+        "components": 3
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 128,
+        "components": 1
+      }
+    ],
+    "ri_stems_native_units": [
+      61,
+      65
+    ],
+    "ri_stems_revised_units": [
+      61,
+      69
+    ],
+    "nari_baseline_y_min": -32
+  },
   "iteration": {
     "baseline": "0.111",
     "changed_outlines": [
@@ -8,6 +133,9 @@
       "U+1B125"
     ],
     "unchanged_glyphs": 18315,
+    "added_codepoints": [
+      "U+332C"
+    ],
     "all_other_outlines_and_metrics_unchanged": true,
     "wu_variants_unchanged": true,
     "fullwidth_advances_and_vertical_origins_preserved": true,
@@ -129,5 +257,131 @@
     ],
     "status": "passed"
   },
+  "kana_coverage": {
+    "Hiragana": {
+      "total": 93,
+      "covered": 93,
+      "missing": []
+    },
+    "Katakana": {
+      "total": 96,
+      "covered": 96,
+      "missing": []
+    },
+    "Katakana Phonetic Extensions": {
+      "total": 16,
+      "covered": 16,
+      "missing": []
+    },
+    "Kana Extended-B": {
+      "total": 13,
+      "covered": 13,
+      "missing": []
+    },
+    "Kana Supplement": {
+      "total": 256,
+      "covered": 256,
+      "missing": []
+    },
+    "Kana Extended-A": {
+      "total": 41,
+      "covered": 41,
+      "missing": []
+    },
+    "Small Kana Extension": {
+      "total": 10,
+      "covered": 10,
+      "missing": []
+    },
+    "Script Hiragana or Katakana": {
+      "total": 709,
+      "covered": 709,
+      "missing": []
+    },
+    "Script plus Script_Extensions": {
+      "total": 763,
+      "covered": 763,
+      "missing": []
+    },
+    "CJK-encoded kana ligatures": {
+      "total": 4,
+      "covered": 4,
+      "missing": []
+    },
+    "Minnan combining marks": {
+      "total": 2,
+      "covered": 2,
+      "missing": []
+    }
+  },
+  "wu_stylistic_set": {
+    "feature": "ss01",
+    "ui_name": "Hooked WU",
+    "default": "curved",
+    "alternate": "hooked",
+    "right_contour_top_units": 729,
+    "mark_cases": 40,
+    "only_wu_changes_in_full_repertoire": true,
+    "raster_connectivity": [
+      {
+        "size_px": 32,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 32,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": true,
+        "components": 2
+      }
+    ],
+    "status": "passed"
+  },
+  "minnan_and_wu": {
+    "source_forms": 15,
+    "mark_shaping_cases": 88,
+    "vertical_tone_cases": 195,
+    "canonical_mark_orders_match": true,
+    "isolated_tones_keep_vertical_cell": true,
+    "wu_connectivity": [
+      {
+        "size_px": 32,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "components": 2
+      }
+    ]
+  },
+  "new_unicode18": 7,
+  "small_vertical_alternates": 10,
+  "mark_shaping_cases": 1244,
+  "woff2_matches_ttf": true,
+  "single_embedded_font": true,
+  "copyright_notices_preserved": true,
   "status": "passed"
 }

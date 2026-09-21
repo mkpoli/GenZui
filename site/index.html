@@ -51,7 +51,7 @@
 
     <section class="coverage-strip" aria-label="Font coverage at a glance">
       <div class="wrap coverage-stats">
-        <div><strong>17,052</strong><span>encoded characters</span></div>
+        <div><strong>17,053</strong><span>encoded characters</span></div>
         <div><strong>286</strong><span>hentaigana</span></div>
         <div><strong>7</strong><span>Unicode 18 additions</span></div>
         <div><strong>1</strong><span>weight · Regular</span></div>
@@ -87,19 +87,20 @@
 
     <section class="section wrap" id="characters" aria-labelledby="characters-title">
       <div class="section-label"><span>03 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
-      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse 328 historical/support characters, or the entire font.<br>Select a character to see its encoding, source and design status.</p></div>
+      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse 329 historical/support characters, or the entire font.<br>Select a character to see its encoding, source and design status.</p></div>
+      <p class="small-note">All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. Version 0.112 adds <span class="face" lang="ja">㌬</span>. <a href="downloads/kana-coverage.json">Coverage audit</a>. Unencoded historical variants and arbitrary combining sequences fall outside this count.</p>
       <div class="inventory-tools">
         <label class="search-box"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="8.3" cy="8.3" r="5.8"/><path d="m12.6 12.6 4.6 4.6"/></svg><span class="sr-only">Search characters</span><input id="character-search" type="search" placeholder="Character, name, or U+1B124" autocomplete="off" spellcheck="false"></label>
         <label class="source-filter"><span class="sr-only">Filter by outline source</span><select id="source-filter"><option value="all">All sources</option><option value="jp">Noto Serif JP</option><option value="hentaigana">Noto Serif Hentaigana</option><option value="frb">FRB Taiwanese Kana</option><option value="genzui">GenZui constructions</option></select></label>
       </div>
       <div class="inventory-filters" role="group" aria-label="Character collections">
-        <button type="button" data-filter="historical" aria-pressed="true">Historical & support <span>328</span></button>
+        <button type="button" data-filter="historical" aria-pressed="true">Historical & support <span>329</span></button>
         <button type="button" data-filter="hentaigana" aria-pressed="false">Hentaigana <span>286</span></button>
         <button type="button" data-filter="unicode18" aria-pressed="false">Unicode 18 <span>7</span></button>
         <button type="button" data-filter="small" aria-pressed="false">Small kana <span>10</span></button>
         <button type="button" data-filter="ligatures" aria-pressed="false">Ligatures <span>10</span></button>
         <button type="button" data-filter="minnan" aria-pressed="false">Minnan <span>15</span></button>
-        <button type="button" data-filter="all" aria-pressed="false">Entire font <span>17,052</span></button>
+        <button type="button" data-filter="all" aria-pressed="false">Entire font <span>17,053</span></button>
       </div>
       <div class="inventory-meta"><span id="result-count" aria-live="polite"></span><span>SELECT A GLYPH TO INSPECT</span></div>
       <div class="inventory-layout">
@@ -127,7 +128,7 @@
           <div class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notoserifjp" target="_blank" rel="noopener noreferrer">Noto Serif JP <span aria-hidden="true">↗</span></a></h3><p>The complete Japanese base, with its original outlines and layout.</p></div><strong>16,726<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">02</span><div><h3><a href="https://github.com/notofonts/hentaigana" target="_blank" rel="noopener noreferrer">Noto Serif Hentaigana <span aria-hidden="true">↗</span></a></h3><p>All 286 hentaigana and four further historical forms.</p></div><strong>290<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with new kana attachment and vertical placement.</p></div><strong>15<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">04</span><div><h3>GenZui constructions</h3><p>Noto components and original drawing, including the redrawn CJK-encoded ligatures.</p></div><strong>21<span>characters · provisional</span></strong></div>
+          <div class="source-row"><span class="source-number">04</span><div><h3>GenZui constructions</h3><p>21 historical kana constructions and the squared katakana symbol ㌬, using Noto components and original drawing.</p></div><strong>22<span>characters · provisional</span></strong></div>
         </div>
         <div class="scope-notes"><div><h3>Japanese regional forms</h3><p>GenZui retains Noto Serif JP’s character repertoire and Japanese forms of shared ideographs. Chinese and Korean coverage is limited to that base.</p></div><div><h3>A development build</h3><p>The 21 constructed forms remain provisional. Historical katakana use Noto’s Mincho kana strokes and newly drawn connections. Regular is the available weight.</p><p><a class="text-link" href="minnan.html">Minnan kana & archaic WU <span aria-hidden="true">↗</span></a></p><p><a class="text-link" href="gallery.html">Review GenZui’s constructions <span aria-hidden="true">↗</span></a></p></div></div>
       </div>

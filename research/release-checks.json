@@ -1,9 +1,9 @@
 {
-  "version": "0.111",
-  "font_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
-  "local_links_checked": 40,
+  "version": "0.112",
+  "font_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "local_links_checked": 41,
   "public_gallery_forms": 21,
-  "release_files_checked": 38,
+  "release_files_checked": 43,
   "font_bytes_unchanged": true,
   "status": "passed"
 }

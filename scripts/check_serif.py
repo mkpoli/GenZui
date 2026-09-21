@@ -13,6 +13,7 @@ from check_refinements import check_refinements
 from check_minnan import check_minnan
 from check_variants import check_variants
 from check_iteration import check_iteration
+from check_coverage import check_coverage
 from sources import ROOT
 
 
@@ -63,7 +64,7 @@ def check():
     original = TTFont(io.BytesIO(serialized(instance('NotoSerifHentaigana', 400))))
     source_cmap, jp_cmap = original.getBestCmap(), jp.getBestCmap()
 
-    assert len(cmap) == 17052
+    assert len(cmap) == 17053
     assert set(cmap) == set(jp_cmap) | {ord(item['character']) for item in chars}
     named_kana = {int(fields[0], 16)
                   for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines()
@@ -128,6 +129,9 @@ def check():
             assert vertical[0][0] != horizontal[0][0], name
             vg = font['glyf'][font.getGlyphName(vertical[0][0])]
             assert vg.xMin == glyph.xMin+140 and vg.yMin == glyph.yMin+190, name
+        if cp == 0x332C:
+            assert vertical[0][0] != horizontal[0][0], name
+            continue  # A squared unit has no kana voicing-mark attachment.
         for mark in ('\u3099', '\u309a'):
             for direction in ('ltr', 'ttb'):
                 shaped = shape(engine, ch+mark, direction)
@@ -188,8 +192,8 @@ def check():
     embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', page)
     assert len(embedded) == 1
     assert base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
-    assert page.count('<tr>') == 37 and 'LETTER SMALL KO' in page
-    assert retained == 290 and len(chars) == 328
+    assert page.count('<tr>') == 38 and 'LETTER SMALL KO' in page
+    assert retained == 290 and len(chars) == 329
     assert 'CC0 1.0 Universal' in (OUT/'Jigmo-CC0.txt').read_text()
     assert 'Fredrick R. Brennan' in licence
     assert 'Fredrick R. Brennan' in font['name'].getDebugName(0)
@@ -206,6 +210,7 @@ def check():
         'unicode_named_hiragana_katakana_covered': len(named_kana),
         'outline_refinements':check_refinements(path, font),
         'iteration':check_iteration(path, font),
+        'kana_coverage':check_coverage(path)['coverage'],
         'wu_stylistic_set':check_variants(path, font, engine, shape, boxes),
         'minnan_and_wu': check_minnan(path, font, engine, shape, boxes),
         'new_unicode18': sum(item['age'] == '18.0' for item in chars),

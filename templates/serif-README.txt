@@ -1,13 +1,14 @@
 GenZui Serif / 源萃明朝（げんずい）
-Regular, version {{VERSION}} — development build
+Regular, version {{VERSION}}
 
 One font for Japanese text and historical kana:
-  17,052 encoded characters from the Noto Serif JP base and historical additions
+  17,053 encoded characters from the Noto Serif JP base and kana additions
   13 Minnan tone letters with overline and dot-below support
   286 hentaigana
   All seven Unicode 18 kana additions
   Four CJK-encoded kana ligatures: U+2A708, U+2CEFF, U+2CF00, U+2CF02
-  328 historical characters and support marks in the documented inventory
+  All 763 characters in Unicode 18's Hiragana/Katakana Script and Script_Extensions
+  329 historical characters, support marks and compatibility kana in the inventory
 
 INSTALL ON WINDOWS
 
@@ -32,8 +33,10 @@ Open serif-proof.html for an offline specimen with the embedded font. It include
 editable mixed text, vertical text, combining marks, all hentaigana, and a table
 of the added forms. The WOFF2 file is provided for web embedding.
 
-Twenty-one forms are provisional constructions from Noto components and original
-drawing. Their joins, weight and proportions need further typographic review.
+Twenty-one historical forms use Noto components and original drawing.
+SQUARE PAATU (U+332C) uses Noto's small squared-katakana components in both
+writing directions. kana-coverage.json records encoded character coverage;
+unencoded historical variants and arbitrary combining sequences are outside its scope.
 Historical katakana use Mincho kana strokes. Hiragana NARI is a new drawing
 with an opening diagonal, a rounded low shoulder and a lighter rising exit,
 aligned to the kana baseline.

@@ -13,11 +13,15 @@ def check_iteration(path, font):
     assert hashlib.sha256(baseline.read_bytes()).hexdigest() == expected['full_ttf_sha256']
     before = TTFont(baseline)
     cmap = font.getBestCmap()
-    assert cmap == before.getBestCmap()
-    assert font.getGlyphOrder() == before.getGlyphOrder()
+    assert {cp: name for cp, name in cmap.items() if cp != 0x332C} == before.getBestCmap()
+    assert set(cmap)-set(before.getBestCmap()) == {0x332C}
+    old_order = before.getGlyphOrder()
+    assert font.getGlyphOrder()[:len(old_order)] == old_order
+    added = font.getGlyphOrder()[len(old_order):]
+    assert len(added) == 2 and added[0] == cmap[0x332C]
     changed = []
     names = {cmap[cp] for cp in REVISION_0112}
-    for name in font.getGlyphOrder():
+    for name in old_order:
         old = before['glyf'][name].getCoordinates(before['glyf'])
         new = font['glyf'][name].getCoordinates(font['glyf'])
         if old != new:
@@ -60,7 +64,8 @@ def check_iteration(path, font):
             joins.append({'codepoint':f'U+{cp:X}', 'size_px':size, 'components':actual})
     return {'baseline':'0.111',
             'changed_outlines':[f'U+{cp:X}' for cp in REVISION_0112],
-            'unchanged_glyphs':len(font.getGlyphOrder())-len(changed),
+            'unchanged_glyphs':len(old_order)-len(changed),
+            'added_codepoints':['U+332C'],
             'all_other_outlines_and_metrics_unchanged':True,
             'wu_variants_unchanged':True,
             'fullwidth_advances_and_vertical_origins_preserved':True,

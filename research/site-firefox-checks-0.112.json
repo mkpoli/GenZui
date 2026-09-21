@@ -88,7 +88,8 @@
   },
   "status": "passed",
   "owned_processes_stopped": true,
+  "browser": "firefox",
   "font_version": "0.112",
-  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
-  "gallery_sha256": "2fa0aa708c7d7c60117758721fe8b76c143d0bccc3c85fe478af1ade84b9dd84"
+  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "gallery_sha256": "3efb39e212735541d2caac7641f8a471d8cf11f016f735e697ae94c9ae55cc8d"
 }

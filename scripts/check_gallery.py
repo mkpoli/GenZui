@@ -63,7 +63,7 @@ def check():
             'all_reading_characters_covered':len(points),'proof_font_count':len(fonts),
             'proof_outlines_and_metrics_match_full_font':True,'curved_wu_default_unchanged':True,
             'minnan_preserves_hooked_alternate':True,
-            'full_repertoire_unchanged_count':len(full.getBestCmap())-len(changed),'status':'passed'}
+            'comparison_characters_unchanged':len(old.getBestCmap())-len(changed),'status':'passed'}
     (ROOT/'research/gallery-font-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
 

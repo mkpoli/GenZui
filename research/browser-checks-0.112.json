@@ -52,7 +52,7 @@
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 330
+            "glyphCount": 331
           }
         ],
         "#ttf-targets": [
@@ -60,7 +60,7 @@
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 338
+            "glyphCount": 339
           }
         ],
         "#marks": [
@@ -135,7 +135,7 @@
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 330
+            "glyphCount": 331
           }
         ],
         "#ttf-targets": [
@@ -143,7 +143,7 @@
             "familyName": "GenZui Serif",
             "postScriptName": "GenZuiSerif-Regular",
             "isCustomFont": true,
-            "glyphCount": 338
+            "glyphCount": 339
           }
         ],
         "#marks": [
@@ -172,7 +172,7 @@
       "status": "passed",
       "result": {
         "status": "passed",
-        "target_count": 328,
+        "target_count": 329,
         "fonts": [
           {
             "family": "ProbeTTF",
@@ -187,11 +187,11 @@
       },
       "version": "156.0",
       "owned_processes_stopped": true,
-      "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
-      "woff2_sha256": "d8377d348786f6ef364f1ff8573f0c2507fe864033c059105452753749d319b9"
+      "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+      "woff2_sha256": "d64b8e3bf50bf14e3605cf1e3c3b8fa4b92a6493f63cfbb8b0e66ce5c3aaa49b"
     }
   ],
-  "ttf_sha256": "8e74ea89a6835e5f4f56f3ebbba4f4153592fe8770fcd7424928a805fa69da47",
-  "woff2_sha256": "d8377d348786f6ef364f1ff8573f0c2507fe864033c059105452753749d319b9",
-  "version": "0.112"
+  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "woff2_sha256": "d64b8e3bf50bf14e3605cf1e3c3b8fa4b92a6493f63cfbb8b0e66ce5c3aaa49b",
+  "font_version": "0.112"
 }
