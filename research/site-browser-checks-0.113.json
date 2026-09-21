@@ -2,12 +2,12 @@
   "version": "0.113",
   "ttf_sha256": "212ed1f1935365d64d713d4729cd97b2afd7a9b463b8c66dc9c32269b0e909f7",
   "woff2_sha256": "59be35a0babfa2af080bae1349d63c7f4633dba896fcac3b7ab5dea4bd79700a",
-  "release_manifest_sha256": "73ae3e8f583287625b5720a059edb28bee7f6b4b229efb55b727b60fb63667c7",
+  "release_manifest_sha256": "06c026080b1f38acd5a2b5158f399f61a9482ee7ec20b8fefe9da5ff091833a0",
   "honkoku_checks_sha256": "69d4c19834690aaba89c50795faca1113fabf586805ee889f48e76a60a041f4c",
   "method": "Isolated Windows browser profiles. Public preview, honkoku permalink, source filters, both writing directions, all three specimen pages. Chrome and Vivaldi also checked at 1440, 768, 390 and 320 px.",
   "results": [
     {
-      "version": "Chrome/153.0.8010.48",
+      "version": "153.0.8010.48",
       "pages": {
         "minnan": {
           "layouts": [
@@ -186,10 +186,11 @@
       },
       "browser": "chrome",
       "status": "passed",
-      "owned_processes_stopped": true
+      "owned_processes_stopped": true,
+      "cdp_product": "Chrome/153.0.8010.48"
     },
     {
-      "version": "Chrome/8.2.4133.68",
+      "version": "8.2.4133.68",
       "pages": {
         "minnan": {
           "layouts": [
@@ -368,7 +369,8 @@
       },
       "browser": "vivaldi",
       "status": "passed",
-      "owned_processes_stopped": true
+      "owned_processes_stopped": true,
+      "cdp_product": "Chrome/8.2.4133.68"
     },
     {
       "pages": {
@@ -546,5 +548,14 @@
       "owned_processes_stopped": true,
       "browser": "firefox"
     }
-  ]
+  ],
+  "tested_release_manifest_sha256": "73ae3e8f583287625b5720a059edb28bee7f6b4b229efb55b727b60fb63667c7",
+  "metadata_refresh": {
+    "changed_assets": [
+      "downloads/GenZuiSerif-Regular-0.113.zip",
+      "v0.113/GenZuiSerif-Regular-0.113.zip"
+    ],
+    "all_site_and_font_bytes_identical_to_tested_build": true,
+    "reason": "Browser versions normalized; raw CDP product retained. Font checks rerun in Chrome and Vivaldi to capture runtime versions."
+  }
 }

@@ -3,7 +3,8 @@
   "results": [
     {
       "browser": "chrome",
-      "version": "153.0.8010.37",
+      "version": "153.0.8010.48",
+      "cdp_product": "Chrome/153.0.8010.48",
       "font_faces": [
         {
           "family": "Proof",
@@ -87,6 +88,7 @@
     {
       "browser": "vivaldi",
       "version": "8.2.4133.68",
+      "cdp_product": "Chrome/8.2.4133.68",
       "font_faces": [
         {
           "family": "Proof",
