@@ -123,8 +123,11 @@ def build():
     (OUT/'genzui-sans.css').write_text(f"@import url('/sans-v{sans_version}/genzui-sans.css');\n")
 
     page = (ROOT/'build/site/index.html').read_text()
-    page = re.sub(r'url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)',
-                  f'url(v{VERSION}/{STEM}.woff2)', page)
+    # The main face becomes the versioned webfont; the switch's label subsets
+    # become hashed assets and must be externalized first.
+    page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
+                  rf'\1url(v{VERSION}/{STEM}.woff2)', page)
+    page = external_fonts(page)
     match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
     data = json.loads(match[1])
     for item in data['characters']:
@@ -159,7 +162,7 @@ def build():
                        'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,
                        'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
     sans_page = sans_page.replace('</head>', '<script type="application/ld+json">'+json.dumps(sans_structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'sans.html').write_text(metadata(sans_page, '/sans', '源萃ゴシック — GenZui Sans', SANS_DESCRIPTION,
+    (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', '源萃ゴシック — GenZui Sans', SANS_DESCRIPTION,
                                           sans_alt, image='genzui-sans-social.png'))
     for route, content, title, description in [
         ('gallery.html', build_gallery(public=True), 'GenZui Serif — Design gallery',

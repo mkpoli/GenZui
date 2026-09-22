@@ -85,6 +85,11 @@ def check():
     assert f'sans-v{sans_version}/{SANS_STEM}.woff2' in sans and f'v{VERSION}/{STEM}.woff2' in sans
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
     assert 'href="sans"' in home and 'GenZui Sans' in home
+    # Each switch label loads its own family's subset, never the main webfont.
+    for label in ('serif','sans'):
+        assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', home), label
+        assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', sans), label
+    assert len(set(re.findall(r'GenZuiLabel-(?:serif|sans);src:url\((assets/proof-[0-9a-f]+\.woff2)\)', home)))==2
     for suffix in ('ttf','woff2'):
         for folder in ('downloads','sans-v'+sans_version):
             actual=hashlib.sha256((OUT/folder/(SANS_STEM+'.'+suffix)).read_bytes()).hexdigest()
