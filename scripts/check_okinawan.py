@@ -11,6 +11,11 @@ def check_okinawan(font, engine, web_engine, shape, boxes):
     assert not set(PUA) & set(range(0xFA80, 0xFA9B))
     assert 0x1B168 not in PUA
     assert not {0xF464, 0xF466} & set(cmap)
+    # Glottal WE has a detached top stroke and a connected body with one
+    # counter. Raised U's three strokes meet in a single filled contour.
+    # Extra contours here previously revealed disconnected stroke joins.
+    for cp, contours in ((0xF462, 3), (0xE534, 1)):
+        assert font['glyf'][cmap[cp]].numberOfContours == contours, hex(cp)
     cases = 0
     for entry in ENTRIES:
         text = ''.join(chr(int(c, 16)) for c in entry['output'])
