@@ -49,7 +49,7 @@ def build_card(destination):
         x, y = 666+(i%3)*174, 238+(i//3)*232
         text(x, y, character, 142, '#f4f6ed', features=features)
         text(x+36, y+44, label, 16, '#bdd1c0', True)
-    text(666, 63, 'HISTORICAL KANA · DRAWINGS', 17, '#bdd1c0', True)
+    text(666, 63, 'HISTORICAL KANA', 17, '#bdd1c0', True)
     rect((666, 540, 1160, 541), '#4d725e')
     text(666, 588, '源萃ゴシック', 21, '#f4f6ed')
     text(1060, 588, version, 18, '#bdd1c0', True)

@@ -14,10 +14,12 @@
   const number = value => value.toLocaleString('en-US');
   const code = cp => `U+${cp.toString(16).toUpperCase().padStart(4, '0')}`;
   const character = item => String.fromCodePoint(item.cp);
-  const origins = {
+  // Source labels and the family name come with the data, so both family pages share this script.
+  const origins = data.origins || {
     jp: 'Noto Serif JP', hentaigana: 'Noto Serif Hentaigana',
      genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana', cjk: 'Noto Serif CJK JP',
   };
+  const familyName = data.family || 'GenZui Serif';
   const filters = {
     historical: item => ['hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph', 'cjk-kana-ligature', 'minnan-tone', 'phonetic-mark', 'compatibility-kana'].includes(item.group),
     hentaigana: item => item.group === 'hentaigana',
@@ -69,8 +71,8 @@
       : picture.mark ? 'Combining mark, shown with a base character. Copy copies the mark only.'
       : item.description ? item.description
       : item.provisional ? 'Noto components and original drawing. Joins, proportions and weight remain under review.'
-      : item.source === 'hentaigana' ? 'Original Noto Serif Hentaigana outline, preserved in GenZui.'
-      : 'Original Noto Serif JP outline, with its Japanese layout behaviour preserved.';
+      : item.source === 'jp' ? `Original ${origins.jp} outline, with its Japanese layout behaviour preserved.`
+      : `Original ${origins[item.source]} outline, preserved in GenZui.`;
     $('#detail-age').textContent = item.age;
     $('#detail-block').textContent = item.block;
     $('#detail-source').textContent = origins[item.source];
@@ -186,7 +188,7 @@
   $('#browse-unicode').addEventListener('click', () => {
     $('#character-search').value = ''; $('#source-filter').value = 'all'; chooseFilter('unicode18');
   });
-  $('#browse-constructions').addEventListener('click', event => {
+  $('#browse-constructions')?.addEventListener('click', event => {
     if (event.button || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     $('#character-search').value = ''; $('#source-filter').value = 'genzui'; chooseFilter('all');
   });
@@ -212,7 +214,7 @@
     $('#type-status').textContent = loadFailed ? 'The embedded font could not load. Try reopening this page in a current browser.'
       : !loaded ? 'Loading the font…'
       : missing.length ? `${number(points.length)} characters · ${missing.length} outside this font: ${missing.slice(0, 4).map(c => code(c.codePointAt(0))).join(', ')}${missing.length > 4 ? '…' : ''}`
-      : `${number(points.length)} characters · GenZui Serif Regular`;
+      : `${number(points.length)} characters · ${familyName} Regular`;
   }
   function setPreset() { typeInput.value = presets[$('#preset').value]; typeInput.scrollTop = 0; typeInput.scrollLeft = 0; typeStatus(); }
   $('#preset').addEventListener('change', setPreset);

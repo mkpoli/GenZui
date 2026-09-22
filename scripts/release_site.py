@@ -61,6 +61,19 @@ def external_fonts(page):
     return re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', save, page)
 
 
+def external_data(page, prefix, descriptions=None):
+    """Move the inline inventory JSON to a hashed asset the page fetches."""
+    match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
+    data = json.loads(match[1])
+    for item in data['characters']:
+        if descriptions and item['cp'] in descriptions:
+            item['description'] = descriptions[item['cp']]
+    raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()
+    name = prefix+'-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
+    (OUT/'assets'/name).write_bytes(raw)
+    return page[:match.start()]+f'<script id="font-data" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
+
+
 def build():
     checks = json.loads((FONT_OUT/'checks.json').read_text())
     assert checks['status'] == 'passed'
@@ -128,15 +141,7 @@ def build():
     page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
                   rf'\1url(v{VERSION}/{STEM}.woff2)', page)
     page = external_fonts(page)
-    match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
-    data = json.loads(match[1])
-    for item in data['characters']:
-        if item['cp'] in FORM_DESCRIPTIONS:
-            item['description'] = FORM_DESCRIPTIONS[item['cp']]
-    raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()
-    name = 'characters-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
-    (OUT/'assets'/name).write_bytes(raw)
-    page = page[:match.start()]+f'<script id="font-data" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
+    page = external_data(page, 'characters', FORM_DESCRIPTIONS)
     page = page.replace('<h3>A development build</h3>', '<h3>Historical letterforms</h3>')
     page = page.replace('The constructed outlines remain provisional.', 'GenZui supplies historical letterforms and transcription symbols using Noto components and original drawing.')
     page = page.replace('Regular · {{VERSION}} development build', 'Regular · {{VERSION}}')
@@ -156,7 +161,7 @@ def build():
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
                 'body {\n  font-family: "GenZui Sans", sans-serif;\n}</code></pre></details>')
-    sans_page = build_sans_page(f'sans-v{sans_version}/{SANS_STEM}.woff2', f'v{VERSION}/{STEM}.woff2', sans_web)
+    sans_page = external_data(build_sans_page(f'sans-v{sans_version}/{SANS_STEM}.woff2', f'v{VERSION}/{STEM}.woff2', sans_web), 'sans-characters')
     sans_alt = build_sans_card(OUT/'media')
     sans_structured = {'@context':'https://schema.org', '@type':'WebSite',
                        'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,
