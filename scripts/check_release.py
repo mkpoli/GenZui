@@ -7,6 +7,7 @@ from urllib.parse import urlsplit, unquote
 from zipfile import ZipFile
 
 from PIL import Image
+from fontTools.pens.recordingPen import RecordingPen
 
 from release_site import OUT, URL
 from serif import VERSION, STEM
@@ -82,7 +83,55 @@ def check():
     sans_version,sans_checks,_=sans_checked()
     assert manifest['sans_version']==sans_version and manifest['sans_font_sha256']==sans_checks['ttf_sha256']
     sans=(OUT/'sans.html').read_text()
-    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' in sans and f'v{VERSION}/{STEM}.woff2' in sans
+    # Chunked faces: each page names its chunks, every chunk's characters are
+    # exactly its declared ranges, and the chunks together cover the font.
+    from fontTools.ttLib import TTFont
+    chunk_cases=0
+    for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
+                                            (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
+                                            (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf'))):
+        faces=re.findall(rf'@font-face\{{font-family:{family};src:url\(assets/({re.escape(stem)}-[a-z0-9]+-[0-9a-f]{{16}}\.woff2)\)[^}}]*unicode-range:([^}}]+)\}}',page_text)
+        assert len(faces)>=10,(family,stem,len(faces))
+        covered=set()
+        for filename,spec in faces:
+            declared=set()
+            for part in spec.split(','):
+                a,_,b=part[2:].partition('-');declared.update(range(int(a,16),int(b or a,16)+1))
+            chunk=TTFont(OUT/'assets'/filename)
+            # A chunk serves its declared range; it may also carry the encoded
+            # variant glyphs its variation sequences select.
+            assert declared<=set(chunk.getBestCmap()),filename
+            assert not covered&declared,filename
+            covered|=declared;chunk_cases+=1
+        assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
+        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif'
+        # Every character the page itself sets comes from the preloaded text chunk.
+        visible=set(re.sub(r'<(script|style)\b[^>]*>.*?</\1>|<[^>]+>|&[#a-zA-Z0-9]+;',' ',page_text,flags=re.S))
+        text_chunk=TTFont(OUT/'assets'/next(f for f,_ in faces if '-text-' in f))
+        assert not {ord(c) for c in visible if ord(c) in set(TTFont(font_path).getBestCmap())}-set(text_chunk.getBestCmap())
+        # Every variation sequence still resolves, to the same outline.
+        # Subsetting renumbers glyphs, so the sequences are compared by
+        # (selector, base) and the outlines are spot-checked.
+        def uvs(font):
+            # A None glyph is a default-variation entry: it selects the base glyph.
+            return {(sel,cp):glyph for t in font['cmap'].tables if t.format==14
+                    for sel,pairs in t.uvsDict.items() for cp,glyph in pairs if glyph}
+        source_font=TTFont(font_path); source_uvs=uvs(source_font)
+        chunk_fonts=[TTFont(OUT/'assets'/f) for f,_ in faces]
+        kept={}
+        for chunk in chunk_fonts:
+            for key,glyph in uvs(chunk).items():
+                kept.setdefault(key,(chunk,glyph))
+        assert set(source_uvs)<=set(kept),(family,stem,len(set(source_uvs)-set(kept)))
+        source_glyphs=source_font.getGlyphSet()
+        for key in sorted(source_uvs)[::max(1,len(source_uvs)//25)]:
+            chunk,glyph=kept[key]
+            expected,actual=RecordingPen(),RecordingPen()
+            source_glyphs[source_uvs[key]].draw(expected)
+            chunk.getGlyphSet()[glyph].draw(actual)
+            assert expected.value==actual.value,(family,key)
+        chunk_cases+=len(source_uvs)
+    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' not in sans and 'data:font/' not in sans
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
     assert 'href="sans"' in home and 'GenZui Sans' in home
     # Each switch label loads its own family's subset, never the main webfont.
@@ -119,7 +168,7 @@ def check():
             'sans_version':sans_version,'sans_font_sha256':sans_checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
             'inventory_collections':{name:len(points) for name,points in groups.items()},
-            'extended_kana_characters':data['historical'],
+            'extended_kana_characters':data['historical'],'font_chunks_checked':chunk_cases,
             'font_bytes_unchanged':True,'status':'passed'}
     (ROOT/'research/release-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
