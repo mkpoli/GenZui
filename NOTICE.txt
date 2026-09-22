@@ -28,3 +28,7 @@ https://kamichikoichi.github.io/jigmo/
 The combined GenZui font is distributed under SIL OFL 1.1.
 The CC0 dedication of the original Jigmo material remains in effect.
 Upstream authors do not endorse this derivative.
+
+GenZui 0.114: 18 Funatsu Okinawan bases and eight raised katakana use Noto
+components and original drawing. PUA conventions follow Nishiki-teki and Xim
+Sans; their outlines are not imported. See research/okinawan.md for references.

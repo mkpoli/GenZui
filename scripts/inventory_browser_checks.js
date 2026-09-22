@@ -55,7 +55,7 @@
   $('[data-filter="historical"]').click();
   check('extended kana has its own scope', $('#result-count').textContent.startsWith('329 '));
   $('[data-filter="all"]').click();
-  check('full font count unchanged', $('#result-count').textContent.startsWith('17,064 '));
+  check('full font count unchanged', $('#result-count').textContent.startsWith('17,090 '));
   const audit = await fetch('downloads/kana-coverage.json').then(response => response.json());
   check('all description characters covered', audit.coverage['Ideographic description characters'].covered === 17 && audit.coverage['Ideographic description characters'].missing.length === 0);
   check('all ideographic tally marks covered', audit.coverage['Ideographic tally marks'].covered === 5);

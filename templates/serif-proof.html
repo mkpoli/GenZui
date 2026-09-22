@@ -27,8 +27,8 @@ details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px}
 <main>
 <h1 class="specimen"><ruby lang="ja">源萃<rt>げんずい</rt></ruby>明朝 · GenZui Serif</h1>
 <p>Japanese text and historical kana · Regular · {{VERSION}} development build · Unicode 18</p>
-<p>One font contains Noto Serif JP’s full 16,726-character repertoire and 338 additional historical kana and transcription characters: 17,064 encoded characters in total. All 286 hentaigana, all seven Unicode 18 kana additions, and the four kana ligatures encoded in CJK blocks are included.</p>
-<p class="note">Twenty-one constructed forms are provisional. Their joins, proportions and stroke weight need typographic review. Regular is the only available weight. The installed family appears as “GenZui Serif” or “源萃明朝”, depending on the application’s language.</p>
+<p>One font contains Noto Serif JP’s full 16,726-character repertoire and 364 additional historical kana, transcription characters and Okinawan PUA characters: 17,090 encoded characters in total. All 286 hentaigana, all seven Unicode 18 kana additions, and the four kana ligatures encoded in CJK blocks are included.</p>
+<p class="note">The 21 historical kana constructions and the new Okinawan drawings are provisional. Their joins, proportions and stroke weight need typographic review. Regular is the only available weight. The installed family appears as “GenZui Serif” or “源萃明朝”, depending on the application’s language.</p>
 <p><a href="GenZuiSerif-Regular.ttf">Installable TTF</a> · <a href="GenZuiSerif-Regular.woff2">Webfont</a> · <a href="OFL.txt">OFL 1.1 licence</a> · <a href="sources.json">Outline provenance</a></p>
 <h2>Mixed text</h2>
 <p>These samples use the unified font. Click the paragraph to try other text.</p>
@@ -42,6 +42,9 @@ details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px}
 <label>Preview size <input id="size" type="range" min="24" max="96" value="64"> <output id="value">64 px</output></label>
 <div class="scroll"><table lang="ja"><thead><tr><th>Character</th><th>Outline</th><th>Horizontal</th><th>Vertical</th><th>Mark positioning</th></tr></thead><tbody>{{ROWS}}</tbody></table></div>
 <p>Mark samples exercise positioning; they do not imply that every combination is linguistically used. Small kana have separate positions for vertical text.</p>
+<h2>Okinawan kana</h2>
+<p>All 27 Funatsu forms and eight prefectural raised katakana. <a href="okinawan-mappings.json">Private-use mappings</a>; ordinary kana and voiced sequences retain standard Unicode components. Raised signs are designed for horizontal text.</p>
+<div id="okinawan" class="sample text specimen" lang="ryu">{{OKINAWAN}}</div>
 <h2>Minnan kana</h2>
 <p id="minnan" class="sample text specimen" lang="ja">チ̅ァム𚿵 チ̅ァム𚿵 チ̣̅ア𚿷<br>ウ̅ ゥ̅ オ̅ ォ̅</p>
 <div id="minnan-vertical" class="sample vertical text specimen" lang="ja">チ̅ァム𚿵<br>チ̣̅ア𚿷</div>

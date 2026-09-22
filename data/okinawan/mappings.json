@@ -1,0 +1,447 @@
+{
+  "version": 1,
+  "description": "GenZui Okinawan input and private-use mappings. PUA assignments are font conventions, not Unicode character assignments. Output sequences are GenZui preferred storage, not Unicode decomposition mappings.",
+  "sources": [
+    {
+      "id": "funatsu",
+      "title": "Funatsu: 沖縄文字一覧 (2016)",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf"
+    },
+    {
+      "id": "proposal",
+      "title": "New Okinawan Kana proposal (2023)",
+      "url": "https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/okana.pdf"
+    },
+    {
+      "id": "prefecture",
+      "title": "沖縄県: しまくとぅば表記について (2022)",
+      "url": "https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/009/625/02_shimakutubahyouki.pdf"
+    },
+    {
+      "id": "raised-proposal",
+      "title": "Ryukyuan superscript kana proposal, L2/23-118",
+      "url": "https://www.unicode.org/L2/L2023/23118-ryukyu-kana.pdf"
+    },
+    {
+      "id": "nishiki",
+      "title": "にしき的フォント: 私用領域 (F450–F46A)",
+      "url": "https://umihotaru.work/nishiki-teki_pua.pdf"
+    },
+    {
+      "id": "xim",
+      "title": "Xim Sans 1.62: Unicode未登録文字の解説",
+      "url": "https://github.com/XimcoYuzuriha/Xim_Sans/tree/main/ver_01_62"
+    },
+    {
+      "id": "toranekoman",
+      "title": "トラネコマン: Mkana+, MgenKana+, Ricty Kana",
+      "url": "https://newjapanese.blog.jp/archives/14540652.html"
+    },
+    {
+      "id": "frokinawa",
+      "title": "FROkinawaMoji",
+      "url": "https://booth.pm/ja/items/1003982"
+    },
+    {
+      "id": "shima",
+      "title": "しま書体: input instructions (a separate orthography)",
+      "url": "https://shimanomoji.site/how.html"
+    }
+  ],
+  "characters": [
+    {
+      "id": "tu",
+      "system": "funatsu",
+      "label": "TU",
+      "output": [
+        "F450"
+      ],
+      "kana": "とぅ",
+      "source": "nishiki"
+    },
+    {
+      "id": "ti",
+      "system": "funatsu",
+      "label": "TI",
+      "output": [
+        "F452"
+      ],
+      "kana": "てぃ",
+      "source": "nishiki"
+    },
+    {
+      "id": "kwa",
+      "system": "funatsu",
+      "label": "KWA",
+      "output": [
+        "F454"
+      ],
+      "kana": "くゎ",
+      "source": "nishiki"
+    },
+    {
+      "id": "kwi",
+      "system": "funatsu",
+      "label": "KWI",
+      "output": [
+        "F456"
+      ],
+      "kana": "くぃ",
+      "source": "nishiki"
+    },
+    {
+      "id": "kwe",
+      "system": "funatsu",
+      "label": "KWE",
+      "output": [
+        "F458"
+      ],
+      "kana": "くぇ",
+      "source": "nishiki"
+    },
+    {
+      "id": "hwa",
+      "system": "funatsu",
+      "label": "HWA",
+      "output": [
+        "F45A"
+      ],
+      "kana": "ふゎ",
+      "source": "nishiki"
+    },
+    {
+      "id": "hwi",
+      "system": "funatsu",
+      "label": "HWI",
+      "output": [
+        "F45B"
+      ],
+      "kana": "ふぃ",
+      "source": "nishiki"
+    },
+    {
+      "id": "hwe",
+      "system": "funatsu",
+      "label": "HWE",
+      "output": [
+        "F45C"
+      ],
+      "kana": "ふぇ",
+      "source": "nishiki"
+    },
+    {
+      "id": "'ya",
+      "system": "funatsu",
+      "label": "Glottal YA",
+      "output": [
+        "F45D"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'yu",
+      "system": "funatsu",
+      "label": "Glottal YU",
+      "output": [
+        "F45E"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'yo",
+      "system": "funatsu",
+      "label": "Glottal YO",
+      "output": [
+        "F45F"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'wa",
+      "system": "funatsu",
+      "label": "Glottal WA",
+      "output": [
+        "F460"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'wi",
+      "system": "funatsu",
+      "label": "Glottal WI",
+      "output": [
+        "F461"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'we",
+      "system": "funatsu",
+      "label": "Glottal WE",
+      "output": [
+        "F462"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "'n",
+      "system": "funatsu",
+      "label": "Glottal N",
+      "output": [
+        "F463"
+      ],
+      "kana": null,
+      "source": "nishiki"
+    },
+    {
+      "id": "wu",
+      "system": "funatsu",
+      "label": "WU",
+      "output": [
+        "F465"
+      ],
+      "kana": "をぅ",
+      "source": "nishiki"
+    },
+    {
+      "id": "si",
+      "system": "funatsu",
+      "label": "SI",
+      "output": [
+        "F467"
+      ],
+      "kana": "すぃ",
+      "source": "nishiki"
+    },
+    {
+      "id": "tsi",
+      "system": "funatsu",
+      "label": "TSI",
+      "output": [
+        "F469"
+      ],
+      "kana": "つぃ",
+      "source": "nishiki"
+    },
+    {
+      "id": "du",
+      "system": "funatsu",
+      "label": "DU",
+      "output": [
+        "F450",
+        "3099"
+      ],
+      "kana": "どぅ",
+      "legacy": [
+        "F451"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "di",
+      "system": "funatsu",
+      "label": "DI",
+      "output": [
+        "F452",
+        "3099"
+      ],
+      "kana": "でぃ",
+      "legacy": [
+        "F453"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "gwa",
+      "system": "funatsu",
+      "label": "GWA",
+      "output": [
+        "F454",
+        "3099"
+      ],
+      "kana": "ぐゎ",
+      "legacy": [
+        "F455"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "gwi",
+      "system": "funatsu",
+      "label": "GWI",
+      "output": [
+        "F456",
+        "3099"
+      ],
+      "kana": "ぐぃ",
+      "legacy": [
+        "F457"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "gwe",
+      "system": "funatsu",
+      "label": "GWE",
+      "output": [
+        "F458",
+        "3099"
+      ],
+      "kana": "ぐぇ",
+      "legacy": [
+        "F459"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "zi",
+      "system": "funatsu",
+      "label": "ZI",
+      "output": [
+        "F467",
+        "3099"
+      ],
+      "kana": "ずぃ",
+      "legacy": [
+        "F468"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "dzi",
+      "system": "funatsu",
+      "label": "DZI",
+      "output": [
+        "F469",
+        "3099"
+      ],
+      "kana": "づぃ",
+      "legacy": [
+        "F46A"
+      ],
+      "source": "nishiki"
+    },
+    {
+      "id": "yi",
+      "system": "funatsu",
+      "label": "YI",
+      "output": [
+        "3044",
+        "3099"
+      ],
+      "kana": null,
+      "legacy": [
+        "F464"
+      ],
+      "source": "funatsu"
+    },
+    {
+      "id": "ye",
+      "system": "funatsu",
+      "label": "YE",
+      "output": [
+        "3048",
+        "3099"
+      ],
+      "kana": null,
+      "legacy": [
+        "F466"
+      ],
+      "source": "funatsu"
+    },
+    {
+      "id": "^a",
+      "system": "prefecture",
+      "label": "Raised ア",
+      "output": [
+        "E532"
+      ],
+      "kana": null,
+      "base": "30A2",
+      "source": "xim"
+    },
+    {
+      "id": "^i",
+      "system": "prefecture",
+      "label": "Raised イ",
+      "output": [
+        "E533"
+      ],
+      "kana": null,
+      "base": "30A4",
+      "source": "xim"
+    },
+    {
+      "id": "^u",
+      "system": "prefecture",
+      "label": "Raised ウ",
+      "output": [
+        "E534"
+      ],
+      "kana": null,
+      "base": "30A6",
+      "source": "xim"
+    },
+    {
+      "id": "^e",
+      "system": "prefecture",
+      "label": "Raised エ",
+      "output": [
+        "E535"
+      ],
+      "kana": null,
+      "base": "30A8",
+      "source": "xim"
+    },
+    {
+      "id": "^o",
+      "system": "prefecture",
+      "label": "Raised オ",
+      "output": [
+        "E536"
+      ],
+      "kana": null,
+      "base": "30AA",
+      "source": "xim"
+    },
+    {
+      "id": "^tsu",
+      "system": "prefecture",
+      "label": "Raised ツ",
+      "output": [
+        "E537"
+      ],
+      "kana": null,
+      "base": "30C4",
+      "source": "xim"
+    },
+    {
+      "id": "^fu",
+      "system": "prefecture",
+      "label": "Raised フ",
+      "output": [
+        "E4EF"
+      ],
+      "kana": null,
+      "base": "30D5",
+      "source": "xim"
+    },
+    {
+      "id": "^n",
+      "system": "prefecture",
+      "label": "Raised ン",
+      "output": [
+        "E5AA"
+      ],
+      "kana": null,
+      "base": "30F3",
+      "source": "xim"
+    }
+  ]
+}

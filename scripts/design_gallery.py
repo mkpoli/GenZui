@@ -13,6 +13,7 @@ from refinement_proof import NAMES
 from serif import OUT, SMALL, STEM, VERSION
 from serif_forms import DESCRIPTIONS, REVISION_0112, wu_alternate
 from sources import ROOT
+from okinawan import PUA as OKINAWAN_PUA
 from honkoku import HONKOKU
 
 REFERENCES = {0x1B124:'トキ', 0x2A708:'トモ', 0x1B123:'こと', 0x2CEFF:'シリ',
@@ -134,7 +135,7 @@ def build_gallery(public=False):
     before = TTFont(io.BytesIO(raw))
     after = TTFont(OUT/(STEM+'.ttf'), recalcTimestamp=False)
     sources = json.loads((OUT/'sources.json').read_text())
-    own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui' and int(cp[2:],16) not in (0x332C, *HONKOKU)}
+    own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui' and int(cp[2:],16) not in (0x332C, *HONKOKU, *OKINAWAN_PUA)}
     assert own == set(DESCRIPTIONS) | set(SMALL) and len(own) == 21
     order = [*REVIEW_FORMS, *sorted(own-set(REVIEW_FORMS))]
     cards = []

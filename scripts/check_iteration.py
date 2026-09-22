@@ -1,9 +1,11 @@
-"""Keep the released kana intact while adding transcription symbols."""
+"""Keep the released repertoire intact while appending new forms."""
 import hashlib
+import copy
 from fontTools.ttLib import TTFont
 from PIL import ImageChops
 from check_refinements import mask
 from honkoku import HONKOKU, TALLIES
+from okinawan import PUA as OKINAWAN_PUA
 from sources import ROOT
 
 
@@ -12,18 +14,33 @@ def check_iteration(path, font):
     assert hashlib.sha256(baseline.read_bytes()).hexdigest() == '66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c'
     before = TTFont(baseline)
     cmap, old_cmap = font.getBestCmap(), before.getBestCmap()
-    assert set(cmap)-set(old_cmap) == set(HONKOKU)
+    assert set(cmap)-set(old_cmap) == set(HONKOKU) | set(OKINAWAN_PUA)
     assert all(cmap[cp] == name for cp, name in old_cmap.items())
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
-    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)
+    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+7
     for name in old_order:
         assert before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf']), name
         for table in ('hmtx', 'vmtx'):
             assert font[table][name] == before[table][name], (table, name)
     # Appending symbols must leave every previous layout rule and IVS intact.
-    for table in ('GSUB', 'GPOS', 'BASE'):
+    for table in ('GPOS', 'BASE'):
         assert font[table].compile(font) == before[table].compile(before), table
+    # Okinawan voicing appends exactly one ccmp lookup. Removing only that
+    # addition must recover the released table byte for byte.
+    gsub = copy.deepcopy(font['GSUB'])
+    table = gsub.table
+    old_count = before['GSUB'].table.LookupList.LookupCount
+    assert table.LookupList.LookupCount == old_count + 1
+    table.LookupList.Lookup.pop()
+    table.LookupList.LookupCount = old_count
+    for record in table.FeatureList.FeatureRecord:
+        indices = record.Feature.LookupListIndex
+        if old_count in indices:
+            assert record.FeatureTag == 'ccmp'
+            indices.remove(old_count)
+            record.Feature.LookupCount = len(indices)
+    assert gsub.compile(font) == before['GSUB'].compile(before), 'previous GSUB rules'
     assert [t.uvsDict for t in font['cmap'].tables if t.format == 14] == [
         t.uvsDict for t in before['cmap'].tables if t.format == 14]
     for cp in HONKOKU:
@@ -51,7 +68,7 @@ def check_iteration(path, font):
     before.close()
     return {'baseline':'0.112', 'changed_outlines':[],
             'unchanged_glyphs':len(old_order),
-            'added_codepoints':[f'U+{cp:X}' for cp in sorted(HONKOKU)],
+            'added_codepoints':[f'U+{cp:X}' for cp in sorted(set(HONKOKU) | set(OKINAWAN_PUA))],
             'all_previous_outlines_and_metrics_unchanged':True,
             'previous_layout_rules_and_ivs_unchanged':True,
             'fullwidth_advances_and_vertical_origins_verified':True,

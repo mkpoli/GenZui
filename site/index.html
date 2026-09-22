@@ -17,7 +17,7 @@
   <header class="site-header">
     <a class="brand" href="#top" aria-label="GenZui, back to top"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SERIF</span></span></a>
     <nav aria-label="Main navigation">
-      <a href="gallery.html">Design gallery</a><a href="#specimen">Specimen</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
+      <a href="gallery.html">Design gallery</a><a href="#specimen">Specimen</a><a href="#okinawan">Okinawan input</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
     </nav>
     <a class="header-download" href="downloads/GenZuiSerif-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
   </header>
@@ -45,13 +45,13 @@
       </div>
       <div class="hero-intro">
         <p>A Japanese serif<br> with historical kana.</p>
-        <div><p>Noto’s Japanese serif, extended with hentaigana, archaic kana, ligatures and Minnan tone letters. Familiar text and historical forms, together in one font.</p><div class="hero-links"><a class="text-link" href="gallery.html">Explore the drawn forms <span aria-hidden="true">↗</span></a><a class="text-link" href="https://kureedo.mkpo.li/">Kureedo <span aria-hidden="true">↗</span></a></div></div>
+        <div><p>Noto’s Japanese serif, extended with hentaigana, archaic kana, ligatures and Minnan tone letters, plus Okinawan kana. Familiar text and historical forms, together in one font.</p><div class="hero-links"><a class="text-link" href="gallery.html">Explore the drawn forms <span aria-hidden="true">↗</span></a><a class="text-link" href="#okinawan">Okinawan keyboard <span aria-hidden="true">↓</span></a><a class="text-link" href="https://kureedo.mkpo.li/">Kureedo <span aria-hidden="true">↗</span></a></div></div>
       </div>
     </section>
 
     <section class="coverage-strip" aria-label="Font coverage at a glance">
       <div class="wrap coverage-stats">
-        <div><strong>17,064</strong><span>encoded characters</span></div>
+        <div><strong>{{CHARACTER_COUNT}}</strong><span>encoded characters</span></div>
         <div><strong>286</strong><span>hentaigana</span></div>
         <div><strong>7</strong><span>Unicode 18 additions</span></div>
         <div><strong>1</strong><span>weight · Regular</span></div>
@@ -76,9 +76,46 @@
       <p class="small-note">Regular, weight 400. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
     </section>
 
+    <section class="section wrap" id="okinawan" aria-labelledby="okinawan-title">
+      <div class="section-label"><span>02 / OKINAWAN INPUT</span><span lang="ja">沖縄語の文字入力</span></div>
+      <div class="section-heading"><h2 id="okinawan-title">Write in Okinawan.</h2><p>Compose with Funatsu’s New Okinawan Kana or the prefecture’s raised katakana. Copy the result into an app that uses GenZui.</p></div>
+      <div class="okinawan-composer">
+        <div class="type-controls">
+          <label><span class="control-label">WRITING SYSTEM</span><select id="okinawan-system"><option value="funatsu">Funatsu · 新沖縄文字</option><option value="prefecture">Prefecture · 上付きカタカナ</option></select></label>
+          <label><span class="control-label">INPUT</span><select id="okinawan-method"><option value="kana">Kana & shortcuts</option><option value="romaji">Romaji & shortcuts</option></select></label>
+          <button type="button" id="okinawan-example">Try a romaji example</button>
+        </div>
+        <div class="okinawan-editors">
+          <label for="okinawan-source"><span class="control-label">YOUR INPUT</span><textarea id="okinawan-source" class="face" lang="ryu" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="okinawan-help"></textarea></label>
+          <label for="okinawan-output"><span class="control-label">RESULT · READY TO COPY</span><textarea id="okinawan-output" class="face" lang="ryu" spellcheck="false" readonly></textarea></label>
+        </div>
+        <div class="type-footer"><button type="button" id="okinawan-clear">Clear input</button><span id="okinawan-copy-status" role="status"></span><button type="button" class="copy-button" id="okinawan-copy">Copy result</button></div>
+        <p id="okinawan-warning" class="okinawan-warning" role="status"></p>
+      </div>
+      <div id="okinawan-help" class="okinawan-help">
+        <p>Type kana with your usual keyboard, or select <b>Romaji</b> and type lowercase syllables. Select a letter below to insert its shortcut at the cursor. Nothing is sent to a server.</p>
+        <div id="okinawan-funatsu-help"><p>In kana mode, <span lang="ryu">とぅ・てぃ・くゎ・すぃ</span> become Funatsu letters. In romaji mode use <code>tu ti kwa si tsi</code>; <code>tsu chi shi</code> give ordinary <span lang="ja">つ・ち・し</span>. Use <code>du di gwa zi dzi</code> for their voiced forms. <code>yi ye</code> produce <span class="face" lang="ryu">い゙・え゙</span>.</p><p><code>{'ya}</code>, <code>{'yu}</code>, <code>{'yo}</code>, <code>{'wa}</code>, <code>{'wi}</code>, <code>{'we}</code> and <code>{'n}</code> select the glottal initial forms. Funatsu uses these at the start of a word. Plain <code>ya yu yo wa wi we n</code> remain ordinary kana.</p></div>
+        <div id="okinawan-prefecture-help" hidden><p>Use <code>^a ^i ^u ^e ^o ^tsu ^fu ^n</code> to insert the eight raised letters. A raised vowel before a full vowel marks a non-glottal onset: <code>^uウトゥ</code> (husband) contrasts with <span lang="ryu">ウトゥ</span> (sound). Raised <span lang="ja">ツ</span> marks the glottal onset in the guide’s specified contexts; raised <span lang="ja">フ</span> distinguishes /f/ from /ɸ/. Choose these signs according to the variety you are writing.</p><p>The guide covers several Ryukyuan languages. This keyboard provides its eight raised signs; it does not infer pronunciation or convert between orthographies.</p></div>
+        <p>In romaji mode, <code>n'</code> separates a nasal from the next vowel (<code>kan'i</code> → <span lang="ja">かんい</span>); double a consonant for small <span lang="ja">っ</span>, or type <code>xtsu</code>. Use <code>-</code> for <span lang="ja">ー</span>. Uppercase text and punctuation stay as typed. Check the result before copying.</p>
+      </div>
+      <div id="okinawan-palette" class="okinawan-palette" role="group" aria-label="Okinawan character shortcuts"></div>
+      <p class="small-note">These letters need GenZui or a font with matching private-use mappings. Ordinary kana and combining dakuten use Unicode; the remaining forms use documented PUA conventions. Raised signs are designed for horizontal text. <a href="downloads/okinawan-mappings.json" download>Download the mappings</a>.</p>
+      <details class="okinawan-reference"><summary>Encoding & reference charts</summary>
+        <p>The palette contains all 27 forms in Funatsu’s chart and all eight raised katakana in the prefectural proposal. Voiced Funatsu forms use a PUA base followed by U+3099. YI and YE use U+3044/U+3048 followed by U+3099. The input tool also converts the older Nishiki-teki PUA equivalents to these sequences.</p>
+        <p>Funatsu bases follow Nishiki-teki’s U+F450–U+F46A convention (18 selected positions). Raised katakana follow Xim Sans: U+E532–U+E537, U+E4EF and U+E5AA. These assignments are private agreements. Proposal code points are not used; U+1B168 remains SMALL ARCHAIC YE.</p>
+        <ul>
+          <li><a href="https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf">Funatsu’s complete chart</a> · <a href="https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/okana.pdf">2023 proposal and specimens</a></li>
+          <li><a href="https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/009/625/02_shimakutubahyouki.pdf">Okinawa Prefecture’s guide</a> (PDF pages 11–12 and 26) · <a href="https://www.unicode.org/L2/L2023/23118-ryukyu-kana.pdf">Raised-katakana proposal</a></li>
+          <li><a href="https://umihotaru.work/nishiki-teki_pua.pdf">Nishiki-teki PUA chart</a> · <a href="https://github.com/XimcoYuzuriha/Xim_Sans/tree/main/ver_01_62">Xim Sans mapping documentation</a></li>
+        </ul>
+        <p>GenZui uses its own Noto-based drawings. Toranekoman’s kana fonts, FROkinawaMoji and しま書体 were consulted as implementation references; their glyph outlines are not included.</p>
+        <p class="control-label">CODE POINTS IN YOUR RESULT</p><output id="okinawan-codepoints" class="okinawan-codepoints" for="okinawan-source okinawan-system okinawan-method"></output>
+      </details>
+    </section>
+
     <section class="unicode-section" id="unicode18" aria-labelledby="unicode-title">
       <div class="wrap">
-        <div class="section-label"><span>02 / UNICODE 18</span><span lang="ja">七つの文字</span></div>
+        <div class="section-label"><span>03 / UNICODE 18</span><span lang="ja">七つの文字</span></div>
         <div class="section-heading"><h2 id="unicode-title">Seven additions.</h2><p>Historical digraphs, alternate katakana and a small archaic ye.<br>All seven are included. Their outlines are provisional.</p></div>
         <div class="unicode-grid" id="unicode-grid"></div>
         <a class="text-link" href="#characters" id="browse-unicode">Inspect the Unicode 18 characters <span aria-hidden="true">↗</span></a>
@@ -86,8 +123,8 @@
     </section>
 
     <section class="section wrap" id="characters" aria-labelledby="characters-title">
-      <div class="section-label"><span>03 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
-      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse by character type, or search all 17,064 characters.<br>Select a character to see its encoding, source and design status.</p></div>
+      <div class="section-label"><span>04 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
+      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse by character type, or search all {{CHARACTER_COUNT}} characters.<br>Select a character to see its encoding, source and design status.</p></div>
       <p class="small-note">All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/kana-coverage.json">Coverage audit</a>. Unencoded historical variants and arbitrary combining sequences fall outside this count.</p>
       <p class="small-note">Try <a href="?sample=numerals#specimen">Han numerals</a>, <a href="?sample=tallies#specimen">ideographic tally marks</a> or <a href="?sample=ideographic-description#specimen">ideographic description characters</a>. Description characters display as visible operators; they do not assemble a new glyph from the following components.</p>
       <div class="inventory-tools">
@@ -100,11 +137,12 @@
         <button type="button" data-filter="unicode18" aria-pressed="false">Unicode 18 <span>7</span></button>
         <button type="button" data-filter="small" aria-pressed="false">Small kana <span>10</span></button>
         <button type="button" data-filter="ligatures" aria-pressed="false">Ligatures <span>10</span></button>
+        <button type="button" data-filter="okinawan" aria-pressed="false">Okinawan PUA <span>26</span></button>
         <button type="button" data-filter="minnan" aria-pressed="false">Minnan <span>15</span></button>
         <button type="button" data-filter="numerals" aria-pressed="false">Han numerals <span>{{NUMERAL_COUNT}}</span></button>
         <button type="button" data-filter="tallies" aria-pressed="false">Ideographic tallies <span>5</span></button>
         <button type="button" data-filter="ideographic-description" aria-pressed="false">Ideographic description <span>17</span></button>
-        <button type="button" data-filter="all" aria-pressed="false">Entire font <span>17,064</span></button>
+        <button type="button" data-filter="all" aria-pressed="false">Entire font <span>{{CHARACTER_COUNT}}</span></button>
       </div>
       <div class="inventory-meta"><span id="result-count" aria-live="polite"></span><span>SELECT A GLYPH TO INSPECT</span></div>
       <div class="inventory-layout">
@@ -126,13 +164,13 @@
 
     <section class="sources-section" id="sources" aria-labelledby="sources-title">
       <div class="wrap">
-        <div class="section-label"><span>04 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
+        <div class="section-label"><span>05 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
         <div class="section-heading"><h2 id="sources-title">Built on established type.</h2><p>Most of GenZui comes directly from existing fonts.<br>Counts show each source’s contribution to GenZui.</p></div>
         <div class="source-rows">
           <div class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notoserifjp" target="_blank" rel="noopener noreferrer">Noto Serif JP <span aria-hidden="true">↗</span></a></h3><p>The Japanese subset of Noto Serif CJK, with its character repertoire, outlines and Japanese layout preserved.</p></div><strong>16,726<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">02</span><div><h3><a href="https://github.com/notofonts/hentaigana" target="_blank" rel="noopener noreferrer">Noto Serif Hentaigana <span aria-hidden="true">↗</span></a></h3><p>All 286 hentaigana and four further historical forms.</p></div><strong>290<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with new kana attachment and vertical placement.</p></div><strong>15<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">04</span><div><h3><a href="?source=genzui#characters" id="browse-constructions">GenZui constructions <span aria-hidden="true">↗</span></a></h3><p>21 historical kana constructions, ㌬, five tally marks and five description symbols, using Noto components and original drawing.</p></div><strong>32<span>characters · provisional</span></strong></div>
+          <div class="source-row"><span class="source-number">04</span><div><h3><a href="?source=genzui#characters" id="browse-constructions">GenZui constructions <span aria-hidden="true">↗</span></a></h3><p>21 historical kana constructions, ㌬, five tally marks, five description symbols and 26 Okinawan PUA characters, using Noto components and original drawing.</p></div><strong>{{CONSTRUCTION_COUNT}}<span>characters · provisional</span></strong></div>
           <div class="source-row"><span class="source-number">05</span><div><h3><a href="https://github.com/notofonts/noto-cjk/tree/main/Serif" target="_blank" rel="noopener noreferrer">Noto Serif CJK JP <span aria-hidden="true">↗</span></a></h3><p>卄 (twenty), absent from the JP subset above, comes from the same family’s full CJK font with Japanese default forms.</p></div><strong>1<span>character · OFL 1.1</span></strong></div>
         </div>
         <div class="scope-notes"><div><h3>Japanese regional forms</h3><p>GenZui retains Noto Serif JP’s character repertoire and Japanese forms of shared ideographs. 卄 is added from Noto Serif CJK JP. Other Chinese and Korean coverage is limited to the Japanese base.</p></div><div><h3>A development build</h3><p>The constructed outlines remain provisional. Historical katakana use Noto’s Mincho kana strokes and newly drawn connections. Regular is the available weight.</p><p><a class="text-link" href="minnan.html">Minnan kana & archaic WU <span aria-hidden="true">↗</span></a></p><p><a class="text-link" href="gallery.html">Review GenZui’s constructions <span aria-hidden="true">↗</span></a></p></div></div>
@@ -140,7 +178,7 @@
     </section>
 
     <section class="download-section wrap" id="download" aria-labelledby="download-title">
-      <div class="download-intro"><div class="section-label"><span>05 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃明朝</h2><p>GenZui Serif Regular · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/OFL.txt">SIL Open Font License 1.1</a>.</p>
+      <div class="download-intro"><div class="section-label"><span>06 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃明朝</h2><p>GenZui Serif Regular · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/OFL.txt">SIL Open Font License 1.1</a>.</p>
         <div class="install-notes"><h3>Install the font</h3><p><strong>Windows</strong> — Download the TTF, open it and select <b>Install</b>.</p><p><strong>macOS</strong> — Open the TTF in Font Book and select <b>Install</b>.</p><p>Choose <b>GenZui Serif</b> in your app’s font menu.</p></div>
       </div>
       <div class="download-options">
@@ -156,6 +194,8 @@
   <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="browser/browser-setup.html">Browser fallback</a><a href="downloads/NOTICE.txt">Source credits</a><a href="#top">Back to top ↑</a></div></footer>
   <noscript><p class="no-script">Enable JavaScript for the interactive specimen and character browser. The font downloads work without JavaScript.</p></noscript>
   <script id="font-data" type="application/json">{{DATA}}</script>
+  <script id="okinawan-data" type="application/json">{{OKINAWAN_DATA}}</script>
+  <script>{{OKINAWAN_JS}}</script>
   <script>{{JS}}</script>
 </body>
 </html>

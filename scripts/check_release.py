@@ -10,6 +10,7 @@ from PIL import Image
 
 from release_site import OUT, URL
 from serif import VERSION, STEM
+from okinawan import PUA as OKINAWAN_PUA, DATA as OKINAWAN_DATA
 from sources import ROOT
 
 
@@ -74,7 +75,7 @@ def check():
     assert Image.open(OUT/'media/genzui-social.png').size==(1200,630)
     assert Image.open(OUT/'media/genzui-social-2x.png').size==(2400,1260)
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
-    assert data['total']==17064 and len(data['characters'])==17064
+    assert data['total']==17064+len(OKINAWAN_PUA) and len(data['characters'])==17064+len(OKINAWAN_PUA)
     assert data['historical']==329
     groups = {name: {c['cp'] for c in data['characters'] if c['group']==name}
               for name in ('han-numeral','tally-mark','ideographic-description')}
@@ -82,7 +83,10 @@ def check():
     assert groups['tally-mark']==set(range(0x1D372,0x1D377))
     assert groups['ideographic-description']==set(range(0x2FF0,0x3000))|{0x31EF}
     assert 'Honkoku additions' not in home and 'sample=honkoku' not in home
-    assert sum(c['source']=='genzui' for c in data['characters'])==32
+    assert sum(c['source']=='genzui' for c in data['characters'])==32+len(OKINAWAN_PUA)
+    assert {c['cp'] for c in data['characters'] if c['group']=='okinawan'} == set(OKINAWAN_PUA)
+    assert json.loads((OUT/'downloads/okinawan-mappings.json').read_text()) == OKINAWAN_DATA
+    assert 'id="okinawan-source"' in home and 'id="okinawan-output"' in home
     report={'version':VERSION,'font_sha256':checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
             'inventory_collections':{name:len(points) for name,points in groups.items()},

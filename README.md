@@ -2,16 +2,14 @@
 
 GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Serif JP**,
 **Noto Serif Hentaigana**, **Noto Serif CJK JP** and **FRB Taiwanese Kana**, with drawn historical kana
-and Unicode 18.0 additions. Version **0.113** contains **17,064 encoded characters**
+and Unicode 18.0 additions. Version **0.114** contains **17,090 encoded characters**
 in one Regular weight.
 
-Version 0.113 supplies eleven further characters: 卄,
-five ideographic tally marks (𝍲𝍳𝍴𝍵𝍶), and five ideographic-description
-symbols (⿼⿽⿾⿿㇯).
-[Construction notes](research/honkoku-0.113.md) describe their sources and coverage.
-The specimen has separate collections for [Han numerals](https://genzui.mkpo.li/?sample=numerals#specimen),
-[ideographic tally marks](https://genzui.mkpo.li/?sample=tallies#specimen) and
-[ideographic description characters](https://genzui.mkpo.li/?sample=ideographic-description#specimen).
+Version 0.114 adds an [Okinawan composer](https://genzui.mkpo.li/#okinawan) to the
+home page, with Funatsu’s 27 forms and the prefecture’s eight raised katakana.
+The font adds 26 documented PUA positions; voiced forms and YI/YE use combining
+dakuten wherever possible. [Input and mapping notes](research/okinawan.md) explain
+the keyboard and [shared registry](data/okinawan/mappings.json).
 
 [Try the font](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -22,12 +20,12 @@ The specimen has separate collections for [Han numerals](https://genzui.mkpo.li/
 
 - **Desktop:** [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf).
   Open the file and select **Install**, then choose **GenZui Serif / 源萃明朝** in your app.
-- **Complete package:** [version 0.113 ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.113.zip),
+- **Complete package:** [version 0.114 ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.114.zip),
   with TTF, WOFF2, an offline specimen, installation instructions and licences.
 - **Web:** load the versioned stylesheet and set the font family:
 
 ```html
-<link rel="stylesheet" href="https://genzui.mkpo.li/v0.113/genzui.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/v0.114/genzui.css">
 ```
 
 ```css
@@ -48,6 +46,7 @@ and browser settings. [Browser setup](browser/README.md) covers historical-kana 
   𬼀 SHITE and 𬼂 hiragana NARI.
 - Small kana, the 16 Katakana Phonetic Extensions used for Ainu, and older kana forms.
 - 13 Minnan tone letters, with overline and dot-below support.
+- 27 Funatsu Okinawan forms and eight raised katakana, using 26 PUA bases and standard combining sequences.
 
 The font covers every assigned character in Unicode 18.0's Hiragana, Katakana,
 Katakana Phonetic Extensions, Kana Supplement, Kana Extended-A, Kana Extended-B
@@ -55,7 +54,7 @@ and Small Kana Extension blocks. A broader check of the Hiragana/Katakana script
 properties and script extensions covers **all 763 characters**, including halfwidth kana, enclosed kana, squared
 katakana and shared marks. Version 0.112 fills the last gap, **㌬ U+332C SQUARE PAATU**,
 using native Noto squared-katakana components in horizontal and vertical forms.
-See the [coverage audit](research/kana-coverage-0.113.json).
+See the [coverage audit](research/kana-coverage-0.114.json).
 This is an encoding check; historical variants and arbitrary combining-mark
 sequences need separate typographic assessment.
 
@@ -86,7 +85,7 @@ or custom spacing require application-level positioning.
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
 | [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms |
-| [GenZui constructions](https://genzui.mkpo.li/?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU and ten transcription symbols, from Noto components and original drawing |
+| [GenZui constructions](https://genzui.mkpo.li/?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui's constructions
 in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
@@ -108,12 +107,13 @@ python3 -m venv .venv
 .venv/bin/python scripts/repertoire.py
 .venv/bin/python scripts/serif.py
 .venv/bin/python scripts/check_serif.py
+node scripts/check_okinawan_input.cjs
 ```
 
 Outputs are in `build/serif/`. The checks cover 340 historical characters and transcription symbols, preservation of upstream glyphs and metrics, Japanese layout,
-vertical small kana, combining marks, Minnan tones, WU variants and TTF/WOFF2 parity.
+vertical small kana, combining marks, Minnan tones, WU variants, the 35 Okinawan forms and TTF/WOFF2 parity.
 The historical glyph constructions are in `scripts/serif_forms.py`; squared kana
-are in `scripts/compatibility.py`; transcription additions are in `scripts/honkoku.py`. `scripts/check_coverage.py` checks the pinned
+are in `scripts/compatibility.py`; Okinawan drawings are in `scripts/okinawan.py`; transcription additions are in `scripts/honkoku.py`. `scripts/check_coverage.py` checks the pinned
 Unicode Script and Script_Extensions properties as part of font validation.
 
 Release packaging uses `scripts/package_serif.py`. It requires passing Chrome,
@@ -127,7 +127,7 @@ report. The packager verifies the TTF and WOFF2 hashes against that report; a
 modified font requires new browser validation.
 
 ```sh
-cp research/browser-checks-0.113.json build/serif/browser-checks.json
+cp research/browser-checks-0.114.json build/serif/browser-checks.json
 .venv/bin/python scripts/package_serif.py
 bun install --frozen-lockfile
 bun run release:build

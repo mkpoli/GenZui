@@ -1,9 +1,9 @@
 {
-  "version": "0.113",
-  "font_sha256": "212ed1f1935365d64d713d4729cd97b2afd7a9b463b8c66dc9c32269b0e909f7",
-  "local_links_checked": 41,
+  "version": "0.114",
+  "font_sha256": "b104e98d7adb448ca6b834b0e7e7ba59093c17dba2d90dc4cf422fbe3927cd4c",
+  "local_links_checked": 42,
   "public_gallery_forms": 21,
-  "release_files_checked": 48,
+  "release_files_checked": 53,
   "inventory_collections": {
     "han-numeral": 80,
     "tally-mark": 5,
