@@ -88,7 +88,7 @@ def prepare():
         print('Compiling Noto Sans Hentaigana Regular and the axis-380 instance', flush=True)
         source = GSFont(str(NOTO / 'NotoSansHentaigana.glyphspackage'))
         instance = GSInstance()
-        instance.name, instance.axes, instance.weightClass = 'GenZui', [TEXT_AXIS], 400
+        instance.name, instance.axes, instance.weight = 'GenZui', [TEXT_AXIS], 400
         source.instances.append(instance)
         source.save(str(STUDY))
         FontProject().run_from_glyphs(
