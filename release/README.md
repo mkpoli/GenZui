@@ -8,7 +8,7 @@ Unicode 18 kana additions, historical kana ligatures, and 13 Minnan tone
 letters. Twenty-one historical kana forms are GenZui constructions. Archaic WU has a curved
 default and a hooked alternate selected by `ss01`.
 
-Version 0.114 adds an Okinawan home-page composer, with Funatsu’s 27 forms and
+Version 0.114 adds an Okinawan composer to the Serif page, with Funatsu’s 27 forms and
 eight raised katakana. The font uses 26 documented PUA positions; voiced forms
 and YI/YE use combining dakuten where possible. The specimen also retains
 separate collections for Han numerals, tally marks and description characters.

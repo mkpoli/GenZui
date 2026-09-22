@@ -99,7 +99,7 @@
       <div class="preview-bar">
         <div class="mode" role="group" aria-label="Family"><button type="button" data-mode="serif" aria-pressed="true" lang="ja">源萃明朝</button><button type="button" data-mode="sans" aria-pressed="false" lang="ja">源萃ゴシック</button><button type="button" data-mode="compare" aria-pressed="false">Compare</button></div>
         <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="size">52 px</output></span><input id="size" type="range" min="24" max="96" value="52"></label>
-        <span class="hint" id="hint">Type your own text. Switch families to see it change.</span>
+        <span class="hint" id="hint" role="status">Type your own text. Switch families to see it change.</span>
       </div>
       <div class="stage" id="stage">
         <p class="layer serif" id="layer-serif" lang="ja" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Preview text">春はあけぼの。やうやう白くなりゆく山ぎは
@@ -137,7 +137,7 @@
     (() => {
       // Links to the Serif page's sections used to be anchors on this URL.
       const old = ['#specimen', '#okinawan', '#unicode18', '#characters', '#sources', '#download'];
-      if (old.includes(location.hash.split('?')[0])) { location.replace(document.querySelector('.family-switch a[data-family=serif]').getAttribute('href') + location.hash); return; }
+      if (old.includes(location.hash.split('?')[0])) { location.replace(document.querySelector('.family-switch a[data-family=serif]').getAttribute('href') + location.search + location.hash); return; }
       const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
       const preview = $('#preview'), stage = $('#stage'), layers = { serif: $('#layer-serif'), sans: $('#layer-sans') };
       const samples = {
