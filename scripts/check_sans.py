@@ -203,7 +203,7 @@ def check():
             if record.nameID == 0:
                 assert record.toUnicode() in (OUT/'OFL.txt').read_text()
                 assert record.toUnicode() in font['name'].getDebugName(0)
-    text = (OUT/'index.html').read_text()
+    text = (OUT/'index.html').read_text(encoding='utf-8')
     embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', text)
     assert len(embedded) == 1 and base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
     assert '/home/' not in text and 'GenZui Serif' not in text

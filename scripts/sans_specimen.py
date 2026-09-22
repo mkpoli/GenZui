@@ -46,7 +46,8 @@ footer{font-size:14px;padding-top:30px;color:#586250}code{font-size:.9em}.small{
 SECTIONS
 <footer><p>Based on Noto Sans JP and Noto Sans Hentaigana, with historical forms from GenSeki Hentaigana Gothic, Minnan signs from FRB Taiwanese Kana, and GenZui drawings. <a href="NOTICE.txt">Source credits</a> · <a href="checks.json">Font checks</a></p></footer></main>
 <script>const sample=document.getElementById('sample');document.getElementById('size').addEventListener('input',e=>{sample.style.setProperty('--size',e.target.value+'px');document.getElementById('size-value').textContent=e.target.value+' px'});document.getElementById('direction').addEventListener('click',e=>{const vertical=sample.classList.toggle('vertical');e.currentTarget.setAttribute('aria-pressed',String(vertical));e.currentTarget.textContent=vertical?'Horizontal text':'Vertical text'});document.getElementById('hooked').addEventListener('change',e=>{sample.style.fontFeatureSettings=e.target.checked?'"ss01" 1':'normal'});</script></html>'''
-    (OUT/'index.html').write_text(source.replace('FONT', webfont).replace('VERSION', VERSION).replace('SECTIONS', sections))
+    (OUT/'index.html').write_text(source.replace('FONT', webfont).replace('VERSION', VERSION).replace('SECTIONS', sections),
+                                  encoding='utf-8')
     (OUT/'genzui-sans.css').write_text(
         "@font-face {\n  font-family: 'GenZui Sans';\n  src: url('GenZuiSans-Regular.woff2') format('woff2');\n"
         "  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n")
