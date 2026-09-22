@@ -63,7 +63,7 @@ def external_fonts(page):
 
 def external_data(page, prefix, descriptions=None):
     """Move the inline inventory JSON to a hashed asset the page fetches."""
-    match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
+    match = re.search(r'<script id="font-data" type="application/json"[^>]*>(.*?)</script>', page, re.S)
     data = json.loads(match[1])
     for item in data['characters']:
         if descriptions and item['cp'] in descriptions:
@@ -71,7 +71,9 @@ def external_data(page, prefix, descriptions=None):
     raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()
     name = prefix+'-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
     (OUT/'assets'/name).write_bytes(raw)
-    return page[:match.start()]+f'<script id="font-data" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
+    family=re.search(r'data-family="([^"]*)"', match.group(0))
+    attribute=f' data-family="{family[1]}"' if family else ''
+    return page[:match.start()]+f'<script id="font-data" type="application/json"{attribute} data-src="assets/{name}"></script>'+page[match.end():]
 
 
 def build():

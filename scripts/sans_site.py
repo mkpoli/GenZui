@@ -22,6 +22,12 @@ PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかた�
 SOURCE_KEYS = {'Noto Sans JP Regular': 'jp', 'Noto Sans Hentaigana': 'hentaigana',
                'GenSeki Hentaigana Gothic': 'genseki', 'FRB Taiwanese Kana': 'frb',
                'Noto Sans CJK JP Regular': 'cjk'}
+# Reader-facing notes for the characters GenZui reworked in this family.
+DESCRIPTIONS = {
+    0x1B123: 'GenSeki’s KOTO, enlarged to the body height of TOKI, TOTE and TOMO and thinned back to their stroke width.',
+    0x1B127: 'GenSeki’s alternate NE, enlarged to the katakana cap height and thinned back to their stroke width.',
+    0x1B168: 'GenSeki’s small archaic YE, lowered onto the small-kana baseline.',
+}
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
            'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP'}
 DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
@@ -57,11 +63,10 @@ def inventory(font, provenance):
     """Every encoded character with its Unicode name, block, source and group."""
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
     kinds = {key: source_key(value) for key, value in provenance.items()}
-    descriptions = {key: value for key, value in provenance.items() if ';' in value}
-    entries = character_data(font, audit, kinds, descriptions)
+    entries = character_data(font, audit, kinds, DESCRIPTIONS)
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
-        entry['provisional'] = entry['source'] == 'genzui' or 'refit' in provenance.get(f"U+{entry['cp']:04X}", '')
+        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
     return entries
 
 
