@@ -82,7 +82,27 @@ def check():
     sans_version,sans_checks,_=sans_checked()
     assert manifest['sans_version']==sans_version and manifest['sans_font_sha256']==sans_checks['ttf_sha256']
     sans=(OUT/'sans.html').read_text()
-    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' in sans and f'v{VERSION}/{STEM}.woff2' in sans
+    # Chunked faces: each page names its chunks, every chunk's characters are
+    # exactly its declared ranges, and the chunks together cover the font.
+    from fontTools.ttLib import TTFont
+    chunk_cases=0
+    for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
+                                            (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
+                                            (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf'))):
+        faces=re.findall(rf'@font-face\{{font-family:{family};src:url\(assets/({re.escape(stem)}-[a-z0-9]+-[0-9a-f]{{16}}\.woff2)\)[^}}]*unicode-range:([^}}]+)\}}',page_text)
+        assert len(faces)>=10,(family,stem,len(faces))
+        covered=set()
+        for filename,spec in faces:
+            declared=set()
+            for part in spec.split(','):
+                a,_,b=part[2:].partition('-');declared.update(range(int(a,16),int(b or a,16)+1))
+            chunk=TTFont(OUT/'assets'/filename)
+            assert set(chunk.getBestCmap())==declared,filename
+            assert not covered&declared,filename
+            covered|=declared;chunk_cases+=1
+        assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
+        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-kana-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif'
+    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' not in sans and 'data:font/' not in sans
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
     assert 'href="sans"' in home and 'GenZui Sans' in home
     # Each switch label loads its own family's subset, never the main webfont.
@@ -119,7 +139,7 @@ def check():
             'sans_version':sans_version,'sans_font_sha256':sans_checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
             'inventory_collections':{name:len(points) for name,points in groups.items()},
-            'extended_kana_characters':data['historical'],
+            'extended_kana_characters':data['historical'],'font_chunks_checked':chunk_cases,
             'font_bytes_unchanged':True,'status':'passed'}
     (ROOT/'research/release-checks.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))

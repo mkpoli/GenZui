@@ -16,6 +16,7 @@ from release_copy import FORM_DESCRIPTIONS
 from serif import OUT as FONT_OUT, STEM, VERSION
 from social_card import build_card
 from sans_card import build_card as build_sans_card
+from font_chunks import build as build_chunks
 from sans_site import OUT as SANS_OUT, STEM as SANS_STEM, build_page as build_sans_page, checked as sans_checked
 from sources import ROOT
 
@@ -122,11 +123,15 @@ def build():
     (OUT/'genzui.css').write_text(f"@import url('/v{VERSION}/genzui.css');\n")
     (OUT/'genzui-sans.css').write_text(f"@import url('/sans-v{sans_version}/genzui-sans.css');\n")
 
+    # Each family is served in unicode-range chunks so a page fetches only the
+    # slices its text uses; the versioned /v*/ webfonts stay whole for other sites.
+    serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets')
+    sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets')
+    preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-kana-' in f)
     page = (ROOT/'build/site/index.html').read_text()
-    # The main face becomes the versioned webfont; the switch's label subsets
-    # become hashed assets and must be externalized first.
-    page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
-                  rf'\1url(v{VERSION}/{STEM}.woff2)', page)
+    page = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
+                  lambda m: serif_css, page, count=1)
+    page = page.replace('</head>', preload(serif_chunks)+'</head>')
     page = external_fonts(page)
     match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
     data = json.loads(match[1])
@@ -156,7 +161,11 @@ def build():
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
                 'body {\n  font-family: "GenZui Sans", sans-serif;\n}</code></pre></details>')
-    sans_page = build_sans_page(f'sans-v{sans_version}/{SANS_STEM}.woff2', f'v{VERSION}/{STEM}.woff2', sans_web)
+    sans_page = build_sans_page('SANS_CHUNKS', 'SERIF_CHUNKS', sans_web)
+    sans_page = re.sub(r"@font-face \{font-family:GenZui;src:url\(SANS_CHUNKS\)[^}]*\}", lambda m: sans_css, sans_page, count=1)
+    sans_page = re.sub(r"@font-face \{font-family:GenZuiSerif;src:url\(SERIF_CHUNKS\)[^}]*\}",
+                       lambda m: serif_css.replace('font-family:GenZui;', 'font-family:GenZuiSerif;').replace('font-display:block', 'font-display:swap'), sans_page, count=1)
+    sans_page = sans_page.replace('</head>', preload(sans_chunks)+'</head>')
     sans_alt = build_sans_card(OUT/'media')
     sans_structured = {'@context':'https://schema.org', '@type':'WebSite',
                        'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,
