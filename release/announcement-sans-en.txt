@@ -1,0 +1,4 @@
+GenZui Sans is out: Noto Sans JP with 286 hentaigana, the Unicode 18.0 kana, historical ligatures and Minnan tone letters. The same historical repertoire as GenZui Serif, now in a gothic face. Regular, TTF + WOFF2, SIL OFL 1.1.
+
+Try the font and download it:
+https://genzui.mkpo.li/sans

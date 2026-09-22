@@ -1,0 +1,4 @@
+源萃ゴシック（GenZui Sans）を公開しました。Noto Sans JPを基に、変体仮名286字、Unicode 18.0の仮名、合略仮名、閩南語の声調文字を収録しています。源萃明朝と同じ歴史的仮名をゴシック体で。TTF・WOFF2、SIL OFL 1.1。
+
+試し組みとダウンロードはこちら。
+https://genzui.mkpo.li/sans
