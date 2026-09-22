@@ -6,6 +6,7 @@ import json
 from collections import Counter
 from zipfile import ZipFile
 
+from family_switch import css as switch_css, html as switch_html
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
 
@@ -48,6 +49,8 @@ def build_page(sans_font, serif_font, webfont_usage=''):
     replacement = {
         '{{SANS_FONT}}': sans_font, '{{SERIF_FONT}}': serif_font,
         '{{CSS}}': (ROOT/'site/style.css').read_text(),
+        '{{FAMILY_SWITCH_CSS}}': switch_css(),
+        '{{FAMILY_SWITCH}}': switch_html('sans'),
         '{{VERSION}}': html.escape(version), '{{SERIF_VERSION}}': html.escape(SERIF_VERSION),
         '{{CHARACTER_COUNT}}': f"{checks['encoded_characters']:,}",
         '{{JP_COUNT}}': f"{kinds['Noto Sans JP Regular']:,}", '{{GENZUI_COUNT}}': str(genzui),
