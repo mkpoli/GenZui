@@ -1,4 +1,4 @@
-# Run in a CDP harness after opening the home page.
+﻿# Run in a CDP harness after opening the home page.
 # Call-CDP and Evaluate are supplied by the harness. Exercise native browser
 # composition: synthetic CompositionEvents do not reproduce its cancellation.
 Evaluate @'
