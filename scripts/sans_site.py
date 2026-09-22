@@ -63,7 +63,8 @@ def inventory(font, provenance):
     """Every encoded character with its Unicode name, block, source and group."""
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
     kinds = {key: source_key(value) for key, value in provenance.items()}
-    entries = character_data(font, audit, kinds, DESCRIPTIONS)
+    entries = character_data(font, audit, kinds,
+                             {f'U+{cp:04X}': text for cp, text in DESCRIPTIONS.items()})
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
         entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
