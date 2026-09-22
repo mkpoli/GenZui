@@ -6,8 +6,8 @@ from fontTools.ttLib import TTFont
 
 from sans_site import OUT, STEM, checked
 
-ALT = ('源萃ゴシック / GenZui Sans. Six historical kana: KOTO, TOKI, TOMO, TOTE, alternate NE and '
-       'alternate WI. {count} characters; 286 hentaigana; Unicode 18.0. Based on Noto Sans JP, '
+ALT = ('源萃ゴシック / GenZui Sans. Six GenZui drawings: Hooked WU, KOTO, alternate NE, small archaic YE, '
+       'SQUARE PAATU and a tally mark. {count} characters; 286 hentaigana; Unicode 18.0. Based on Noto Sans JP, '
        'Noto Sans Hentaigana and GenSeki Hentaigana Gothic. genzui.mkpo.li/sans.')
 
 
@@ -22,9 +22,9 @@ def build_card(destination):
     def rect(box, fill):
         draw.rectangle(tuple(round(x*scale) for x in box), fill=fill)
 
-    def text(x, y, value, size, color=ink, sans=False):
+    def text(x, y, value, size, color=ink, sans=False, features=None):
         face = ImageFont.truetype('DejaVuSans.ttf' if sans else font, round(size*scale))
-        draw.text((x*scale, y*scale), value, font=face, fill=color, anchor='ls')
+        draw.text((x*scale, y*scale), value, font=face, fill=color, anchor='ls', features=features)
 
     count = f"{len(TTFont(font).getBestCmap()):,}"
     rect((628, 0, 1200, 630), green)
@@ -42,13 +42,15 @@ def build_card(destination):
     text(60, 521, 'GenSeki Hentaigana Gothic', 17, ink, True)
     text(60, 589, 'genzui.mkpo.li/sans', 24, green, True)
 
-    points = [('𛄣', 'KOTO'), ('𛄤', 'TOKI'), ('𪜈', 'TOMO'),
-              ('𛄥', 'TOTE'), ('𛄧', 'NE'), ('𛄨', 'WI')]
-    for i, (character, label) in enumerate(points):
+    # GenZui's own work in this family: the Hooked WU alternate, the three
+    # refitted kana and two of the drawn transcription symbols.
+    points = [('𛄟', 'HOOKED WU', ['ss01']), ('𛄣', 'KOTO', None), ('𛄧', 'NE', None),
+              ('𛅨', 'SMALL YE', None), ('㌬', 'PAATU', None), ('𝍵', 'TALLY', None)]
+    for i, (character, label, features) in enumerate(points):
         x, y = 666+(i%3)*174, 238+(i//3)*232
-        text(x, y, character, 142, '#f4f6ed')
+        text(x, y, character, 142, '#f4f6ed', features=features)
         text(x+36, y+44, label, 16, '#bdd1c0', True)
-    text(666, 63, 'HISTORICAL KANA', 17, '#bdd1c0', True)
+    text(666, 63, 'GENZUI DRAWINGS', 17, '#bdd1c0', True)
     rect((666, 540, 1160, 541), '#4d725e')
     text(666, 588, '源萃ゴシック', 21, '#f4f6ed')
     text(1060, 588, version, 18, '#bdd1c0', True)

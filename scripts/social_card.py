@@ -7,7 +7,7 @@ from fontTools.ttLib import TTFont
 from serif import OUT, STEM, VERSION
 from sans_site import OUT as SANS_OUT, STEM as SANS_STEM, checked as sans_checked
 
-ALT = ('源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui Sans 源萃ゴシック. KOTO, TOKI and TOMO '
+ALT = ('源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui Sans 源萃ゴシック. Hooked WU, KOTO and alternate NE '
        'in both families. {serif} and {sans} characters; 286 hentaigana; Unicode 18.0. '
        'Based on Noto Serif JP, Noto Sans JP and Noto Hentaigana. genzui.mkpo.li.')
 
@@ -23,9 +23,9 @@ def build_card(destination):
     def rect(box, fill):
         draw.rectangle(tuple(round(x*scale) for x in box), fill=fill)
 
-    def text(x, y, value, size, color=ink, face=None):
+    def text(x, y, value, size, color=ink, face=None, features=None):
         font = ImageFont.truetype(face or 'DejaVuSans.ttf', round(size*scale))
-        draw.text((x*scale, y*scale), value, font=font, fill=color, anchor='ls')
+        draw.text((x*scale, y*scale), value, font=font, fill=color, anchor='ls', features=features)
 
     counts = {name: f'{len(TTFont(path).getBestCmap()):,}' for name, path in (('serif', serif), ('sans', sans))}
     rect((628, 0, 1200, 630), green)
@@ -45,15 +45,16 @@ def build_card(destination):
     text(60, 521, 'BASED ON  Noto Serif JP · Noto Sans JP · Noto Hentaigana', 15, ink)
     text(60, 589, 'genzui.mkpo.li', 24, green)
 
-    points = [('𛄣', 'KOTO'), ('𛄤', 'TOKI'), ('𪜈', 'TOMO')]
+    # GenZui's own drawings in both families.
+    points = [('𛄟', 'HOOKED WU', ['ss01']), ('𛄣', 'KOTO', None), ('𛄧', 'NE', None)]
     for row, (face, label) in enumerate(((serif, 'SERIF · 源萃明朝'), (sans, 'SANS · 源萃ゴシック'))):
         y = 236+row*232
         text(666, y-142, label, 15, '#bdd1c0', face)
-        for i, (character, name) in enumerate(points):
+        for i, (character, name, features) in enumerate(points):
             x = 666+i*174
-            text(x, y, character, 128, '#f4f6ed', face)
+            text(x, y, character, 128, '#f4f6ed', face, features)
             text(x+30, y+40, name, 15, '#bdd1c0')
-    text(666, 63, 'HISTORICAL KANA', 17, '#bdd1c0')
+    text(666, 63, 'GENZUI DRAWINGS', 17, '#bdd1c0')
     rect((666, 540, 1160, 541), '#4d725e')
     text(666, 588, '源萃', 21, '#f4f6ed', serif)
     text(1000, 588, f'{VERSION} · {sans_version}', 16, '#bdd1c0')

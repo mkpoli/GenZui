@@ -35,8 +35,8 @@ small archaic YE are refitted to their kana neighbours.
 The page is https://genzui.mkpo.li/sans. `releases/sans-v0.100/` holds the
 immutable font assets; the site exposes `/sans-v0.100/genzui-sans.css` and the
 current alias `/genzui-sans.css`. The release image's text alternative is:
-“源萃ゴシック / GenZui Sans. Six historical kana: KOTO, TOKI, TOMO, TOTE,
-alternate NE and alternate WI. 17,070 characters; 286 hentaigana; Unicode 18.0.
+“源萃ゴシック / GenZui Sans. Six GenZui drawings: Hooked WU, KOTO, alternate NE,
+small archaic YE, SQUARE PAATU and a tally mark. 17,070 characters; 286 hentaigana; Unicode 18.0.
 Based on Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana Gothic.
 genzui.mkpo.li/sans.”
 
@@ -54,7 +54,7 @@ CSS (`/v0.114/genzui.css`) and a current alias (`/genzui.css`).
 
 The home page's share image shows both families from the distributed fonts'
 glyphs. Its text alternative is: “源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui
-Sans 源萃ゴシック. KOTO, TOKI and TOMO in both families. 17,090 and 17,070
+Sans 源萃ゴシック. Hooked WU, KOTO and alternate NE in both families. 17,090 and 17,070
 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP, Noto Sans JP
 and Noto Hentaigana. genzui.mkpo.li.” The Sans page has its own card,
 described under GenZui Sans below.
