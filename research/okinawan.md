@@ -91,37 +91,54 @@ receiving application needs GenZui or a font with matching PUA mappings.
 
 ## Drawings
 
-The 35 forms use original contours drawn as complete strokes in
+The 27 Funatsu forms use original contours drawn as complete strokes in
 [`scripts/okinawan_drawings.py`](../scripts/okinawan_drawings.py). Funatsu’s chart
 and FK Okinawa Mincho establish the distinguishing strokes. FROkinawanMoji,
 MgenKana+ and Nishiki-teki provide further comparisons of letter proportions.
 No outlines from those fonts or Xim Sans are included in GenZui.
 
 TU and WU have a broad lower return. TI, KWI and TSI continue into a full lower
-stroke. The labial forms share a continuous ふ body; each following vowel is
-drawn at its own optical size. Voiced forms have consistent dakuten placement.
-YI and YE also have dedicated drawings, reached through their existing Unicode
-sequences. Noto’s original outlines and layout tables remain intact; two appended
-composition lookups select the Okinawan forms.
+stroke. The labial forms share a continuous ふ body, widened to keep the weight
+of a full ふ; the following vowel is drawn at its own size, HWI’s close to full
+height as in the chart. Glottal YA carries its diagonal above the arc, glottal
+YU and YO a full-height stroke on the left, and glottal WA, WI and WE a level
+bar above the letter, all following the chart. Voiced forms have consistent
+dakuten placement. YI and YE also have dedicated drawings, reached through
+their existing Unicode sequences. Noto’s original outlines and layout tables
+remain intact; two appended composition lookups select the Okinawan forms.
 
-The eight raised katakana have individually drawn contours, a half-em advance
-and stronger hairlines than scaled full-size kana. They sit in the upper half
-of the line. Their design target is horizontal text; the cited material does
-not establish a vertical-layout convention for these signs.
+When the font is assembled, each joined letter is fitted to the Noto kana it
+extends (`BASES`): the same vertical extent and baseline, centred in the em,
+uniformly scaled, and never wider than 920 units. Every stroke is then
+thickened by a small radius (`WEIGHT` sets exceptions) so the hairlines match
+Noto’s kana weight in running text.
+
+The eight raised katakana are not drawn separately. The prefectural guide sets
+them as the text face’s own katakana at about half size, top-aligned with the
+line (PDF page 5), so GenZui reduces Noto’s small kana ァィゥェォッㇷ, which
+already carry the optical correction for a small size, thickens them slightly,
+and places them at the top of a half-em cell; ン, which has no small kana, is
+reduced from the full letter with more thickening (`RAISED`). Their design
+target is horizontal text; the cited material does not establish a
+vertical-layout convention for these signs. No other released font with these
+signs was found apart from Xim Sans.
 
 After building the checked font and specimen site,
 `scripts/okinawan_proof.py --references <reference-directory>` builds a local
 comparison page in `build/okinawan`. It accepts `FK-Okinawa-reference.ttf`,
-`nishiki-teki.ttf`, `mgenkanaplus.woff2`, `Xim-Sans-Handwritten.ttf` and the
-published FROkinawanMoji specimen `frokinawa-sample.jpg`. Reference files stay
+`nishiki-teki.ttf`, `mgenkanaplus.woff2`, `Xim-Sans-Handwritten.ttf`, Funatsu’s
+chart `funatsu-chart.pdf` (its embedded letter font is extracted with `mutool`
+and shown as “Funatsu’s chart”) and the published FROkinawanMoji specimen
+`frokinawa-sample.jpg`. Each card also shows the ordinary kana the letter
+joins or modifies, set in GenZui. Reference files stay
 in the ignored study output and are excluded from the release build. The font
 size control and reference selector apply to all 35 forms.
 
 ## References
 
-- [Funatsu’s 2016 complete chart](https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf): all 27 forms, contrasts, examples and word-initial restrictions.
+- [Funatsu’s 2016 complete chart](https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf): all 27 forms, contrasts, examples and word-initial restrictions. The PDF embeds Funatsu’s own letter font (an EUDC TrueType subset), the primary shape reference for the redraw.
 - [Brennan’s 2023 proposal](https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/okana.pdf): 18 bases, seven voiced derivatives and two existing Unicode sequences.
-- [Okinawa Prefecture’s guide](https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/009/625/02_shimakutubahyouki.pdf): PDF pages 11–12 (printed 8–9) and 26 (printed 22) illustrate the raised signs.
+- [Okinawa Prefecture’s guide](https://www.pref.okinawa.lg.jp/_res/projects/default_project/_page_/001/009/625/02_shimakutubahyouki.pdf): PDF page 5 sets the raised signs in running text (half-size, top-aligned katakana of the text face); pages 11–12 (printed 8–9) and 26 (printed 22) illustrate them further.
 - [L2/23-118](https://www.unicode.org/L2/L2023/23118-ryukyu-kana.pdf): the eight-sign proposal and samples. Proposed positions are not assignments.
 - [Nishiki-teki PUA chart](https://umihotaru.work/nishiki-teki_pua.pdf): the Funatsu F450–F46A convention.
 - [Xim Sans 1.62](https://github.com/XimcoYuzuriha/Xim_Sans/tree/main/ver_01_62): the eight raised-sign PUA mappings in the author’s unencoded-character documentation.
