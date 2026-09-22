@@ -125,9 +125,12 @@ def build():
 
     # Each family is served in unicode-range chunks so a page fetches only the
     # slices its text uses; the versioned /v*/ webfonts stay whole for other sites.
-    serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets')
-    sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets')
-    preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-kana-' in f)
+    site_text = set()
+    for source in (ROOT/'build/site').glob('*.html'):
+        site_text.update(ord(c) for c in re.sub(r'<[^>]+>|&[#a-zA-Z0-9]+;', ' ', source.read_text()))
+    serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
+    sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets', site_text)
+    preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-text-' in f)
     page = (ROOT/'build/site/index.html').read_text()
     page = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
                   lambda m: serif_css, page, count=1)

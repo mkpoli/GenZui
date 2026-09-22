@@ -7,6 +7,7 @@ from urllib.parse import urlsplit, unquote
 from zipfile import ZipFile
 
 from PIL import Image
+from fontTools.pens.recordingPen import RecordingPen
 
 from release_site import OUT, URL
 from serif import VERSION, STEM
@@ -97,11 +98,39 @@ def check():
             for part in spec.split(','):
                 a,_,b=part[2:].partition('-');declared.update(range(int(a,16),int(b or a,16)+1))
             chunk=TTFont(OUT/'assets'/filename)
-            assert set(chunk.getBestCmap())==declared,filename
+            # A chunk serves its declared range; it may also carry the encoded
+            # variant glyphs its variation sequences select.
+            assert declared<=set(chunk.getBestCmap()),filename
             assert not covered&declared,filename
             covered|=declared;chunk_cases+=1
         assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
-        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-kana-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif'
+        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif'
+        # Every character the page itself sets comes from the preloaded text chunk.
+        visible=set(re.sub(r'<(script|style)\b[^>]*>.*?</\1>|<[^>]+>|&[#a-zA-Z0-9]+;',' ',page_text,flags=re.S))
+        text_chunk=TTFont(OUT/'assets'/next(f for f,_ in faces if '-text-' in f))
+        assert not {ord(c) for c in visible if ord(c) in set(TTFont(font_path).getBestCmap())}-set(text_chunk.getBestCmap())
+        # Every variation sequence still resolves, to the same outline.
+        # Subsetting renumbers glyphs, so the sequences are compared by
+        # (selector, base) and the outlines are spot-checked.
+        def uvs(font):
+            # A None glyph is a default-variation entry: it selects the base glyph.
+            return {(sel,cp):glyph for t in font['cmap'].tables if t.format==14
+                    for sel,pairs in t.uvsDict.items() for cp,glyph in pairs if glyph}
+        source_font=TTFont(font_path); source_uvs=uvs(source_font)
+        chunk_fonts=[TTFont(OUT/'assets'/f) for f,_ in faces]
+        kept={}
+        for chunk in chunk_fonts:
+            for key,glyph in uvs(chunk).items():
+                kept.setdefault(key,(chunk,glyph))
+        assert set(source_uvs)<=set(kept),(family,stem,len(set(source_uvs)-set(kept)))
+        source_glyphs=source_font.getGlyphSet()
+        for key in sorted(source_uvs)[::max(1,len(source_uvs)//25)]:
+            chunk,glyph=kept[key]
+            expected,actual=RecordingPen(),RecordingPen()
+            source_glyphs[source_uvs[key]].draw(expected)
+            chunk.getGlyphSet()[glyph].draw(actual)
+            assert expected.value==actual.value,(family,key)
+        chunk_cases+=len(source_uvs)
     assert f'sans-v{sans_version}/{SANS_STEM}.woff2' not in sans and 'data:font/' not in sans
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
     assert 'href="sans"' in home and 'GenZui Sans' in home
