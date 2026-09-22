@@ -1,14 +1,17 @@
-"""Funatsu kana and prefectural raised katakana, drawn as complete strokes.
+"""Funatsu kana drawn as complete strokes, and prefectural raised katakana
+derived from Noto's own small katakana.
 
 Mapping references describe character identity, not an upstream outline licence.
 No outlines are imported from Nishiki-teki, Xim Sans or legacy Okinawan fonts.
 """
 import json
+import math
 import pathops
+from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
-from okinawan_drawings import outlines, BASES, CANONICAL, DAKUTEN
+from okinawan_drawings import outlines, BASES, WEIGHT, RAISED, RAISED_BOX, RAISED_TOP, CANONICAL, DAKUTEN
 from serif_forms import path
 from sources import ROOT
 
@@ -51,8 +54,41 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
         dy = low - scale * bottom
         return [transform(part, (scale, 0, 0, scale, dx, dy)) for part in parts]
 
-    recipes = {cp: fit(parts, BASES[cp]) if cp in BASES else parts
+    def embolden(parts, radius):
+        # Thicken every stroke by uniting copies offset around a small
+        # circle, so the hairlines match Noto's kana weight.
+        merged = pathops.Path()
+        for part in parts:
+            shape = pathops.Path()
+            part.replay(shape.getPen())
+            for k in range(12):
+                angle = k * math.pi / 6
+                moved = pathops.Path()
+                shape.draw(TransformPen(moved.getPen(), (1, 0, 0, 1, radius * math.cos(angle), radius * math.sin(angle))))
+                merged = pathops.op(merged, moved, pathops.PathOp.UNION)
+        pen = RecordingPen()
+        merged.draw(pen)
+        return [pen]
+
+    def raised(source, radius):
+        # The prefectural guide sets raised katakana as the text face's own
+        # katakana at about half size, top-aligned with the line. Noto's
+        # small kana already carry the optical correction for that size, so
+        # each raised sign is the small kana reduced further, thickened, and
+        # moved to the top of a half-width cell.
+        pen = RecordingPen()
+        font.getGlyphSet()[font.getBestCmap()[source]].draw(pen)
+        shape = pathops.Path()
+        pen.replay(shape.getPen())
+        left, bottom, right, top = shape.bounds
+        scale = min(RAISED_BOX[1] / (top - bottom), RAISED_BOX[0] / (right - left))
+        dx = 250 - scale * (left + right) / 2
+        dy = RAISED_TOP - scale * top
+        return embolden([transform(pen, (scale, 0, 0, scale, dx, dy))], radius)
+
+    recipes = {cp: embolden(fit(parts, BASES[cp]), WEIGHT.get(cp, 8))
                for cp, parts in outlines().items()}
+    recipes.update({cp: raised(source, radius) for cp, (source, radius) in RAISED.items()})
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]
