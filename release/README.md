@@ -23,17 +23,17 @@ The font is distributed under SIL OFL 1.1; source notices accompany the download
 The specimen site is https://genzui.mkpo.li/. Related typeface:
 [Kureedo](https://kureedo.mkpo.li/), based on Klee One.
 
-## GenZui Sans 0.100
+## GenZui Sans 0.101
 
 GenZui Sans / 源萃ゴシック is the gothic family, derived from Noto Sans JP,
 Noto Sans Hentaigana, GenSeki Hentaigana Gothic, Noto Sans CJK JP and FRB
 Taiwanese Kana. It contains 17,070 encoded characters with the Serif family's
-historical repertoire. The hentaigana come from Noto's DemiLight instance so
-they sit evenly beside Noto Sans JP Regular; KOTO, the alternate NE and the
+historical repertoire. The hentaigana are compiled at weight axis 380, where
+their stems match Noto Sans JP Regular's hiragana; KOTO, the alternate NE and the
 small archaic YE are refitted to their kana neighbours.
 
-The page is https://genzui.mkpo.li/sans. `releases/sans-v0.100/` holds the
-immutable font assets; the site exposes `/sans-v0.100/genzui-sans.css` and the
+The page is https://genzui.mkpo.li/sans. `releases/sans-v0.101/` holds the
+immutable font assets; the site exposes `/sans-v0.101/genzui-sans.css` and the
 current alias `/genzui-sans.css`. The release image's text alternative is:
 “源萃ゴシック / GenZui Sans. Archaic WU, then GenZui drawings: refitted KOTO, alternate NE
 and small archaic YE, SQUARE PAATU and a tally mark. 17,070 characters; 286 hentaigana; Unicode 18.0.
@@ -48,7 +48,7 @@ and `build/sans/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`; deploy with `bun run deploy` after committing the release.
 
-`releases/v0.114/` and `releases/sans-v0.100/` contain the immutable font assets.
+`releases/v0.114/` and `releases/sans-v0.101/` contain the immutable font assets.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.114/genzui.css`) and a current alias (`/genzui.css`).
 

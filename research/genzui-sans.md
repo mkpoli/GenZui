@@ -1,7 +1,7 @@
 # GenZui Sans Regular
 
 GenZui Sans / 源萃ゴシック is a Japanese sans-serif with historical kana.
-Version 0.100 contains 17,070 encoded characters in one Regular weight: the
+Version 0.101 contains 17,070 encoded characters in one Regular weight: the
 repertoire of GenZui Serif 0.113 on the Noto Sans JP base. The experimental
 Okinawan forms and historical katakana variants are not part of the Sans family.
 
@@ -10,7 +10,7 @@ Okinawan forms and historical katakana variants are not part of the Sans family.
 | Source | Contribution |
 | --- | --- |
 | Noto Sans JP, weight 400 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
-| Noto Sans Hentaigana, DemiLight instance | 286 hentaigana |
+| Noto Sans Hentaigana, instance at weight axis 380 | 286 hentaigana |
 | Noto Sans Hentaigana, Regular instance | Four archaic kana: 𛀀 𛄠 𛄡 𛄢 |
 | GenSeki Hentaigana Gothic 1.201 Regular | 21 historical kana, small kana and ligatures |
 | Noto Sans CJK JP Regular | U+5344 卄 |
@@ -24,13 +24,15 @@ archaic E and YE drawings receive U+1B000 and U+1B001.
 ## Weight
 
 Upstream gives the Noto Sans Hentaigana Regular instance (axis 400) weight
-class 500, and its DemiLight instance (axis 300) weight class 400. Beside Noto
-Sans JP Regular the Regular-instance hentaigana read darker than the
-surrounding kana: their median stem is 73 units against 69 for hiragana, and
-the cursive forms carry more strokes in the same body. The DemiLight instance
-(median stem 58) balances the text colour, so it supplies the 286 hentaigana.
-The four archaic kana are simple katakana-like forms and keep the Regular
-instance, matching ordinary katakana stems of 72–75 units.
+class 500. Beside Noto Sans JP Regular its hentaigana read darker than the
+surrounding kana: their median stem is 73 units against 69 for hiragana.
+Version 0.100 used the DemiLight instance (axis 300, stem 58), which reads
+too thin. Version 0.101 adds an instance at axis 380 to the upstream sources,
+where the hentaigana's median stem is 69.5 units against 69.3 for the
+hiragana; the check requires the two to stay within two units. The four
+archaic kana are simple katakana-like forms and keep the Regular instance,
+matching ordinary katakana stems of 72–75 units. The stem estimate is twice
+the filled area over the perimeter, the median over the set.
 
 ## Refits
 
@@ -73,13 +75,13 @@ compare TTF with WOFF2. The coverage audit requires all 763 characters in
 Unicode 18's Hiragana/Katakana scripts and script extensions. The browser check
 validates the offline specimen in Chromium and Firefox and records the font
 hashes; the packager rejects stale hashes and writes
-`dist/GenZuiSans-Regular-0.100.zip`.
+`dist/GenZuiSans-Regular-0.101.zip`.
 
 ## Site
 
 `scripts/sans_site.py` renders `templates/sans.html` for the development
 specimen (`build/site/sans.html`, embedded fonts) and the public site
-(`/sans`, fonts from `/sans-v0.100/`). The public build also publishes the
+(`/sans`, fonts from `/sans-v0.101/`). The public build also publishes the
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
-Version reports live in `research/sans-browser-checks-0.100.json` and
-`research/sans-kana-coverage-0.100.json`.
+Version reports live in `research/sans-browser-checks-0.101.json` and
+`research/sans-kana-coverage-0.101.json`.

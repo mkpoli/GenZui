@@ -17,7 +17,7 @@ the keyboard and [shared registry](data/okinawan/mappings.json).
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
 **GenZui Sans / 源萃ゴシック** is the gothic companion, built on Noto Sans JP
-with the same historical repertoire. Version **0.100** contains **17,070 encoded
+with the same historical repertoire. Version **0.101** contains **17,070 encoded
 characters**. [Try GenZui Sans](https://genzui.mkpo.li/sans) ·
 [Download TTF](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) ·
 [Build notes](research/genzui-sans.md)
@@ -145,7 +145,7 @@ bun run release:build
 ```
 
 The public site is generated in `build/release/`. It also needs the checked
-Sans package (`dist/GenZuiSans-Regular-0.100.zip` with its checks in `build/sans/`),
+Sans package (`dist/GenZuiSans-Regular-0.101.zip` with its checks in `build/sans/`),
 which supplies the `/sans` page and its downloads. Edit `site/`, `templates/` and
 `scripts/release_site.py`. `build/site/` contains the offline development specimen
 with glyph comparisons; the public gallery shows the released forms.

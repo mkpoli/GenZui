@@ -12,15 +12,15 @@ from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from minnan import import_forms, layout as minnan_layout
 from sans_forms import REFITS, refit
-from sans_sources import CACHE, CJK, DONOR, GENSEKI, LIGHT, NOTO, prepare
+from sans_sources import CACHE, CJK, DONOR, GENSEKI, NOTO, TEXT, TEXT_AXIS, prepare
 
 OUT = ROOT / 'build/sans'
 FAMILY = 'GenZui Sans'
 FAMILY_JA = '源萃ゴシック'
 STEM = 'GenZuiSans-Regular'
-VERSION = '0.100'
+VERSION = '0.101'
 # Simple archaic kana keep the Regular master beside ordinary katakana; the
-# cursive hentaigana use the lighter DemiLight instance (see sans_sources).
+# cursive hentaigana use the stem-matched axis-380 instance (see sans_sources).
 REGULAR_WEIGHT = {0x1B000, 0x1B120, 0x1B121, 0x1B122}
 
 
@@ -62,10 +62,10 @@ def build():
     print('Instantiating Noto Sans JP Regular', flush=True)
     font = instance('NotoSansJP', 400)
     donor = TTFont(DONOR, recalcTimestamp=False)
-    light = TTFont(LIGHT, recalcTimestamp=False)
+    text_instance = TTFont(TEXT, recalcTimestamp=False)
     genseki = TTFont(GENSEKI/'GenSekiHentaiganaGothic.ttf', recalcTimestamp=False)
     assert font['head'].unitsPerEm == donor['head'].unitsPerEm == 1000
-    assert light['head'].unitsPerEm == genseki['head'].unitsPerEm == 1000
+    assert text_instance['head'].unitsPerEm == genseki['head'].unitsPerEm == 1000
     original = set(font.getBestCmap())
     targets = {ord(item['character']) for item in repertoire()}
     historical = targets - original - {PAATU} - set(HONKOKU) - set(MINNAN_TONES) - set(MINNAN_MARKS)
@@ -84,7 +84,7 @@ def build():
             if cp in REGULAR_WEIGHT:
                 source, prefix, description = donor, 'notoSansHist', 'Noto Sans Hentaigana Regular instance'
             else:
-                source, prefix, description = light, 'notoSansHistLight', 'Noto Sans Hentaigana DemiLight instance'
+                source, prefix, description = text_instance, 'notoSansHistText', f'Noto Sans Hentaigana instance at weight axis {TEXT_AXIS}'
             if cp in (0x1B000, 0x1B001):
                 description += '; Unicode mapping restored for the upstream unencoded drawing'
         else:
@@ -169,8 +169,8 @@ def build():
         'GenZui Sans / 源萃ゴシック\n\n'
         'Noto Sans JP Regular: Japanese base, kana components and transcription symbols.\n'
         'https://github.com/google/fonts/tree/main/ofl/notosansjp\n'
-        'Noto Sans Hentaigana: 286 hentaigana from the DemiLight instance, the weight\n'
-        'upstream pairs with weight class 400; four archaic kana from the Regular instance.\n'
+        'Noto Sans Hentaigana: 286 hentaigana from an instance at weight axis 380, whose\n'
+        'stems match Noto Sans JP Regular; four archaic kana from the Regular instance.\n'
         'The upstream unencoded E and YE drawings receive U+1B000 and U+1B001.\n'
         'https://github.com/notofonts/hentaigana\n'
         'GenSeki Hentaigana Gothic 1.201: 21 historical kana, small kana and ligatures.\n'

@@ -15,12 +15,15 @@ CACHE = ROOT / 'build/sans-work'
 SOURCE = CACHE / 'sources'
 NOTO = SOURCE / 'NotoSansHentaigana'
 GENSEKI = SOURCE / 'GenSekiHentaiganaGothic'
-# The Regular instance sits on the Regular master; upstream gives it weight
-# class 500. DemiLight (axis 300) is the instance upstream pairs with weight
-# class 400, so it supplies the hentaigana beside Noto Sans JP Regular.
+# The Regular instance sits on the Regular master (upstream weight class 500).
+# GenZui adds an instance at axis 380, where the hentaigana's median stem
+# (69.5 units) matches Noto Sans JP Regular's hiragana (69.3), for the
+# hentaigana beside ordinary kana.
 INSTANCES = CACHE / 'instances'
+STUDY = CACHE / 'NotoSansHentaigana-GenZui.glyphs'
+TEXT_AXIS = 380
 DONOR = INSTANCES / 'NotoSansHentaigana-Regular.ttf'
-LIGHT = INSTANCES / 'NotoSansHentaigana-DemiLight.ttf'
+TEXT = INSTANCES / 'NotoSansHentaigana-GenZui.ttf'
 CJK = CACHE / 'NotoSansCJKjp-Regular.otf'
 EPOCH = '1749081600'
 
@@ -74,19 +77,24 @@ def prepare():
     versions = {name: importlib.metadata.version(name)
                 for name in ('fontmake', 'fonttools', 'glyphsLib', 'ufo2ft')}
     key = {'sources': manifest, 'compiler': versions, 'epoch': EPOCH,
-           'instances': [DONOR.name, LIGHT.name]}
+           'instances': [DONOR.name, TEXT.name], 'text_axis': TEXT_AXIS}
     stamp = CACHE / 'instance-build.json'
     previous = json.loads(stamp.read_text()) if stamp.exists() else {}
-    hashes = {p.name: digest(p) for p in (DONOR, LIGHT) if p.exists()}
+    hashes = {p.name: digest(p) for p in (DONOR, TEXT) if p.exists()}
     if previous.get('inputs') != key or previous.get('sha256') != hashes or len(hashes) < 2:
         from fontmake.font_project import FontProject
+        from glyphsLib import GSFont, GSInstance
         os.environ['SOURCE_DATE_EPOCH'] = EPOCH
-        print('Compiling Noto Sans Hentaigana Regular and DemiLight', flush=True)
+        print('Compiling Noto Sans Hentaigana Regular and the axis-380 instance', flush=True)
+        source = GSFont(str(NOTO / 'NotoSansHentaigana.glyphspackage'))
+        instance = GSInstance()
+        instance.name, instance.axes, instance.weightClass = 'GenZui', [TEXT_AXIS], 400
+        source.instances.append(instance)
+        source.save(str(STUDY))
         FontProject().run_from_glyphs(
-            str(NOTO / 'NotoSansHentaigana.glyphspackage'), output=['ttf'],
-            interpolate='.* (Regular|DemiLight)$', master_dir='{tmp}',
-            instance_dir='{tmp}', output_dir=str(INSTANCES))
-        for path in (DONOR, LIGHT):
+            str(STUDY), output=['ttf'], interpolate='.* (Regular|GenZui)$',
+            master_dir='{tmp}', instance_dir='{tmp}', output_dir=str(INSTANCES))
+        for path in (DONOR, TEXT):
             font = TTFont(path, recalcTimestamp=False)
             # Both drawings exist upstream but lack Unicode assignments.
             for cp, name in ((0x1B000, 'archaicEkatakana'), (0x1B001, 'archaicYehiragana')):
@@ -96,7 +104,7 @@ def prepare():
                     if table.isUnicode() and table.format == 12:
                         table.cmap[cp] = name
             font.save(path)
-        hashes = {p.name: digest(p) for p in (DONOR, LIGHT)}
+        hashes = {p.name: digest(p) for p in (DONOR, TEXT)}
         stamp.write_text(json.dumps({'inputs': key, 'sha256': hashes}, indent=2) + '\n')
     return manifest
 
