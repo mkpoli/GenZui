@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Okinawan kana · GenZui</title>
+<style>
+@font-face{font-family:GenZui;src:url(fonts/genzui.woff2)}
+@font-face{font-family:Previous;src:url(fonts/previous.woff2)}
+@font-face{font-family:FK;src:url(fonts/fk.woff2)}
+@font-face{font-family:Nishiki;src:url(fonts/nishiki.woff2)}
+@font-face{font-family:Mgen;src:url(fonts/mgen.woff2)}
+@font-face{font-family:Xim;src:url(fonts/xim.woff2)}
+:root{--ink:#243b32;--line:#d7ddd5;--paper:#f7f8f4;--size:112px}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,sans-serif}
+a{color:inherit;text-underline-offset:4px}button,select,input{font:inherit}header.masthead{max-width:1360px;margin:auto;padding:30px 32px 26px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-family:GenZui,serif;font-size:29px;text-decoration:none}.brand span{font:14px system-ui,sans-serif;margin-left:12px}nav{display:flex;gap:24px;font-size:14px}
+main{max-width:1360px;margin:auto;padding:36px 32px 70px}.intro{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:28px}.intro h1{font:normal 58px/1.2 GenZui,serif;margin:0 0 12px}.intro p{margin:0;color:#52665c;max-width:570px}.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.controls{display:flex;gap:26px;align-items:center;flex-wrap:wrap;padding:20px 24px;background:#fff;border:1px solid var(--line);border-radius:6px}.controls label{display:flex;gap:12px;align-items:center;font-size:14px}.controls select{padding:8px 32px 8px 10px;border:1px solid #bac8bd;border-radius:4px;background:white;color:var(--ink)}input[type=range]{width:150px;accent-color:#285e48}.size-output{min-width:46px}.controls a{margin-left:auto;font-size:14px}
+section{margin-top:44px}h2{font-size:24px;font-weight:500;margin:0 0 10px}.section-note{margin:0 0 20px;color:#52665c;font-size:14px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}.letter{min-width:0;background:white;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 15px 12px}.letter header{display:flex;justify-content:space-between;gap:12px;font-size:13px}.letter header span{font-family:GenZui,serif;color:#63746a}.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.pair>div{min-width:0;text-align:center}.pair small{display:block;font-size:11px;color:#6e7e73}.glyph{display:block;height:calc(var(--size) * 1.45);font-size:var(--size);line-height:1.45;font-synthesis:none;white-space:nowrap}.new{font-family:GenZui,serif}.reference{color:#627168}.missing{font:12px/1.5 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;white-space:normal}.codes{font:11px/1.4 ui-monospace,monospace;color:#849087;margin:18px 0 0}.reading{background:white;padding:26px;border:1px solid var(--line);border-radius:6px}.reading p{font:40px/1.9 GenZui,serif;margin:10px 0;overflow-wrap:anywhere}.reading small{font:12px system-ui,sans-serif;color:#627168}.portability{margin-top:24px;border-left:3px solid #bc8e4d;padding:10px 18px;background:#fff3df;color:#68461e;font-size:14px}.references{font-size:14px}.references ul{padding-left:22px;line-height:2}.references figure{max-width:900px;margin:28px 0}.references img{display:block;width:100%;height:auto}.references figcaption{margin-top:10px;color:#627168}footer{font-size:13px;margin-top:40px;color:#627168}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{display:block}.intro p{margin-top:16px}.controls a{margin-left:0}}
+@media(max-width:570px){header.masthead{padding:20px;align-items:start}.brand span{display:none}nav{gap:16px;font-size:12px}main{padding:28px 20px 50px}.intro h1{font-size:46px}.grid{grid-template-columns:1fr}.controls{padding:16px;gap:16px}.controls label{flex-wrap:wrap}.reading{padding:18px}.reading p{font-size:30px}}
+</style></head>
+<body>
+<header class="masthead"><a href="./" class="brand">源萃<span>GenZui Serif</span></a><nav><a href="#letters">All letters</a><a href="#reading">Reading</a><a href="home/#okinawan">Input tool</a></nav></header>
+<main>
+<div class="intro"><div><div class="kicker">Okinawan kana</div><h1 lang="ja">沖縄文字</h1></div><p>27 Funatsu forms and eight raised katakana. Compare their strokes and spacing with existing fonts, then try them in the input tool.</p></div>
+<div class="controls"><label for="reference">Compare with <select id="reference"><option value="fk">FK Okinawa Mincho</option><option value="nishiki">Nishiki-teki</option><option value="mgen">MgenKana+</option><option value="previous">GenZui 0.114</option></select></label><label for="size">Size <input id="size" type="range" min="40" max="128" value="112"><output class="size-output" for="size">112 px</output></label><a href="#sources">Reference sources</a></div>
+<section id="letters"><h2>Funatsu · <span lang="ja">新沖縄文字</span></h2><p class="section-note">Each pair shows GenZui on the left and the selected reference on the right.</p><div class="grid">{{FUNATSU}}</div></section>
+<section id="raised"><h2>Raised katakana · <span lang="ja">上付きカタカナ</span></h2><p class="section-note">The reference is Xim Sans, except when comparing with GenZui 0.114. Both use the same private-use positions.</p><div class="grid">{{RAISED}}</div></section>
+<section id="reading"><h2>In a line of text</h2><div class="reading" lang="ryu"><small>Funatsu</small><p>とぅい　うとぅ　くゎじ　ふぃじゃい　をぅとぅ</p><small>Raised katakana</small><p>ウトゥ　&#xE534;ウトゥ　&#xE537;ヤー　&#xE5AA;ン</p></div><aside class="portability"><strong>Copied PUA text may be unreadable elsewhere.</strong> These letters use the <a href="https://en.wikipedia.org/wiki/Private_Use_Areas">Private Use Area (PUA)</a>. Other apps and recipients need GenZui or a font with matching mappings; otherwise the text may appear as boxes or unrelated symbols. Ordinary Unicode kana retain their standard encoding.</aside><p><a href="home/#okinawan">Open the Okinawan input tool →</a></p></section>
+<section class="references" id="sources"><h2>Reference sources</h2><ul><li><a href="https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf">Funatsu’s complete chart</a></li><li><a href="https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/okana.pdf">FK Okinawa Mincho in the New Okinawan Kana proposal</a></li><li><a href="https://newjapanese.blog.jp/archives/14540652.html">Toranekoman’s Mkana+, MgenKana+ and Ricty Kana</a> — partial coverage of Funatsu letters.</li><li><a href="https://umihotaru.work/">Nishiki-teki</a></li><li><a href="https://github.com/XimcoYuzuriha/Xim_Sans/tree/main/ver_01_62">Xim Sans</a> and <a href="https://www.unicode.org/L2/L2023/23118-ryukyu-kana.pdf">the raised-katakana proposal</a></li></ul><figure><img src="frokinawa-sample.jpg" alt="FROkinawanMoji specimen showing all 27 Funatsu letters in a Mincho design" loading="lazy"><figcaption><a href="https://booth.pm/ja/items/1003982">FROkinawanMoji</a>, specimen published by まいりわ.</figcaption></figure></section>
+<footer>GenZui’s Okinawan contours are independent drawings. Reference outlines are shown for comparison.</footer>
+</main>
+<script type="application/json" id="data">{{DATA}}</script>
+<script>
+const data=JSON.parse(document.querySelector('#data').textContent),entries=new Map(data.entries.map(e=>[e.id,e]));
+const fonts={fk:'FK',nishiki:'Nishiki',mgen:'Mgen',previous:'Previous',xim:'Xim'};
+const names={fk:'FK Mincho',nishiki:'Nishiki-teki',mgen:'MgenKana+',previous:'GenZui 0.114',xim:'Xim Sans'};
+function compare(){
+ const choice=document.querySelector('#reference').value;
+ for(const card of document.querySelectorAll('.letter')){
+  const e=entries.get(card.dataset.id),key=e.system==='prefecture'&&choice!=='previous'?'xim':choice;
+  const ref=card.querySelector('.reference');
+  const cp=parseInt((e.legacy||e.output)[0],16),covered=key==='previous'||(data.references[key]||[]).includes(cp);
+  ref.style.fontFamily=covered?fonts[key]:'system-ui';ref.classList.toggle('missing',!covered);
+  ref.textContent=covered?(key==='previous'?e.output.map(c=>String.fromCodePoint(parseInt(c,16))).join(''):String.fromCodePoint(cp)):'Not included';
+  card.querySelector('.reference-label').textContent=names[key];
+ }
+}
+document.querySelector('#reference').addEventListener('change',compare);
+document.querySelector('#size').addEventListener('input',event=>{document.documentElement.style.setProperty('--size',event.target.value+'px');document.querySelector('.size-output').textContent=event.target.value+' px';});
+const sample=document.querySelector('.reading p');sample.textContent='\uF450い　う\uF450　\uF454じ　\uF45Bじゃい　\uF465\uF450';
+if(!data.references.fk)document.querySelector('#reference').value='previous';
+compare();
+</script></body></html>

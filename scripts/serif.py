@@ -303,7 +303,7 @@ def build():
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
     add_honkoku(font, add, glyph, contours, transform)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
-    add_okinawan(font, add, glyph, contours, transform, add_feature)
+    add_okinawan(font, add, glyph, transform, add_feature)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in OKINAWAN_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
@@ -348,7 +348,7 @@ def build():
         'GenZui: five ideographic tally marks and five ideographic-description symbols.\n'
         'GenZui: SQUARE PAATU uses native Noto Serif JP squared-katakana components.\n'
         'WU has a curved default and a hooked stylistic alternate (ss01).\n'
-        'GenZui: 18 Funatsu Okinawan bases and eight raised katakana, drawn from Noto components.\n'
+        'GenZui: 27 Funatsu Okinawan forms and eight raised katakana, drawn as complete strokes.\n'
         'Private-use conventions follow Nishiki-teki and Xim Sans; see okinawan-mappings.json.\n'
         'Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.\n'
         'The Google, Adobe and Noto Project notices are retained in OFL.txt.\n'

@@ -1,4 +1,4 @@
-# Okinawan kana in GenZui 0.114
+# Okinawan kana in GenZui
 
 GenZui supplies all 27 forms in Funatsu’s New Okinawan Kana chart and the eight
 raised katakana used in Okinawa Prefecture’s notation guide. The home page has a
@@ -91,13 +91,31 @@ receiving application needs GenZui or a font with matching PUA mappings.
 
 ## Drawings
 
-The new outlines use Noto Serif JP components and GenZui drawing. No outlines from
-Nishiki-teki, Xim Sans, Toranekoman’s fonts or FROkinawaMoji are redistributed.
-The Funatsu chart and proposal establish the shapes and distinguishing strokes.
-The constructed forms remain provisional, as do GenZui’s other drawn additions.
-Raised katakana have a half-em advance and sit in the upper half of the line.
-Their design target is horizontal text; the cited material does not establish a
-vertical-layout convention for these eight signs.
+The 35 forms use original contours drawn as complete strokes in
+[`scripts/okinawan_drawings.py`](../scripts/okinawan_drawings.py). Funatsu’s chart
+and FK Okinawa Mincho establish the distinguishing strokes. FROkinawanMoji,
+MgenKana+ and Nishiki-teki provide further comparisons of letter proportions.
+No outlines from those fonts or Xim Sans are included in GenZui.
+
+TU and WU have a broad lower return. TI, KWI and TSI continue into a full lower
+stroke. The labial forms share a continuous ふ body; each following vowel is
+drawn at its own optical size. Voiced forms have consistent dakuten placement.
+YI and YE also have dedicated drawings, reached through their existing Unicode
+sequences. Noto’s original outlines and layout tables remain intact; two appended
+composition lookups select the Okinawan forms.
+
+The eight raised katakana have individually drawn contours, a half-em advance
+and stronger hairlines than scaled full-size kana. They sit in the upper half
+of the line. Their design target is horizontal text; the cited material does
+not establish a vertical-layout convention for these signs.
+
+After building the checked font and specimen site,
+`scripts/okinawan_proof.py --references <reference-directory>` builds a local
+comparison page in `build/okinawan`. It accepts `FK-Okinawa-reference.ttf`,
+`nishiki-teki.ttf`, `mgenkanaplus.woff2`, `Xim-Sans-Handwritten.ttf` and the
+published FROkinawanMoji specimen `frokinawa-sample.jpg`. Reference files stay
+in the ignored study output and are excluded from the release build. The font
+size control and reference selector apply to all 35 forms.
 
 ## References
 

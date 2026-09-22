@@ -18,7 +18,7 @@ def check_iteration(path, font):
     assert all(cmap[cp] == name for cp, name in old_cmap.items())
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
-    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+7
+    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+9
     for name in old_order:
         assert before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf']), name
         for table in ('hmtx', 'vmtx'):
@@ -26,20 +26,20 @@ def check_iteration(path, font):
     # Appending symbols must leave every previous layout rule and IVS intact.
     for table in ('GPOS', 'BASE'):
         assert font[table].compile(font) == before[table].compile(before), table
-    # Okinawan voicing appends exactly one ccmp lookup. Removing only that
-    # addition must recover the released table byte for byte.
+    # Okinawan voicing appends a composition lookup and a lookup for Noto's
+    # precomposed YI/YE glyphs. Removing them recovers the released table.
     gsub = copy.deepcopy(font['GSUB'])
     table = gsub.table
     old_count = before['GSUB'].table.LookupList.LookupCount
-    assert table.LookupList.LookupCount == old_count + 1
-    table.LookupList.Lookup.pop()
+    assert table.LookupList.LookupCount == old_count + 2
+    table.LookupList.Lookup = table.LookupList.Lookup[:old_count]
     table.LookupList.LookupCount = old_count
     for record in table.FeatureList.FeatureRecord:
         indices = record.Feature.LookupListIndex
-        if old_count in indices:
+        if any(i >= old_count for i in indices):
             assert record.FeatureTag == 'ccmp'
-            indices.remove(old_count)
-            record.Feature.LookupCount = len(indices)
+            record.Feature.LookupListIndex = [i for i in indices if i < old_count]
+            record.Feature.LookupCount = len(record.Feature.LookupListIndex)
     assert gsub.compile(font) == before['GSUB'].compile(before), 'previous GSUB rules'
     assert [t.uvsDict for t in font['cmap'].tables if t.format == 14] == [
         t.uvsDict for t in before['cmap'].tables if t.format == 14]

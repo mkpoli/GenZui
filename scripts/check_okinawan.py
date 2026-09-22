@@ -24,6 +24,7 @@ def check_okinawan(font, engine, web_engine, shape, boxes):
                     box = boxes(font, expected)[0]
                     assert 0 <= box[0] < box[2] <= 500 and 350 < box[1] < box[3] <= 880, box
             else:
+                assert len(expected) == 1, (entry['id'], expected)
                 assert sum(g[1] for g in expected) == (1000 if direction == 'ltr' else 0)
                 assert sum(g[2] for g in expected) == (-1000 if direction == 'ttb' else 0)
                 if int(entry['output'][0], 16) in PUA:
