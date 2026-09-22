@@ -28,22 +28,30 @@
     .mode button[data-mode=serif]{font-family:GenZui,serif}.mode button[data-mode=sans]{font-family:GenZuiSans,sans-serif}
     .preview-bar .range-control{flex:1;min-width:120px;max-width:260px}
     .preview-bar .hint{margin-left:auto;font-size:11px;color:var(--muted)}
-    .stage{position:relative;padding:38px 42px;min-height:280px;font-size:var(--size,52px);line-height:1.75}
-    .layer{position:absolute;inset:0;padding:inherit;margin:0;min-height:100%;white-space:pre-wrap;overflow-wrap:anywhere;outline:none;transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1);color:var(--ink)}
-    .layer.serif{position:relative;padding:0;font-family:GenZui,serif;opacity:var(--serif);transform:translateY(calc((1 - var(--serif)) * 6px))}
+    .stage{position:relative;isolation:isolate;min-height:280px;font-size:var(--size,52px);line-height:1.75}
+    .layer{position:absolute;inset:0;padding:38px 42px;margin:0;min-height:100%;white-space:pre-wrap;overflow-wrap:anywhere;outline:none;transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1);color:var(--ink)}
+    .layer.serif{position:relative;font-family:GenZui,serif;opacity:var(--serif);transform:translateY(calc((1 - var(--serif)) * 6px))}
     .layer.sans{font-family:GenZuiSans,sans-serif;opacity:var(--sans);transform:translateY(calc((1 - var(--sans)) * 6px))}
-    .layer[aria-hidden=true]{pointer-events:none}
+    .layer[contenteditable=false]{pointer-events:none;user-select:none}
     .preview[data-mode=serif]{--serif:1;--sans:0}.preview[data-mode=sans]{--serif:0;--sans:1}
     .preview[data-mode=compare]{--serif:1;--sans:1}
     .preview[data-mode=compare] .layer.sans{clip-path:inset(0 0 0 var(--split,50%));}
     .preview[data-mode=compare] .layer.serif{clip-path:inset(0 calc(100% - var(--split,50%)) 0 0)}
     .divider{position:absolute;top:0;bottom:0;left:var(--split,50%);width:0;display:none;pointer-events:none}
     .divider::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:var(--green)}
-    .divider span{position:absolute;top:14px;right:6px;padding:3px 7px;border-radius:999px;background:var(--green);color:white;font:600 9px/1.4 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:1.2px;white-space:nowrap}
-    .divider span+span{top:auto;bottom:14px;right:auto;left:6px}
+    .divider span{position:absolute;top:8px;right:10px;padding:3px 7px;border-radius:999px;background:var(--green);color:white;font:600 9px/1.4 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:1.2px;white-space:nowrap}
+    .divider span+span{top:auto;bottom:8px;right:auto;left:10px}
     .preview[data-mode=compare] .divider{display:block}
-    .split{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;display:none;-webkit-appearance:none;appearance:none}
-    .preview[data-mode=compare] .split{display:block}
+    .split[type=range]{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;background:none;cursor:ew-resize;display:none;-webkit-appearance:none;appearance:none;pointer-events:none}
+    .preview[data-mode=compare] .split[type=range]{display:block}
+    /* Only the handle takes the pointer, so the text underneath stays editable. */
+    .split[type=range]:focus{outline:none}
+    .split::-webkit-slider-runnable-track{background:transparent;border:0}
+    .split::-moz-range-track{background:transparent;border:0}
+    .split::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;cursor:ew-resize;width:16px;height:46px;border-radius:8px;background:var(--green);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+    .split::-moz-range-thumb{pointer-events:auto;cursor:ew-resize;width:16px;height:46px;border-radius:8px;background:var(--green);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+    .split:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--green)}
+    .split:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--green)}
     .preview-foot{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:14px 22px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
     .preview-foot button{border:0;background:none;font-size:11px;padding:4px 0;white-space:nowrap}
     .preview-foot .samples{display:flex;gap:14px;flex-wrap:wrap}
@@ -61,7 +69,9 @@
     .family-card .card-actions .primary-button{flex:1;min-width:190px}
     .family-card .card-links{display:flex;gap:16px;flex-wrap:wrap;font-size:11px}
     .family-card .card-links a{border-bottom:1px solid var(--line)}
-    .both{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-top:18px;padding:18px 24px;border:1px solid var(--line);background:#f6f8f3;font-size:12px;color:var(--muted)}
+    .both{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;margin-top:18px;padding:18px 24px;border:1px solid var(--line);background:#f6f8f3;font-size:12px;color:var(--muted)}
+    .both #download-note{flex-basis:100%;margin:0;font-size:11px;color:var(--green)}
+    .both #download-note:empty{display:none}
     .both button{border:1px solid var(--ink);background:none;padding:10px 18px;font-size:13px;display:flex;gap:18px;align-items:center;transition:background .15s,color .15s}
     .both button:hover{background:var(--ink);color:white}
     @media(max-width:1120px){.stage{padding:30px 28px}}
@@ -92,9 +102,9 @@
         <span class="hint" id="hint">Type your own text. Switch families to see it change.</span>
       </div>
       <div class="stage" id="stage">
-        <p class="layer serif" id="layer-serif" lang="ja" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Preview text">春はあけぼの。やうやう白くなりゆく山ぎは
+        <p class="layer serif" id="layer-serif" lang="ja" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Preview text">春はあけぼの。やうやう白くなりゆく山ぎは
 𛀂𛀆𛀋 𛄣𛄤𛄥 𛄧𛄨 チ̅ァム𚿵</p>
-        <p class="layer sans" id="layer-sans" lang="ja" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Preview text" aria-hidden="true">春はあけぼの。やうやう白くなりゆく山ぎは
+        <p class="layer sans" id="layer-sans" lang="ja" contenteditable="false" spellcheck="false" aria-multiline="true" aria-label="Preview text" aria-hidden="true">春はあけぼの。やうやう白くなりゆく山ぎは
 𛀂𛀆𛀋 𛄣𛄤𛄥 𛄧𛄨 チ̅ァム𚿵</p>
         <div class="divider" aria-hidden="true"><span>SERIF</span><span>SANS</span></div>
         <input class="split" id="split" type="range" min="0" max="100" value="50" aria-label="Compare position">
@@ -117,10 +127,11 @@
           <div class="card-links"><a href="downloads/GenZuiSans-Regular-{{SANS_VERSION}}.zip" download>Complete package</a><a href="downloads/GenZuiSans-Regular.woff2" download>WOFF2</a><a href="sans.html">Specimen & characters</a></div>
         </article>
       </div>
-      <div class="both"><span>Both families, SIL Open Font License 1.1 · free for any use · <a href="downloads/OFL.txt">licence</a> · <a href="downloads/NOTICE.txt">Serif credits</a> · <a href="downloads/GenZuiSans-NOTICE.txt">Sans credits</a></span><button type="button" id="download-both">Download both TTFs <span aria-hidden="true">↓↓</span></button></div>
+      <div class="both"><span>Both families, SIL Open Font License 1.1 · free for any use · <a href="downloads/OFL.txt">licence</a> · <a href="downloads/NOTICE.txt">Serif credits</a> · <a href="downloads/GenZuiSans-NOTICE.txt">Sans credits</a></span><button type="button" id="download-both">Download both TTFs <span aria-hidden="true">↓↓</span></button><p id="download-note" role="status"></p></div>
     </section>
   </main>
 
+  <noscript><p class="no-script">Enable JavaScript for the preview. The downloads below work without it.</p></noscript>
   <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="serif.html">GenZui Serif</a><a href="sans.html">GenZui Sans</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="#top">Back to top ↑</a></div></footer>
   <script>
     (() => {
@@ -139,30 +150,40 @@
       function sync(from) {
         if (syncing) return; syncing = true;
         const other = from === layers.serif ? layers.sans : layers.serif;
-        if (other.textContent !== from.textContent) other.textContent = from.textContent;
+        if (other.innerText !== from.innerText) other.textContent = from.innerText;
         syncing = false;
       }
       for (const layer of Object.values(layers)) layer.addEventListener('input', () => sync(layer));
       function setMode(mode) {
         preview.dataset.mode = mode;
         $$('.mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
-        layers.serif.setAttribute('aria-hidden', String(mode === 'sans'));
-        layers.sans.setAttribute('aria-hidden', String(mode === 'serif'));
-        layers.serif.contentEditable = String(mode !== 'sans'); layers.sans.contentEditable = String(mode === 'sans');
+        // One editable textbox at a time. Compare shows each family through a
+        // clip, where only part of a layer could be clicked, so it reads only.
+        const editable = mode === 'compare' ? null : mode;
+        for (const [name, layer] of Object.entries(layers)) {
+          layer.contentEditable = name === editable ? 'plaintext-only' : 'false';
+          layer.setAttribute('aria-hidden', String(mode === 'compare' ? name === 'sans' : name !== mode));
+          if (name === editable) layer.setAttribute('role', 'textbox'); else layer.removeAttribute('role');
+        }
+        $('#split').disabled = mode !== 'compare';
         $$('.family-card').forEach(c => c.classList.toggle('is-active', mode === 'compare' || c.dataset.family === mode));
-        $('#hint').textContent = mode === 'compare' ? 'Drag across the text to compare the two families.' : 'Type your own text. Switch families to see it change.';
+        $('#hint').textContent = mode === 'compare' ? 'Drag the handle, or use its arrow keys, to compare. Switch to one family to edit the text.' : 'Type your own text. Switch families to see it change.';
       }
       $$('.mode button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-      $$('.family-card').forEach(c => c.addEventListener('mouseenter', () => { if (preview.dataset.mode !== 'compare') setMode(c.dataset.family); }));
+      // Hovering or focusing a card previews that family, except while comparing.
+      const peek = c => { if (preview.dataset.mode !== 'compare' && !c.contains(document.activeElement)) setMode(c.dataset.family); };
+      $$('.family-card').forEach(c => { c.addEventListener('mouseenter', () => peek(c)); c.addEventListener('focusin', () => peek(c)); });
       $('#split').addEventListener('input', e => stage.style.setProperty('--split', e.target.value + '%'));
       $('#size').addEventListener('input', e => { stage.style.setProperty('--size', e.target.value + 'px'); $('#size-value').textContent = e.target.value + ' px'; });
-      $$('[data-sample]').forEach(b => b.addEventListener('click', () => { layers.serif.textContent = layers.sans.textContent = samples[b.dataset.sample]; }));
-      $('#reset').addEventListener('click', () => { layers.serif.textContent = layers.sans.textContent = samples.reading; $('#size').value = 52; stage.style.setProperty('--size', '52px'); $('#size-value').textContent = '52 px'; $('#split').value = 50; stage.style.setProperty('--split', '50%'); setMode('serif'); });
+      const setText = text => { layers.serif.textContent = layers.sans.textContent = text; };
+      $$('[data-sample]').forEach(b => b.addEventListener('click', () => setText(samples[b.dataset.sample])));
+      $('#reset').addEventListener('click', () => { setText(samples.reading); $('#size').value = 52; stage.style.setProperty('--size', '52px'); $('#size-value').textContent = '52 px'; $('#split').value = 50; stage.style.setProperty('--split', '50%'); setMode('serif'); });
       $('#download-both').addEventListener('click', () => {
         for (const href of ['downloads/GenZuiSerif-Regular.ttf', 'downloads/GenZuiSans-Regular.ttf']) { const a = document.createElement('a'); a.href = href; a.download = ''; document.body.append(a); a.click(); a.remove(); }
+        $('#download-note').textContent = 'Two downloads started. If only one arrived, your browser asked before the second — allow multiple downloads, or use the buttons above.';
       });
       const mode = new URLSearchParams(location.search).get('mode');
-      if (['serif', 'sans', 'compare'].includes(mode)) setMode(mode);
+      setMode(['serif', 'sans', 'compare'].includes(mode) ? mode : 'serif');
     })();
   </script>
 </body>
