@@ -1,0 +1,30 @@
+【✍️ GenZui Sans 源萃ゴシック 💫】
+
+Built on Noto Sans JP and Noto Sans Hentaigana, with
+
+・all 286 hentaigana
+・every small kana
+・the Unicode 18.0 kana additions
+・every encoded kana ligature
+・the full Ainu katakana set
+・Minnan (Taiwanese) kana tone letters
+
+A free, open font (SIL OFL 1.1) 🚀 The same historical repertoire as GenZui Serif, in a gothic face.
+
+---
+
+🔽 Glyph list and type tester 🔽
+
+https://genzui.mkpo.li/sans
+
+---
+
+⬇️ Font sources ⬇️
+
+https://github.com/mkpoli/GenZui
+
+---
+
+The Mincho family, GenZui Serif, is here. Both share their code points, so text moves between them unchanged.
+
+https://genzui.mkpo.li/

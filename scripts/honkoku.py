@@ -24,7 +24,8 @@ DESCRIPTIONS = {
 }
 
 
-def add_honkoku(font, add, make_glyph, contours, transform):
+def add_honkoku(font, add, make_glyph, contours, transform, source=SOURCE,
+                tally_order=(0, 1, 3, 4, 2)):
     """Append the new characters, keeping all existing glyph IDs and mappings."""
     def part(cp, indices=None):
         return contours(font, cp, indices)
@@ -47,10 +48,10 @@ def add_honkoku(font, add, make_glyph, contours, transform):
             'C585 158 734 280 734 430 C734 570 625 674 470 674 Z')],
         0x31EF: [frame, path('M230 365 H770 V395 H230 Z')],
     }
-    order = (0, 1, 3, 4, 2)  # 正: upper bar, upright, middle bar, left stem, foot.
+    order = tally_order  # 正: upper bar, upright, middle bar, left stem, foot.
     recipes.update({cp: [part(0x6B63, order[:i])]
                     for i, cp in enumerate(TALLIES, 1)})
-    with TTFont(SOURCE) as donor:
+    with TTFont(source) as donor:
         assert donor['head'].unitsPerEm == font['head'].unitsPerEm == 1000
         source_name = donor.getBestCmap()[0x5344]
         pen = RecordingPen()

@@ -19,6 +19,7 @@ from refinement_proof import build_comparison
 from browser_setup import build as build_browser_setup
 from minnan_proof import build_study
 from design_gallery import build_gallery
+from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
 OUT = ROOT / 'build/site'
 
@@ -118,6 +119,7 @@ def build():
         '{{JS}}': (ROOT/'site/main.js').read_text(),
         '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),
         '{{VERSION}}': html.escape(VERSION),
+        '{{SANS_VERSION}}': html.escape(sans_checked()[0]),
         '{{FONT_SIZE}}': f'{(FONT_OUT/(STEM+".ttf")).stat().st_size/1048576:.1f}',
         '{{ZIP_SIZE}}': f'{package.stat().st_size/1048576:.1f}',
         '{{WEBFONT_SIZE}}': f'{(FONT_OUT/(STEM+".woff2")).stat().st_size/1048576:.1f}',
@@ -131,12 +133,20 @@ def build():
     (OUT/'refinements.html').write_text(build_comparison())
     (OUT/'minnan.html').write_text(build_study())
     (OUT/'gallery.html').write_text(build_gallery())
+    (OUT/'sans.html').write_text(build_sans_page())
     shutil.copytree(build_browser_setup(), OUT/'browser', dirs_exist_ok=True)
     downloads = OUT/'downloads'; downloads.mkdir(exist_ok=True)
     for old in downloads.glob(STEM+'-*.zip'):
         if old.name != package.name:
             old.unlink()
     shutil.copyfile(package, downloads/package.name)
+    sans_version, _, sans_package = sans_checked()
+    for old in downloads.glob('GenZuiSans-Regular-*.zip'):
+        if old.name != sans_package.name:
+            old.unlink()
+    shutil.copyfile(sans_package, downloads/sans_package.name)
+    for source, name in SANS_DOWNLOADS.items():
+        shutil.copyfile(SANS_OUT/source, downloads/name)
     for name in (STEM+'.ttf', STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
                  'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
                  'FRB-OFL.txt', 'FRB-README.md',
@@ -145,6 +155,7 @@ def build():
     (OUT/'README.txt').write_text(
         'GenZui Serif specimen site\n\nOpen index.html in a current browser.\n'
         'The page embeds the font and its full character inventory and works offline.\n'
+        'sans.html is the GenZui Sans specimen.\n'
         'Keep the downloads folder beside index.html for the download links.\n'
         'Only deliberate source links navigate to external websites.\n'
         'Font, Unicode data and script licences are included in downloads.\n'

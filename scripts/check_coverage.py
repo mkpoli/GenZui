@@ -12,7 +12,7 @@ KANA_BLOCKS = ('Hiragana', 'Katakana', 'Katakana Phonetic Extensions',
                'Small Kana Extension')
 
 
-def check_coverage(path):
+def check_coverage(path, report_path=None):
     """Require every assigned kana-script character and record additional scope."""
     manifest = verify()
     assigned = set(properties('DerivedAge.txt'))
@@ -55,8 +55,8 @@ def check_coverage(path):
     missing = {label: result['missing'] for label, result in coverage.items() if result['missing']}
     assert not missing, missing
     assert len(all_points) == 763, 'Review the pinned Unicode coverage scope if it changes.'
-    (ROOT/'research'/f'kana-coverage-{version}.json').write_text(
-        json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+    report_path = report_path or ROOT/'research'/f'kana-coverage-{version}.json'
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
     return report
 
 

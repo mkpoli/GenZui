@@ -1,0 +1,32 @@
+{
+  "files": [
+    {
+      "filename": "hentaigana.zip",
+      "url": "https://codeload.github.com/notofonts/hentaigana/zip/3aa4d30ee04254d3d0a69c500de7fda494e3b302",
+      "sha256": "649438edf7253a56ccd10218d95103aea3fa9e154729f27fb5cdd084ae270a2c",
+      "size": 104504313,
+      "kind": "zip"
+    },
+    {
+      "filename": "genseki.tar.xz",
+      "url": "https://github.com/MihailJP/GenSekiHentaiganaGothic/releases/download/v1.201/GenSekiHentaiganaGothic-1.201.tar.xz",
+      "sha256": "9879888197f472ffd8d8e553d35d581f7f8a23751830f374b4684e0c97ff75c2",
+      "size": 287740,
+      "kind": "tar.xz"
+    },
+    {
+      "filename": "NotoSansCJKjp-Regular.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf",
+      "sha256": "68a3fc98800b2a27b371f2fb79991daf3633bd89309d4ffaa6946fd587f375b5",
+      "size": 16467736,
+      "kind": "file"
+    },
+    {
+      "filename": "NotoSansCJK-OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/LICENSE",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "size": 4301,
+      "kind": "file"
+    }
+  ]
+}

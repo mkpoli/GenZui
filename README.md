@@ -16,6 +16,12 @@ the keyboard and [shared registry](data/okinawan/mappings.json).
 [Download TTF](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
+**GenZui Sans / 源萃ゴシック** is the gothic companion, built on Noto Sans JP
+with the same historical repertoire. Version **0.100** contains **17,070 encoded
+characters**. [Try GenZui Sans](https://genzui.mkpo.li/sans) ·
+[Download TTF](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) ·
+[Build notes](research/genzui-sans.md)
+
 ## Download and use
 
 - **Desktop:** [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf).
@@ -97,6 +103,10 @@ derivative with historical katakana and Ainu kana.
 
 ## Build the font
 
+GenZui Sans has a separate [build guide](research/genzui-sans.md); it uses
+Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana Gothic, and its
+outputs go to `build/sans/`.
+
 Python 3.12 is supported. Source fonts and Unicode data are pinned by URL and
 SHA-256 in `sources/manifest.json`; they are downloaded by `sources.py`.
 
@@ -134,7 +144,9 @@ bun run release:build
 .venv/bin/python scripts/check_release.py
 ```
 
-The public site is generated in `build/release/`. Edit `site/`, `templates/` and
+The public site is generated in `build/release/`. It also needs the checked
+Sans package (`dist/GenZuiSans-Regular-0.100.zip` with its checks in `build/sans/`),
+which supplies the `/sans` page and its downloads. Edit `site/`, `templates/` and
 `scripts/release_site.py`. `build/site/` contains the offline development specimen
 with glyph comparisons; the public gallery shows the released forms.
 [Deployment notes](release/README.md) describe the Cloudflare configuration.

@@ -11,6 +11,7 @@ from PIL import Image
 from release_site import OUT, URL
 from serif import VERSION, STEM
 from okinawan import PUA as OKINAWAN_PUA, DATA as OKINAWAN_DATA
+from sans_site import STEM as SANS_STEM, checked as sans_checked
 from sources import ROOT
 
 
@@ -47,13 +48,15 @@ def check():
             elif not target.is_file() and not target.suffix:target=target.with_suffix('.html')
             assert target.is_file(),(name,link)
             count+=1
-    for route in ('index.html','gallery.html','minnan.html'):
+    for route in ('index.html','gallery.html','minnan.html','sans.html'):
         text=(OUT/route).read_text()
         assert 'name="twitter:card" content="summary_large_image"' in text
-        assert f'{URL}/media/genzui-social.png' in text
+        image='genzui-sans-social.png' if route=='sans.html' else 'genzui-social.png'
+        assert f'{URL}/media/{image}' in text
         assert 'data:font/' not in text
     home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
+    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans"' in home and 'GenZui Sans (源萃ゴシック)' in home
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review
@@ -74,6 +77,26 @@ def check():
         assert json.loads((OUT/'downloads/kana-coverage.json').read_text())==coverage
     assert Image.open(OUT/'media/genzui-social.png').size==(1200,630)
     assert Image.open(OUT/'media/genzui-social-2x.png').size==(2400,1260)
+    assert Image.open(OUT/'media/genzui-sans-social.png').size==(1200,630)
+    assert Image.open(OUT/'media/genzui-sans-social-2x.png').size==(2400,1260)
+    sans_version,sans_checks,_=sans_checked()
+    assert manifest['sans_version']==sans_version and manifest['sans_font_sha256']==sans_checks['ttf_sha256']
+    sans=(OUT/'sans.html').read_text()
+    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' in sans and f'v{VERSION}/{STEM}.woff2' in sans
+    assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
+    assert 'href="sans"' in home and 'GenZui Sans' in home
+    for suffix in ('ttf','woff2'):
+        for folder in ('downloads','sans-v'+sans_version):
+            actual=hashlib.sha256((OUT/folder/(SANS_STEM+'.'+suffix)).read_bytes()).hexdigest()
+            assert actual==sans_checks[suffix+'_sha256']
+    with ZipFile(OUT/'downloads'/f'{SANS_STEM}-{sans_version}.zip') as z:
+        assert z.testzip() is None
+        assert hashlib.sha256(z.read(SANS_STEM+'.ttf')).hexdigest()==sans_checks['ttf_sha256']
+        assert {'OFL.txt','NOTICE.txt','GenSeki-OFL.txt','NotoSansHentaigana-OFL.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
+        assert json.loads(z.read('kana-coverage.json'))['coverage']['Script plus Script_Extensions']=={'total':763,'covered':763,'missing':[]}
+        assert json.loads((OUT/'downloads/GenZuiSans-kana-coverage.json').read_text())==json.loads(z.read('kana-coverage.json'))
+    assert (OUT/'genzui-sans.css').read_text()==f"@import url('/sans-v{sans_version}/genzui-sans.css');\n"
+    assert '/sans-v*' in (OUT/'_headers').read_text() and f'{URL}/sans</loc>' in (OUT/'sitemap.xml').read_text()
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
     assert data['total']==17064+len(OKINAWAN_PUA) and len(data['characters'])==17064+len(OKINAWAN_PUA)
     assert data['historical']==329
@@ -87,7 +110,8 @@ def check():
     assert {c['cp'] for c in data['characters'] if c['group']=='okinawan'} == set(OKINAWAN_PUA)
     assert json.loads((OUT/'downloads/okinawan-mappings.json').read_text()) == OKINAWAN_DATA
     assert 'id="okinawan-source"' in home and 'id="okinawan-output"' in home
-    report={'version':VERSION,'font_sha256':checks['ttf_sha256'],'local_links_checked':count,
+    report={'version':VERSION,'font_sha256':checks['ttf_sha256'],
+            'sans_version':sans_version,'sans_font_sha256':sans_checks['ttf_sha256'],'local_links_checked':count,
             'public_gallery_forms':21,'release_files_checked':len(manifest['files']),
             'inventory_collections':{name:len(points) for name,points in groups.items()},
             'extended_kana_characters':data['historical'],

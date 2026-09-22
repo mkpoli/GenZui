@@ -4,7 +4,7 @@
     if (!(element instanceof HTMLElement) || !element.closest('.face')) return;
     const root = element.matches('.face');
     if (!root && !historical.test(element.textContent)) return;
-    const family = root ? 'GenZui, serif' : 'inherit';
+    const family = root ? `GenZui, ${document.body.dataset.fallback || 'serif'}` : 'inherit';
     if (element.style.getPropertyValue('font-family') !== family ||
         element.style.getPropertyPriority('font-family') !== 'important') {
       element.style.setProperty('font-family', family, 'important');
