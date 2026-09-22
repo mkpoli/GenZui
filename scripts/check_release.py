@@ -56,6 +56,7 @@ def check():
         assert 'data:font/' not in text
     home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
+    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans"' in home and 'GenZui Sans (源萃ゴシック)' in home
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review

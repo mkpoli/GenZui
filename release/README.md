@@ -52,7 +52,9 @@ branch is `main`; deploy with `bun run deploy` after committing the release.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.114/genzui.css`) and a current alias (`/genzui.css`).
 
-The release image uses the distributed font's glyphs. Its text alternative is:
-“源萃明朝 / GenZui Serif. Six historical kana: KOTO, TOKI, TOMO, TOTE,
-alternate NE and alternate WI. 17,090 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP,
-Noto Serif Hentaigana and FRB Taiwanese Kana. genzui.mkpo.li.”
+The home page's share image shows both families from the distributed fonts'
+glyphs. Its text alternative is: “源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui
+Sans 源萃ゴシック. KOTO, TOKI and TOMO in both families. 17,090 and 17,070
+characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP, Noto Sans JP
+and Noto Hentaigana. genzui.mkpo.li.” The Sans page has its own card,
+described under GenZui Sans below.
