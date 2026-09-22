@@ -6,11 +6,14 @@ import json
 import re
 
 import uharfbuzz as hb
+from fontTools.pens.areaPen import AreaPen
+from fontTools.pens.perimeterPen import PerimeterPen
 from fontTools.ttLib import TTFont
+from statistics import median
 
 from sans import FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance
 from sans_forms import REFITS
-from sans_sources import DONOR, GENSEKI, LIGHT
+from sans_sources import DONOR, GENSEKI, TEXT
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from check_coverage import check_coverage
@@ -38,6 +41,17 @@ def shape(font, text, direction='ltr', features=None, script=None, language='ja'
     hb.shape(font, buffer, features)
     return [(info.codepoint, p.x_advance, p.y_advance, p.x_offset, p.y_offset)
             for info, p in zip(buffer.glyph_infos, buffer.glyph_positions)]
+
+
+def stem(font, points):
+    """Median stroke width estimate: twice the filled area over the perimeter."""
+    glyphs, cmap, widths = font.getGlyphSet(), font.getBestCmap(), []
+    for cp in points:
+        area, perimeter = AreaPen(glyphs), PerimeterPen(glyphs)
+        glyphs[cmap[cp]].draw(area)
+        glyphs[cmap[cp]].draw(perimeter)
+        widths.append(2*abs(area.value)/perimeter.value)
+    return round(median(widths), 1)
 
 
 def boxes(font, shaped):
@@ -100,17 +114,17 @@ def check():
                 assert actual == shape(web_engine, text, direction, features)
                 base_cases += 1
 
-    donor, light = TTFont(DONOR), TTFont(LIGHT)
+    donor, text_instance = TTFont(DONOR), TTFont(TEXT)
     genseki = TTFont(GENSEKI/'GenSekiHentaiganaGothic.ttf')
     donor_cmap, gen_cmap = donor.getBestCmap(), genseki.getBestCmap()
-    assert donor['OS/2'].usWeightClass == 500 and light['OS/2'].usWeightClass == 400
-    retained = {'noto_regular': 0, 'noto_demilight': 0, 'genseki': 0, 'genseki_refit': 0}
+    assert donor['OS/2'].usWeightClass == 500 and text_instance['OS/2'].usWeightClass == 400
+    retained = {'noto_regular': 0, 'noto_text': 0, 'genseki': 0, 'genseki_refit': 0}
     mark_cases = 0
     for cp in sorted(targets - set(base_cmap)):
         name = cmap[cp]
         g = font['glyf'][name]
         assert g.numberOfContours != 0, hex(cp)
-        source = ((donor if cp in REGULAR_WEIGHT else light) if cp in donor_cmap
+        source = ((donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
                   else genseki if cp in gen_cmap else None)
         if source and cp in REFITS:
             old = gen_cmap[cp]
@@ -127,7 +141,7 @@ def check():
             old = source.getBestCmap()[cp]
             assert g.getCoordinates(font['glyf']) == source['glyf'][old].getCoordinates(source['glyf']), hex(cp)
             assert font['hmtx'][name] == source['hmtx'][old], hex(cp)
-            retained['noto_regular' if source is donor else 'noto_demilight' if source is light else 'genseki'] += 1
+            retained['noto_regular' if source is donor else 'noto_text' if source is text_instance else 'genseki'] += 1
         if cp in (*MINNAN_TONES, *MINNAN_MARKS):
             continue
         for direction in ('ltr', 'ttb'):
@@ -153,7 +167,12 @@ def check():
                     assert actual == shape(engine, text, direction, script=script), (hex(cp), script)
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
-    assert retained == {'noto_regular': 4, 'noto_demilight': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    assert retained == {'noto_regular': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    # The hentaigana's median stem matches the hiragana's within two units.
+    stems = {label: stem(font, cps) for label, cps in (
+        ('hiragana', [ord(c) for c in 'いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす']),
+        ('hentaigana', range(0x1B002, 0x1B11F)))}
+    assert abs(stems['hiragana'] - stems['hentaigana']) <= 2, stems
     # KOTO, TOKI, TOTE and TOMO share a body height; the small archaic YE sits with small kana.
     heights = {cp: font['glyf'][cmap[cp]].yMax - font['glyf'][cmap[cp]].yMin
                for cp in (0x1B123, 0x1B124, 0x1B125, 0x2A708)}
@@ -212,7 +231,7 @@ def check():
         'woff2_sha256': hashlib.sha256((OUT/(STEM+'.woff2')).read_bytes()).hexdigest(),
         'encoded_characters': len(cmap), 'unchanged_jp_characters': len(base_cmap),
         'unchanged_jp_glyphs_and_metrics': len(base.getGlyphOrder()),
-        'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained,
+        'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
         'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in REFITS.items()},
         'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'kana_coverage': coverage['coverage'],
         'woff2_matches_ttf': True,

@@ -43,7 +43,7 @@ def build_page(sans_font, serif_font, webfont_usage=''):
     provenance = json.loads((OUT/'sources.json').read_text())['source_kinds']
     kinds = Counter(value.split(';')[0] for value in provenance.values())
     genzui = sum(count for kind, count in kinds.items() if 'GenZui' in kind or 'squared-katakana' in kind)
-    assert kinds['Noto Sans Hentaigana DemiLight instance'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 21
+    assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 21
     hentaigana = ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)) + ' 𛀀𛄠𛄡𛄢 𛄣𛄤𛄥𛄦𛄧𛄨𛅨'
     page = (ROOT/'templates/sans.html').read_text()
     replacement = {
