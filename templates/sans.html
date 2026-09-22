@@ -11,6 +11,7 @@
     @font-face {font-family:GenZui;src:url({{SANS_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
     @font-face {font-family:GenZuiSerif;src:url({{SERIF_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:swap}
     {{CSS}}
+    {{FAMILY_SWITCH_CSS}}
     .face{font-family:GenZui,sans-serif}
     .serif-face{font-family:GenZuiSerif,serif;font-weight:400;font-synthesis:none}
     .sheet{font-size:44px;line-height:1.85;letter-spacing:.06em;margin:0;overflow-wrap:anywhere;border:1px solid var(--line);background:white;padding:28px 34px}
@@ -30,8 +31,9 @@
   <a class="skip-link" href="#specimen">Skip to the specimen</a>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="GenZui Sans, back to top"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SANS</span></span></a>
+    {{FAMILY_SWITCH}}
     <nav aria-label="Main navigation">
-      <a href="index.html">GenZui Serif</a><a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#sources">Sources</a>
+      <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#sources">Sources</a>
     </nav>
     <a class="header-download" href="downloads/GenZuiSans-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
   </header>

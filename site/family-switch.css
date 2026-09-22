@@ -1,0 +1,12 @@
+.brand{flex:none;white-space:nowrap}
+.family-switch{display:flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:#f1f4ef;flex:none}
+.family-switch a{display:flex;align-items:baseline;gap:9px;padding:7px 15px 8px;border-radius:999px;color:var(--muted);font-size:15px;line-height:1;letter-spacing:0;font-weight:400;font-synthesis:none;transition:background .15s,color .15s}
+.family-switch a[data-family=serif] span{font-family:GenZuiLabel-serif,serif}
+.family-switch a[data-family=sans] span{font-family:GenZuiLabel-sans,sans-serif}
+.family-switch a small{font:600 8px/1 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:1.5px;color:var(--muted)}
+.family-switch a:hover{background:white;color:var(--ink)}
+.family-switch a[aria-current=page]{background:var(--green);color:white;cursor:default}
+.family-switch a[aria-current=page] small{color:#cfe3d4}
+.family-switch a:focus-visible{outline-offset:2px}
+@media(max-width:1120px){.family-switch a{padding:6px 12px 7px;font-size:14px}.family-switch a small{display:none}.site-header nav a[href="#okinawan"]{display:none}}
+@media(max-width:760px){.family-switch{order:3;width:100%}.family-switch a{flex:1;justify-content:center;padding:8px 10px;font-size:14px}.site-header{height:auto;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;row-gap:10px}}

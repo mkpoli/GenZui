@@ -148,7 +148,7 @@ def build():
                   'name':'GenZui / 源萃', 'url':URL+'/', 'description':DESCRIPTION,
                   'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
     page = page.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'index.html').write_text(metadata(page, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
+    (OUT/'index.html').write_text(metadata(external_fonts(page), '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
     sans_web = (f'<details class="webfont-usage"><summary>Use GenZui Sans on your website</summary>'
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
@@ -159,7 +159,7 @@ def build():
                        'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,
                        'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
     sans_page = sans_page.replace('</head>', '<script type="application/ld+json">'+json.dumps(sans_structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'sans.html').write_text(metadata(sans_page, '/sans', '源萃ゴシック — GenZui Sans', SANS_DESCRIPTION,
+    (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', '源萃ゴシック — GenZui Sans', SANS_DESCRIPTION,
                                           sans_alt, image='genzui-sans-social.png'))
     for route, content, title, description in [
         ('gallery.html', build_gallery(public=True), 'GenZui Serif — Design gallery',
