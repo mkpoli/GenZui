@@ -123,8 +123,11 @@ def build():
     (OUT/'genzui-sans.css').write_text(f"@import url('/sans-v{sans_version}/genzui-sans.css');\n")
 
     page = (ROOT/'build/site/index.html').read_text()
-    page = re.sub(r'url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)',
-                  f'url(v{VERSION}/{STEM}.woff2)', page)
+    # The main face becomes the versioned webfont; the switch's label subsets
+    # become hashed assets and must be externalized first.
+    page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
+                  rf'\1url(v{VERSION}/{STEM}.woff2)', page)
+    page = external_fonts(page)
     match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
     data = json.loads(match[1])
     for item in data['characters']:
@@ -148,7 +151,7 @@ def build():
                   'name':'GenZui / 源萃', 'url':URL+'/', 'description':DESCRIPTION,
                   'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
     page = page.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'index.html').write_text(metadata(external_fonts(page), '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
+    (OUT/'index.html').write_text(metadata(page, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
     sans_web = (f'<details class="webfont-usage"><summary>Use GenZui Sans on your website</summary>'
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'

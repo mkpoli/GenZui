@@ -9,4 +9,4 @@
 .family-switch a[aria-current=page] small{color:#cfe3d4}
 .family-switch a:focus-visible{outline-offset:2px}
 @media(max-width:1120px){.family-switch a{padding:6px 12px 7px;font-size:14px}.family-switch a small{display:none}.site-header nav a[href="#okinawan"]{display:none}}
-@media(max-width:760px){.family-switch{order:3;width:100%}.family-switch a{flex:1;justify-content:center;padding:8px 10px;font-size:14px}.site-header{height:auto;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;row-gap:10px}}
+@media(max-width:760px){.family-switch{order:3;width:100%}.family-switch a{flex:1;justify-content:center;padding:8px 10px;font-size:14px}.site-header{height:auto;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;row-gap:10px}html{scroll-padding-top:122px}.glyph-detail{top:122px}}

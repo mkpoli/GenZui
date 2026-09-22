@@ -13,7 +13,7 @@ LABELS = {'serif': ('源萃明朝', 'SERIF', 'index.html', ROOT/'build/serif/Gen
 
 def label_face(path, text):
     """A few-kilobyte subset so each label can be set in its own family."""
-    font = TTFont(path)
+    font = TTFont(path, recalcTimestamp=False)
     font.flavor = None
     options = subset.Options(flavor='woff2', hinting=False, layout_features=[], name_IDs=[0, 1, 2, 3, 4, 5, 6, 13, 14])
     subsetter = subset.Subsetter(options)
