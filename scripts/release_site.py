@@ -22,6 +22,7 @@ from sources import ROOT
 OUT = ROOT/'build/release'
 URL = 'https://genzui.mkpo.li'
 DESCRIPTION = 'GenZui / 源萃: GenZui Serif (源萃明朝) and GenZui Sans (源萃ゴシック), Noto derivatives with 286 hentaigana, historical kana, Unicode 18 kana additions, Minnan tone letters and an Okinawan input tool.'
+SERIF_DESCRIPTION = 'GenZui Serif / 源萃明朝: a Noto Serif JP derivative with 286 hentaigana, historical kana, Unicode 18 kana additions, Minnan tone letters and an Okinawan input tool.'
 SITE_NAME = 'GenZui / 源萃 — Serif & Sans'
 SANS_DESCRIPTION = 'GenZui Sans / 源萃ゴシック: a Noto Sans JP derivative with 286 hentaigana, historical kana, Unicode 18 kana additions and Minnan tone letters.'
 
@@ -29,7 +30,7 @@ SANS_DESCRIPTION = 'GenZui Sans / 源萃ゴシック: a Noto Sans JP derivative 
 def metadata(page, route, title, description, image_alt, image='genzui-social.png', site_name=SITE_NAME):
     page = re.sub(r'<meta name="description"[^>]*>', '', page)
     route = route.removesuffix('.html')
-    for name in ('gallery', 'minnan', 'sans'):
+    for name in ('gallery', 'minnan', 'sans', 'serif'):
         page = page.replace(f'href="{name}.html', f'href="{name}')
     page = page.replace('href="index.html', 'href="./')
     tags = [f'<link rel="canonical" href="{URL}{route}">',
@@ -122,7 +123,7 @@ def build():
     (OUT/'genzui.css').write_text(f"@import url('/v{VERSION}/genzui.css');\n")
     (OUT/'genzui-sans.css').write_text(f"@import url('/sans-v{sans_version}/genzui-sans.css');\n")
 
-    page = (ROOT/'build/site/index.html').read_text()
+    page = (ROOT/'build/site/serif.html').read_text()
     # The main face becomes the versioned webfont; the switch's label subsets
     # become hashed assets and must be externalized first.
     page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
@@ -151,7 +152,13 @@ def build():
                   'name':'GenZui / 源萃', 'url':URL+'/', 'description':DESCRIPTION,
                   'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
     page = page.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'index.html').write_text(metadata(page, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
+    (OUT/'serif.html').write_text(metadata(page, '/serif', '源萃明朝 — GenZui Serif', SERIF_DESCRIPTION, home_alt))
+    landing = (ROOT/'build/site/index.html').read_text()
+    landing = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)", rf'\1url(v{VERSION}/{STEM}.woff2)', landing)
+    landing = re.sub(r"(font-family:GenZuiSans;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)", rf'\1url(sans-v{sans_version}/{SANS_STEM}.woff2)', landing)
+    landing = external_fonts(landing)
+    landing = landing.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
+    (OUT/'index.html').write_text(metadata(landing, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
     sans_web = (f'<details class="webfont-usage"><summary>Use GenZui Sans on your website</summary>'
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
@@ -175,18 +182,18 @@ def build():
     (OUT/'favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect width="1000" height="1000" rx="170" fill="#214e3c"/><path fill="#f7f8f2" transform="translate(80 804) scale(.84 -.84)" d="'+pen.getCommands()+'"/></svg>')
     (OUT/'404.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Page not found — GenZui</title><style>body{max-width:36em;margin:15vh auto;padding:24px;background:#f7f8f2;color:#25382e;font:18px/1.6 system-ui}a{color:#214e3c}</style><h1>Page not found.</h1><p><a href="/">Return to GenZui</a></p></html>')
     (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+URL+'/sitemap.xml\n')
-    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/sans', '/gallery', '/minnan'])+'</urlset>')
-    (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
+    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/serif', '/sans', '/gallery', '/minnan'])+'</urlset>')
+    (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/serif\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
     (OUT/'_redirects').write_text('/index.html / 301\n')
     for name in ['announcement-ja', 'announcement-en', 'announcement-sans-ja', 'announcement-sans-en']:
         shutil.copyfile(ROOT/'release'/(name+'.txt'), OUT/(name+'.txt'))
-    for name in ['index.html','sans.html','gallery.html','minnan.html']:
+    for name in ['index.html','serif.html','sans.html','gallery.html','minnan.html']:
         p=OUT/name
         p.write_text(p.read_text().replace('assets/proof-font.js','assets/'+guard_name))
     hashes = {str(p.relative_to(OUT)):hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted(OUT.rglob('*')) if p.is_file()}
     (OUT/'release.json').write_text(json.dumps({'version':VERSION,'font_sha256':checks['ttf_sha256'],'sans_version':sans_version,'sans_font_sha256':sans_checks['ttf_sha256'],'files':hashes},indent=2)+'\n')
-    print(f'Public GenZui {VERSION}: {len(hashes)} assets; {len((OUT/"index.html").read_bytes()):,}-byte home page.')
+    print(f'Public GenZui {VERSION}: {len(hashes)} assets; {len((OUT/"index.html").read_bytes()):,}-byte landing page.')
 
 
 if __name__ == '__main__':build()

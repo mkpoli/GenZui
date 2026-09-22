@@ -48,15 +48,18 @@ def check():
             elif not target.is_file() and not target.suffix:target=target.with_suffix('.html')
             assert target.is_file(),(name,link)
             count+=1
-    for route in ('index.html','gallery.html','minnan.html','sans.html'):
+    for route in ('index.html','serif.html','gallery.html','minnan.html','sans.html'):
         text=(OUT/route).read_text()
         assert 'name="twitter:card" content="summary_large_image"' in text
         image='genzui-sans-social.png' if route=='sans.html' else 'genzui-social.png'
         assert f'{URL}/media/{image}' in text
         assert 'data:font/' not in text
-    home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
+    landing=(OUT/'index.html').read_text();home=(OUT/'serif.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
-    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans"' in home and 'GenZui Sans (源萃ゴシック)' in home
+    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans"' in landing and 'GenZui Sans (源萃ゴシック)' in landing
+    assert 'og:title" content="源萃明朝 — GenZui Serif"' in home and 'rel="canonical" href="https://genzui.mkpo.li/serif"' in home
+    assert 'id="layer-serif"' in landing and 'id="download-both"' in landing and 'href="serif#okinawan"' in landing
+    assert f'{URL}/serif</loc>' in (OUT/'sitemap.xml').read_text() and '/serif\n  Cache-Control' in (OUT/'_headers').read_text()
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review
@@ -84,7 +87,7 @@ def check():
     sans=(OUT/'sans.html').read_text()
     assert f'sans-v{sans_version}/{SANS_STEM}.woff2' in sans and f'v{VERSION}/{STEM}.woff2' in sans
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
-    assert 'href="sans"' in home and 'GenZui Sans' in home
+    assert 'href="sans"' in home and 'GenZui Sans' in home and 'href="serif"' in sans
     # Each switch label loads its own family's subset, never the main webfont.
     for label in ('serif','sans'):
         assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', home), label

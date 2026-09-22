@@ -7,7 +7,7 @@ from fontTools.ttLib import TTFont
 
 from sources import ROOT
 
-LABELS = {'serif': ('源萃明朝', 'SERIF', 'index.html', ROOT/'build/serif/GenZuiSerif-Regular.woff2'),
+LABELS = {'serif': ('源萃明朝', 'SERIF', 'serif.html', ROOT/'build/serif/GenZuiSerif-Regular.woff2'),
           'sans': ('源萃ゴシック', 'SANS', 'sans.html', ROOT/'build/sans/GenZuiSans-Regular.woff2')}
 
 
@@ -32,7 +32,7 @@ def css():
 
 
 def html(current):
-    assert current in LABELS
+    assert current in LABELS or current is None
     items = []
     for key, (text, kind, href, _) in LABELS.items():
         current_attr = ' aria-current="page"' if key == current else ''

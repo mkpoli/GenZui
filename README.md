@@ -5,13 +5,13 @@ GenZui (源萃, げんずい) is a Japanese Mincho font derived from **Noto Seri
 and Unicode 18.0 additions. Version **0.114** contains **17,090 encoded characters**
 in one Regular weight.
 
-Version 0.114 adds an [Okinawan composer](https://genzui.mkpo.li/#okinawan) to the
+Version 0.114 adds an [Okinawan composer](https://genzui.mkpo.li/serif#okinawan) to the
 home page, with Funatsu’s 27 forms and the prefecture’s eight raised katakana.
 The font adds 26 documented PUA positions; voiced forms and YI/YE use combining
 dakuten wherever possible. [Input and mapping notes](research/okinawan.md) explain
 the keyboard and [shared registry](data/okinawan/mappings.json).
 
-[Try the font](https://genzui.mkpo.li/) ·
+[Try the font](https://genzui.mkpo.li/serif) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
 [Download TTF](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)

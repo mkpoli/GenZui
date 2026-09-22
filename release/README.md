@@ -20,7 +20,7 @@ this encoding audit.
 Regular is the available weight. Shared ideographs use Japanese regional forms.
 The font is distributed under SIL OFL 1.1; source notices accompany the download.
 
-The specimen site is https://genzui.mkpo.li/. Related typeface:
+The site is https://genzui.mkpo.li/: a landing page with both families, the Serif page at /serif and the Sans page at /sans. Related typeface:
 [Kureedo](https://kureedo.mkpo.li/), based on Klee One.
 
 ## GenZui Sans 0.101

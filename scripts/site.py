@@ -108,7 +108,7 @@ def build():
             'historical': sum(e['group'] in KANA_GROUPS for e in entries)}
     OUT.mkdir(parents=True, exist_ok=True)
     font_data = base64.b64encode((FONT_OUT/(STEM+'.woff2')).read_bytes()).decode()
-    page = (ROOT/'site/index.html').read_text()
+    page = (ROOT/'site/serif.html').read_text()
     replacement = {
         '{{FONT}}': font_data,
         '{{CHARACTER_COUNT}}': f'{len(entries):,}',
@@ -132,7 +132,24 @@ def build():
         page = page.replace(token, value)
     assert all(token not in page for token in replacement)
     assert '/home/' not in page
-    (OUT/'index.html').write_text(page)
+    (OUT/'serif.html').write_text(page)
+    sans_checks = json.loads((SANS_OUT/'checks.json').read_text())
+    sans_provenance = json.loads((SANS_OUT/'sources.json').read_text())['source_kinds']
+    landing = (ROOT/'site/landing.html').read_text()
+    for token, value in {
+        '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
+        '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
+        '{{CSS}}': replacement['{{CSS}}'], '{{FAMILY_SWITCH_CSS}}': switch_css(), '{{FAMILY_SWITCH}}': switch_html(None),
+        '{{VERSION}}': html.escape(VERSION), '{{SANS_VERSION}}': html.escape(sans_checks['version']),
+        '{{CHARACTER_COUNT}}': replacement['{{CHARACTER_COUNT}}'], '{{CONSTRUCTION_COUNT}}': replacement['{{CONSTRUCTION_COUNT}}'],
+        '{{SANS_CHARACTER_COUNT}}': f"{sans_checks['encoded_characters']:,}",
+        '{{SANS_CONSTRUCTION_COUNT}}': str(sum('GenZui' in v.split(';')[0] or 'squared-katakana' in v for v in sans_provenance.values())),
+        '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'],
+        '{{SANS_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Regular.ttf').stat().st_size/1048576:.1f}",
+    }.items():
+        landing = landing.replace(token, value)
+    assert '{{' not in landing and '/home/' not in landing
+    (OUT/'index.html').write_text(landing)
     (OUT/'refinements.html').write_text(build_comparison())
     (OUT/'minnan.html').write_text(build_study())
     (OUT/'gallery.html').write_text(build_gallery())
@@ -156,9 +173,8 @@ def build():
                  'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt', 'okinawan-mappings.json'):
         shutil.copyfile(FONT_OUT/name, downloads/name)
     (OUT/'README.txt').write_text(
-        'GenZui Serif specimen site\n\nOpen index.html in a current browser.\n'
-        'The page embeds the font and its full character inventory and works offline.\n'
-        'sans.html is the GenZui Sans specimen.\n'
+        'GenZui specimen site\n\nOpen index.html in a current browser.\n'
+        'serif.html and sans.html are the family specimens; each embeds its font and full character inventory and works offline.\n'
         'Keep the downloads folder beside index.html for the download links.\n'
         'Only deliberate source links navigate to external websites.\n'
         'Font, Unicode data and script licences are included in downloads.\n'
