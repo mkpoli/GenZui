@@ -87,9 +87,13 @@
         </div>
         <div class="okinawan-editors">
           <label for="okinawan-source"><span class="control-label">YOUR INPUT</span><textarea id="okinawan-source" class="face" lang="ryu" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="okinawan-help"></textarea></label>
-          <label for="okinawan-output"><span class="control-label">RESULT · READY TO COPY</span><textarea id="okinawan-output" class="face" lang="ryu" spellcheck="false" readonly></textarea></label>
+          <label for="okinawan-output"><span class="control-label">RESULT · READY TO COPY</span><textarea id="okinawan-output" class="face" lang="ryu" spellcheck="false" aria-describedby="okinawan-portability" readonly></textarea></label>
         </div>
-        <div class="type-footer"><button type="button" id="okinawan-clear">Clear input</button><span id="okinawan-copy-status" role="status"></span><button type="button" class="copy-button" id="okinawan-copy">Copy result</button></div>
+        <aside id="okinawan-portability" class="okinawan-portability" aria-label="Copying and sharing">
+          <strong>Copied text may be unreadable elsewhere.</strong>
+          <p>Some letters use Unicode’s <a href="https://en.wikipedia.org/wiki/Private_Use_Areas" target="_blank" rel="noopener noreferrer" aria-label="Private Use Area (PUA), Wikipedia, opens in a new tab">Private Use Area (PUA)</a>. Copied PUA text does not work reliably in other apps, websites or messages: it may appear as boxes or unrelated symbols. You and your recipients need GenZui or a font with matching PUA mappings enabled.</p>
+        </aside>
+        <div class="type-footer"><button type="button" id="okinawan-clear">Clear input</button><span id="okinawan-copy-status" role="status"></span><button type="button" class="copy-button" id="okinawan-copy" aria-describedby="okinawan-portability">Copy result</button></div>
         <p id="okinawan-warning" class="okinawan-warning" role="status"></p>
       </div>
       <div id="okinawan-help" class="okinawan-help">
@@ -99,7 +103,7 @@
         <p>In romaji mode, <code>n'</code> separates a nasal from the next vowel (<code>kan'i</code> → <span lang="ja">かんい</span>); double a consonant for small <span lang="ja">っ</span>, or type <code>xtsu</code>. Use <code>-</code> for <span lang="ja">ー</span>. Uppercase text and punctuation stay as typed. Check the result before copying.</p>
       </div>
       <div id="okinawan-palette" class="okinawan-palette" role="group" aria-label="Okinawan character shortcuts"></div>
-      <p class="small-note">These letters need GenZui or a font with matching private-use mappings. Ordinary kana and combining dakuten use Unicode; the remaining forms use documented PUA conventions. Raised signs are designed for horizontal text. <a href="downloads/okinawan-mappings.json" download>Download the mappings</a>.</p>
+      <p class="small-note">Ordinary kana and combining dakuten use Unicode; the remaining forms use documented PUA conventions. Raised signs are designed for horizontal text. <a href="downloads/okinawan-mappings.json" download>Download the mappings</a>.</p>
       <details class="okinawan-reference"><summary>Encoding & reference charts</summary>
         <p>The palette contains all 27 forms in Funatsu’s chart and all eight raised katakana in the prefectural proposal. Voiced Funatsu forms use a PUA base followed by U+3099. YI and YE use U+3044/U+3048 followed by U+3099. The input tool also converts the older Nishiki-teki PUA equivalents to these sequences.</p>
         <p>Funatsu bases follow Nishiki-teki’s U+F450–U+F46A convention (18 selected positions). Raised katakana follow Xim Sans: U+E532–U+E537, U+E4EF and U+E5AA. These assignments are private agreements. Proposal code points are not used; U+1B168 remains SMALL ARCHAIC YE.</p>
