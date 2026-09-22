@@ -15,7 +15,7 @@ Okinawan forms and historical katakana variants are not part of the Sans family.
 | GenSeki Hentaigana Gothic 1.201 Regular | 21 historical kana, small kana and ligatures |
 | Noto Sans CJK JP Regular | U+5344 卄 |
 | FRB Taiwanese Kana | 13 Minnan tone letters and two combining marks |
-| GenZui | Hooked WU, squared PAATU and the transcription symbols |
+| GenZui | Squared PAATU and the transcription symbols |
 
 Both Noto Sans Hentaigana instances are compiled from the Glyphs package at
 upstream commit `3aa4d30ee04254d3d0a69c500de7fda494e3b302`. The unencoded
@@ -68,7 +68,7 @@ archives and the compiled instances are cached under `build/sans-work/`.
 
 The checks compare every Noto Sans JP outline and metric with the base font,
 exercise Japanese layout in both writing directions, verify historical marks,
-Minnan tone placement and the Hooked WU alternate, check the refits, and
+Minnan tone placement, check the refits, and
 compare TTF with WOFF2. The coverage audit requires all 763 characters in
 Unicode 18's Hiragana/Katakana scripts and script extensions. The browser check
 validates the offline specimen in Chromium and Firefox and records the font

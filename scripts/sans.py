@@ -3,9 +3,7 @@ import copy
 import json
 import shutil
 
-from fontTools.otlLib.builder import buildLookup, buildSingleSubstSubtable
 from fontTools.ttLib import TTFont
-from fontTools.ttLib.tables import otTables
 
 from sources import ROOT
 from serif import add, add_feature, contours, glyph, instance, layout, transform
@@ -13,7 +11,7 @@ from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
 from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from minnan import import_forms, layout as minnan_layout
-from sans_forms import REFITS, hooked_wu, refit
+from sans_forms import REFITS, refit
 from sans_sources import CACHE, CJK, DONOR, GENSEKI, LIGHT, NOTO, prepare
 
 OUT = ROOT / 'build/sans'
@@ -111,15 +109,7 @@ def build():
                        for cp in (*MINNAN_TONES, *MINNAN_MARKS)})
     update_cmap(font, additions)
 
-    alternate = add(font, 'hist.u1B11F.ss01', glyph([hooked_wu()]))
-    add_feature(font, 'GSUB', 'ss01', buildLookup([
-        buildSingleSubstSubtable({additions[0x1B11F]: alternate})]))
-    params = otTables.FeatureParamsStylisticSet()
-    params.Version = 0
-    params.UINameID = font['name'].addName('Hooked WU')
-    next(r.Feature for r in font['GSUB'].table.FeatureList.FeatureRecord
-         if r.FeatureTag == 'ss01').FeatureParams = params
-    layout(font, donor, vertical, historical, [alternate], mark_anchor_x=815)
+    layout(font, donor, vertical, historical, mark_anchor_x=815)
     minnan_layout(font, add, add_feature)
     add_paatu(font, add, glyph, add_feature)
     provenance[f'U+{PAATU:04X}'] = 'Noto Sans JP squared-katakana components'
@@ -191,7 +181,7 @@ def build():
         'https://github.com/notofonts/noto-cjk\n'
         'FRB Taiwanese Kana by Fredrick R. Brennan: Minnan tone letters and combining marks.\n'
         'https://github.com/ctrlcctrlv/FRBTaiwaneseKana\n'
-        'GenZui: Hooked WU, transcription symbols, SQUARE PAATU and layout.\n\n'
+        'GenZui: transcription symbols, SQUARE PAATU and layout.\n\n'
         'Fonts and derived outlines are licensed under SIL OFL 1.1.\n'
         'Original copyright notices are retained in OFL.txt and the font metadata.\n')
     print(f'Built {FAMILY} {VERSION}: {len(font.getBestCmap()):,} encoded characters.', flush=True)

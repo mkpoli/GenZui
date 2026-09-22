@@ -39,8 +39,6 @@ Coverage and features
 Noto Sans JP Regular supplies the Japanese base. Noto Sans Hentaigana supplies
 290 historical forms; GenSeki Hentaigana Gothic supplies 21 further forms.
 
-ss01 selects Hooked WU.
-
 Minnan tone placement supports one to four fullwidth kana in vertical text
 at default spacing. Longer groups need application-level positioning.
 

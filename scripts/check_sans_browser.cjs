@@ -56,8 +56,6 @@ const hashes = Object.fromEntries(['ttf', 'woff2'].map(ext => [ext + '_sha256',
       assert.equal(await page.locator('#sample').evaluate(e => getComputedStyle(e).fontSize), '60px');
       await page.locator('#direction').click();
       assert.equal(await page.locator('#sample').evaluate(e => getComputedStyle(e).writingMode), 'vertical-rl');
-      await page.locator('#hooked').check();
-      assert.match(await page.locator('#sample').evaluate(e => getComputedStyle(e).fontFeatureSettings), /ss01/);
       await page.locator('#direction').click();
       await page.screenshot({ path: path.join(out, engine.name() + '-specimen.png') });
       await page.setViewportSize({ width: 390, height: 844 });

@@ -1,39 +1,7 @@
-"""Sans strokes and outline refits for GenZui Sans."""
+"""Outline refits for GenZui Sans."""
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
-from fontTools.svgLib.path import parse_path
-
-
-def stroke(commands, width=70):
-    """Expand an authored centre line with flat terminals and round joins."""
-    shape = pathops.Path()
-    parse_path(commands, shape.getPen())
-    shape.stroke(width, pathops.LineCap.BUTT_CAP, pathops.LineJoin.ROUND_JOIN, 4)
-    shape.convertConicsToQuads(.1)
-    outline = RecordingPen()
-    shape.draw(outline)
-    return outline
-
-
-def unite(parts):
-    merged = pathops.Path()
-    for part in parts:
-        shape = pathops.Path()
-        part.replay(shape.getPen())
-        merged = pathops.op(merged, shape, pathops.PathOp.UNION)
-    outline = RecordingPen()
-    merged.draw(outline)
-    return outline
-
-
-def hooked_wu():
-    return unite([
-        stroke('M302 744 C259 542 251 303 292 98 L343 223'),
-        stroke('M441 647 Q627 625 849 680', 66),
-        stroke('M416 422 Q634 396 876 455', 66),
-        stroke('M704 745 C739 546 763 353 720 163 Q688 3 604 3 Q567 3 545 63'),
-    ])
 
 
 # Donor outlines whose body sits outside the range of their kana peers. Each

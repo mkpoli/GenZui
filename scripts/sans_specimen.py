@@ -37,15 +37,15 @@ footer{font-size:14px;padding-top:30px;color:#586250}code{font-size:.9em}.small{
 </style><main><header><div class="kicker">Regular · VERSION</div><h1 lang="ja">源萃ゴシック<br>GenZui Sans</h1>
 <p>A Japanese sans-serif for modern text and historical kana, with all 286 hentaigana, the Unicode 18 kana additions and Minnan tone letters.</p>
 <nav class="links"><a href="GenZuiSans-Regular.ttf" download>Download TTF</a><a href="GenZuiSans-Regular.woff2" download>Download WOFF2</a><a href="OFL.txt">SIL Open Font License</a></nav></header>
-<section><h2>Try the font</h2><div class="controls"><label>Size <input id="size" type="range" min="20" max="88" value="44"><output id="size-value">44 px</output></label><button id="direction" type="button" aria-pressed="false">Vertical text</button><label><input id="hooked" type="checkbox">Hooked WU</label></div>
+<section><h2>Try the font</h2><div class="controls"><label>Size <input id="size" type="range" min="20" max="88" value="44"><output id="size-value">44 px</output></label><button id="direction" type="button" aria-pressed="false">Vertical text</button></div>
 <div class="sample" id="sample" contenteditable="true" role="textbox" aria-label="Font specimen text" aria-multiline="true" lang="ja" spellcheck="false">いろはにほへと ちりぬるを
 あいうえお　𛀂𛀆𛀋𛀁𛀔
 𛄟𛄣 𛄤𛄥𛄦 𛄧𛄨𛅨
 日本語の文字と、むかしの仮名。</div>
-<p class="small">Edit the text above. Hooked WU uses <code>ss01</code>.</p></section>
+<p class="small">Edit the text above.</p></section>
 SECTIONS
-<footer><p>Based on Noto Sans JP and Noto Sans Hentaigana, with historical forms from GenSeki Hentaigana Gothic, Minnan signs from FRB Taiwanese Kana, and GenZui drawings. <a href="NOTICE.txt">Source credits</a> · <a href="checks.json">Font checks</a></p></footer></main>
-<script>const sample=document.getElementById('sample');document.getElementById('size').addEventListener('input',e=>{sample.style.setProperty('--size',e.target.value+'px');document.getElementById('size-value').textContent=e.target.value+' px'});document.getElementById('direction').addEventListener('click',e=>{const vertical=sample.classList.toggle('vertical');e.currentTarget.setAttribute('aria-pressed',String(vertical));e.currentTarget.textContent=vertical?'Horizontal text':'Vertical text'});document.getElementById('hooked').addEventListener('change',e=>{sample.style.fontFeatureSettings=e.target.checked?'"ss01" 1':'normal'});</script></html>'''
+<footer><p>Based on Noto Sans JP and Noto Sans Hentaigana, with historical forms from GenSeki Hentaigana Gothic, Minnan signs from FRB Taiwanese Kana, and GenZui transcription symbols. <a href="NOTICE.txt">Source credits</a> · <a href="checks.json">Font checks</a></p></footer></main>
+<script>const sample=document.getElementById('sample');document.getElementById('size').addEventListener('input',e=>{sample.style.setProperty('--size',e.target.value+'px');document.getElementById('size-value').textContent=e.target.value+' px'});document.getElementById('direction').addEventListener('click',e=>{const vertical=sample.classList.toggle('vertical');e.currentTarget.setAttribute('aria-pressed',String(vertical));e.currentTarget.textContent=vertical?'Horizontal text':'Vertical text'})</script></html>'''
     (OUT/'index.html').write_text(source.replace('FONT', webfont).replace('VERSION', VERSION).replace('SECTIONS', sections),
                                   encoding='utf-8')
     (OUT/'genzui-sans.css').write_text(

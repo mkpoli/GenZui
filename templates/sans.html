@@ -13,9 +13,6 @@
     {{CSS}}
     .face{font-family:GenZui,sans-serif}
     .serif-face{font-family:GenZuiSerif,serif;font-weight:400;font-synthesis:none}
-    .hooked-control{display:flex;align-items:center;gap:10px;font-size:11px;white-space:nowrap}
-    .hooked-control input{accent-color:var(--green);margin:0}
-    .hooked{font-feature-settings:"ss01" 1}
     .sheet{font-size:44px;line-height:1.85;letter-spacing:.06em;margin:0;overflow-wrap:anywhere;border:1px solid var(--line);background:white;padding:28px 34px}
     .pairing{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);background:white;margin-top:34px}
     .pairing>div{padding:26px 32px;min-width:0}
@@ -52,10 +49,10 @@
             <div class="hero-download-meta"><span>Regular {{VERSION}} · SIL OFL 1.1</span><a href="#download">All formats & installation <span aria-hidden="true">↗</span></a></div>
           </div>
         </div>
-        <div class="hero-collection" aria-label="GenZui's own drawings in this family">
-          <div class="hero-collection-label"><span>GENZUI DRAWINGS</span><span>作字</span></div>
+        <div class="hero-collection" role="group" aria-label="Historical kana and GenZui drawings">
+          <div class="hero-collection-label"><span>HISTORICAL KANA · DRAWINGS</span><span>字形</span></div>
           <div class="hero-glyphs face" lang="ja">
-            <span class="hooked">𛄟<small>HOOKED WU</small></span><span class="accent-glyph">𛄣<small>KOTO</small></span><span>𛄧<small>NE</small></span>
+            <span>𛄟<small>WU</small></span><span class="accent-glyph">𛄣<small>KOTO</small></span><span>𛄧<small>NE</small></span>
             <span>𛅨<small>SMALL YE</small></span><span>㌬<small>PAATU</small></span><span>𝍵<small>TALLY</small></span>
           </div>
         </div>
@@ -83,7 +80,6 @@
           <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="latin">Latin & numerals</option></select></label>
           <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="type-size">48 px</output></span><input id="type-size" type="range" min="20" max="112" value="48" step="1"></label>
           <label class="range-control spacing-control"><span class="control-label">SPACING <output id="spacing-value" for="type-spacing">0 em</output></span><input id="type-spacing" type="range" min="0" max="20" value="0" step="1"></label>
-          <label class="hooked-control"><input id="hooked-wu" type="checkbox">Hooked WU</label>
           <div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
         </div>
         <div class="type-canvas"><textarea id="type-input" class="face" lang="ja" spellcheck="false" aria-label="Editable GenZui Sans specimen">春はあけぼの。
@@ -91,7 +87,7 @@
 あ𛀂 い𛀆 う𛀋 え𛀁 お𛀕</textarea></div>
         <div class="type-footer"><span id="type-status" role="status">Loading the font…</span><button type="button" id="reset-type">Reset sample <span aria-hidden="true">↺</span></button></div>
       </div>
-      <p class="small-note">Regular, weight 400. Hooked WU applies <code>ss01</code> to 𛄟. Unsupported characters in your text may use a fallback font.</p>
+      <p class="small-note">Regular, weight 400. Unsupported characters in your text may use a fallback font.</p>
     </section>
 
     <section class="unicode-section" id="hentaigana" aria-labelledby="hentaigana-title">
@@ -99,7 +95,7 @@
         <div class="section-label"><span>02 / HENTAIGANA</span><span lang="ja">変体仮名</span></div>
         <div class="section-heading"><h2 id="hentaigana-title">All 286 hentaigana.</h2><p>Noto Sans Hentaigana’s drawings, set at the DemiLight weight so their many-stroked forms sit evenly beside ordinary kana.</p></div>
         <p class="sheet face" lang="ja">{{HENTAIGANA}}</p>
-        <p class="small-note">U+1B001–U+1B11E in code point order, followed by the four archaic kana 𛀀 𛄠 𛄡 𛄢 and the Unicode 18 additions 𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨.</p>
+        <p class="small-note">U+1B001–U+1B11E in code point order, followed by the four archaic kana <span class="face" lang="ja">𛀀 𛄠 𛄡 𛄢</span> and the Unicode 18 additions <span class="face" lang="ja">𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨</span>.</p>
       </div>
     </section>
 
@@ -126,7 +122,7 @@
           <div class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/MihailJP/GenSekiHentaiganaGothic" target="_blank" rel="noopener noreferrer">GenSeki Hentaigana Gothic <span aria-hidden="true">↗</span></a></h3><p>The seven Unicode 18 additions, kana ligatures and small kana. Three outlines are refitted to their kana neighbours.</p></div><strong>21<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">04</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with kana attachment and vertical placement.</p></div><strong>15<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">05</span><div><h3><a href="https://github.com/notofonts/noto-cjk/tree/main/Sans" target="_blank" rel="noopener noreferrer">Noto Sans CJK JP <span aria-hidden="true">↗</span></a></h3><p>卄 (twenty), absent from the JP subset above, comes from the same family’s full CJK font with Japanese default forms.</p></div><strong>1<span>character · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">06</span><div><h3>GenZui drawings</h3><p>㌬ SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components, plus the Hooked WU alternate.</p></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></div>
+          <div class="source-row"><span class="source-number">06</span><div><h3>GenZui drawings</h3><p><span class="face" lang="ja">㌬</span> SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components.</p></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></div>
         </div>
         <div class="scope-notes"><div><h3>Japanese regional forms</h3><p>GenZui Sans retains Noto Sans JP’s character repertoire and Japanese forms of shared ideographs. Other Chinese and Korean coverage is limited to the Japanese base.</p></div><div><h3>Coverage</h3><p>All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/GenZuiSans-kana-coverage.json">Coverage audit</a> · <a href="downloads/GenZuiSans-checks.json">Font checks</a>.</p></div></div>
       </div>
@@ -182,7 +178,6 @@
     typeInput.style.letterSpacing = `${amount}em`;
     $('#spacing-value').textContent = `${amount} em`;
   });
-  $('#hooked-wu').addEventListener('change', event => typeInput.classList.toggle('hooked', event.target.checked));
   function setDirection(direction) {
     typeInput.classList.toggle('is-vertical', direction === 'vertical');
     $$('[data-direction]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.direction === direction)));
@@ -190,8 +185,8 @@
   $$('[data-direction]').forEach(button => button.addEventListener('click', () => setDirection(button.dataset.direction)));
   $('#reset-type').addEventListener('click', () => {
     const size = window.innerWidth <= 520 ? 30 : window.innerWidth <= 760 ? 36 : 48;
-    $('#type-size').value = size; $('#type-spacing').value = 0; $('#hooked-wu').checked = false;
-    typeInput.style.fontSize = `${size}px`; typeInput.style.letterSpacing = '0em'; typeInput.classList.remove('hooked');
+    $('#type-size').value = size; $('#type-spacing').value = 0;
+    typeInput.style.fontSize = `${size}px`; typeInput.style.letterSpacing = '0em';
     $('#size-value').textContent = `${size} px`; $('#spacing-value').textContent = '0 em';
     setDirection('horizontal'); setPreset();
   });

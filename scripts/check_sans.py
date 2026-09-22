@@ -160,11 +160,9 @@ def check():
     assert max(heights.values()) - min(heights.values()) <= 40, heights
     assert font['glyf'][cmap[0x1B127]].yMax >= 725
     assert -60 <= font['glyf'][cmap[0x1B168]].yMin <= -20
+    assert 'ss01' not in {r.FeatureTag for r in font['GSUB'].table.FeatureList.FeatureRecord}
     for direction in ('ltr', 'ttb'):
-        default = shape(engine, '𛄟', direction)
-        hooked = shape(engine, '𛄟', direction, {'ss01': True})
-        assert default != hooked and default[0][1:] == hooked[0][1:]
-        assert hooked == shape(web_engine, '𛄟', direction, {'ss01': True})
+        assert shape(engine, '𛄟', direction) == shape(engine, '𛄟', direction, {'ss01': True})
         for text in ('𛄤\u3099か\u3099', '𛅨\u309aハ\u309a'):
             assert shape(engine, text, direction)[-1:] == shape(base_engine, text[-2:], direction)
 
