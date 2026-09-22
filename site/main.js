@@ -23,6 +23,7 @@
     hentaigana: item => item.group === 'hentaigana',
     unicode18: item => item.group !== 'base' && item.age === '18.0',
     small: item => item.group === 'small-kana',
+    okinawan: item => item.group === 'okinawan',
     minnan: item => ['minnan-tone', 'phonetic-mark'].includes(item.group),
     ligatures: item => item.group !== 'base' && (item.label.includes('DIGRAPH') || item.group === 'cjk-kana-ligature'),
     numerals: item => item.group === 'han-numeral',
@@ -37,7 +38,7 @@
   let matches = [];
 
   function display(item) {
-    if (item.category[0] === 'Z' || item.category[0] === 'C') {
+    if (item.category[0] === 'Z' || ['Cc', 'Cf', 'Cs', 'Cn'].includes(item.category)) {
       return { text: item.category[0] === 'Z' ? 'SPACE' : 'CONTROL', invisible: true };
     }
     if (item.category[0] === 'M') {

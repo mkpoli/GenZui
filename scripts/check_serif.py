@@ -13,6 +13,8 @@ from check_refinements import check_refinements
 from check_minnan import check_minnan
 from check_variants import check_variants
 from check_iteration import check_iteration
+from check_okinawan import check_okinawan
+from okinawan import PUA as OKINAWAN_PUA
 from check_coverage import check_coverage
 from honkoku import HONKOKU, SOURCE as CJK_SOURCE
 from sources import ROOT
@@ -65,8 +67,8 @@ def check():
     original = TTFont(io.BytesIO(serialized(instance('NotoSerifHentaigana', 400))))
     source_cmap, jp_cmap = original.getBestCmap(), jp.getBestCmap()
 
-    assert len(cmap) == 17064
-    assert set(cmap) == set(jp_cmap) | {ord(item['character']) for item in chars}
+    assert len(cmap) == 17064 + len(OKINAWAN_PUA)
+    assert set(cmap) == set(jp_cmap) | {ord(item['character']) for item in chars} | set(OKINAWAN_PUA)
     named_kana = {int(fields[0], 16)
                   for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines()
                   if (fields := line.split(';')) and
@@ -209,6 +211,7 @@ def check():
         'jp_shaping_regression_cases': jp_cases, 'jp_variation_sequences_preserved': True,
         'target_characters': len(chars), 'unchanged_historical_outlines': retained,
         'unicode_named_hiragana_katakana_covered': len(named_kana),
+        'okinawan': check_okinawan(font, engine, web_engine, shape, boxes),
         'outline_refinements':check_refinements(path, font),
         'iteration':check_iteration(path, font),
         'kana_coverage':check_coverage(path)['coverage'],

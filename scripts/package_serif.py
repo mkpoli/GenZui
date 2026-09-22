@@ -29,7 +29,7 @@ def package():
              'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
              'FRB-OFL.txt', 'FRB-README.md', 'NotoSerifCJK-OFL.txt',
              'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'source-manifest.json',
-             'sources.json', 'checks.json', 'browser-checks.json', 'kana-coverage.json']
+             'okinawan-mappings.json', 'sources.json', 'checks.json', 'browser-checks.json', 'kana-coverage.json']
     (ROOT/'dist').mkdir(exist_ok=True)
     archive = ROOT/'dist'/f'{STEM}-{VERSION}.zip'
     with ZipFile(archive, 'w', compression=ZIP_DEFLATED) as z:

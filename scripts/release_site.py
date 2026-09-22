@@ -19,7 +19,7 @@ from sources import ROOT
 
 OUT = ROOT/'build/release'
 URL = 'https://genzui.mkpo.li'
-DESCRIPTION = 'GenZui Serif / 源萃明朝: a Noto Serif JP derivative with 286 hentaigana, historical kana, Unicode 18 kana additions and Minnan tone letters.'
+DESCRIPTION = 'GenZui Serif / 源萃明朝: a Noto Serif JP derivative with 286 hentaigana, historical kana, Unicode 18 kana additions, Minnan tone letters and an Okinawan input tool.'
 
 
 def metadata(page, route, title, description):

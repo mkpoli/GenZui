@@ -12,6 +12,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 from fontTools.ttLib import TTFont
 from repertoire import properties
 from honkoku import TALLIES
+from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
 from serif import FAMILY, OUT as FONT_OUT, STEM, VERSION
 from sources import ROOT, verify
 from refinement_proof import build_comparison
@@ -65,12 +66,14 @@ def character_data(font, audit, provenance):
         assert index >= 0 and cp <= blocks[index][1]
         h = historic.get(cp)
         key = f'U+{cp:04X}'
-        source = provenance['source_kinds'][key] if h else 'jp'
-        group = ('han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
+        source = provenance['source_kinds'][key] if h or cp in OKINAWAN_PUA else 'jp'
+        if cp in OKINAWAN_PUA:
+            name = 'OKINAWAN ' + OKINAWAN_PUA[cp]['label'].upper() + ' (PRIVATE USE)'
+        group = ('okinawan' if cp in OKINAWAN_PUA else 'han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
                  'ideographic-description' if 0x2FF0 <= cp <= 0x2FFF or cp == 0x31EF else
                  'tally-mark' if cp in TALLIES else h['group'] if h else 'base')
         entries.append({'cp': cp, 'name': name, 'category': category,
-                        'block': blocks[index][2], 'age': ages[cp],
+                        'block': blocks[index][2], 'age': 'Private use' if cp in OKINAWAN_PUA else ages[cp],
                         'source': source, 'group': group,
                         'label': h.get('label', name) if h else name,
                         'provisional': source == 'genzui',
@@ -96,7 +99,7 @@ def build():
     provenance = json.loads((FONT_OUT/'sources.json').read_text())
     entries = character_data(font, audit, provenance)
     source_counts = dict(Counter(e['source'] for e in entries))
-    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32, 'frb': 15, 'cjk': 1}
+    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32 + len(OKINAWAN_PUA), 'frb': 15, 'cjk': 1}
     assert len(entries) == checks['encoded_characters']
     data = {'version': VERSION, 'family': FAMILY, 'characters': entries,
             'counts': source_counts, 'total': len(entries),
@@ -106,6 +109,10 @@ def build():
     page = (ROOT/'site/index.html').read_text()
     replacement = {
         '{{FONT}}': font_data,
+        '{{CHARACTER_COUNT}}': f'{len(entries):,}',
+        '{{CONSTRUCTION_COUNT}}': str(source_counts['genzui']),
+        '{{OKINAWAN_DATA}}': json.dumps(OKINAWAN_DATA, ensure_ascii=False).replace('<', '\\u003c'),
+        '{{OKINAWAN_JS}}': (ROOT/'site/okinawan.js').read_text() + '\n' + (ROOT/'site/okinawan-ui.js').read_text(),
         '{{NUMERAL_COUNT}}': str(sum(e['group'] == 'han-numeral' for e in entries)),
         '{{CSS}}': (ROOT/'site/style.css').read_text(),
         '{{JS}}': (ROOT/'site/main.js').read_text(),
@@ -133,7 +140,7 @@ def build():
     for name in (STEM+'.ttf', STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
                  'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
                  'FRB-OFL.txt', 'FRB-README.md',
-                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt'):
+                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt', 'okinawan-mappings.json'):
         shutil.copyfile(FONT_OUT/name, downloads/name)
     (OUT/'README.txt').write_text(
         'GenZui Serif specimen site\n\nOpen index.html in a current browser.\n'

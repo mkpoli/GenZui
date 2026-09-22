@@ -24,11 +24,13 @@ from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
 
+from okinawan import add_okinawan, PUA as OKINAWAN_PUA, DESCRIPTIONS as OKINAWAN_DESCRIPTIONS, ENTRIES as OKINAWAN_ENTRIES
+
 OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
 FAMILY_JA = '源萃明朝'
 STEM = 'GenZuiSerif-Regular'
-VERSION = '0.113'
+VERSION = '0.114'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B152: 0x3092, 0x1B155: 0x30B3, 0x1B164: 0x30F0,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
@@ -301,6 +303,8 @@ def build():
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
     add_honkoku(font, add, glyph, contours, transform)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
+    add_okinawan(font, add, glyph, contours, transform, add_feature)
+    PROVENANCE.update({f'U+{cp:04X}': value for cp, value in OKINAWAN_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
         notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]
@@ -315,7 +319,7 @@ def build():
     for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:VERSION+';'+STEM,
                        4:FAMILY+' Regular', 5:'Version '+VERSION, 6:STEM,
                        16:FAMILY,17:'Regular',
-                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes historical kana constructions, SQUARE PAATU, transcription symbols and a hooked WU stylistic alternate.',
+                       10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes historical kana constructions, SQUARE PAATU, transcription symbols, Okinawan kana with documented private-use mappings, and a hooked WU stylistic alternate.',
                        13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
                        14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
@@ -323,6 +327,7 @@ def build():
                        16:FAMILY_JA, 17:'Regular'}.items():
         font['name'].setName(value,nid,3,1,0x411)
     font['head'].fontRevision = float(VERSION)
+    font['OS/2'].ulUnicodeRange2 |= 1 << 28  # Bit 60: BMP Private Use Area.
     font['OS/2'].achVendID = 'NONE'
     font['OS/2'].usWeightClass = 400
     font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~33) | 64
@@ -343,6 +348,8 @@ def build():
         'GenZui: five ideographic tally marks and five ideographic-description symbols.\n'
         'GenZui: SQUARE PAATU uses native Noto Serif JP squared-katakana components.\n'
         'WU has a curved default and a hooked stylistic alternate (ss01).\n'
+        'GenZui: 18 Funatsu Okinawan bases and eight raised katakana, drawn from Noto components.\n'
+        'Private-use conventions follow Nishiki-teki and Xim Sans; see okinawan-mappings.json.\n'
         'Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components.\n'
         'The Google, Adobe and Noto Project notices are retained in OFL.txt.\n'
         'https://github.com/google/fonts/tree/main/ofl/notoserifjp\n'
@@ -376,6 +383,7 @@ def build():
         'encoded_characters':len(font.getBestCmap()),
         'target_characters':len(points),'retained_historical':retained,
         'provisional_forms':len(recipes), 'compatibility_forms':1,
+        'okinawan_pua_characters':len(OKINAWAN_PUA),
         'honkoku_forms':len(HONKOKU), 'honkoku_constructions':10,
         'stylistic_sets':{'ss01':{'name':'Hooked WU','codepoint':'U+1B11F',
             'default':'curved','alternate':'hooked','glyph':alternate}},
@@ -399,12 +407,13 @@ def build():
         'revision_0105':[f'U+{cp:04X}' for cp in REVISION_0105],
         'source_kinds':{f'U+{cp:04X}':('jp' if cp in originals else
             'cjk' if cp == 0x5344 else
-            'genzui' if cp in recipes or cp == PAATU or cp in HONKOKU else 'frb' if cp in minnan_points else
-            'hentaigana') for cp in sorted(points)}},ensure_ascii=False,indent=2)+'\n')
+            'genzui' if cp in OKINAWAN_PUA or cp in recipes or cp == PAATU or cp in HONKOKU else 'frb' if cp in minnan_points else
+            'hentaigana') for cp in sorted(points | set(OKINAWAN_PUA))}},ensure_ascii=False,indent=2)+'\n')
     for file in ('JP-Regular.ttf', 'JP-Regular.woff2', 'HKSerifProof-Regular.ttf',
                  'HKSerifProof-Regular.woff2', 'Hentaigana-Regular.ttf',
                  'checks.json', 'browser-checks.json'):
         (OUT/file).unlink(missing_ok=True)
+    shutil.copyfile(ROOT/'data/okinawan/mappings.json', OUT/'okinawan-mappings.json')
     proof()
     print(f'Built {FAMILY} {VERSION}: {len(font.getBestCmap()):,} encoded characters, {len(points)} historical targets, {len(recipes)} provisional forms.')
 
@@ -447,6 +456,7 @@ def proof():
     replacements = {
         '{{CSS}}': css, '{{ROWS}}': ''.join(rows),
         '{{VERSION}}': VERSION,
+        '{{OKINAWAN}}': '　'.join(''.join(chr(int(cp,16)) for cp in e['output']) for e in OKINAWAN_ENTRIES),
         '{{ALL}}': ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)),
         '{{LICENSE}}': html.escape((OUT/'OFL.txt').read_text()),
     }
