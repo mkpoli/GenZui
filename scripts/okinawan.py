@@ -8,7 +8,7 @@ import pathops
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
-from okinawan_drawings import outlines, CANONICAL, DAKUTEN
+from okinawan_drawings import outlines, BASES, CANONICAL, DAKUTEN
 from serif_forms import path
 from sources import ROOT
 
@@ -36,7 +36,23 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
         merged.draw(pen)
         return make_glyph([pen])
 
-    recipes = outlines()
+    def fit(parts, base):
+        # Joined letters share the vertical extent of the Noto kana they
+        # extend, so they sit on the same baseline at the same size. They
+        # are centred in the em and never wider than 920 units.
+        shape = pathops.Path()
+        for part in parts:
+            part.replay(shape.getPen())
+        left, bottom, right, top = shape.bounds
+        targets = [font['glyf'][font.getBestCmap()[ord(c)]] for c in base]
+        low, high = min(t.yMin for t in targets), max(t.yMax for t in targets)
+        scale = min((high - low) / (top - bottom), 920 / (right - left))
+        dx = 500 - scale * (left + right) / 2
+        dy = low - scale * bottom
+        return [transform(part, (scale, 0, 0, scale, dx, dy)) for part in parts]
+
+    recipes = {cp: fit(parts, BASES[cp]) if cp in BASES else parts
+               for cp, parts in outlines().items()}
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]

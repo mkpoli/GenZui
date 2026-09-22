@@ -4,6 +4,7 @@ Funatsu's chart, FK Okinawa Mincho, FROkinawanMoji, Nishiki-teki and
 MgenKana+ establish the stroke topology. These closed Bezier contours are
 independent drawings. No outlines from the reference fonts are imported.
 """
+import re
 from serif_forms import path
 
 # Each entry describes complete strokes. The small vowel is drawn as part of
@@ -235,9 +236,21 @@ FUNATSU = {
     ],
 }
 
+# The Noto kana each joined letter extends; their combined bounds set the
+# letter's size and baseline when the font is assembled. TSI names both
+# kana because its vowel rises well above the low つ.
+BASES = {
+    0xF450: 'と', 0xF452: 'て', 0xF454: 'く', 0xF456: 'く', 0xF458: 'く',
+    0xF45A: 'ふ', 0xF45B: 'ふ', 0xF45C: 'ふ', 0xF45D: 'や', 0xF45E: 'ゆ',
+    0xF45F: 'よ', 0xF460: 'わ', 0xF461: 'ゐ', 0xF462: 'ゑ', 0xF463: 'ん',
+    0xF465: 'を', 0xF467: 'す', 0xF469: 'つい',
+}
+
 # The labial group has one continuous ふ body. The right-hand vowel is drawn
 # at its own optical size instead of shrinking two complete kana into a cell.
-FU = [
+# The body is widened by a fifth so it keeps the weight of a full ふ, and
+# the vowel moves right to clear it.
+FU_BODY = [
     'M277 794 C307 747 352 714 408 685 C438 669 443 648 425 631 '
     'C403 610 365 592 364 561 C363 533 391 508 418 481 '
     'C478 420 524 349 515 273 C506 193 443 144 371 145 '
@@ -249,7 +262,27 @@ FU = [
     'C330 597 354 620 379 641 C388 649 386 656 374 663 '
     'C326 692 286 735 262 785 Z',
 ]
-FUNATSU[0xF45A] = FU + [
+
+
+def map_x(commands, fn):
+    """Apply fn to every x coordinate of a path string."""
+    out, seen = [], 0
+    for token in commands.split():
+        head, number = re.match(r'([A-Z]?)(-?\d*)', token).groups()
+        if number:
+            if seen % 2 == 0:
+                number = str(round(fn(int(number))))
+            seen += 1
+        out.append(head + number)
+    return ' '.join(out)
+
+
+def vowel(strokes):
+    return [map_x(stroke, lambda x: x + 55) for stroke in strokes]
+
+
+FU = [map_x(stroke, lambda x: 90 + (x - 90) * 1.2) for stroke in FU_BODY]
+FUNATSU[0xF45A] = FU + vowel([
     'M573 389 C604 403 641 382 644 356 C646 330 632 302 633 271 '
     'L632 79 C632 49 617 38 600 52 C588 62 588 84 589 111 '
     'L591 283 C591 344 590 363 569 377 Z',
@@ -258,16 +291,16 @@ FUNATSU[0xF45A] = FU + [
     'C775 313 701 307 637 256 C572 205 534 133 555 114 '
     'C569 101 590 117 609 133 L621 122 C582 72 540 59 514 88 '
     'C480 127 520 204 594 272 Z',
-]
-FUNATSU[0xF45B] = FU + [
+])
+FUNATSU[0xF45B] = FU + vowel([
     'M585 405 C616 418 650 395 650 368 C650 336 628 246 633 190 '
     'C636 155 643 129 654 125 C666 121 682 157 707 202 L721 195 '
     'C703 151 687 105 673 81 C658 55 636 65 617 87 '
     'C585 125 576 194 582 269 C587 335 593 375 578 394 Z',
     'M752 384 C832 347 875 280 883 208 C887 178 870 159 851 170 '
     'C837 178 838 207 831 237 C818 294 791 339 742 371 Z',
-]
-FUNATSU[0xF45C] = FU + [
+])
+FUNATSU[0xF45C] = FU + vowel([
     'M577 368 C596 350 609 345 632 351 L750 387 C779 395 803 382 803 366 '
     'C803 354 789 343 773 329 L648 205 C681 219 707 215 721 197 '
     'C740 174 737 139 758 124 C784 107 838 121 876 135 '
@@ -276,7 +309,7 @@ FUNATSU[0xF45C] = FU + [
     'C677 184 656 175 636 154 L583 99 C568 83 551 84 543 94 '
     'C535 105 545 118 558 132 L748 344 C705 333 661 313 634 311 '
     'C607 309 583 327 567 357 Z',
-]
+])
 
 # Unencoded bases for the two canonical Unicode sequences. The ordinary
 # encoded い and え keep their Noto outlines; only base + dakuten composes here.
