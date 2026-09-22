@@ -1,4 +1,5 @@
 .venv/
+.venv-sans/
 __pycache__/
 sources/upstream/*/*.ttf
 sources/upstream/*/*.otf

@@ -174,7 +174,7 @@ def add_feature(font, table_tag, feature_tag, lookup):
     table.ScriptList.ScriptCount = len(table.ScriptList.ScriptRecord)
 
 
-def layout(font, donor, vertical, points, alternates=()):
+def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830):
     cmap = font.getBestCmap()
     bases = {cmap[cp] for cp in points} | set(vertical.values()) | set(alternates)
     marks, mark_mapping = {}, {}
@@ -223,7 +223,7 @@ def layout(font, donor, vertical, points, alternates=()):
     for name in bases:
         g = font['glyf'][name]
         # Keep both marks clear of the top outline and within the em's width.
-        anchors[name] = {0: buildAnchor(830, g.yMax - 626),
+        anchors[name] = {0: buildAnchor(mark_anchor_x, g.yMax - 626),
                          1: buildAnchor(g.xMax + 148, 0)}
     lookup = otTables.Lookup()
     lookup.LookupType, lookup.LookupFlag = 4, 0

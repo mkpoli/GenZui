@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "family": "GenZui Sans",
+  "ttf_sha256": "3346f06b5093a00f68fac10b31f38a0fdda944fdb916ac97a78e97089b8e2518",
+  "woff2_sha256": "027e41924ed80726f3c08162eb7ccd15816068180986a56cefaae630d443103f",
+  "browsers": [
+    {
+      "engine": "chromium",
+      "version": "154.0.8037.0",
+      "raster_cases": 18,
+      "horizontal_vertical_controls": true,
+      "mobile_layout": true,
+      "status": "passed"
+    },
+    {
+      "engine": "firefox",
+      "version": "156.0",
+      "raster_cases": 18,
+      "horizontal_vertical_controls": true,
+      "mobile_layout": true,
+      "status": "passed"
+    }
+  ]
+}
