@@ -343,33 +343,6 @@ FUNATSU[0xF45C] = FU + vowel([
     'C607 309 583 327 567 357 Z',
 ])
 
-# Unencoded bases for the two canonical Unicode sequences. The ordinary
-# encoded い and え keep their Noto outlines; only base + dakuten composes here.
-CANONICAL = {
-    0x3044: [
-        'M199 728 C229 736 268 712 269 684 C270 660 258 632 253 596 '
-        'C240 504 234 401 259 302 C275 242 300 204 323 201 '
-        'C339 199 365 248 406 326 L423 317 C389 239 367 188 351 151 '
-        'C336 118 314 120 284 145 C205 211 185 342 191 471 '
-        'C195 561 211 658 195 694 L183 714 Z',
-        'M605 657 C736 606 808 501 821 381 C825 345 806 321 784 335 '
-        'C768 345 768 381 759 420 C735 520 685 597 594 642 Z',
-    ],
-    0x3048: [
-        'M347 805 C404 765 470 741 544 738 C576 737 601 724 600 704 '
-        'C599 688 577 682 551 686 L420 686 L416 700 L493 717 '
-        'C433 731 381 755 337 792 Z',
-        'M206 585 C232 553 254 546 292 555 L622 637 C665 648 707 626 706 604 '
-        'C705 586 678 574 656 553 C551 450 430 315 331 176 '
-        'C389 238 443 253 479 224 C507 200 502 145 532 116 '
-        'C570 80 663 100 749 124 C779 132 807 123 815 104 '
-        'C823 84 805 70 777 62 C662 30 557 23 512 61 '
-        'C472 95 482 159 455 180 C427 201 384 176 349 141 '
-        'L261 48 C242 27 218 24 205 40 C194 54 207 74 225 94 '
-        'L588 580 C506 560 398 524 309 503 C263 495 224 525 194 574 Z',
-    ],
-}
-
 # Raised katakana: the Noto small kana each sign is reduced from, and the
 # thickening that restores its stroke weight at the smaller size. ン has no
 # small kana, so the full letter is reduced with more thickening. The signs

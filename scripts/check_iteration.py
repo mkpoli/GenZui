@@ -5,7 +5,7 @@ from fontTools.ttLib import TTFont
 from PIL import ImageChops
 from check_refinements import mask
 from honkoku import HONKOKU, TALLIES
-from okinawan import PUA as OKINAWAN_PUA
+from okinawan import PUA as OKINAWAN_PUA, ENTRIES as OKINAWAN_ENTRIES
 from sources import ROOT
 
 
@@ -18,7 +18,11 @@ def check_iteration(path, font):
     assert all(cmap[cp] == name for cp, name in old_cmap.items())
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
-    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+9
+    # Voiced private-use letters are composed at build time from a base plus
+    # dakuten. YI and YE stay with Noto's own い゙ and え゙ composition.
+    composed = [e for e in OKINAWAN_ENTRIES
+                if len(e['output']) == 2 and int(e['output'][0], 16) in OKINAWAN_PUA]
+    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+len(composed)
     for name in old_order:
         assert before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf']), name
         for table in ('hmtx', 'vmtx'):
@@ -26,12 +30,12 @@ def check_iteration(path, font):
     # Appending symbols must leave every previous layout rule and IVS intact.
     for table in ('GPOS', 'BASE'):
         assert font[table].compile(font) == before[table].compile(before), table
-    # Okinawan voicing appends a composition lookup and a lookup for Noto's
-    # precomposed YI/YE glyphs. Removing them recovers the released table.
+    # Okinawan voicing appends one composition lookup. Removing it recovers
+    # the released table.
     gsub = copy.deepcopy(font['GSUB'])
     table = gsub.table
     old_count = before['GSUB'].table.LookupList.LookupCount
-    assert table.LookupList.LookupCount == old_count + 2
+    assert table.LookupList.LookupCount == old_count + 1
     table.LookupList.Lookup = table.LookupList.Lookup[:old_count]
     table.LookupList.LookupCount = old_count
     for record in table.FeatureList.FeatureRecord:

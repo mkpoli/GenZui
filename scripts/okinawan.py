@@ -11,7 +11,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
-from okinawan_drawings import outlines, BASES, WEIGHT, RAISED, RAISED_BOX, RAISED_TOP, CANONICAL, DAKUTEN
+from okinawan_drawings import outlines, BASES, WEIGHT, RAISED, RAISED_BOX, RAISED_TOP, DAKUTEN
 from serif_forms import path
 from sources import ROOT
 
@@ -102,38 +102,22 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
     # Use a composition lookup so combining dakuten works even when a shaping
     # engine assigns an unknown script to the private-use base. The text stays
     # base + U+3099; the composed drawings are unencoded glyphs.
-    mapping, native_compositions = {}, {}
+    # YI and YE stay with Noto's own い゙ and え゙ composition; only the
+    # private-use bases need a composed drawing.
+    mapping = {}
     cmap = font.getBestCmap()
     for e in ENTRIES:
-        if len(e['output']) != 2:
+        if len(e['output']) != 2 or int(e['output'][0], 16) not in recipes:
             continue
         cp = int(e['output'][0], 16)
-
-        base = recipes[cp] if cp in recipes else [path(stroke) for stroke in CANONICAL[cp]]
         name = add(font, f"okinawa.{e['id']}", unite([
-            transform(p, (.90, 0, 0, 1, 12, 0)) for p in base]
+            transform(p, (.90, 0, 0, 1, 12, 0)) for p in recipes[cp]]
             + [path(stroke) for stroke in DAKUTEN]))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name
-        if cp in CANONICAL:
-            # Noto already composes these two sequences in an earlier lookup.
-            # Follow that composition with a substitution for the completed
-            # glyph, preserving Noto's original lookup and outline.
-            for existing in font['GSUB'].table.LookupList.Lookup:
-                for subtable in existing.SubTable:
-                    table = getattr(subtable, 'ExtSubTable', subtable)
-                    for ligature in getattr(table, 'ligatures', {}).get(cmap[cp], []):
-                        if ligature.Component == [cmap[0x3099]]:
-                            native_compositions[ligature.LigGlyph] = name
     lookup = otTables.Lookup()
     lookup.LookupType, lookup.LookupFlag = 4, 0
     lookup.SubTable = [buildLigatureSubstSubtable(mapping)]
     lookup.SubTableCount = 1
-    add_feature(font, 'GSUB', 'ccmp', lookup)
-    lookup = otTables.Lookup()
-    lookup.LookupType, lookup.LookupFlag = 1, 0
-    subtable = otTables.SingleSubst()
-    subtable.mapping = native_compositions
-    lookup.SubTable, lookup.SubTableCount = [subtable], 1
     add_feature(font, 'GSUB', 'ccmp', lookup)
