@@ -11,6 +11,7 @@ kana and Unicode 18.0 additions.
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) |
 | Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.114.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-Regular-0.101.zip) |
 
+[Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
@@ -100,7 +101,7 @@ character encoding.
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
 | [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms |
-| [GenZui constructions](https://genzui.mkpo.li/?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
+| [GenZui constructions](https://genzui.mkpo.li/serif?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
 
 ### GenZui Sans
 
@@ -175,9 +176,10 @@ bun run release:build
 .venv/bin/python scripts/check_release.py
 ```
 
-The public site is written to `build/release/` and serves Serif at `/` and Sans
-at `/sans`, with fonts from the versioned release folders. Edit `site/`,
-`templates/` and `scripts/release_site.py` / `scripts/sans_site.py`.
+The public site is written to `build/release/` and serves a family landing at
+`/`, GenZui Serif at `/serif` and GenZui Sans at `/sans`, with fonts from the
+versioned release folders. Edit `site/`, `templates/` and
+`scripts/release_site.py` / `scripts/sans_site.py`.
 `build/site/` holds the offline development specimen with glyph comparisons.
 [Deployment notes](release/README.md) describe the Cloudflare configuration.
 
