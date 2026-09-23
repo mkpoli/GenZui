@@ -1,5 +1,6 @@
 """Check release links, font identity, public copy and share assets."""
 import hashlib
+import html
 import json
 import re
 from html.parser import HTMLParser
@@ -52,12 +53,26 @@ def check():
     for route in ('index.html','gallery.html','minnan.html','sans.html'):
         text=(OUT/route).read_text()
         assert 'name="twitter:card" content="summary_large_image"' in text
-        image='genzui-sans-social.png' if route=='sans.html' else 'genzui-social.png'
+        title=re.search(r'<title>([^<]*)</title>', text)[1]
+        og=re.search(r'property="og:title" content="([^"]*)"', text)[1]
+        assert html.unescape(title)==html.unescape(og) and title
+        image='genzui-sans-social-2x.png' if route=='sans.html' else 'genzui-social-2x.png'
         assert f'{URL}/media/{image}' in text
+        assert 'property="og:image:width" content="2400"' in text
+        assert 'property="og:image:type" content="image/png"' in text
+        assert 'property="og:locale" content="en_US"' in text
+        assert 'name="robots" content="max-image-preview:large"' in text
+        assert 'name="author" content="まくぽり (mkpoli)"' in text
+        assert 'rel="author" href="https://mkpo.li"' in text
+        assert 'rel="canonical"' in text and 'sizes="any"' in text
+        assert 'application/ld+json' in text and '"inLanguage"' in text
         assert 'data:font/' not in text
     home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
-    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans"' in home and 'GenZui Sans (源萃ゴシック)' in home
+    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans｜変体仮名・歴史的仮名のフリーフォント"' in home
+    assert '変体仮名286字' in home and '"alternateName"' in home and '"@type": "WebSite"' in home
+    assert 'noindex' in (OUT/'404.html').read_text()
+    assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review

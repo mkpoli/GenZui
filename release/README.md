@@ -58,3 +58,18 @@ Sans 源萃ゴシック. Archaic WU, KOTO and alternate NE in both families. 17,
 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP, Noto Sans JP
 and Noto Hentaigana. genzui.mkpo.li.” The Sans page has its own card,
 described under GenZui Sans below.
+
+## Search metadata
+
+Page titles, descriptions, Open Graph tags, Twitter cards and `WebSite` /
+`WebPage` structured data are emitted by `scripts/release_site.py` and locked by
+`scripts/check_release.py`. Canonical URLs, the Open Graph URLs and the home
+page's structured data use `https://genzui.mkpo.li/`. `sitemap.xml` lists the
+four HTML routes (`/`, `/sans`, `/gallery`, `/minnan`); section anchors, font
+assets and release folders are not separate pages. `robots.txt` advertises the
+sitemap, and `404.html` is `noindex`.
+
+After deployment, check that `/robots.txt` includes the sitemap line,
+`/sitemap.xml` returns XML with status 200, and a missing URL returns status
+404. Submit `https://genzui.mkpo.li/sitemap.xml` in Google Search Console and
+request indexing of the home and `/sans` pages through URL Inspection.
