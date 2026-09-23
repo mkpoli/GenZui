@@ -22,35 +22,68 @@ from sources import ROOT
 
 OUT = ROOT/'build/release'
 URL = 'https://genzui.mkpo.li'
-DESCRIPTION = 'GenZui / 源萃: GenZui Serif (源萃明朝) and GenZui Sans (源萃ゴシック), Noto derivatives with 286 hentaigana, historical kana, Unicode 18 kana additions, Minnan tone letters and an Okinawan input tool.'
-SITE_NAME = 'GenZui / 源萃 — Serif & Sans'
-SANS_DESCRIPTION = 'GenZui Sans / 源萃ゴシック: a Noto Sans JP derivative with 286 hentaigana, historical kana, Unicode 18 kana additions and Minnan tone letters.'
+AUTHOR = 'まくぽり (mkpoli)'
+AUTHOR_URL = 'https://mkpo.li'
+DESCRIPTION = ('Notoをもとに、変体仮名286字、Unicode 18.0の仮名追加、仮名合字、閩南語の声調記号を収めた日本語フリーフォント。'
+               '源萃明朝と源萃ゴシックの2書体で、沖縄語の文字入力にも対応。'
+               'TTF・WOFF2のダウンロード、試し書き、ウェブフォントの使い方を掲載。')
+SITE_NAME = 'GenZui / 源萃'
+TITLE = '源萃 — GenZui Serif / GenZui Sans｜変体仮名・歴史的仮名のフリーフォント'
+SANS_TITLE = '源萃ゴシック — GenZui Sans｜変体仮名・歴史的仮名のフリーフォント'
+GALLERY_TITLE = 'GenZui Serif — Design gallery｜歴史的仮名の作字21字'
+MINNAN_TITLE = 'Minnan kana & archaic WU — GenZui Serif｜閩南語の声調記号'
+SANS_DESCRIPTION = ('Noto Sans JPをもとに、変体仮名286字、Unicode 18.0の仮名追加、仮名合字、閩南語の声調記号を収めた'
+                    'ゴシック体の日本語フリーフォント。TTF・WOFF2のダウンロード、試し書き、ウェブフォントの使い方を掲載。')
+GALLERY_DESCRIPTION = 'GenZuiが作字した歴史的仮名21字。横組み・縦組みの見本、筆画参照、WUの2字形を掲載。'
+MINNAN_DESCRIPTION = '源萃明朝の閩南語声調記号、結合記号、古形WUの2字形の見本。'
 
 
-def metadata(page, route, title, description, image_alt, image='genzui-social.png', site_name=SITE_NAME):
+def structured_data(route, title, description, site_name=SITE_NAME):
+    author = {'@type': 'Person', 'name': 'まくぽり / mkpoli', 'url': AUTHOR_URL + '/'}
+    if route == '/':
+        data = {'@context': 'https://schema.org', '@type': 'WebSite', 'name': site_name,
+                'alternateName': 'GenZui Serif / GenZui Sans', 'url': URL + '/',
+                'inLanguage': ['en', 'ja'], 'description': description, 'author': author}
+    else:
+        data = {'@context': 'https://schema.org', '@type': 'WebPage', 'name': title,
+                'url': URL + route, 'description': description, 'inLanguage': ['en', 'ja'],
+                'isPartOf': {'@type': 'WebSite', 'name': SITE_NAME, 'url': URL + '/'},
+                'author': author}
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + '</script>'
+
+
+def metadata(page, route, title, description, image_alt, image='genzui-social-2x.png', site_name=SITE_NAME):
     page = re.sub(r'<meta name="description"[^>]*>', '', page)
     route = route.removesuffix('.html')
     for name in ('gallery', 'minnan', 'sans'):
         page = page.replace(f'href="{name}.html', f'href="{name}')
     page = page.replace('href="index.html', 'href="./')
+    page = re.sub(r'<title>[^<]*</title>', f'<title>{html.escape(title)}</title>', page, count=1)
+    share = f'{URL}/media/{image}'
     tags = [f'<link rel="canonical" href="{URL}{route}">',
-            '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+            '<link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">',
+            f'<meta name="author" content="{html.escape(AUTHOR, quote=True)}">',
+            f'<link rel="author" href="{AUTHOR_URL}">',
             f'<meta name="description" content="{html.escape(description, quote=True)}">',
+            '<meta name="robots" content="max-image-preview:large">',
             '<meta property="og:type" content="website">',
             f'<meta property="og:site_name" content="{html.escape(site_name, quote=True)}">',
+            '<meta property="og:locale" content="en_US">',
             f'<meta property="og:url" content="{URL}{route}">',
             f'<meta property="og:title" content="{html.escape(title, quote=True)}">',
             f'<meta property="og:description" content="{html.escape(description, quote=True)}">',
-            f'<meta property="og:image" content="{URL}/media/{image}">',
-            '<meta property="og:image:width" content="1200">',
-            '<meta property="og:image:height" content="630">',
+            f'<meta property="og:image" content="{share}">',
+            '<meta property="og:image:type" content="image/png">',
+            '<meta property="og:image:width" content="2400">',
+            '<meta property="og:image:height" content="1260">',
             f'<meta property="og:image:alt" content="{html.escape(image_alt, quote=True)}">',
             '<meta name="twitter:card" content="summary_large_image">',
-            f'<meta name="twitter:image" content="{URL}/media/{image}">',
-            f'<meta name="twitter:image:alt" content="{html.escape(image_alt, quote=True)}">']
+            f'<meta name="twitter:image" content="{share}">',
+            f'<meta name="twitter:image:alt" content="{html.escape(image_alt, quote=True)}">',
+            structured_data(route, title, description, site_name)]
     page = re.sub(r'<link rel="icon"[^>]*>', '', page)
     page = page.replace('</body>', '<script src="assets/proof-font.js"></script></body>')
-    return page.replace('</head>', '\n'.join(tags)+'\n</head>')
+    return page.replace('</head>', '\n'.join(tags) + '\n</head>')
 
 
 def external_fonts(page):
@@ -143,6 +176,8 @@ def build():
     site_text = set()
     for source in (ROOT/'build/site').glob('*.html'):
         site_text.update(ord(c) for c in re.sub(r'<[^>]+>|&[#a-zA-Z0-9]+;', ' ', source.read_text()))
+    for copy in (TITLE, SANS_TITLE, GALLERY_TITLE, MINNAN_TITLE):
+        site_text.update(ord(c) for c in copy)
     serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
     sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets', site_text)
     preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-text-' in f)
@@ -162,11 +197,7 @@ def build():
            f'<pre><code>&lt;link rel="stylesheet" href="{URL}/v{VERSION}/genzui.css"&gt;\n\n'
            'body {\n  font-family: "GenZui Serif", serif;\n}</code></pre></details>')
     page = page.replace('<!-- webfont-usage -->', web)
-    structured = {'@context':'https://schema.org', '@type':'WebSite',
-                  'name':'GenZui / 源萃', 'url':URL+'/', 'description':DESCRIPTION,
-                  'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
-    page = page.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'index.html').write_text(metadata(page, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
+    (OUT/'index.html').write_text(metadata(page, '/', TITLE, DESCRIPTION, home_alt))
     sans_web = (f'<details class="webfont-usage"><summary>Use GenZui Sans on your website</summary>'
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
@@ -178,22 +209,16 @@ def build():
     sans_page = sans_page.replace('</head>', preload(sans_chunks)+'</head>')
     sans_page = external_data(sans_page, 'sans-characters')
     sans_alt = build_sans_card(OUT/'media')
-    sans_structured = {'@context':'https://schema.org', '@type':'WebSite',
-                       'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,
-                       'author':{'@type':'Person','name':'まくぽり / mkpoli','url':'https://mkpo.li/'}}
-    sans_page = sans_page.replace('</head>', '<script type="application/ld+json">'+json.dumps(sans_structured,ensure_ascii=False)+'</script></head>')
-    (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', '源萃ゴシック — GenZui Sans', SANS_DESCRIPTION,
-                                          sans_alt, image='genzui-sans-social.png'))
+    (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', SANS_TITLE, SANS_DESCRIPTION,
+                                          sans_alt, image='genzui-sans-social-2x.png'))
     for route, content, title, description in [
-        ('gallery.html', build_gallery(public=True), 'GenZui Serif — Design gallery',
-         'Twenty-one GenZui historical kana constructions, with horizontal and vertical samples, stroke references and two WU forms.'),
-        ('minnan.html', (ROOT/'build/site/minnan.html').read_text(), 'Minnan kana & archaic WU — GenZui Serif',
-         'Minnan tone letters, combining marks and two archaic WU forms in GenZui Serif.')]:
+        ('gallery.html', build_gallery(public=True), GALLERY_TITLE, GALLERY_DESCRIPTION),
+        ('minnan.html', (ROOT/'build/site/minnan.html').read_text(), MINNAN_TITLE, MINNAN_DESCRIPTION)]:
         (OUT/route).write_text(metadata(external_fonts(content), '/'+route, title, description, home_alt))
     font = TTFont(FONT_OUT/(STEM+'.ttf'))
     pen = SVGPathPen(font.getGlyphSet());font.getGlyphSet()[font.getBestCmap()[0x1B123]].draw(pen)
     (OUT/'favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect width="1000" height="1000" rx="170" fill="#214e3c"/><path fill="#f7f8f2" transform="translate(80 804) scale(.84 -.84)" d="'+pen.getCommands()+'"/></svg>')
-    (OUT/'404.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Page not found — GenZui</title><style>body{max-width:36em;margin:15vh auto;padding:24px;background:#f7f8f2;color:#25382e;font:18px/1.6 system-ui}a{color:#214e3c}</style><h1>Page not found.</h1><p><a href="/">Return to GenZui</a></p></html>')
+    (OUT/'404.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Page not found — GenZui</title><meta name="robots" content="noindex"><style>body{max-width:36em;margin:15vh auto;padding:24px;background:#f7f8f2;color:#25382e;font:18px/1.6 system-ui}a{color:#214e3c}</style><h1>Page not found.</h1><p><a href="/">Return to GenZui</a></p></html>')
     (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+URL+'/sitemap.xml\n')
     (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/sans', '/gallery', '/minnan'])+'</urlset>')
     (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
