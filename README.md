@@ -29,7 +29,7 @@ Browser fallback depends on the website and browser settings.
 
 ```html
 <link rel="stylesheet" href="https://genzui.mkpo.li/v0.114/genzui.css">
-<link rel="stylesheet" href="https://genzui.mkpo.li/genzui-sans.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.101/genzui-sans.css">
 ```
 
 ```css
@@ -43,8 +43,10 @@ Both faces include:
 
 - 286 hentaigana.
 - All seven Unicode 18.0 kana additions: 𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨.
-- Ten encoded kana ligatures, including 𪜈 TOMO,  ㅅ katakana NARI,
-   ㅅ SHITE and  ㅅ hiragana NARI.
+- Ten encoded kana ligatures, including 𪜈 TOMO, 𬻿 katakana NARI,
+  𬼀 SHITE and 𬼂 hiragana NARI.
+  Type them as their own characters; ordinary kana sequences are never
+  rewritten into ligatures, because those depend on the word and the hand.
 - Small kana, the 16 Katakana Phonetic Extensions used for Ainu, and older kana forms.
 - 13 Minnan tone letters, with overline and dot-below support.
 
@@ -137,16 +139,16 @@ python3 -m venv .venv
 .venv/bin/python scripts/serif.py
 .venv/bin/python scripts/check_serif.py
 node scripts/check_okinawan_input.cjs
+cp research/browser-checks-0.114.json build/serif/browser-checks.json
+.venv/bin/python scripts/package_serif.py
 ```
 
 Outputs are in `build/serif/`. The checks cover the historical and
 transcription inventory, preservation of upstream glyphs and metrics, Japanese
 layout, marks, Minnan tones, WU variants, the Okinawan forms and TTF/WOFF2
 parity. `scripts/check_coverage.py` checks the pinned Unicode Script and
-Script_Extensions properties.
-
-Release packaging is `scripts/package_serif.py`. It requires passing Chrome,
-Vivaldi and Firefox reports for the exact font bytes.
+Script_Extensions properties. Release packaging stages the Chrome, Vivaldi and
+Firefox report for the exact font bytes, then writes the ZIP.
 
 ### GenZui Sans
 
@@ -155,6 +157,7 @@ python3 -m venv .venv-sans
 .venv-sans/bin/python -m pip install -r requirements-sans.lock
 .venv-sans/bin/python scripts/sans.py
 .venv-sans/bin/python scripts/check_sans.py
+PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node scripts/check_sans_browser.cjs
 .venv-sans/bin/python scripts/package_sans.py
 ```
 
