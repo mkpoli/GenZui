@@ -26,5 +26,11 @@ body:not(.hooked-on) #u1b11f .default-overlay{display:none!important}
 @media(max-width:760px){.single .sample{grid-template-columns:1fr}.historical-reference{flex-wrap:wrap}.historical-reference img{max-width:120px}}
 
 .overlay-on .single .default-shape{fill:var(--ink);opacity:1}
+.bold-default,.bold-alternate{display:none}
+body.weight-bold .current .default-shape,body.weight-bold .current .alternate-shape,body.weight-bold .stroke-glyphs .default-shape{display:none}
+body.weight-bold .current .bold-default,body.weight-bold .stroke-glyphs .bold-default{display:block}
+body.weight-bold.hooked-on #u1b11f .current .bold-default{display:none}
+body.weight-bold.hooked-on #u1b11f .current .bold-alternate{display:block}
+body.weight-bold .current,body.weight-bold .wu-fixed,body.weight-bold .wu-form,body.weight-bold .stroke-glyphs figcaption{font-weight:700}
 
 .stroke-study{padding:20px 0;max-width:680px}.stroke-study h4{font:13px/1.5 system-ui,sans-serif;margin:0 0 12px}.stroke-glyphs{display:flex;gap:24px;margin-bottom:14px}.stroke-glyphs figure{width:min(28%,150px)}.stroke-glyphs svg{width:100%;height:auto}.stroke-glyphs .guides{display:none}.stroke-glyphs figcaption{font-family:GenZui,serif}.stroke-study p{font-size:14px}

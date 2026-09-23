@@ -25,6 +25,12 @@
     $('#count').textContent = `${count} ${names[value]}`;
   }
   $('#collection').addEventListener('change', filter);
+  $('#weight')?.addEventListener('change', e => {
+    const bold = e.target.value === '700';
+    document.body.classList.toggle('weight-bold', bold);
+    const label = $('#weight-label');
+    if (label) label.textContent = label.dataset[bold ? 'bold' : 'regular'];
+  });
   $('#reading-size').addEventListener('input', e => {
     document.documentElement.style.setProperty('--reading', `${e.target.value}px`);
     $('#size-value').textContent = `${e.target.value} px`;
