@@ -7,7 +7,7 @@ kana and Unicode 18.0 additions.
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
 | Release | Regular 0.114 · 17,090 characters | Regular 0.101 · 17,070 characters |
-| Specimen | [genzui.mkpo.li](https://genzui.mkpo.li/) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
+| Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) |
 | Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.114.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-Regular-0.101.zip) |
 
@@ -73,7 +73,7 @@ Regular is the only weight.
 
 - 27 Funatsu Okinawan forms and eight raised katakana, on 26 documented PUA
   bases. Voiced forms and YI/YE use combining dakuten wherever possible. The
-  [Okinawan composer](https://genzui.mkpo.li/#okinawan) on the home page,
+  [Okinawan composer](https://genzui.mkpo.li/serif#okinawan) on the Serif page,
   the [input notes](research/okinawan.md) and the
   [mapping registry](data/okinawan/mappings.json) document the keyboard.
 - 21 historical kana constructions from Noto components and original drawing.

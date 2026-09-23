@@ -50,7 +50,7 @@ def check():
             elif not target.is_file() and not target.suffix:target=target.with_suffix('.html')
             assert target.is_file(),(name,link)
             count+=1
-    for route in ('index.html','gallery.html','minnan.html','sans.html'):
+    for route in ('index.html','serif.html','gallery.html','minnan.html','sans.html'):
         text=(OUT/route).read_text()
         assert 'name="twitter:card" content="summary_large_image"' in text
         title=re.search(r'<title>([^<]*)</title>', text)[1]
@@ -71,14 +71,17 @@ def check():
         else:
             assert '"@type": "WebPage"' in text and '"isPartOf"' in text
         assert 'data:font/' not in text
-    home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
+    landing=(OUT/'index.html').read_text();home=(OUT/'serif.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
-    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans｜変体仮名・歴史的仮名のフリーフォント"' in home
-    assert '変体仮名286字' in home and '"alternateName"' in home and '"@type": "WebSite"' in home
+    assert 'og:title" content="源萃 — GenZui Serif / GenZui Sans｜変体仮名・歴史的仮名のフリーフォント"' in landing
+    assert '変体仮名286字' in landing and '"alternateName"' in landing and '"@type": "WebSite"' in landing
+    assert 'og:title" content="源萃明朝 — GenZui Serif｜変体仮名・歴史的仮名のフリーフォント"' in home and 'rel="canonical" href="https://genzui.mkpo.li/serif"' in home
+    assert 'id="layer-serif"' in landing and 'id="download-both"' in landing and 'href="serif#okinawan"' in landing
+    assert '/serif\n  Cache-Control' in (OUT/'_headers').read_text()
     assert 'noindex' in (OUT/'404.html').read_text()
     assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')
     sitemap=(OUT/'sitemap.xml').read_text()
-    for route in ('/', '/sans', '/gallery', '/minnan'):
+    for route in ('/', '/serif', '/sans', '/gallery', '/minnan'):
         assert f'{URL}{route}</loc>' in sitemap, route
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
@@ -111,7 +114,9 @@ def check():
     chunk_cases=0
     for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
-                                            (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf'))):
+                                            (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
+                                            (landing,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
+                                            (landing,'GenZuiSans',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf'))):
         faces=re.findall(rf'@font-face\{{font-family:{family};src:url\(assets/({re.escape(stem)}-[a-z0-9]+-[0-9a-f]{{16}}\.woff2)\)[^}}]*unicode-range:([^}}]+)\}}',page_text)
         assert len(faces)>=10,(family,stem,len(faces))
         covered=set()
@@ -154,12 +159,16 @@ def check():
             assert expected.value==actual.value,(family,key)
         chunk_cases+=len(source_uvs)
     assert f'sans-v{sans_version}/{SANS_STEM}.woff2' not in sans and 'data:font/' not in sans
+    # The landing serves both families in chunks too, never the whole webfonts.
+    assert 'data:font/' not in landing and f'v{VERSION}/{STEM}.woff2' not in landing
+    assert f'sans-v{sans_version}/{SANS_STEM}.woff2' not in landing and 'id="download-both"' in landing
     assert f"{sans_checks['encoded_characters']:,}" in sans and 'GenZui Serif' in sans
-    assert 'href="sans"' in home and 'GenZui Sans' in home
+    assert 'href="sans"' in home and 'GenZui Sans' in home and 'href="serif"' in sans
     # Each switch label loads its own family's subset, never the main webfont.
     for label in ('serif','sans'):
         assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', home), label
         assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', sans), label
+        assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', landing), label
     assert len(set(re.findall(r'GenZuiLabel-(?:serif|sans);src:url\((assets/proof-[0-9a-f]+\.woff2)\)', home)))==2
     for suffix in ('ttf','woff2'):
         for folder in ('downloads','sans-v'+sans_version):

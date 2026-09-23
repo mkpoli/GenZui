@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="GenZui: two Japanese typefaces with historical kana. GenZui Serif (源萃明朝) and GenZui Sans (源萃ゴシック), with 286 hentaigana, the Unicode 18 kana additions and Minnan tone letters.">
+  <title>源萃 — GenZui Serif / GenZui Sans</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231f634d'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='43' fill='white' font-family='serif'%3E源%3C/text%3E%3C/svg%3E">
+  <style>
+    @font-face {font-family:GenZui;src:url({{SERIF_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
+    @font-face {font-family:GenZuiSans;src:url({{SANS_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
+    {{CSS}}
+    {{FAMILY_SWITCH_CSS}}
+    .sans-face{font-family:GenZuiSans,sans-serif;font-weight:400;font-synthesis:none}
+    .serif-face{font-family:GenZui,serif;font-weight:400;font-synthesis:none}
+    .landing{padding:40px 0 72px}
+    .landing-topline{display:flex;justify-content:space-between;gap:20px;font-size:10px;font-weight:600;letter-spacing:1.6px;color:var(--muted);margin-bottom:26px}
+    .landing h1{font-size:clamp(28px,3.4vw,44px);font-weight:400;letter-spacing:-1.2px;line-height:1.2;margin:0 0 10px}
+    .landing-lead{max-width:560px;color:var(--muted);font-size:14px;line-height:1.75;margin:0 0 30px}
+    /* preview */
+    .preview{border:1px solid var(--line);background:white;--serif:1;--sans:0}
+    .preview-bar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:16px 22px;border-bottom:1px solid var(--line);background:#f6f8f3}
+    .mode{display:flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;background:#eef2ec}
+    .mode button{border:0;background:none;border-radius:999px;padding:8px 16px;font-size:13px;color:var(--muted);transition:background .18s,color .18s,transform .18s}
+    .mode button:hover{color:var(--ink)}
+    .mode button[aria-pressed=true]{background:var(--green);color:white}
+    .mode button[data-mode=serif]{font-family:GenZui,serif}.mode button[data-mode=sans]{font-family:GenZuiSans,sans-serif}
+    .preview-bar .range-control{flex:1;min-width:120px;max-width:260px}
+    .preview-bar .hint{margin-left:auto;font-size:11px;color:var(--muted)}
+    .stage{position:relative;isolation:isolate;min-height:280px;font-size:var(--size,52px);line-height:1.75}
+    .layer{position:absolute;inset:0;padding:38px 42px;margin:0;min-height:100%;white-space:pre-wrap;overflow-wrap:anywhere;outline:none;transition:opacity .45s cubic-bezier(.2,.7,.2,1),transform .45s cubic-bezier(.2,.7,.2,1);color:var(--ink)}
+    .layer.serif{position:relative;font-family:GenZui,serif;opacity:var(--serif);transform:translateY(calc((1 - var(--serif)) * 6px))}
+    .layer.sans{font-family:GenZuiSans,sans-serif;opacity:var(--sans);transform:translateY(calc((1 - var(--sans)) * 6px))}
+    .layer[contenteditable=false]{pointer-events:none;user-select:none}
+    .preview[data-mode=serif]{--serif:1;--sans:0}.preview[data-mode=sans]{--serif:0;--sans:1}
+    .preview[data-mode=compare]{--serif:1;--sans:1}
+    .preview[data-mode=compare] .layer.sans{clip-path:inset(0 0 0 var(--split,50%));}
+    .preview[data-mode=compare] .layer.serif{clip-path:inset(0 calc(100% - var(--split,50%)) 0 0)}
+    .divider{position:absolute;top:0;bottom:0;left:var(--split,50%);width:0;display:none;pointer-events:none}
+    .divider::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:var(--green)}
+    .divider span{position:absolute;top:8px;right:10px;padding:3px 7px;border-radius:999px;background:var(--green);color:white;font:600 9px/1.4 Inter,"Segoe UI",system-ui,sans-serif;letter-spacing:1.2px;white-space:nowrap}
+    .divider span+span{top:auto;bottom:8px;right:auto;left:10px}
+    .preview[data-mode=compare] .divider{display:block}
+    .split[type=range]{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;background:none;cursor:ew-resize;display:none;-webkit-appearance:none;appearance:none;pointer-events:none}
+    .preview[data-mode=compare] .split[type=range]{display:block}
+    /* Only the handle takes the pointer, so the text underneath stays editable. */
+    .split[type=range]:focus{outline:none}
+    .split::-webkit-slider-runnable-track{background:transparent;border:0}
+    .split::-moz-range-track{background:transparent;border:0}
+    .split::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;cursor:ew-resize;width:16px;height:46px;border-radius:8px;background:var(--green);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+    .split::-moz-range-thumb{pointer-events:auto;cursor:ew-resize;width:16px;height:46px;border-radius:8px;background:var(--green);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+    .split:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--green)}
+    .split:focus-visible::-moz-range-thumb{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--green)}
+    .preview-foot{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:14px 22px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+    .preview-foot button{border:0;background:none;font-size:11px;padding:4px 0;white-space:nowrap}
+    .preview-foot .samples{display:flex;gap:14px;flex-wrap:wrap}
+    .preview-foot .samples button{color:var(--green);border-bottom:1px solid transparent}.preview-foot .samples button:hover{border-color:var(--green)}
+    /* families */
+    .families{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px}
+    .family-card{display:flex;flex-direction:column;gap:18px;border:1px solid var(--line);background:white;padding:28px 30px 26px;min-width:0;transition:border-color .3s,box-shadow .3s,transform .3s}
+    .family-card.is-active{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset;transform:translateY(-2px)}
+    .family-card header{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+    .family-card h2{font-size:32px;font-weight:400;letter-spacing:-.5px;margin:0;line-height:1.3}
+    .family-card header small{font-size:10px;font-weight:600;letter-spacing:1.6px;color:var(--muted)}
+    .family-card dl{display:grid;grid-template-columns:1fr auto;gap:6px 18px;margin:0;font-size:12px}
+    .family-card dt{color:var(--muted)}.family-card dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+    .family-card .card-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:auto;padding-top:6px}
+    .family-card .card-actions .primary-button{flex:1;min-width:190px}
+    .family-card .card-links{display:flex;gap:16px;flex-wrap:wrap;font-size:11px}
+    .family-card .card-links a{border-bottom:1px solid var(--line)}
+    .both{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;margin-top:18px;padding:18px 24px;border:1px solid var(--line);background:#f6f8f3;font-size:12px;color:var(--muted)}
+    .both #download-note{flex-basis:100%;margin:0;font-size:11px;color:var(--green)}
+    .both #download-note:empty{display:none}
+    .both button{border:1px solid var(--ink);background:none;padding:10px 18px;font-size:13px;display:flex;gap:18px;align-items:center;transition:background .15s,color .15s}
+    .both button:hover{background:var(--ink);color:white}
+    @media(max-width:1120px){.stage{padding:30px 28px}}
+    @media(max-width:760px){.landing{padding:26px 0 48px}.landing-lead{margin-bottom:20px}.preview-bar{padding:12px 16px;gap:12px}.preview-bar .hint{display:none}.stage{padding:24px 18px;min-height:220px;font-size:min(var(--size,52px),36px)}.families{grid-template-columns:1fr;gap:16px}.family-card{padding:22px 20px}.family-card h2{font-size:26px}}
+    @media(prefers-reduced-motion:reduce){.layer,.family-card,.mode button{transition:none}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#preview">Skip to the preview</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="GenZui, back to top"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SERIF · SANS</span></span></a>
+    {{FAMILY_SWITCH}}
+    <nav aria-label="Main navigation">
+      <a href="gallery.html">Design gallery</a><a href="minnan.html">Minnan kana</a><a href="serif.html#okinawan">Okinawan input</a><a href="https://github.com/mkpoli/GenZui">GitHub</a>
+    </nav>
+    <a class="header-download" href="#families">Download <span aria-hidden="true">↓</span></a>
+  </header>
+
+  <main id="top" class="landing wrap">
+    <div class="landing-topline"><span>源萃 · GENZUI</span><span>SERIF {{VERSION}} · SANS {{SANS_VERSION}}</span></div>
+    <h1>Two Japanese typefaces with historical kana.</h1>
+    <p class="landing-lead">Noto’s Japanese serif and sans, each extended with all 286 hentaigana, archaic kana, the Unicode 18 additions, kana ligatures and Minnan tone letters. Same code points, two voices.</p>
+
+    <section class="preview" id="preview" data-mode="serif" aria-label="Quick preview">
+      <div class="preview-bar">
+        <div class="mode" role="group" aria-label="Family"><button type="button" data-mode="serif" aria-pressed="true" lang="ja">源萃明朝</button><button type="button" data-mode="sans" aria-pressed="false" lang="ja">源萃ゴシック</button><button type="button" data-mode="compare" aria-pressed="false">Compare</button></div>
+        <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="size">52 px</output></span><input id="size" type="range" min="24" max="96" value="52"></label>
+        <span class="hint" id="hint" role="status">Type your own text. Switch families to see it change.</span>
+      </div>
+      <div class="stage" id="stage">
+        <p class="layer serif" id="layer-serif" lang="ja" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Preview text">春はあけぼの。やうやう白くなりゆく山ぎは
+𛀂𛀆𛀋 𛄣𛄤𛄥 𛄧𛄨 チ̅ァム𚿵</p>
+        <p class="layer sans" id="layer-sans" lang="ja" contenteditable="false" spellcheck="false" aria-multiline="true" aria-label="Preview text" aria-hidden="true">春はあけぼの。やうやう白くなりゆく山ぎは
+𛀂𛀆𛀋 𛄣𛄤𛄥 𛄧𛄨 チ̅ァム𚿵</p>
+        <div class="divider" aria-hidden="true"><span>SERIF</span><span>SANS</span></div>
+        <input class="split" id="split" type="range" min="0" max="100" value="50" aria-label="Compare position">
+      </div>
+      <div class="preview-foot"><div class="samples"><span>SAMPLES</span><button type="button" data-sample="reading">Reading text</button><button type="button" data-sample="hentaigana">Hentaigana</button><button type="button" data-sample="unicode18">Unicode 18</button><button type="button" data-sample="minnan">Minnan</button></div><button type="button" id="reset">Reset <span aria-hidden="true">↺</span></button></div>
+    </section>
+
+    <section id="families" aria-label="The two families">
+      <div class="families">
+        <article class="family-card is-active" data-family="serif">
+          <header><h2 class="serif-face" lang="ja">源萃明朝</h2><small>GENZUI SERIF · {{VERSION}}</small></header>
+          <dl><dt>Base</dt><dd>Noto Serif JP</dd><dt>Hentaigana</dt><dd>Noto Serif Hentaigana</dd><dt>Encoded characters</dt><dd>{{CHARACTER_COUNT}}</dd><dt>GenZui drawings</dt><dd>{{CONSTRUCTION_COUNT}}</dd><dt>Extras</dt><dd>Okinawan keyboard · Hooked WU</dd><dt>Stylesheet</dt><dd><code>/genzui.css</code></dd></dl>
+          <div class="card-actions"><a class="primary-button" href="downloads/GenZuiSerif-Regular.ttf" download><span>Download TTF<small>{{FONT_SIZE}} MB · Windows / macOS / Linux</small></span><span aria-hidden="true">↓</span></a></div>
+          <div class="card-links"><a href="downloads/GenZuiSerif-Regular-{{VERSION}}.zip" download>Complete package</a><a href="downloads/GenZuiSerif-Regular.woff2" download>WOFF2</a><a href="serif.html">Specimen & characters</a><a href="serif.html#okinawan">Okinawan input</a></div>
+        </article>
+        <article class="family-card" data-family="sans">
+          <header><h2 class="sans-face" lang="ja">源萃ゴシック</h2><small>GENZUI SANS · {{SANS_VERSION}}</small></header>
+          <dl><dt>Base</dt><dd>Noto Sans JP</dd><dt>Hentaigana</dt><dd>Noto Sans Hentaigana</dd><dt>Encoded characters</dt><dd>{{SANS_CHARACTER_COUNT}}</dd><dt>GenZui drawings</dt><dd>{{SANS_CONSTRUCTION_COUNT}}</dd><dt>Extras</dt><dd>Stem-matched hentaigana</dd><dt>Stylesheet</dt><dd><code>/genzui-sans.css</code></dd></dl>
+          <div class="card-actions"><a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download TTF<small>{{SANS_FONT_SIZE}} MB · Windows / macOS / Linux</small></span><span aria-hidden="true">↓</span></a></div>
+          <div class="card-links"><a href="downloads/GenZuiSans-Regular-{{SANS_VERSION}}.zip" download>Complete package</a><a href="downloads/GenZuiSans-Regular.woff2" download>WOFF2</a><a href="sans.html">Specimen & characters</a></div>
+        </article>
+      </div>
+      <div class="both"><span>Both families, SIL Open Font License 1.1 · free for any use · <a href="downloads/OFL.txt">licence</a> · <a href="downloads/NOTICE.txt">Serif credits</a> · <a href="downloads/GenZuiSans-NOTICE.txt">Sans credits</a></span><button type="button" id="download-both">Download both TTFs <span aria-hidden="true">↓↓</span></button><p id="download-note" role="status"></p></div>
+    </section>
+  </main>
+
+  <noscript><p class="no-script">Enable JavaScript for the preview. The downloads below work without it.</p></noscript>
+  <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="serif.html">GenZui Serif</a><a href="sans.html">GenZui Sans</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="#top">Back to top ↑</a></div></footer>
+  <script>
+    (() => {
+      // Links to the Serif page's sections used to be anchors on this URL.
+      const old = ['#specimen', '#okinawan', '#unicode18', '#characters', '#sources', '#download'];
+      if (old.includes(location.hash.split('?')[0])) { location.replace(document.querySelector('.family-switch a[data-family=serif]').getAttribute('href') + location.search + location.hash); return; }
+      const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+      const preview = $('#preview'), stage = $('#stage'), layers = { serif: $('#layer-serif'), sans: $('#layer-sans') };
+      const samples = {
+        reading: '春はあけぼの。やうやう白くなりゆく山ぎは\n𛀂𛀆𛀋 𛄣𛄤𛄥 𛄧𛄨 チ̅ァム𚿵',
+        hentaigana: 'あ 𛀂 𛀃 𛀄 𛀅　い 𛀆 𛀇 𛀈 𛀉\nう 𛀊 𛀋 𛀌 𛀍 𛀎　え 𛀁 𛀏 𛀐',
+        unicode18: '𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨\nゟ ヿ 𪜈 𬻿 𬼀 𬼂',
+        minnan: 'チ̅ァム𚿵 チ̅ァム𚿵 チ̣̅ア𚿷\nウ̅ ゥ̅ オ̅ ォ̅',
+      };
+      let syncing = false;
+      function sync(from) {
+        if (syncing) return; syncing = true;
+        const other = from === layers.serif ? layers.sans : layers.serif;
+        if (other.innerText !== from.innerText) other.textContent = from.innerText;
+        syncing = false;
+      }
+      for (const layer of Object.values(layers)) layer.addEventListener('input', () => sync(layer));
+      function setMode(mode) {
+        preview.dataset.mode = mode;
+        $$('.mode button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+        // One editable textbox at a time. Compare shows each family through a
+        // clip, where only part of a layer could be clicked, so it reads only.
+        const editable = mode === 'compare' ? null : mode;
+        for (const [name, layer] of Object.entries(layers)) {
+          layer.contentEditable = name === editable ? 'plaintext-only' : 'false';
+          layer.setAttribute('aria-hidden', String(mode === 'compare' ? name === 'sans' : name !== mode));
+          if (name === editable) layer.setAttribute('role', 'textbox'); else layer.removeAttribute('role');
+        }
+        $('#split').disabled = mode !== 'compare';
+        $$('.family-card').forEach(c => c.classList.toggle('is-active', mode === 'compare' || c.dataset.family === mode));
+        $('#hint').textContent = mode === 'compare' ? 'Drag the handle, or use its arrow keys, to compare. Switch to one family to edit the text.' : 'Type your own text. Switch families to see it change.';
+      }
+      $$('.mode button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+      // Hovering or focusing a card previews that family, except while comparing.
+      const peek = c => { if (preview.dataset.mode !== 'compare' && !c.contains(document.activeElement)) setMode(c.dataset.family); };
+      $$('.family-card').forEach(c => { c.addEventListener('mouseenter', () => peek(c)); c.addEventListener('focusin', () => peek(c)); });
+      $('#split').addEventListener('input', e => stage.style.setProperty('--split', e.target.value + '%'));
+      $('#size').addEventListener('input', e => { stage.style.setProperty('--size', e.target.value + 'px'); $('#size-value').textContent = e.target.value + ' px'; });
+      const setText = text => { layers.serif.textContent = layers.sans.textContent = text; };
+      $$('[data-sample]').forEach(b => b.addEventListener('click', () => setText(samples[b.dataset.sample])));
+      $('#reset').addEventListener('click', () => { setText(samples.reading); $('#size').value = 52; stage.style.setProperty('--size', '52px'); $('#size-value').textContent = '52 px'; $('#split').value = 50; stage.style.setProperty('--split', '50%'); setMode('serif'); });
+      $('#download-both').addEventListener('click', () => {
+        for (const href of ['downloads/GenZuiSerif-Regular.ttf', 'downloads/GenZuiSans-Regular.ttf']) { const a = document.createElement('a'); a.href = href; a.download = ''; document.body.append(a); a.click(); a.remove(); }
+        $('#download-note').textContent = 'Two downloads started. If only one arrived, your browser asked before the second — allow multiple downloads, or use the buttons above.';
+      });
+      const mode = new URLSearchParams(location.search).get('mode');
+      setMode(['serif', 'sans', 'compare'].includes(mode) ? mode : 'serif');
+    })();
+  </script>
+</body>
+</html>

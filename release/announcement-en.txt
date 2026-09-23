@@ -1,4 +1,4 @@
 GenZui Serif is out: Noto Serif JP with 286 hentaigana, Unicode 18.0 kana, historical ligatures and Minnan tone letters. Regular, TTF + WOFF2, SIL OFL 1.1.
 
 Try the font and browse its glyphs:
-https://genzui.mkpo.li/
+https://genzui.mkpo.li/serif
