@@ -6,6 +6,7 @@ No outlines are imported from Nishiki-teki, Xim Sans or legacy Okinawan fonts.
 """
 import json
 import math
+import os
 import pathops
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
@@ -54,6 +55,8 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
         dy = low - scale * bottom
         return [transform(part, (scale, 0, 0, scale, dx, dy)) for part in parts]
 
+    radius_scale = float(os.environ.get('GENZUI_OKINAWAN_WEIGHT', '1'))
+
     def embolden(parts, radius):
         # Thicken every stroke by uniting copies offset around a small
         # circle, so the hairlines match Noto's kana weight.
@@ -86,9 +89,9 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
         dy = RAISED_TOP - scale * top
         return embolden([transform(pen, (scale, 0, 0, scale, dx, dy))], radius)
 
-    recipes = {cp: embolden(fit(parts, BASES[cp]), WEIGHT.get(cp, 8))
+    recipes = {cp: embolden(fit(parts, BASES[cp]), WEIGHT.get(cp, 8) * radius_scale)
                for cp, parts in outlines().items()}
-    recipes.update({cp: raised(source, radius) for cp, (source, radius) in RAISED.items()})
+    recipes.update({cp: raised(source, radius * radius_scale) for cp, (source, radius) in RAISED.items()})
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]
