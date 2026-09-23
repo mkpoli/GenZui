@@ -23,8 +23,11 @@ from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REV
 from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
+from mincho_weight import RADIUS, expand_outline
 
 from okinawan import add_okinawan, PUA as OKINAWAN_PUA, DESCRIPTIONS as OKINAWAN_DESCRIPTIONS, ENTRIES as OKINAWAN_ENTRIES
+
+CJK_BOLD = CJK_SOURCE.with_name('NotoSerifCJKjp-Bold.otf')
 
 OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
@@ -242,14 +245,24 @@ def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830):
     font['OS/2'].usWinAscent = max(font['OS/2'].usWinAscent, top)
 
 
-def build():
+def build(weight=400):
+    """Build one static face. 400 is Regular. 700 is Bold, the named Noto instance."""
     verify()
     PROVENANCE.clear()
     OUT.mkdir(parents=True, exist_ok=True)
-    font = jp = instance('NotoSerifJP', 400)
-    heavier = instance('NotoSerifJP', 500, set(SMALL.values()) - {0x1B121})
-    h_heavier = instance('NotoSerifHentaigana', 500, {0x1B121})
-    donor = instance('NotoSerifHentaigana', 400)
+    style = 'Regular' if weight == 400 else 'Bold'
+    stem = 'GenZuiSerif-' + style
+    # Small forms are scaled from one step above the text weight, as Regular
+    # scales weight 500 rather than 400. Bold scales weight 800.
+    small_weight = 500 if weight == 400 else 800
+    print(f'Instantiating Noto Serif JP at weight {weight}', flush=True)
+    font = jp = instance('NotoSerifJP', weight)
+    heavier = instance('NotoSerifJP', small_weight, set(SMALL.values()) - {0x1B121})
+    h_heavier = instance('NotoSerifHentaigana', small_weight, {0x1B121})
+    donor = instance('NotoSerifHentaigana', weight)
+    # Drawn joins use coordinates measured on Regular. Bold rebuilds those
+    # drawings from Regular, then dilates them to the Bold stem.
+    drawing_font = jp if weight == 400 else instance('NotoSerifJP', 400)
     originals = set(font.getBestCmap())
     points = {ord(item['character']) for item in repertoire()}
     historical = points - originals - {PAATU} - set(HONKOKU)
@@ -258,24 +271,35 @@ def build():
     retained = len(cmap_add)
     minnan_points = set(MINNAN_TONES) | set(MINNAN_MARKS)
     cmap_add.update(import_minnan(font, add))
+    if weight != 400:
+        for cp in MINNAN_TONES:
+            name = cmap_add[cp]
+            outline = expand_outline(font['glyf'][name], font['glyf'], glyph)
+            outline.recalcBounds(font['glyf'])
+            font['glyf'][name] = outline
+            font['hmtx'][name] = (font['hmtx'][name][0], outline.xMin)
+            font['vmtx'][name] = (font['vmtx'][name][0], 880 - outline.yMax)
     for cp in minnan_points:
         PROVENANCE[f'U+{cp:04X}'] = ('FRB Taiwanese Kana outline; GenZui kana mark attachment.'
             if cp in MINNAN_MARKS else 'FRB Taiwanese Kana outline; 500-unit horizontal advance and contextual vertical placement.')
     def part(ch, indices=None):
-        return contours(jp, ord(ch), indices)
+        return contours(drawing_font, ord(ch), indices)
     recipes = {}
     recipes.update(refinements(part, transform))
     descriptions = dict(DESCRIPTIONS)
     vertical = {}
     for cp, source_cp in SMALL.items():
         source = h_heavier if cp == 0x1B168 else heavier
-        # Weight 500 before scaling gives small forms more substance than a
-        # literal reduction of Regular; positioning follows JP small kana.
+        # One step above the text weight, then scale 0.72, so small forms keep
+        # more substance than a literal reduction. Positioning follows JP small kana.
         recipes[cp] = [transform(contours(source, source_cp), (.72,0,0,.72,140,-25))]
-        descriptions[cp] = f'Noto Serif {"Hentaigana" if cp == 0x1B168 else "JP"} U+{source_cp:04X}, weight 500, scale 0.72.'
+        descriptions[cp] = f'Noto Serif {"Hentaigana" if cp == 0x1B168 else "JP"} U+{source_cp:04X}, weight {small_weight}, scale 0.72.'
     for cp, parts in sorted(recipes.items()):
         name = f'hist.u{cp:05X}'
-        add(font, name, glyph(parts))
+        outline = glyph(parts)
+        if weight != 400 and cp not in SMALL:
+            outline = expand_outline(outline, font['glyf'], glyph, RADIUS)
+        add(font, name, outline)
         cmap_add[cp] = name
         if cp in SMALL:
             vertical[name] = add(font, name+'.vert', glyph([transform(p, (1,0,0,1,140,190)) for p in parts]))
@@ -284,7 +308,10 @@ def build():
         if table.isUnicode() and table.format in (4, 12):
             table.cmap.update({cp: name for cp, name in cmap_add.items()
                                if cp <= (0xFFFF if table.format == 4 else 0x10FFFF)})
-    alternate = add(font, 'hist.u1B11F.ss01', glyph(hooked_wu(part, transform)))
+    alternate_outline = glyph(hooked_wu(part, transform))
+    if weight != 400:
+        alternate_outline = expand_outline(alternate_outline, font['glyf'], glyph, RADIUS)
+    alternate = add(font, 'hist.u1B11F.ss01', alternate_outline)
     sub = otTables.SingleSubst()
     sub.mapping = {cmap_add[0x1B11F]: alternate}
     lookup = otTables.Lookup()
@@ -301,9 +328,16 @@ def build():
     layout_minnan(font, add, add_feature)
     add_paatu(font, add, glyph, add_feature)
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
-    add_honkoku(font, add, glyph, contours, transform)
+    add_honkoku(font, add, glyph, contours, transform,
+                source=CJK_SOURCE if weight == 400 else CJK_BOLD)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
-    add_okinawan(font, add, glyph, contours, transform, add_feature)
+    if weight != 400:
+        PROVENANCE[f'U+{0x5344:04X}'] = HONKOKU_DESCRIPTIONS[0x5344].replace('Regular', 'Bold')
+    okinawan_source = {} if weight == 400 else {
+        'source': drawing_font,
+        'thicken': lambda outline: expand_outline(outline, font['glyf'], glyph),
+    }
+    add_okinawan(font, add, glyph, contours, transform, add_feature, **okinawan_source)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in OKINAWAN_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
@@ -316,27 +350,36 @@ def build():
     notices += '\n' + (ROOT/'sources/upstream/FRBTaiwaneseKana/LICENSE.txt').read_text().split('\n\n')[0]
     for nid in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,21,22,25):
         font['name'].removeNames(nameID=nid)
-    for nid, value in {0:notices, 1:FAMILY, 2:'Regular', 3:VERSION+';'+STEM,
-                       4:FAMILY+' Regular', 5:'Version '+VERSION, 6:STEM,
-                       16:FAMILY,17:'Regular',
+    for nid, value in {0:notices, 1:FAMILY, 2:style, 3:VERSION+';'+stem,
+                       4:FAMILY+' '+style, 5:'Version '+VERSION, 6:stem,
+                       16:FAMILY,17:style,
                        10:'Japanese text and historical kana derived from Noto Serif JP, Noto Serif Hentaigana and FRB Taiwanese Kana. Includes historical kana constructions, SQUARE PAATU, transcription symbols, Okinawan kana with documented private-use mappings, and a hooked WU stylistic alternate.',
                        13:'This Font Software is licensed under the SIL Open Font License, Version 1.1. See OFL.txt.',
                        14:'https://openfontlicense.org'}.items():
         font['name'].setName(value,nid,3,1,0x409)
-    for nid, value in {1:FAMILY_JA, 2:'Regular', 4:FAMILY_JA+' Regular',
-                       16:FAMILY_JA, 17:'Regular'}.items():
+    for nid, value in {1:FAMILY_JA, 2:style, 4:FAMILY_JA+' '+style,
+                       16:FAMILY_JA, 17:style}.items():
         font['name'].setName(value,nid,3,1,0x411)
     font['head'].fontRevision = float(VERSION)
     font['OS/2'].ulUnicodeRange2 |= 1 << 28  # Bit 60: BMP Private Use Area.
     font['OS/2'].achVendID = 'NONE'
-    font['OS/2'].usWeightClass = 400
-    font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~33) | 64
-    font['head'].macStyle = 0
+    font['OS/2'].usWeightClass = 400 if weight == 400 else 700
+    if weight == 400:
+        font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~33) | 64
+        font['head'].macStyle = 0
+    else:
+        font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~65) | 32
+        font['head'].macStyle = 1
     for tag in ('STAT','DSIG'):
         if tag in font: del font[tag]
-    font.save(OUT/(STEM+'.ttf'))
+    font.save(OUT/(stem+'.ttf'))
     font.flavor = 'woff2'
-    font.save(OUT/(STEM+'.woff2'))
+    font.save(OUT/(stem+'.woff2'))
+    if weight != 400:
+        _write_bold_record(stem, font, originals, points, retained, recipes, alternate, minnan_points, small_weight)
+        bold_sheet(stem)
+        print(f'Built {FAMILY} Bold {VERSION}: {len(font.getBestCmap()):,} encoded characters.')
+        return
     licence = (ROOT/'sources/upstream/NotoSerifJP/OFL.txt').read_text().split('\n\n', 1)[1]
     (OUT/'OFL.txt').write_text(notices+'\n\n'+licence)
     (OUT/'NOTICE.txt').write_text(
@@ -416,6 +459,64 @@ def build():
     shutil.copyfile(ROOT/'data/okinawan/mappings.json', OUT/'okinawan-mappings.json')
     proof()
     print(f'Built {FAMILY} {VERSION}: {len(font.getBestCmap()):,} encoded characters, {len(points)} historical targets, {len(recipes)} provisional forms.')
+
+
+def _write_bold_record(stem, font, originals, points, retained, recipes, alternate, minnan_points, small_weight):
+    (OUT/'sources-bold.json').write_text(json.dumps({
+        'family': FAMILY, 'family_ja': FAMILY_JA, 'reading': 'げんずい',
+        'status': 'development build', 'weight': 700, 'style': 'Bold',
+        'stem': stem, 'version': VERSION, 'base': 'Noto Serif JP',
+        'base_characters': len(originals),
+        'encoded_characters': len(font.getBestCmap()),
+        'target_characters': len(points), 'retained_historical': retained,
+        'provisional_forms': len(recipes),
+        'small_source_weight': small_weight,
+        'drawing_dilation': {
+            'regular_stem': 60, 'bold_stem': 105, 'radius': RADIUS,
+            'note': 'Noto Serif JP Bold supplies every glyph in that variable font, including hentaigana at wght 700. GenZui drawings measured on Regular are dilated horizontally so a 60-unit stem becomes 105, matching ト.',
+        },
+        'stylistic_sets': {'ss01': {'name': 'Hooked WU', 'glyph': alternate}},
+        'minnan_source_forms': len(minnan_points),
+        'added': PROVENANCE,
+    }, ensure_ascii=False, indent=2) + '\n')
+
+
+def bold_sheet(stem):
+    """Contact sheet of the Bold face, with Regular above it when that file exists."""
+    bold_path = OUT / (stem + '.ttf')
+    regular_path = OUT / (STEM + '.ttf')
+    rows = []
+    if regular_path.exists():
+        rows.append(('Regular', ImageFont.truetype(str(regular_path), 86)))
+    rows.append(('Bold', ImageFont.truetype(str(bold_path), 86)))
+    lines = [
+        '源萃明朝の太字。漢字と仮名が同じ太さで並ぶ。',
+        'あいうえおアイウエオトシ正んけ',
+        ''.join(chr(cp) for cp in range(0x1B002, 0x1B012)),
+        ''.join(chr(cp) for cp in REVISED),
+        ''.join(chr(cp) for cp in SMALL),
+        '卄' + ''.join(chr(cp) for cp in TALLIES) + '⿷⿺',
+        ''.join(chr(cp) for cp in list(MINNAN_TONES)[:8]),
+    ]
+    label = ImageFont.truetype('DejaVuSans.ttf', 18)
+    width, line_h, pad = 1680, 120, 16
+    image = Image.new('RGB', (width, pad + len(rows) * len(lines) * line_h), '#f6f4ee')
+    draw = ImageDraw.Draw(image)
+    for r, (name, face) in enumerate(rows):
+        for i, text in enumerate(lines):
+            y = pad + (r * len(lines) + i) * line_h
+            draw.text((pad, y), name, font=label, fill='#5c675f')
+            draw.text((110, y), text, font=face, fill='#182620')
+    image.save(OUT / 'bold-proof.png')
+    css = (OUT / (stem + '.woff2')).read_bytes()
+    import base64 as _b64
+    data = _b64.b64encode(css).decode()
+    samples = '<br>'.join(html.escape(line) for line in lines)
+    (OUT / 'bold-proof.html').write_text(
+        '<!doctype html><meta charset="utf-8"><title>GenZui Serif Bold</title>'
+        f'<style>@font-face{{font-family:Bold;src:url(data:font/woff2;base64,{data}) format("woff2");font-weight:700}}'
+        'body{margin:32px;background:#f6f4ee;color:#182620;font:22px/1.7 Bold,serif}'
+        f'h1{{font:18px/1.4 system-ui;font-weight:600}}</style><h1>GenZui Serif Bold {VERSION}</h1><p>{samples}</p>')
 
 
 def proof():

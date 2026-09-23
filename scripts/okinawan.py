@@ -22,7 +22,10 @@ DESCRIPTIONS = {cp: (f"{e['label']}. " +
     for cp, e in PUA.items()}
 
 
-def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
+def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
+                  source=None, thicken=None):
+    base = font if source is None else source
+
     def unite(parts):
         # Union independently filled components: opposite native/custom winding
         # must not punch holes into a shared join.
@@ -35,11 +38,15 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
         merged.draw(pen)
         return make_glyph([pen])
 
+    def place(parts):
+        outline = unite(parts)
+        return outline if thicken is None else thicken(outline)
+
     def part(ch, indices=None, matrix=None):
-        pen = contours(font, ord(ch), indices)
+        pen = contours(base, ord(ch), indices)
         return transform(pen, matrix) if matrix else pen
 
-    fu_left = contours(font, ord('ふ'), [1])
+    fu_left = contours(base, ord('ふ'), [1])
     native = pathops.Path()
     fu_left.replay(native.getPen())
     clip = pathops.Path()
@@ -129,7 +136,7 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
             # Half-em advance, raised into the upper half of a full kana cell.
             recipes[cp] = [part(chr(int(entry['base'], 16)), matrix=(.48, 0, 0, .48, 10, 410))]
     for cp, parts in recipes.items():
-        name = add(font, f'okinawa.u{cp:04X}', unite(parts))
+        name = add(font, f'okinawa.u{cp:04X}', place(parts))
         g = font['glyf'][name]
         raised = PUA[cp]['system'] == 'prefecture'
         font['hmtx'][name] = (500 if raised else 1000, g.xMin)
@@ -150,7 +157,7 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
 
         original_mark = font['glyf'][cmap[0x309B]]
         mark = part('゛', matrix=(.72, 0, 0, .72, 810-.72*original_mark.xMin, 825-.72*original_mark.yMax))
-        name = add(font, f"okinawa.{e['id']}", unite([
+        name = add(font, f"okinawa.{e['id']}", place([
             transform(p, (.9, 0, 0, .9, 0, 0)) for p in recipes[cp]]+[mark]))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
