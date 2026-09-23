@@ -33,7 +33,7 @@
     <a class="brand" href="./" aria-label="GenZui, both families"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SANS</span></span></a>
     {{FAMILY_SWITCH}}
     <nav aria-label="Main navigation">
-      <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#sources">Sources</a>
+      <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
     </nav>
     <a class="header-download" href="downloads/GenZuiSans-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
   </header>
@@ -47,12 +47,12 @@
           <div class="hero-caption"><span lang="ja">げんずい</span><span>GenZui Sans</span></div>
           <div class="hero-download">
             <span class="download-label"><span lang="ja">無料ダウンロード</span> / FREE FONT</span>
-            <a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download GenZui Sans<small>TTF · {{FONT_SIZE}} MB · Windows / macOS</small></span><span aria-hidden="true">↓</span></a>
+            <a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download GenZui Sans<small>TTF · {{FONT_SIZE}} MB · Windows / macOS / Linux</small></span><span aria-hidden="true">↓</span></a>
             <div class="hero-download-meta"><span>Regular {{VERSION}} · SIL OFL 1.1</span><a href="#download">All formats & installation <span aria-hidden="true">↗</span></a></div>
           </div>
         </div>
         <div class="hero-collection" role="group" aria-label="Historical kana and GenZui drawings">
-          <div class="hero-collection-label"><span>HISTORICAL KANA · DRAWINGS</span><span>字形</span></div>
+          <div class="hero-collection-label"><span>HISTORICAL KANA</span><span>字形</span></div>
           <div class="hero-glyphs face" lang="ja">
             <span>𛄟<small>WU</small></span><span class="accent-glyph">𛄣<small>KOTO</small></span><span>𛄧<small>NE</small></span>
             <span>𛅨<small>SMALL YE</small></span><span>㌬<small>PAATU</small></span><span>𝍵<small>TALLY</small></span>
@@ -79,7 +79,7 @@
       <div class="section-heading"><h2 id="specimen-title">Try the typeface.</h2><p>Choose a sample, or type your own text.</p></div>
       <div class="typesetter">
         <div class="type-controls">
-          <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="latin">Latin & numerals</option></select></label>
+          <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="numerals">Han numerals</option><option value="tallies">Ideographic tally marks</option><option value="ideographic-description">Ideographic description characters</option></select></label>
           <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="type-size">48 px</output></span><input id="type-size" type="range" min="20" max="112" value="48" step="1"></label>
           <label class="range-control spacing-control"><span class="control-label">SPACING <output id="spacing-value" for="type-spacing">0 em</output></span><input id="type-spacing" type="range" min="0" max="20" value="0" step="1"></label>
           <div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
@@ -89,7 +89,7 @@
 あ𛀂 い𛀆 う𛀋 え𛀁 お𛀕</textarea></div>
         <div class="type-footer"><span id="type-status" role="status">Loading the font…</span><button type="button" id="reset-type">Reset sample <span aria-hidden="true">↺</span></button></div>
       </div>
-      <p class="small-note">Regular, weight 400. Unsupported characters in your text may use a fallback font.</p>
+      <p class="small-note">Regular, weight 400. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
     </section>
 
     <section class="unicode-section" id="hentaigana" aria-labelledby="hentaigana-title">
@@ -114,9 +114,57 @@
       </div>
     </section>
 
+    <section class="unicode-section" id="unicode18" aria-labelledby="unicode-title">
+      <div class="wrap">
+        <div class="section-label"><span>04 / UNICODE 18</span><span lang="ja">七つの文字</span></div>
+        <div class="section-heading"><h2 id="unicode-title">Seven additions.</h2><p>Historical digraphs, alternate katakana and a small archaic ye.<br>All seven are included; KOTO, alternate NE and small archaic YE are refitted from GenSeki.</p></div>
+        <div class="unicode-grid" id="unicode-grid"></div>
+        <a class="text-link" href="#characters" id="browse-unicode">Inspect the Unicode 18 characters <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section class="section wrap" id="characters" aria-labelledby="characters-title">
+      <div class="section-label"><span>05 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
+      <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse by character type, or search all {{CHARACTER_COUNT}} characters.<br>Select a character to see its encoding, source and design status.</p></div>
+      <p class="small-note">All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/GenZuiSans-kana-coverage.json">Coverage audit</a>. Unencoded historical variants and arbitrary combining sequences fall outside this count.</p>
+      <p class="small-note">Try <a href="?sample=numerals#specimen">Han numerals</a>, <a href="?sample=tallies#specimen">ideographic tally marks</a> or <a href="?sample=ideographic-description#specimen">ideographic description characters</a>. Description characters display as visible operators; they do not assemble a new glyph from the following components.</p>
+      <div class="inventory-tools">
+        <label class="search-box"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="8.3" cy="8.3" r="5.8"/><path d="m12.6 12.6 4.6 4.6"/></svg><span class="sr-only">Search characters</span><input id="character-search" type="search" placeholder="Character, name, or U+1B124" autocomplete="off" spellcheck="false"></label>
+        <label class="source-filter"><span class="sr-only">Filter by outline source</span><select id="source-filter"><option value="all">All sources</option><option value="jp">Noto Sans JP</option><option value="hentaigana">Noto Sans Hentaigana</option><option value="genseki">GenSeki Hentaigana Gothic</option><option value="frb">FRB Taiwanese Kana</option><option value="genzui">GenZui drawings</option><option value="cjk">Noto Sans CJK JP</option></select></label>
+      </div>
+      <div class="inventory-filters" role="group" aria-label="Character collections">
+        <button type="button" data-filter="historical" aria-pressed="true">Extended kana <span>{{EXTENDED_KANA_COUNT}}</span></button>
+        <button type="button" data-filter="hentaigana" aria-pressed="false">Hentaigana <span>286</span></button>
+        <button type="button" data-filter="unicode18" aria-pressed="false">Unicode 18 <span>7</span></button>
+        <button type="button" data-filter="small" aria-pressed="false">Small kana <span>10</span></button>
+        <button type="button" data-filter="ligatures" aria-pressed="false">Ligatures <span>10</span></button>
+        <button type="button" data-filter="minnan" aria-pressed="false">Minnan <span>15</span></button>
+        <button type="button" data-filter="numerals" aria-pressed="false">Han numerals <span>{{NUMERAL_COUNT}}</span></button>
+        <button type="button" data-filter="tallies" aria-pressed="false">Ideographic tallies <span>5</span></button>
+        <button type="button" data-filter="ideographic-description" aria-pressed="false">Ideographic description <span>17</span></button>
+        <button type="button" data-filter="all" aria-pressed="false">Entire font <span>{{CHARACTER_COUNT}}</span></button>
+      </div>
+      <div class="inventory-meta"><span id="result-count" aria-live="polite"></span><span>SELECT A GLYPH TO INSPECT</span></div>
+      <div class="inventory-layout">
+        <div class="inventory-results">
+          <div id="character-grid" class="character-grid" aria-label="Characters"></div>
+          <div id="empty-state" class="empty-state" hidden><h3>No matching characters.</h3><p>Try a different name or code point, or broaden the collection.</p><button type="button" class="text-link" id="search-all">Search the entire font <span aria-hidden="true">↗</span></button></div>
+          <div class="pagination"><span id="page-label"></span><div><button type="button" id="previous-page" aria-label="Previous page">←</button><button type="button" id="next-page" aria-label="Next page">→</button></div></div>
+        </div>
+        <aside class="glyph-detail" id="glyph-detail" aria-labelledby="detail-name">
+          <div class="detail-top"><span id="detail-code"></span><span id="detail-status" class="status-tag"></span></div>
+          <div class="detail-glyph face" id="detail-glyph" lang="ja"></div>
+          <h3 id="detail-name"></h3><p class="detail-description" id="detail-description"></p>
+          <dl><div><dt>Unicode</dt><dd id="detail-age"></dd></div><div><dt>Block</dt><dd id="detail-block"></dd></div><div><dt>Outline source</dt><dd id="detail-source"></dd></div></dl>
+          <button type="button" class="copy-button" id="copy-character">Copy character <span aria-hidden="true">↗</span></button>
+          <p id="copy-status" class="copy-status" aria-live="polite"></p>
+        </aside>
+      </div>
+    </section>
+
     <section class="sources-section" id="sources" aria-labelledby="sources-title">
       <div class="wrap">
-        <div class="section-label"><span>04 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
+        <div class="section-label"><span>06 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
         <div class="section-heading"><h2 id="sources-title">Built on established type.</h2><p>Most of GenZui Sans comes directly from existing fonts.<br>Counts show each source’s contribution.</p></div>
         <div class="source-rows">
           <div class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notosansjp" target="_blank" rel="noopener noreferrer">Noto Sans JP <span aria-hidden="true">↗</span></a></h3><p>The Japanese subset of Noto Sans CJK at weight 400, with its character repertoire, outlines and Japanese layout preserved.</p></div><strong>{{JP_COUNT}}<span>characters · OFL 1.1</span></strong></div>
@@ -124,15 +172,15 @@
           <div class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/MihailJP/GenSekiHentaiganaGothic" target="_blank" rel="noopener noreferrer">GenSeki Hentaigana Gothic <span aria-hidden="true">↗</span></a></h3><p>The seven Unicode 18 additions, kana ligatures and small kana. Three outlines are refitted to their kana neighbours.</p></div><strong>21<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">04</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with kana attachment and vertical placement.</p></div><strong>15<span>characters · OFL 1.1</span></strong></div>
           <div class="source-row"><span class="source-number">05</span><div><h3><a href="https://github.com/notofonts/noto-cjk/tree/main/Sans" target="_blank" rel="noopener noreferrer">Noto Sans CJK JP <span aria-hidden="true">↗</span></a></h3><p>卄 (twenty), absent from the JP subset above, comes from the same family’s full CJK font with Japanese default forms.</p></div><strong>1<span>character · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">06</span><div><h3>GenZui drawings</h3><p><span class="face" lang="ja">㌬</span> SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components.</p></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></div>
+          <div class="source-row"><span class="source-number">06</span><div><h3><a href="?source=genzui#characters" id="browse-constructions">GenZui drawings <span aria-hidden="true">↗</span></a></h3><p><span class="face" lang="ja">㌬</span> SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components.</p></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></div>
         </div>
         <div class="scope-notes"><div><h3>Japanese regional forms</h3><p>GenZui Sans retains Noto Sans JP’s character repertoire and Japanese forms of shared ideographs. Other Chinese and Korean coverage is limited to the Japanese base.</p></div><div><h3>Coverage</h3><p>All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/GenZuiSans-kana-coverage.json">Coverage audit</a> · <a href="downloads/GenZuiSans-checks.json">Font checks</a>.</p></div></div>
       </div>
     </section>
 
     <section class="download-section wrap" id="download" aria-labelledby="download-title">
-      <div class="download-intro"><div class="section-label"><span>05 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃ゴシック</h2><p>GenZui Sans Regular · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/GenZuiSans-OFL.txt">SIL Open Font License 1.1</a>.</p>
-        <div class="install-notes"><h3>Install the font</h3><p><strong>Windows</strong> — Download the TTF, open it and select <b>Install</b>.</p><p><strong>macOS</strong> — Open the TTF in Font Book and select <b>Install</b>.</p><p>Choose <b>GenZui Sans</b> in your app’s font menu. It installs beside GenZui Serif.</p></div>
+      <div class="download-intro"><div class="section-label"><span>07 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃ゴシック</h2><p>GenZui Sans Regular · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/GenZuiSans-OFL.txt">SIL Open Font License 1.1</a>.</p>
+        <div class="install-notes"><h3>Install the font</h3><p><strong>Windows</strong> — Download the TTF, open it and select <b>Install</b>.</p><p><strong>macOS</strong> — Open the TTF in Font Book and select <b>Install</b>.</p><p><strong>Linux</strong> — Copy the TTF to <code>~/.local/share/fonts/</code> and run <code>fc-cache</code>, or open it in your font manager.</p><p><strong>iOS / Android</strong> — Install through a font-installer app or a configuration profile; the system apps then list it.</p><p>Choose <b>GenZui Sans</b> in your app’s font menu. It installs beside GenZui Serif.</p></div>
         {{WEBFONT_USAGE}}</div>
       <div class="download-options">
         <a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download TTF<small>For desktop apps · {{FONT_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
@@ -145,63 +193,8 @@
   </main>
 
   <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="serif.html">GenZui Serif</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="downloads/GenZuiSans-NOTICE.txt">Source credits</a><a href="#top">Back to top ↑</a></div></footer>
-  <noscript><p class="no-script">Enable JavaScript for the interactive specimen. The font downloads work without JavaScript.</p></noscript>
-  <script>
-(() => {
-  'use strict';
-  const $ = selector => document.querySelector(selector);
-  const $$ = selector => [...document.querySelectorAll(selector)];
-  const presets = {
-    mixed: '春はあけぼの。\nかなのかたちを読む。\nあ𛀂 い𛀆 う𛀋 え𛀁 お𛀕',
-    reading: '春はあけぼの。\nやうやう白くなりゆく山ぎは。\n文字を読み、ことばをたどる。',
-    historical: 'あ 𛀂 𛀃 𛀄 𛀅\nい 𛀆 𛀇 𛀈 𛀉\nう 𛀊 𛀋 𛀌 𛀍 𛀎',
-    unicode18: '𛄣 𛄤 𛄥 𛄦 𛄧 𛄨 𛅨',
-    ligatures: 'ゟ ヿ 𪜈 𬻿 𬼀 𬼂\n𛄣 𛄤 𛄥 𛄦',
-    marks: '𛀂゙ 𛀂゚　𛀙゙ 𛀙゚\n𛄤゙ 𛄤゚　𛅨゙ 𛅨゚',
-    minnan: 'チ̅ァム𚿵 チ̅ァム𚿵 チ̣̅ア𚿷\nウ̅ ゥ̅ オ̅ ォ̅',
-    latin: 'GenZui Sans 0123456789\nHentaigana & Unicode 18.0\n源萃ゴシック・げんずい',
-  };
-  const typeInput = $('#type-input');
-  let loaded = false, loadFailed = false;
-  function typeStatus() {
-    const count = [...typeInput.value].length.toLocaleString('en-US');
-    $('#type-status').textContent = loadFailed ? 'The font could not load. Try reopening this page in a current browser.'
-      : !loaded ? 'Loading the font…' : `${count} characters · GenZui Sans Regular`;
-  }
-  function setPreset() { typeInput.value = presets[$('#preset').value]; typeInput.scrollTop = 0; typeInput.scrollLeft = 0; typeStatus(); }
-  $('#preset').addEventListener('change', setPreset);
-  typeInput.addEventListener('input', typeStatus);
-  $('#type-size').addEventListener('input', event => {
-    typeInput.style.fontSize = `${event.target.value}px`;
-    $('#size-value').textContent = `${event.target.value} px`;
-  });
-  $('#type-spacing').addEventListener('input', event => {
-    const amount = Number(event.target.value) / 100;
-    typeInput.style.letterSpacing = `${amount}em`;
-    $('#spacing-value').textContent = `${amount} em`;
-  });
-  function setDirection(direction) {
-    typeInput.classList.toggle('is-vertical', direction === 'vertical');
-    $$('[data-direction]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.direction === direction)));
-  }
-  $$('[data-direction]').forEach(button => button.addEventListener('click', () => setDirection(button.dataset.direction)));
-  $('#reset-type').addEventListener('click', () => {
-    const size = window.innerWidth <= 520 ? 30 : window.innerWidth <= 760 ? 36 : 48;
-    $('#type-size').value = size; $('#type-spacing').value = 0;
-    typeInput.style.fontSize = `${size}px`; typeInput.style.letterSpacing = '0em';
-    $('#size-value').textContent = `${size} px`; $('#spacing-value').textContent = '0 em';
-    setDirection('horizontal'); setPreset();
-  });
-  const initialSize = Math.round(parseFloat(getComputedStyle(typeInput).fontSize));
-  $('#type-size').value = initialSize; $('#size-value').textContent = `${initialSize} px`;
-  const initialPreset = new URLSearchParams(location.search).get('sample');
-  if (Object.hasOwn(presets, initialPreset)) { $('#preset').value = initialPreset; setPreset(); }
-  document.fonts.load('48px GenZui', '源萃𛄤').then(faces => {
-    if (!faces.length) throw new Error('GenZui Sans face unavailable');
-    loaded = true; typeStatus();
-  }).catch(() => { loadFailed = true; typeStatus(); });
-  typeStatus();
-})();
-  </script>
+  <noscript><p class="no-script">Enable JavaScript for the interactive specimen and character browser. The font downloads work without JavaScript.</p></noscript>
+  <script id="font-data" type="application/json" data-family="GenZui Sans">{{DATA}}</script>
+  <script>{{JS}}</script>
 </body>
 </html>

@@ -16,6 +16,7 @@ from release_copy import FORM_DESCRIPTIONS
 from serif import OUT as FONT_OUT, STEM, VERSION
 from social_card import build_card
 from sans_card import build_card as build_sans_card
+from font_chunks import build as build_chunks
 from sans_site import OUT as SANS_OUT, STEM as SANS_STEM, build_page as build_sans_page, checked as sans_checked
 from sources import ROOT
 
@@ -60,6 +61,21 @@ def external_fonts(page):
         (OUT/'assets'/name).write_bytes(raw)
         return 'url(assets/'+name+')'
     return re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', save, page)
+
+
+def external_data(page, prefix, descriptions=None):
+    """Move the inline inventory JSON to a hashed asset the page fetches."""
+    match = re.search(r'<script id="font-data" type="application/json"[^>]*>(.*?)</script>', page, re.S)
+    data = json.loads(match[1])
+    for item in data['characters']:
+        if descriptions and item['cp'] in descriptions:
+            item['description'] = descriptions[item['cp']]
+    raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()
+    name = prefix+'-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
+    (OUT/'assets'/name).write_bytes(raw)
+    family=re.search(r'data-family="([^"]*)"', match.group(0))
+    attribute=f' data-family="{family[1]}"' if family else ''
+    return page[:match.start()]+f'<script id="font-data" type="application/json"{attribute} data-src="assets/{name}"></script>'+page[match.end():]
 
 
 def build():
@@ -123,21 +139,24 @@ def build():
     (OUT/'genzui.css').write_text(f"@import url('/v{VERSION}/genzui.css');\n")
     (OUT/'genzui-sans.css').write_text(f"@import url('/sans-v{sans_version}/genzui-sans.css');\n")
 
+    # Each family is served in unicode-range chunks so a page fetches only the
+    # slices its text uses; the versioned /v*/ webfonts stay whole for other sites.
+    site_text = set()
+    for source in (ROOT/'build/site').glob('*.html'):
+        site_text.update(ord(c) for c in re.sub(r'<[^>]+>|&[#a-zA-Z0-9]+;', ' ', source.read_text()))
+    serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
+    sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets', site_text)
+    preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-text-' in f)
+    # The landing declares a second family name for the Sans face.
+    landing_serif_css = serif_css
+    landing_sans_css = sans_css.replace('font-family:GenZui;', 'font-family:GenZuiSans;')
+    sans_serif_css = serif_css.replace('font-family:GenZui;', 'font-family:GenZuiSerif;').replace('font-display:block', 'font-display:swap')
     page = (ROOT/'build/site/serif.html').read_text()
-    # The main face becomes the versioned webfont; the switch's label subsets
-    # become hashed assets and must be externalized first.
-    page = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)",
-                  rf'\1url(v{VERSION}/{STEM}.woff2)', page)
+    page = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
+                  lambda m: serif_css, page, count=1)
+    page = page.replace('</head>', preload(serif_chunks)+'</head>')
     page = external_fonts(page)
-    match = re.search(r'<script id="font-data" type="application/json">(.*?)</script>', page, re.S)
-    data = json.loads(match[1])
-    for item in data['characters']:
-        if item['cp'] in FORM_DESCRIPTIONS:
-            item['description'] = FORM_DESCRIPTIONS[item['cp']]
-    raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode()
-    name = 'characters-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
-    (OUT/'assets'/name).write_bytes(raw)
-    page = page[:match.start()]+f'<script id="font-data" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
+    page = external_data(page, 'characters', FORM_DESCRIPTIONS)
     page = page.replace('<h3>A development build</h3>', '<h3>Historical letterforms</h3>')
     page = page.replace('The constructed outlines remain provisional.', 'GenZui supplies historical letterforms and transcription symbols using Noto components and original drawing.')
     page = page.replace('Regular · {{VERSION}} development build', 'Regular · {{VERSION}}')
@@ -154,8 +173,11 @@ def build():
     page = page.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
     (OUT/'serif.html').write_text(metadata(page, '/serif', '源萃明朝 — GenZui Serif', SERIF_DESCRIPTION, home_alt))
     landing = (ROOT/'build/site/index.html').read_text()
-    landing = re.sub(r"(font-family:GenZui;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)", rf'\1url(v{VERSION}/{STEM}.woff2)', landing)
-    landing = re.sub(r"(font-family:GenZuiSans;src:)url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)", rf'\1url(sans-v{sans_version}/{SANS_STEM}.woff2)', landing)
+    landing = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
+                     lambda m: landing_serif_css, landing, count=1)
+    landing = re.sub(r"@font-face \{font-family:GenZuiSans;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
+                     lambda m: landing_sans_css, landing, count=1)
+    landing = landing.replace('</head>', preload(serif_chunks)+preload(sans_chunks)+'</head>')
     landing = external_fonts(landing)
     landing = landing.replace('</head>', '<script type="application/ld+json">'+json.dumps(structured,ensure_ascii=False)+'</script></head>')
     (OUT/'index.html').write_text(metadata(landing, '/', '源萃 — GenZui Serif / GenZui Sans', DESCRIPTION, home_alt))
@@ -163,7 +185,12 @@ def build():
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
                 'body {\n  font-family: "GenZui Sans", sans-serif;\n}</code></pre></details>')
-    sans_page = build_sans_page(f'sans-v{sans_version}/{SANS_STEM}.woff2', f'v{VERSION}/{STEM}.woff2', sans_web)
+    sans_page = build_sans_page('SANS_CHUNKS', 'SERIF_CHUNKS', sans_web)
+    sans_page = re.sub(r"@font-face \{font-family:GenZui;src:url\(SANS_CHUNKS\)[^}]*\}", lambda m: sans_css, sans_page, count=1)
+    sans_page = re.sub(r"@font-face \{font-family:GenZuiSerif;src:url\(SERIF_CHUNKS\)[^}]*\}",
+                       lambda m: sans_serif_css, sans_page, count=1)
+    sans_page = sans_page.replace('</head>', preload(sans_chunks)+'</head>')
+    sans_page = external_data(sans_page, 'sans-characters')
     sans_alt = build_sans_card(OUT/'media')
     sans_structured = {'@context':'https://schema.org', '@type':'WebSite',
                        'name':'GenZui Sans / 源萃ゴシック', 'url':URL+'/sans', 'description':SANS_DESCRIPTION,

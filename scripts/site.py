@@ -4,15 +4,12 @@ import hashlib
 import html
 import json
 import shutil
-from bisect import bisect_right
 from collections import Counter
-import unicodedata
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from fontTools.ttLib import TTFont
-from repertoire import properties
-from honkoku import TALLIES
 from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
+from inventory import KANA_GROUPS, character_data
 from serif import FAMILY, OUT as FONT_OUT, STEM, VERSION
 from sources import ROOT, verify
 from refinement_proof import build_comparison
@@ -23,65 +20,6 @@ from family_switch import css as switch_css, html as switch_html
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
 OUT = ROOT / 'build/site'
-
-KANA_GROUPS = {'hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph',
-               'cjk-kana-ligature', 'minnan-tone', 'phonetic-mark', 'compatibility-kana'}
-
-
-def character_data(font, audit, provenance):
-    cmap = font.getBestCmap()
-    historic = {ord(c['character']): c for c in audit['characters']}
-    ages = properties('DerivedAge.txt')
-    numeric = properties('DerivedNumericType.txt')
-    scripts = properties('Scripts.txt')
-    blocks, starts = [], []
-    for line in (ROOT/'data/unicode/Blocks.txt').read_text().splitlines():
-        line = line.split('#', 1)[0].strip()
-        if line:
-            extent, label = (s.strip() for s in line.split(';'))
-            first, last = (int(s, 16) for s in extent.split('..'))
-            blocks.append((first, last, label)); starts.append(first)
-    names, ranges, first_range = {}, [], None
-    for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines():
-        fields = line.split(';'); cp = int(fields[0], 16)
-        if fields[1].endswith(', First>'):
-            first_range = (cp, fields[2], fields[1])
-        elif fields[1].endswith(', Last>'):
-            ranges.append((first_range[0], cp, first_range[1], first_range[2]))
-        elif cp in cmap:
-            names[cp] = (fields[1], fields[2])
-    for first, last, category, range_name in ranges:
-        for cp in (c for c in cmap if first <= c <= last):
-            if range_name.startswith('<CJK Ideograph'):
-                name = f'CJK UNIFIED IDEOGRAPH-{cp:04X}'
-            elif range_name.startswith('<Hangul Syllable'):
-                name = unicodedata.name(chr(cp))  # Stable algorithmic names.
-            else:
-                assert category == 'Co', range_name
-                name = f'PRIVATE USE-{cp:04X}'
-            names[cp] = (name, category)
-    entries = []
-    for cp in sorted(cmap):
-        assert cp in names, f'Missing Unicode name: U+{cp:04X}'
-        name, category = names[cp]
-        index = bisect_right(starts, cp)-1
-        assert index >= 0 and cp <= blocks[index][1]
-        h = historic.get(cp)
-        key = f'U+{cp:04X}'
-        source = provenance['source_kinds'][key] if h or cp in OKINAWAN_PUA else 'jp'
-        if cp in OKINAWAN_PUA:
-            name = 'OKINAWAN ' + OKINAWAN_PUA[cp]['label'].upper() + ' (PRIVATE USE)'
-        group = ('okinawan' if cp in OKINAWAN_PUA else 'han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
-                 'ideographic-description' if 0x2FF0 <= cp <= 0x2FFF or cp == 0x31EF else
-                 'tally-mark' if cp in TALLIES else h['group'] if h else 'base')
-        entries.append({'cp': cp, 'name': name, 'category': category,
-                        'block': blocks[index][2], 'age': 'Private use' if cp in OKINAWAN_PUA else ages[cp],
-                        'source': source, 'group': group,
-                        'label': h.get('label', name) if h else name,
-                        'provisional': source == 'genzui',
-                        'description': provenance['added'].get(key, '')})
-    return entries
-
 
 def build():
     verify()
@@ -99,7 +37,7 @@ def build():
     # Use the audited source assignments in addition to the Unicode inventory.
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
     provenance = json.loads((FONT_OUT/'sources.json').read_text())
-    entries = character_data(font, audit, provenance)
+    entries = character_data(font, audit, provenance['source_kinds'], provenance['added'])
     source_counts = dict(Counter(e['source'] for e in entries))
     assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32 + len(OKINAWAN_PUA), 'frb': 15, 'cjk': 1}
     assert len(entries) == checks['encoded_characters']
