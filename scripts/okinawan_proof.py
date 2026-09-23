@@ -113,11 +113,12 @@ def chart_typesetting(pdf, out, font):
     page = render_page(pdf)
     scale = CHART_DPI / 72
     em = CHART_BODY_PT * scale
-    codes = {e['id']: int(e['output'][0], 16) for e in ENTRIES}
+    # A voiced letter is its base followed by U+3099; the font composes the pair.
+    letters = {e['id']: ''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES}
     runs = []
     for gid, head in sorted(heads.items(), key=lambda kv: (-kv[1]['y'], kv[1]['x'])):
         label = CHART_GLYPHS[gid]
-        if label not in codes:
+        if label not in letters:
             continue
         # The example run starts at the occurrence whose next character is
         # kana; the headword's own next character is its romaji label.
@@ -144,7 +145,7 @@ def chart_typesetting(pdf, out, font):
         if not run:
             continue
         start_at, words = run
-        text = chr(codes[label]) + ''.join(w['ch'] for w in words)
+        text = letters[label] + ''.join(w['ch'] for w in words)
         x0 = (start_at['x'] - .10 * CHART_BODY_PT) * scale
         x1 = (words[-1]['x'] + words[-1]['size'] * 1.04) * scale
         y0 = (CHART_PAGE - start_at['y'] - 1.02 * CHART_BODY_PT) * scale
@@ -155,7 +156,7 @@ def chart_typesetting(pdf, out, font):
         # The crop's top is 1.02 em above the printed baseline; anchor the
         # same text on that baseline so the two strips share a scale.
         ImageDraw.Draw(strip).text((round(.10 * em), round(1.02 * em)), text, anchor='ls',
-                                   font=ImageFont.truetype(str(font), round(em)), fill='#15291f')
+                                   font=ImageFont.truetype(str(font), round(em), layout_engine=ImageFont.Layout.RAQM), fill='#15291f')
         strip.save(out/f'genzui-{label}.png')
         runs.append(dict(id=label, text=''.join(w['ch'] for w in words)))
     return runs
