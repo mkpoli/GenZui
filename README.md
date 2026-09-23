@@ -7,10 +7,11 @@ kana and Unicode 18.0 additions.
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
 | Release | Regular 0.114 · 17,090 characters | Regular 0.101 · 17,070 characters |
-| Specimen | [genzui.mkpo.li](https://genzui.mkpo.li/) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
+| Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) |
 | Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.114.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-Regular-0.101.zip) |
 
+[Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
@@ -73,7 +74,7 @@ Regular is the only weight.
 
 - 27 Funatsu Okinawan forms and eight raised katakana, on 26 documented PUA
   bases. Voiced forms and YI/YE use combining dakuten wherever possible. The
-  [Okinawan composer](https://genzui.mkpo.li/#okinawan) on the home page,
+  [Okinawan composer](https://genzui.mkpo.li/serif#okinawan) on the Serif page,
   the [input notes](research/okinawan.md) and the
   [mapping registry](data/okinawan/mappings.json) document the keyboard.
 - 21 historical kana constructions from Noto components and original drawing.
@@ -100,7 +101,7 @@ character encoding.
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
 | [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms |
-| [GenZui constructions](https://genzui.mkpo.li/?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
+| [GenZui constructions](https://genzui.mkpo.li/serif?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
 
 ### GenZui Sans
 
@@ -175,9 +176,10 @@ bun run release:build
 .venv/bin/python scripts/check_release.py
 ```
 
-The public site is written to `build/release/` and serves Serif at `/` and Sans
-at `/sans`, with fonts from the versioned release folders. Edit `site/`,
-`templates/` and `scripts/release_site.py` / `scripts/sans_site.py`.
+The public site is written to `build/release/` and serves a family landing at
+`/`, GenZui Serif at `/serif` and GenZui Sans at `/sans`, with fonts from the
+versioned release folders. Edit `site/`, `templates/` and
+`scripts/release_site.py` / `scripts/sans_site.py`.
 `build/site/` holds the offline development specimen with glyph comparisons.
 [Deployment notes](release/README.md) describe the Cloudflare configuration.
 
