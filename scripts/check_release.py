@@ -66,6 +66,10 @@ def check():
         assert 'rel="author" href="https://mkpo.li"' in text
         assert 'rel="canonical"' in text and 'sizes="any"' in text
         assert 'application/ld+json' in text and '"inLanguage"' in text
+        if route=='index.html':
+            assert '"@type": "WebSite"' in text and '"alternateName"' in text
+        else:
+            assert '"@type": "WebPage"' in text and '"isPartOf"' in text
         assert 'data:font/' not in text
     home=(OUT/'index.html').read_text();gallery=(OUT/'gallery.html').read_text()
     assert 'https://kureedo.mkpo.li/' in home
@@ -73,6 +77,9 @@ def check():
     assert '変体仮名286字' in home and '"alternateName"' in home and '"@type": "WebSite"' in home
     assert 'noindex' in (OUT/'404.html').read_text()
     assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')
+    sitemap=(OUT/'sitemap.xml').read_text()
+    for route in ('/', '/sans', '/gallery', '/minnan'):
+        assert f'{URL}{route}</loc>' in sitemap, route
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review
