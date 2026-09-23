@@ -149,6 +149,12 @@ def check():
         assert {'OFL.txt','NOTICE.txt','GenSeki-OFL.txt','NotoSansHentaigana-OFL.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
         assert json.loads(z.read('kana-coverage.json'))['coverage']['Script plus Script_Extensions']=={'total':763,'covered':763,'missing':[]}
         assert json.loads((OUT/'downloads/GenZuiSans-kana-coverage.json').read_text())==json.loads(z.read('kana-coverage.json'))
+    sans_data=json.loads(next((OUT/'assets').glob('sans-characters-*.json')).read_text())
+    assert sans_data['family']=='GenZui Sans' and sans_data['total']==sans_checks['encoded_characters']==len(sans_data['characters'])
+    assert sans_data['historical']==329 and sans_data['counts']=={'jp':16732,'hentaigana':290,'genseki':21,'frb':15,'cjk':1,'genzui':11}
+    assert 'sans-characters-' in sans and 'id="character-grid"' in sans and 'id="unicode-grid"' in sans
+    assert {c['cp'] for c in sans_data['characters'] if c['description']}>= {0x1B123,0x1B127,0x1B168}
+    assert 'HISTORICAL KANA · DRAWINGS' not in sans and 'Windows / macOS / Linux' in sans and 'Windows / macOS / Linux' in home
     assert (OUT/'genzui-sans.css').read_text()==f"@import url('/sans-v{sans_version}/genzui-sans.css');\n"
     assert '/sans-v*' in (OUT/'_headers').read_text() and f'{URL}/sans</loc>' in (OUT/'sitemap.xml').read_text()
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
