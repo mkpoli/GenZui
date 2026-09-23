@@ -78,9 +78,9 @@ Regular is the only weight.
 
 ### Hooked WU
 
-𛄟 U+1B11F has a curved descent by default. Stylistic set 1 (`ss01`,
-“Hooked WU”) selects the hooked alternate without changing the character
-encoding.
+In GenZui Serif, 𛄟 U+1B11F has a curved descent by default. Stylistic set 1
+(`ss01`, “Hooked WU”) selects the hooked alternate without changing the
+character encoding.
 
 ```css
 .hooked-wu {
