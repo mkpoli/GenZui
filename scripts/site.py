@@ -10,7 +10,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 from fontTools.ttLib import TTFont
 from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
 from inventory import KANA_GROUPS, character_data
-from serif import FAMILY, OUT as FONT_OUT, STEM, VERSION
+from serif import BOLD_STEM, FAMILY, OUT as FONT_OUT, PACKAGE, STEM, VERSION
 from sources import ROOT, verify
 from refinement_proof import build_comparison
 from browser_setup import build as build_browser_setup
@@ -42,14 +42,19 @@ def build():
     verify()
     checks = json.loads((FONT_OUT/'checks.json').read_text())
     assert checks['status'] == 'passed' and checks['family'] == FAMILY
-    package = ROOT/'dist'/f'{STEM}-{VERSION}.zip'
+    bold = json.loads((FONT_OUT/'checks-bold.json').read_text())
+    assert bold['status'] == 'passed' and bold['family'] == FAMILY
+    package = ROOT/'dist'/PACKAGE
     assert package.is_file(), 'Build the checked font package before the site.'
-    for ext in ('ttf', 'woff2'):
-        assert hashlib.sha256((FONT_OUT/(STEM+'.'+ext)).read_bytes()).hexdigest() == checks[ext+'_sha256']
+    faces = ((STEM, checks), (BOLD_STEM, bold))
+    for stem, record in faces:
+        for ext in ('ttf', 'woff2'):
+            assert hashlib.sha256((FONT_OUT/(stem+'.'+ext)).read_bytes()).hexdigest() == record[ext+'_sha256']
     with ZipFile(package) as z:
         assert z.testzip() is None
-        for ext in ('ttf', 'woff2'):
-            assert hashlib.sha256(z.read(STEM+'.'+ext)).hexdigest() == checks[ext+'_sha256'], 'Rebuild the font package: its font bytes are stale.'
+        for stem, record in faces:
+            for ext in ('ttf', 'woff2'):
+                assert hashlib.sha256(z.read(stem+'.'+ext)).hexdigest() == record[ext+'_sha256'], 'Rebuild the font package: its font bytes are stale.'
     font = TTFont(FONT_OUT/(STEM+'.ttf'))
     # Use the audited source assignments in addition to the Unicode inventory.
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
@@ -81,6 +86,7 @@ def build():
         '{{FONT_SIZE}}': f'{(FONT_OUT/(STEM+".ttf")).stat().st_size/1048576:.1f}',
         '{{ZIP_SIZE}}': f'{package.stat().st_size/1048576:.1f}',
         '{{WEBFONT_SIZE}}': f'{(FONT_OUT/(STEM+".woff2")).stat().st_size/1048576:.1f}',
+        '{{BOLD_FONT_SIZE}}': f'{(FONT_OUT/(BOLD_STEM+".ttf")).stat().st_size/1048576:.1f}',
         '{{WEBFONT_USAGE}}': '<!-- webfont-usage -->',
     }
     for token, value in replacement.items():
@@ -97,12 +103,11 @@ def build():
         '{{BOTH_ZIP}}': both.name, '{{BOTH_SIZE}}': f'{both.stat().st_size/1048576:.1f}',
         '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
         '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
-        '{{CSS}}': replacement['{{CSS}}'], '{{FAMILY_SWITCH_CSS}}': switch_css(), '{{FAMILY_SWITCH}}': switch_html(None),
         '{{VERSION}}': html.escape(VERSION), '{{SANS_VERSION}}': html.escape(sans_checks['version']),
         '{{CHARACTER_COUNT}}': replacement['{{CHARACTER_COUNT}}'], '{{CONSTRUCTION_COUNT}}': replacement['{{CONSTRUCTION_COUNT}}'],
         '{{SANS_CHARACTER_COUNT}}': f"{sans_checks['encoded_characters']:,}",
         '{{SANS_CONSTRUCTION_COUNT}}': str(sum('GenZui' in v.split(';')[0] or 'squared-katakana' in v for v in sans_provenance.values())),
-        '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'],
+        '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'], '{{BOLD_FONT_SIZE}}': replacement['{{BOLD_FONT_SIZE}}'],
         '{{SANS_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Regular.ttf').stat().st_size/1048576:.1f}",
     }.items():
         landing = landing.replace(token, value)
@@ -114,7 +119,7 @@ def build():
     (OUT/'sans.html').write_text(build_sans_page())
     shutil.copytree(build_browser_setup(), OUT/'browser', dirs_exist_ok=True)
     downloads = OUT/'downloads'; downloads.mkdir(exist_ok=True)
-    for old in downloads.glob(STEM+'-*.zip'):
+    for old in downloads.glob('GenZuiSerif-*.zip'):
         if old.name != package.name:
             old.unlink()
     shutil.copyfile(package, downloads/package.name)
@@ -128,7 +133,7 @@ def build():
     shutil.copyfile(sans_package, downloads/sans_package.name)
     for source, name in SANS_DOWNLOADS.items():
         shutil.copyfile(SANS_OUT/source, downloads/name)
-    for name in (STEM+'.ttf', STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
+    for name in (STEM+'.ttf', STEM+'.woff2', BOLD_STEM+'.ttf', BOLD_STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
                  'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
                  'FRB-OFL.txt', 'FRB-README.md',
                  'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt', 'okinawan-mappings.json'):

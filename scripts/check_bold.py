@@ -1,5 +1,6 @@
 """Check GenZui Serif Bold against the Noto Serif Bold instances."""
 import hashlib
+import json
 import re
 
 import numpy as np
@@ -12,10 +13,10 @@ from minnan import BOLD as MINNAN_BOLD, source_font
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
 from repertoire import MINNAN_MARKS, MINNAN_TONES
-from serif import CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
+from serif import BOLD_STEM, CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
 from serif_forms import DENSE_WEIGHT, CURVED_WU_BRIDGE, DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
 
-BOLD = OUT / 'GenZuiSerif-Bold.ttf'
+BOLD = OUT / (BOLD_STEM + '.ttf')
 
 
 def signature(font, codepoint):
@@ -82,7 +83,7 @@ def main():
     assert font['OS/2'].fsSelection & 32
     assert not font['OS/2'].fsSelection & 64
     assert 'fvar' not in font
-    web = TTFont(OUT / 'GenZuiSerif-Bold.woff2')
+    web = TTFont(OUT / (BOLD_STEM + '.woff2'))
     web.flavor = None
     assert web.getBestCmap() == font.getBestCmap()
 
@@ -157,6 +158,14 @@ def main():
         assert all(abs(a - b) <= 1 for a, b in zip(bounds(font, 0x5344), bounds(cjk, 0x5344)))
 
     digest = hashlib.sha256(BOLD.read_bytes()).hexdigest()
+    (OUT/'checks-bold.json').write_text(json.dumps({
+        'family': FAMILY, 'style': 'Bold', 'font_version': 'Version ' + VERSION,
+        'ttf_sha256': digest,
+        'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
+        'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
+        'drawing_gain': [min(gains.values()), max(gains.values())],
+        'native_kana_gain': [round(min(native), 2), round(max(native), 2)],
+        'status': 'passed'}, indent=2) + '\n')
     print(f'GenZui Serif Bold {VERSION}: {len(font.getBestCmap()):,} characters; '
           f'{len(pairs) + 2} compatible masters; {len(gains)} drawings gain {min(gains.values())}-{max(gains.values())}x '
           f'(Noto kana {min(native):.2f}-{max(native):.2f}x); sha256 {digest}')

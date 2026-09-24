@@ -1,5 +1,5 @@
 GenZui Serif / 源萃明朝（げんずい）
-Regular, version {{VERSION}}
+Regular and Bold, version {{VERSION}}
 
 One font for Japanese text and historical kana:
   17,090 encoded characters from the Noto Serif JP base and kana additions
@@ -16,13 +16,13 @@ One font for Japanese text and historical kana:
 
 INSTALL ON WINDOWS
 
-Double-click GenZuiSerif-Regular.ttf and choose Install. The family appears as
-GenZui Serif or 源萃明朝 depending on the application's language. Reopen an
-application if its font list does not update.
+Double-click GenZuiSerif-Regular.ttf and GenZuiSerif-Bold.ttf and choose Install
+for each. The family appears as GenZui Serif or 源萃明朝 depending on the
+application's language. Reopen an application if its font list does not update.
 
-The optional Install-GenZui.ps1 installs for the current Windows user, verifies
-the font against checks.json, and checks the registered Regular face. To run
-it from PowerShell in this folder:
+The optional Install-GenZui.ps1 installs both faces for the current Windows user,
+verifies them against checks.json and checks-bold.json, and checks that Windows
+resolves each registered face. To run it from PowerShell in this folder:
 
   powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Install-GenZui.ps1
 
@@ -44,8 +44,8 @@ unencoded historical variants and arbitrary combining sequences are outside its 
 Historical katakana use Mincho kana strokes. Hiragana NARI is a new drawing
 with an opening diagonal, a rounded low shoulder and a lighter rising exit,
 aligned to the kana baseline.
-Regular is the available weight;
-bold text may be synthesized by the application. Shared ideographs use Japanese
+Regular and Bold cover the same characters. Bold uses Noto's own Bold outlines,
+and GenZui's drawn strokes have Bold versions of matching weight. Shared ideographs use Japanese
 regional forms. Chinese and Korean coverage follows the Noto Serif JP base, with 卄 added from Noto Serif CJK JP.
 
 Minnan tone letters come from FRB Taiwanese Kana. Vertical tone placement
@@ -64,13 +64,13 @@ SOURCES AND LICENCES
 
 Noto Serif JP and Noto Serif Hentaigana supply the base and historical outlines
 under SIL OFL 1.1. FRB Taiwanese Kana supplies 13 tone letters and two marks
-under OFL 1.1; its original licence and README are included. Noto Serif CJK JP supplies 卄; its original OFL is included as NotoSerifCJK-OFL.txt.
+under OFL 1.1; its original licence and README are included. Noto Serif CJK JP Regular and Bold supply 卄; the original OFL is included as NotoSerifCJK-OFL.txt.
 The combined font
 is distributed under SIL OFL 1.1. Jigmo2 supplied the NARI outline in comparison
 fonts through 0.102 under CC0; its licence and notices accompany the comparisons.
 See OFL.txt and NOTICE.txt.
 
 source-manifest.json pins upstream files and checksums. sources.json describes
-each addition. checks.json records font validation; browser-checks.json records
-browser verification. Unicode data terms are in Unicode-LICENSE.txt. The installer
+each addition, and sources-bold.json the Bold face. checks.json and checks-bold.json
+record font validation; browser-checks.json records browser verification of both. Unicode data terms are in Unicode-LICENSE.txt. The installer
 uses the MIT licence in LICENSE-scripts.txt.

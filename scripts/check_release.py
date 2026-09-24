@@ -11,7 +11,7 @@ from PIL import Image
 from fontTools.pens.recordingPen import RecordingPen
 
 from release_site import OUT, URL
-from serif import VERSION, STEM
+from serif import BOLD_STEM, PACKAGE, VERSION, STEM
 from okinawan import PUA as OKINAWAN_PUA, DATA as OKINAWAN_DATA
 from sans_site import STEM as SANS_STEM, checked as sans_checked
 from sources import ROOT
@@ -97,13 +97,18 @@ def check():
         assert review not in visible_gallery,review
     assert gallery.count('class="glyph-card"')==21
     assert 'value="hooked"' in gallery and 'value="curved"' in gallery
-    for suffix in ('ttf','woff2'):
-        for folder in ('downloads','v'+VERSION):
-            actual=hashlib.sha256((OUT/folder/(STEM+'.'+suffix)).read_bytes()).hexdigest()
-            assert actual==checks[suffix+'_sha256']
-    with ZipFile(OUT/'downloads'/f'{STEM}-{VERSION}.zip') as z:
+    bold=json.loads((ROOT/'build/serif/checks-bold.json').read_text())
+    for stem,record in ((STEM,checks),(BOLD_STEM,bold)):
+        for suffix in ('ttf','woff2'):
+            for folder in ('downloads','v'+VERSION):
+                actual=hashlib.sha256((OUT/folder/(stem+'.'+suffix)).read_bytes()).hexdigest()
+                assert actual==record[suffix+'_sha256'],(stem,suffix,folder)
+    css=(OUT/('v'+VERSION)/'genzui.css').read_text()
+    assert f"url('./{BOLD_STEM}.woff2')" in css and 'font-weight: 700;' in css
+    with ZipFile(OUT/'downloads'/PACKAGE) as z:
         assert z.testzip() is None
         assert hashlib.sha256(z.read(STEM+'.ttf')).hexdigest()==checks['ttf_sha256']
+        assert hashlib.sha256(z.read(BOLD_STEM+'.ttf')).hexdigest()==bold['ttf_sha256']
         assert {'OFL.txt','NOTICE.txt','FRB-OFL.txt','NotoSerifCJK-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
         coverage=json.loads(z.read('kana-coverage.json'))
         assert coverage['font_sha256']==checks['ttf_sha256']
