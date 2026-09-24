@@ -8,7 +8,10 @@ use Noto's Mincho kana stroke vocabulary.
 Every drawn stroke has a Regular and a Bold master with the same points. Bold
 takes its native strokes from Noto Serif JP at wght 700, and its drawn strokes
 match that weight; scripts/draft_bold.py drafts a Bold master for review.
+YORI packs two kana into one cell, so Bold draws it lighter: its native RI
+stroke comes from wght 550 and its drawn strokes blend between the masters.
 """
+import re
 from math import hypot, sqrt
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.svgLib.path import parse_path
@@ -21,6 +24,7 @@ REVISION_0108 = (0x2CEFF, 0x1B127, 0x1B128)
 REVISION_0109 = (0x1B127, 0x1B128)
 REVISION_0110 = ()  # Only the unencoded Hooked WU alternate changes.
 REVISION_0112 = (0x1B124, 0x1B125)
+REVISION_0115 = (0x2A708, 0x1B124, 0x1B125, 0x1B126)
 REVISION_0111 = ()  # Only the unencoded Hooked WU alternate changes.
 REVISION_0106 = (0x2A708, 0x1B123, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
 REVISION_0105 = (0x2A708, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
@@ -253,7 +257,21 @@ def tomo_entry_point(x, y):
     return x+18*t*t, y-35*t*t
 
 
-def refinements(part, transform, bold=False):
+def blend(regular, heavy, t):
+    """A drawn stroke between its masters: 0 is Regular, 1 is Bold."""
+    numbers = iter(float(v) for v in NUMBER.findall(heavy))
+    return NUMBER.sub(lambda m: f'{float(m.group()) + t*(next(numbers) - float(m.group())):.1f}', regular)
+
+
+NUMBER = re.compile(r'-?\d*\.?\d+')
+# Constructions that pack two kana into one cell take lighter strokes in Bold,
+# as Noto's own kana keep their counters open. Noto Serif JP's stems at wght
+# 550 are 80 units wide, 41% of the way from Regular (62) to Bold (106).
+DENSE_WEIGHT = 550
+DENSE_BLEND = .41
+
+
+def refinements(part, transform, bold=False, dense_part=None):
     def move(outline, x=0, y=0):
         return transform(outline, (1, 0, 0, 1, x, y))
 
@@ -261,6 +279,11 @@ def refinements(part, transform, bold=False):
         # Each drawn stroke has a Regular and a Bold master with the same
         # points, drawn to the stroke weights of Noto Serif JP 400 and 700.
         return path(heavy if bold else regular)
+
+    def dense(regular, heavy):
+        return path(blend(regular, heavy, DENSE_BLEND) if bold else regular)
+
+    dense_part = dense_part or part
 
     # One native TO stem, at its original width, shared by TOKI and TOTE.
     stem = move(part('ト', [0]), -220)
@@ -325,7 +348,7 @@ def refinements(part, transform, bold=False):
 
         # Shortened YO bars, drawn at text weight; RI's left stroke is native
         # size and its right stroke is redrawn with a full-width descending arc.
-        0x1B126: [drawn(
+        0x1B126: [dense(
             'M109 676 L129 684 C150 655 165 633 190 633 '
             'C251 634 369 649 423 657 C442 660 451 674 466 674 '
             'C488 674 542 636 549 617 C554 603 536 591 532 570 '
@@ -343,7 +366,7 @@ def refinements(part, transform, bold=False):
             'C448 583 442 590 431 590 '
             'C374.7 590.3 287.3 575 221.4 560 '
             'C204.4 558 198.4 547.4 174 546 '
-            'C129.7 552 103 594 93 629 Z'), drawn(
+            'C129.7 552 103 594 93 629 Z'), dense(
             'M130 419 L149 430 C173 400 188 381 210 381 '
             'C281 384 383 398 491 407 L488 354 '
             'C380 346 293 333 232 321 C214 317 202 310 188 310 '
@@ -352,7 +375,7 @@ def refinements(part, transform, bold=False):
             'C287.7 402.5 361.5 417 505.4 422 L505 337.4 '
             'C362 329.3 305.3 313.6 236 302 '
             'C221 299 209 291 188 290.5 C142.3 295 121 341 113 378 '
-            'Z'), drawn(
+            'Z'), dense(
             'M98 166 L116 177 C141 145 157 126 182 126 '
             'C251 128 384 147 455 152 C484 154 518 138 523 120 '
             'C528 103 516 87 495 87 C475 87 451 95 420 95 '
@@ -365,7 +388,7 @@ def refinements(part, transform, bold=False):
             'C553 95.7 526 65.5 495 67.3 C470 68 447 75 420.4 76 '
             'C344.3 77.7 266 59.7 217 49 C201.7 46 190 37 168 36.4 '
             'C123.3 41 91.6 85.3 84 123 Z'),
-            move(part('リ', [1]), 333), drawn(
+            move(dense_part('リ', [1]), 333), dense(
             'M754 731 C779 740 803 748 825 748 '
             'C849 748 902 725 923 702 C944 681 919 668 915 633 '
             'C912 571 914 474 909 402 C904 234 831 83 669 -48 '
@@ -474,13 +497,15 @@ def refinements(part, transform, bold=False):
         # and rounded foot supply its Mincho weight variation.
         0x2CF02: hiragana_nari(part, bold),
     }
-    # Reduce both TOMO components together, preserving their shared proportion.
-    forms[0x2A708] = [transform(p, (.92, 0, 0, .92, 40, 29.2)) for p in forms[0x2A708]]
-    # Match TOMO's optical footprint around the same (500, 365) centre.
-    # TOKI has denser crossing strokes and uses a slightly smaller size.
-    for cp, scale in ((0x1B125, .92), (0x1B124, .90)):
+    # TOMO, TOTE and TOKI share one TO stem and an optical size around the
+    # (500, 365) centre; TOKI's crossing strokes take it to 90%, like TOMO.
+    # Each moves right so the shared stem lines up and the ink, which lies
+    # mostly right of that stem, centres in the cell. YORI carries two kana in
+    # one cell: its reduction brings its blackness near the densest native
+    # kana, and it moves left, since RI's two strokes weight its right side.
+    for cp, scale, shift in ((0x2A708, .90, 25), (0x1B125, .92, 35), (0x1B124, .90, 25), (0x1B126, .90, -45)):
         forms[cp] = [transform(p, (scale, 0, 0, scale,
-                                  500*(1-scale), 365*(1-scale))) for p in forms[cp]]
+                                  500*(1-scale) + shift, 365*(1-scale))) for p in forms[cp]]
     forms[0x1B123] = balanced_koto(forms[0x1B123], bold)
     return forms
 
@@ -488,12 +513,12 @@ def refinements(part, transform, bold=False):
 DESCRIPTIONS = {
     0x1B11F: 'Curved WU preserves the native KE descent. Stylistic set 1 keeps the upper outward bow and carries its weight through a compact rounded return, set farther right.',
     0x1B123: 'KOTO E: a lower upper curve shifted left, with a longer rising right stroke and a shallow Noto TO bowl.',
-    0x1B124: 'Noto TO stem and an upright KI diagonal with joined crossbars, at 90% optical size beside TOMO and TOTE.',
-    0x1B125: 'Noto Serif JP TO stem and TE strokes with a drawn connecting bar, at 92% optical size beside TOMO.',
-    0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and full-weight RI descending stroke.',
+    0x1B124: 'Noto TO stem and an upright KI diagonal with joined crossbars, at 90% optical size like TOMO. The shared TO stem aligns with TOMO and TOTE, and the ink centres in the cell.',
+    0x1B125: 'Noto Serif JP TO stem and TE strokes with a drawn connecting bar, at 92% optical size. The shared TO stem aligns with TOMO and TOKI, and the ink centres in the cell.',
+    0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and an RI descending stroke of full width, at 90% optical size and centred in the cell. Bold draws its strokes at the weight of Noto Serif JP 550, keeping the three verticals open.',
     0x1B127: 'A modulated upper bar and lighter return above a hooked stem. The middle crossbar sits halfway between its 0.107 and 0.108 positions.',
     0x1B128: 'Noto WI bars join a NA-derived left descent and the native right stem. Stem spacing is halfway between 0.107 and 0.108; stroke weights are preserved.',
-    0x2A708: 'Native MO stem and return beside TO. MO’s upturned entry is lower and shorter, giving the nearby TO head more space. The shared 92% optical size is unchanged.',
+    0x2A708: 'Native MO stem and return beside TO. MO’s upturned entry is lower and shorter, giving the nearby TO head more space. At 90% optical size, with the shared TO stem aligned with TOTE and TOKI.',
     0x2CF00: 'An enlarged SHI dot meets the NO-derived descent directly. Its transverse weight is closer to NO while its length is unchanged.',
     0x2CEFF: 'Native SHI upper stroke with a substantial lower entry and neck. The shoulder sits farther inward and the bowl has less weight.',
     0x2CF02: 'Redrawn NARI retains its upper stroke and rounded foot. The lower wave has steadier weight and Noto E’s full, rounded finish.',

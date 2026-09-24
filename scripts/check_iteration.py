@@ -6,6 +6,7 @@ from PIL import ImageChops
 from check_refinements import mask
 from honkoku import HONKOKU, TALLIES
 from okinawan import PUA as OKINAWAN_PUA
+from serif_forms import REVISION_0115
 from sources import ROOT
 
 
@@ -19,13 +20,44 @@ def check_iteration(path, font):
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
     assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+7
+    # 0.115 recentres TOMO, TOTE and TOKI and reduces YORI; nothing else moves.
+    revised = {cmap[cp] for cp in REVISION_0115}
     for name in old_order:
-        assert before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf']), name
+        same = before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf'])
+        assert same != (name in revised), name
         for table in ('hmtx', 'vmtx'):
-            assert font[table][name] == before[table][name], (table, name)
+            if name in revised:
+                assert font[table][name][0] == before[table][name][0], (table, name)
+            else:
+                assert font[table][name] == before[table][name], (table, name)
     # Appending symbols must leave every previous layout rule and IVS intact.
-    for table in ('GPOS', 'BASE'):
-        assert font[table].compile(font) == before[table].compile(before), table
+    # Mark anchors follow each base's bounds. A revised base's anchors must
+    # move with its bounds; they then take their previous values back so the
+    # rest of GPOS can be compared byte for byte.
+    gpos = copy.deepcopy(font['GPOS'])
+    for lookup, old_lookup in zip(gpos.table.LookupList.Lookup, before['GPOS'].table.LookupList.Lookup):
+        for sub, old_sub in zip(lookup.SubTable, old_lookup.SubTable):
+            if getattr(sub, 'LookupType', lookup.LookupType) != 4:
+                continue
+            old_index = {g: i for i, g in enumerate(old_sub.BaseCoverage.glyphs)}
+            for i, g in enumerate(sub.BaseCoverage.glyphs):
+                if g in revised:
+                    old_record = old_sub.BaseArray.BaseRecord[old_index[g]]
+                    # Each anchor must move exactly as one edge or centre of the base did.
+                    new_glyph, old_glyph = font['glyf'][g], before['glyf'][g]
+                    dx = {0, new_glyph.xMin-old_glyph.xMin, new_glyph.xMax-old_glyph.xMax,
+                          (new_glyph.xMin+new_glyph.xMax-old_glyph.xMin-old_glyph.xMax)/2}
+                    dy = {0, new_glyph.yMin-old_glyph.yMin, new_glyph.yMax-old_glyph.yMax,
+                          (new_glyph.yMin+new_glyph.yMax-old_glyph.yMin-old_glyph.yMax)/2}
+                    for new_anchor, old_anchor in zip(sub.BaseArray.BaseRecord[i].BaseAnchor, old_record.BaseAnchor):
+                        if new_anchor is None or old_anchor is None:
+                            assert new_anchor is old_anchor, g
+                            continue
+                        assert any(abs(new_anchor.XCoordinate-old_anchor.XCoordinate-d) <= 1 for d in dx), (g, 'x')
+                        assert any(abs(new_anchor.YCoordinate-old_anchor.YCoordinate-d) <= 1 for d in dy), (g, 'y')
+                    sub.BaseArray.BaseRecord[i] = old_record
+    assert gpos.compile(font) == before['GPOS'].compile(before), 'GPOS'
+    assert font['BASE'].compile(font) == before['BASE'].compile(before), 'BASE'
     # Okinawan voicing appends exactly one ccmp lookup. Removing only that
     # addition must recover the released table byte for byte.
     gsub = copy.deepcopy(font['GSUB'])
@@ -66,10 +98,10 @@ def check_iteration(path, font):
         assert ImageChops.difference(native, rasters[-1]).getbbox() is None, size
         tally_checks.append({'size_px':size, 'increasing_ink_area':True, 'fifth_matches_native_zheng':True})
     before.close()
-    return {'baseline':'0.112', 'changed_outlines':[],
+    return {'baseline':'0.112', 'changed_outlines':[f'U+{cp:04X}' for cp in REVISION_0115],
             'unchanged_glyphs':len(old_order),
             'added_codepoints':[f'U+{cp:X}' for cp in sorted(set(HONKOKU) | set(OKINAWAN_PUA))],
-            'all_previous_outlines_and_metrics_unchanged':True,
+            'other_previous_outlines_and_metrics_unchanged':True,
             'previous_layout_rules_and_ivs_unchanged':True,
             'fullwidth_advances_and_vertical_origins_verified':True,
             'tally_checks':tally_checks, 'status':'passed'}

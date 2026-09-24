@@ -13,7 +13,7 @@ from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
 from repertoire import MINNAN_MARKS, MINNAN_TONES
 from serif import CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
-from serif_forms import CURVED_WU_BRIDGE, DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
+from serif_forms import DENSE_WEIGHT, CURVED_WU_BRIDGE, DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
 
 BOLD = OUT / 'GenZuiSerif-Bold.ttf'
 
@@ -45,7 +45,7 @@ def masters():
     """Each drawn Regular and Bold master pair, as SVG path data."""
     for module in ('serif_forms', 'okinawan'):
         source = (ROOT/'scripts'/f'{module}.py').read_text()
-        for match in re.finditer(r"drawn\(\s*((?:'[^']*'\s*)+),\s*((?:'[^']*'\s*)+)\)", source):
+        for match in re.finditer(r"(?:drawn|dense)\(\s*((?:'[^']*'\s*)+),\s*((?:'[^']*'\s*)+)\)", source):
             yield tuple(''.join(re.findall(r"'([^']*)'", match.group(k))) for k in (1, 2))
     yield HOOKED_WU[False]['stem'], HOOKED_WU[True]['stem']
     yield from zip(HOOKED_WU[False]['bars'], HOOKED_WU[True]['bars'])
@@ -125,7 +125,12 @@ def main():
     # Filled teardrop tones gain as Noto's dots do.
     dots = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
             for cp in map(ord, '・、')]
+    # Dense constructions draw at DENSE_WEIGHT; they gain as Noto's kana do there.
+    dense_font = instance('NotoSerifJP', DENSE_WEIGHT, set(map(ord, 'トリキテ')))
+    dense = [weight(dense_font, dense_font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
+             for cp in map(ord, 'トリキテ')]
     bands = {label: (min(dots) - .12, max(dots) + .12) if label in ('U+1AFF2', 'U+1AFF6', 'U+0323')
+             else (min(dense) - .12, max(dense) + .12) if label == 'U+1B126'
              else (low, high) for label in gains}
     off = {k: (v, tuple(round(b, 2) for b in bands[k]))
            for k, v in gains.items() if not bands[k][0] <= v <= bands[k][1]}

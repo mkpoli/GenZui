@@ -10,7 +10,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from check_refinements import components
 from serif import OUT, STEM, VERSION
-from serif_forms import wu_alternate, REVISION_0112
+from serif_forms import wu_alternate, REVISION_0112, REVISION_0115
 from check_serif import shaper, shape, serialized
 from sources import ROOT
 
@@ -52,7 +52,7 @@ def check():
     assert current['glyf'][wu_alternate(current)].getCoordinates(current['glyf'])==full['glyf'][wu_alternate(full)].getCoordinates(full['glyf'])
     old=fonts[('Previous','400')]
     changed=[cp for cp,name in old.getBestCmap().items() if old['glyf'][name].getCoordinates(old['glyf'])!=full['glyf'][full.getBestCmap()[cp]].getCoordinates(full['glyf'])]
-    assert set(changed)==set(REVISION_0112)
+    assert set(changed)==set(REVISION_0112)|set(REVISION_0115)
     # The curved default is unchanged in both full and proof fonts.
     assert old['glyf'][old.getBestCmap()[0x1B11F]].getCoordinates(old['glyf'])==current['glyf'][current.getBestCmap()[0x1B11F]].getCoordinates(current['glyf'])
     # Minnan also demonstrates the two current forms, using the same feature.

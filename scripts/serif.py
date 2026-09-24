@@ -19,7 +19,7 @@ import pathops
 
 from repertoire import MINNAN_MARKS, MINNAN_TONES, font_path, repertoire
 from minnan import import_forms as import_minnan, layout as layout_minnan
-from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, hooked_wu, refinements
+from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, REVISION_0115, DENSE_WEIGHT, hooked_wu, refinements
 from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
@@ -31,7 +31,7 @@ OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
 FAMILY_JA = '源萃明朝'
 STEM = 'GenZuiSerif-Regular'
-VERSION = '0.114'
+VERSION = '0.115'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B152: 0x3092, 0x1B155: 0x30B3, 0x1B164: 0x30F0,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
@@ -274,7 +274,9 @@ def build(weight=400):
     def part(ch, indices=None):
         return contours(jp, ord(ch), indices)
     recipes = {}
-    recipes.update(refinements(part, transform, weight >= 700))
+    dense = instance('NotoSerifJP', DENSE_WEIGHT, {ord('リ')}) if weight >= 700 else jp
+    recipes.update(refinements(part, transform, weight >= 700,
+                               lambda ch, indices=None: contours(dense, ord(ch), indices)))
     descriptions = dict(DESCRIPTIONS)
     vertical = {}
     for cp, source_cp in SMALL.items():
@@ -421,6 +423,7 @@ def build(weight=400):
         'revision_0110':[f'U+{cp:04X}' for cp in REVISION_0110],
         'alternate_revision_0110':['U+1B11F/ss01'],
         'revision_0112':[f'U+{cp:04X}' for cp in REVISION_0112],
+        'revision_0115':[f'U+{cp:04X}' for cp in REVISION_0115],
         'revision_0111':[f'U+{cp:04X}' for cp in REVISION_0111],
         'alternate_revision_0111':['U+1B11F/ss01'],
         'alternate_revision_0109':['U+1B11F/ss01'],

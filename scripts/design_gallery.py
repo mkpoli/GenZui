@@ -11,7 +11,7 @@ from fontTools.ttLib import TTFont
 
 from refinement_proof import NAMES
 from serif import OUT, SMALL, STEM, VERSION
-from serif_forms import DESCRIPTIONS, REVISION_0112, wu_alternate
+from serif_forms import DESCRIPTIONS, REVISION_0112, REVISION_0115, wu_alternate
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
 from honkoku import HONKOKU
@@ -20,7 +20,7 @@ REFERENCES = {0x1B124:'トキ', 0x2A708:'トモ', 0x1B123:'こと', 0x2CEFF:'シ
               0x2CF02:'んえへ', 0x2CF00:'シノ', 0x1B11F:'けほ', 0x1B125:'トテ',
               0x1B126:'ヨリ', 0x1B127:'ネヰ', 0x1B128:'ナヰ'}
 
-REVIEW_FORMS = REVISION_0112
+REVIEW_FORMS = tuple(dict.fromkeys((*REVISION_0112, *REVISION_0115)))
 
 APPROVED = {0x1B11F, 0x1B123, 0x1B126, 0x2A708, 0x2CF00, 0x2CEFF, 0x1B128}
 
