@@ -19,7 +19,7 @@ import pathops
 
 from repertoire import MINNAN_MARKS, MINNAN_TONES, font_path, repertoire
 from minnan import import_forms as import_minnan, layout as layout_minnan
-from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, REVISION_0115, DENSE_WEIGHT, hooked_wu, refinements
+from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REVISION_0105, REVISION_0106, REVISION_0107, REVISION_0108, REVISION_0109, REVISION_0110, REVISION_0111, REVISION_0112, REVISION_0115, REVISION_0117, DENSE_WEIGHT, hooked_wu, refinements
 from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
@@ -32,7 +32,7 @@ FAMILY = 'GenZui Serif'
 FAMILY_JA = '源萃明朝'
 STEM = 'GenZuiSerif-Regular'
 BOLD_STEM = 'GenZuiSerif-Bold'
-VERSION = '0.116'
+VERSION = '0.117'
 # One archive carries both faces.
 PACKAGE = f'GenZuiSerif-{VERSION}.zip'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
@@ -427,6 +427,7 @@ def build(weight=400):
         'alternate_revision_0110':['U+1B11F/ss01'],
         'revision_0112':[f'U+{cp:04X}' for cp in REVISION_0112],
         'revision_0115':[f'U+{cp:04X}' for cp in REVISION_0115],
+        'revision_0117':[f'U+{cp:04X}' for cp in REVISION_0117],
         'revision_0111':[f'U+{cp:04X}' for cp in REVISION_0111],
         'alternate_revision_0111':['U+1B11F/ss01'],
         'alternate_revision_0109':['U+1B11F/ss01'],
