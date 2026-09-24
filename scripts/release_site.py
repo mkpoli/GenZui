@@ -252,7 +252,8 @@ def build():
                      if archive.name != PACKAGE)
     (OUT/'_redirects').write_text('/index.html / 301\n'
         f'/downloads/{STEM}-{VERSION}.zip /downloads/{PACKAGE} 301\n'
-        f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n' + ''.join(earlier))
+        f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n'
+        f'/downloads/{SANS_STEM}-:version.zip /sans-v:version/{SANS_STEM}-:version.zip 301\n' + ''.join(earlier))
     for name in ['announcement-ja', 'announcement-en', 'announcement-sans-ja', 'announcement-sans-en']:
         shutil.copyfile(ROOT/'release'/(name+'.txt'), OUT/(name+'.txt'))
     for name in ['index.html','serif.html','sans.html','gallery.html','minnan.html']:

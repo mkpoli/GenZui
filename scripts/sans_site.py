@@ -42,7 +42,7 @@ def checked():
     assert checks['status'] == browsers['status'] == 'passed'
     assert checks['family'] == browsers['family'] == 'GenZui Sans'
     version = checks['version']
-    package = ROOT/'dist'/f'{STEM}-{version}.zip'
+    package = ROOT/'dist'/f'GenZuiSans-{version}.zip'
     assert package.is_file(), 'Package the checked Sans font first: scripts/package_sans.py'
     with ZipFile(package) as archive:
         for ext in ('ttf', 'woff2'):

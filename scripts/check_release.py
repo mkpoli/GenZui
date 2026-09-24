@@ -199,7 +199,7 @@ def check():
         for folder in ('downloads','sans-v'+sans_version):
             actual=hashlib.sha256((OUT/folder/(SANS_STEM+'.'+suffix)).read_bytes()).hexdigest()
             assert actual==sans_checks[suffix+'_sha256']
-    with ZipFile(OUT/'downloads'/f'{SANS_STEM}-{sans_version}.zip') as z:
+    with ZipFile(OUT/'downloads'/f'GenZuiSans-{sans_version}.zip') as z:
         assert z.testzip() is None
         assert hashlib.sha256(z.read(SANS_STEM+'.ttf')).hexdigest()==sans_checks['ttf_sha256']
         assert {'OFL.txt','NOTICE.txt','GenSeki-OFL.txt','NotoSansHentaigana-OFL.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
