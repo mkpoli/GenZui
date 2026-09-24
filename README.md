@@ -139,6 +139,8 @@ python3 -m venv .venv
 .venv/bin/python scripts/repertoire.py
 .venv/bin/python scripts/serif.py
 .venv/bin/python scripts/check_serif.py
+.venv/bin/python scripts/bold.py
+.venv/bin/python scripts/check_bold.py
 node scripts/check_okinawan_input.cjs
 cp research/browser-checks-0.114.json build/serif/browser-checks.json
 .venv/bin/python scripts/package_serif.py
