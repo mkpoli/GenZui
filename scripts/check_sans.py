@@ -120,7 +120,7 @@ def check(weight=400):
     donor_cmap, gen_cmap = donor.getBestCmap(), genseki.getBestCmap()
     if not bold:
         assert donor['OS/2'].usWeightClass == 500 and text_instance['OS/2'].usWeightClass == 400
-    retained = {'noto_regular': 0, 'noto_text': 0, 'genseki': 0, 'genseki_refit': 0}
+    retained = {'noto_archaic': 0, 'noto_text': 0, 'genseki': 0, 'genseki_refit': 0}
     mark_cases = 0
     for cp in sorted(targets - set(base_cmap)):
         name = cmap[cp]
@@ -143,7 +143,7 @@ def check(weight=400):
             old = source.getBestCmap()[cp]
             assert g.getCoordinates(font['glyf']) == source['glyf'][old].getCoordinates(source['glyf']), hex(cp)
             assert font['hmtx'][name] == source['hmtx'][old], hex(cp)
-            retained['noto_regular' if source is donor else 'noto_text' if source is text_instance else 'genseki'] += 1
+            retained['noto_archaic' if source is donor else 'noto_text' if source is text_instance else 'genseki'] += 1
         if cp in (*MINNAN_TONES, *MINNAN_MARKS):
             continue
         for direction in ('ltr', 'ttb'):
@@ -169,7 +169,7 @@ def check(weight=400):
                     assert actual == shape(engine, text, direction, script=script), (hex(cp), script)
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
-    assert retained == {'noto_regular': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
     # The hentaigana's median stem matches the hiragana's, and the archaic kana
     # the katakana's, within two units.
     stems = {label: stem(font, cps) for label, cps in (
