@@ -85,7 +85,8 @@ def check():
     with ZipFile(OUT/both[1]) as z:
         assert z.testzip() is None
         names=set(z.namelist())
-        assert f'GenZui Serif/{STEM}.ttf' in names and f'GenZui Sans/{SANS_STEM}.ttf' in names
+        assert {f'GenZui Serif/{STEM}.ttf', f'GenZui Serif/{BOLD_STEM}.ttf', f'GenZui Sans/{SANS_STEM}.ttf', 'GenZui Serif/OFL.txt', 'GenZui Sans/OFL.txt'} <= names
+    assert (OUT/both[1]).stat().st_size < 25 << 20, 'Workers static assets are limited to 25 MiB per file'
     assert '/serif\n  Cache-Control' in (OUT/'_headers').read_text()
     assert 'noindex' in (OUT/'404.html').read_text()
     assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')

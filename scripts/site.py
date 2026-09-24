@@ -23,19 +23,22 @@ OUT = ROOT / 'build/site'
 
 
 def both_package(serif_package, sans_package, serif_version, sans_version):
-    """One archive holding both families' complete packages, each in its own folder."""
+    """The installable fonts of both families with their licences, each family in its own folder."""
     archive = ROOT/'dist'/f'GenZui-Serif-{serif_version}-Sans-{sans_version}.zip'
-    with ZipFile(archive, 'w', ZIP_DEFLATED, compresslevel=9) as out:
+    with ZipFile(archive, 'w') as out:
         for folder, package in (('GenZui Serif', serif_package), ('GenZui Sans', sans_package)):
             with ZipFile(package) as z:
                 assert z.testzip() is None
                 for name in sorted(z.namelist()):
+                    if not name.endswith(('.ttf', '.txt', '.md', '.ps1')):
+                        continue
                     info = ZipInfo(f'{folder}/{name}', (2025, 6, 5, 0, 0, 0))
-                    info.compress_type = ZIP_DEFLATED
+                    info.create_system = 3
                     info.external_attr = 0o644 << 16
-                    out.writestr(info, z.read(name))
+                    out.writestr(info, z.read(name), ZIP_DEFLATED, 9)
     with ZipFile(archive) as z:
         assert z.testzip() is None
+    assert archive.stat().st_size < 25 << 20, 'Cloudflare static assets are limited to 25 MiB per file.'
     return archive
 
 def build():
