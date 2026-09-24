@@ -60,10 +60,10 @@
         typeStatus();
       });
     }
-    // Samples fade while the other weight's glyphs arrive.
+    // Samples fade until every face the new layout requests has arrived.
     document.body.classList.add('weight-switching');
-    document.fonts.load(`${weight} 48px GenZui`, typeInput.value.slice(0, 200) || '源萃').catch(() => {})
-      .finally(() => document.body.classList.remove('weight-switching'));
+    requestAnimationFrame(() => requestAnimationFrame(() => document.fonts.ready
+      .finally(() => document.body.classList.remove('weight-switching'))));
     if (remember) {
       const url = new URL(location.href);
       if (weight === '700') url.searchParams.set('weight', 'bold'); else url.searchParams.delete('weight');
