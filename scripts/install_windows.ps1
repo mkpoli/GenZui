@@ -62,22 +62,37 @@ foreach ($face in $faces) {
     if (!$same) {
         Copy-Item -LiteralPath $face.Source -Destination $face.Destination -Force
     }
-    # Stage the new version before changing registration. Open applications can
-    # keep their old file handles while newly started applications see the update.
-    if ($face.Previous -and $face.Previous -ne $face.Destination -and (Test-Path -LiteralPath $face.Previous)) {
-        while ([GenZuiFontInstall]::RemoveFontResourceEx($face.Previous, 0, [IntPtr]::Zero)) { }
+}
+# The faces are registered as one family. If any registration fails, every face
+# changed so far returns to its previous registration.
+$changed = @()
+try {
+    foreach ($face in $faces) {
+        # Stage the new version before changing registration. Open applications can
+        # keep their old file handles while newly started applications see the update.
+        if ($face.Previous -and $face.Previous -ne $face.Destination -and (Test-Path -LiteralPath $face.Previous)) {
+            while ([GenZuiFontInstall]::RemoveFontResourceEx($face.Previous, 0, [IntPtr]::Zero)) { }
+        }
+        $changed += $face
+        New-ItemProperty -Path $key -Name $face.Entry -PropertyType String -Value $face.Destination -Force | Out-Null
+        $face.Added = [GenZuiFontInstall]::AddFontResourceEx($face.Destination, 0, [IntPtr]::Zero)
+        if ($face.Added -eq 0) {
+            throw "Windows could not register the new $($face.Style) font resource."
+        }
     }
-    New-ItemProperty -Path $key -Name $face.Entry -PropertyType String -Value $face.Destination -Force | Out-Null
-    $face.Added = [GenZuiFontInstall]::AddFontResourceEx($face.Destination, 0, [IntPtr]::Zero)
-    if ($face.Added -eq 0) {
+} catch {
+    foreach ($face in $changed) {
+        if ($face.Previous -ne $face.Destination) {
+            [void][GenZuiFontInstall]::RemoveFontResourceEx($face.Destination, 0, [IntPtr]::Zero)
+        }
         if ($face.Previous) {
             New-ItemProperty -Path $key -Name $face.Entry -PropertyType String -Value $face.Previous -Force | Out-Null
             [void][GenZuiFontInstall]::AddFontResourceEx($face.Previous, 0, [IntPtr]::Zero)
         } else {
             Remove-ItemProperty -Path $key -Name $face.Entry -ErrorAction SilentlyContinue
         }
-        throw "Windows could not register the new $($face.Style) font resource."
     }
+    throw
 }
 [UIntPtr]$result = [UIntPtr]::Zero
 [void][GenZuiFontInstall]::SendMessageTimeout([IntPtr]0xffff, 0x001D, [UIntPtr]::Zero,
@@ -103,15 +118,16 @@ try {
     if (!$family.Count) { throw 'GenZui Serif is not visible in the Windows font collection.' }
     $resolved = @{}
     foreach ($style in 'Regular', 'Bold') {
-        if (!$family[0].IsStyleAvailable([Drawing.FontStyle]::$style)) {
-            throw "GenZui Serif $style is not visible in the Windows font collection."
-        }
         $weight = if ($style -eq 'Bold') { [System.Windows.FontWeights]::Bold } else { [System.Windows.FontWeights]::Normal }
         $face = [System.Windows.Media.Typeface]::new([System.Windows.Media.FontFamily]::new('GenZui Serif'),
             [System.Windows.FontStyles]::Normal, $weight, [System.Windows.FontStretches]::Normal)
         [System.Windows.Media.GlyphTypeface]$glyphFace = $null
         if (!$face.TryGetGlyphTypeface([ref]$glyphFace)) {
             throw "Windows could not resolve the installed GenZui $style glyph face."
+        }
+        # Without a registered Bold, Windows emboldens Regular instead.
+        if ($glyphFace.StyleSimulations -ne [System.Windows.Media.StyleSimulations]::None) {
+            throw "Windows simulates GenZui Serif $style instead of using the installed face."
         }
         $resolved[$style] = (Get-FileHash -LiteralPath $glyphFace.FontUri.LocalPath -Algorithm SHA256).Hash.ToLowerInvariant()
     }
