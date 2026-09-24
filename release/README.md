@@ -1,4 +1,4 @@
-# GenZui Serif 0.116
+# GenZui Serif 0.117
 
 GenZui Serif / 源萃明朝 is a Japanese Mincho derived from
 Noto Serif JP, Noto Serif Hentaigana, Noto Serif CJK JP and FRB Taiwanese Kana.
@@ -13,9 +13,10 @@ outlines come from the fonts' own Bold instances, and every stroke GenZui draws
 has a Bold version of matching weight. TOMO, TOTE and TOKI share one position
 for their TO stem, with their weight centred in the cell.
 
-Version 0.116 redraws Bold YORI: its strokes take the weight of Noto Serif JP 650
-at 95% size, so they match the kana beside it while its three verticals stay
-apart. Regular YORI is unchanged at 90%.
+Version 0.117 raises TOMO's lower return, so the bars of its MO keep the spacing
+of native モ and the ligature no longer reads tall. Bold YORI draws its strokes
+at the weight of Noto Serif JP 650 and 95% size, so they match the kana beside
+it while its three verticals stay apart.
 
 The Serif page includes an Okinawan composer with Funatsu’s 27 forms and
 eight raised katakana. The font uses 26 documented PUA positions; voiced forms
@@ -57,10 +58,10 @@ and `build/sans/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`; deploy with `bun run deploy` after committing the release.
 
-`releases/v0.116/` and `releases/sans-v0.101/` contain the immutable font assets;
-`releases/v0.116/` holds both Serif faces.
+`releases/v0.117/` and `releases/sans-v0.101/` contain the immutable font assets;
+`releases/v0.117/` holds both Serif faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
-CSS (`/v0.116/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
+CSS (`/v0.117/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
 alias (`/genzui.css`).
 
 The home page's share image shows both families from the distributed fonts'

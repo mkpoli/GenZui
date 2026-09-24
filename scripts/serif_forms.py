@@ -25,6 +25,7 @@ REVISION_0109 = (0x1B127, 0x1B128)
 REVISION_0110 = ()  # Only the unencoded Hooked WU alternate changes.
 REVISION_0112 = (0x1B124, 0x1B125)
 REVISION_0115 = (0x2A708, 0x1B124, 0x1B125, 0x1B126)
+REVISION_0117 = (0x2A708,)
 REVISION_0111 = ()  # Only the unencoded Hooked WU alternate changes.
 REVISION_0106 = (0x2A708, 0x1B123, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
 REVISION_0105 = (0x2A708, 0x2CEFF, 0x2CF02, 0x2CF00, 0x1B11F, 0x1B127, 0x1B128)
@@ -252,6 +253,12 @@ def hiragana_nari(part, bold=False):
     return [outline]
 
 
+# MO in TOMO: its top bar and upper stem rise, and its foot drops, by these.
+# The foot keeps the spacing of native MO's lower bars.
+TOMO_TOP_RISE = 82
+TOMO_FOOT_DROP = 12
+
+
 def tomo_entry_point(x, y):
     t = max(0, min(1, (350-x)/149))
     return x+18*t*t, y-35*t*t
@@ -454,9 +461,9 @@ def refinements(part, transform, bold=False, dense_part=None):
 
         # TOMO keeps MO's shoulder and return. Lengthen the intervening
         # shaft, leaving each end at native weight.
-        0x2A708: [stem, move(reshape(part('モ', [2]), tomo_entry_point), 90, 82),
+        0x2A708: [stem, move(reshape(part('モ', [2]), tomo_entry_point), 90, TOMO_TOP_RISE),
                   reshape(part('モ', [0]), lambda x, y:
-                          (x+90, y-42+124*max(0, min(1, (y-180)/310)))), drawn(
+                          (x+90, y-TOMO_FOOT_DROP+(TOMO_TOP_RISE+TOMO_FOOT_DROP)*max(0, min(1, (y-180)/310)))), drawn(
             'M220 390 C410 405 649 435 791 454 '
             'C822 458 839 467 855 466 C885 465 928 445 938 426 '
             'C949 406 935 391 915 391 C881 391 854 399 821 399 '
@@ -521,7 +528,7 @@ DESCRIPTIONS = {
     0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and an RI descending stroke of full width, at 90% optical size and centred in the cell. Bold draws its strokes at the weight of Noto Serif JP 650 and at 95%, keeping the three verticals apart.',
     0x1B127: 'A modulated upper bar and lighter return above a hooked stem. The middle crossbar sits halfway between its 0.107 and 0.108 positions.',
     0x1B128: 'Noto WI bars join a NA-derived left descent and the native right stem. Stem spacing is halfway between 0.107 and 0.108; stroke weights are preserved.',
-    0x2A708: 'Native MO stem and return beside TO. MO’s upturned entry is lower and shorter, giving the nearby TO head more space. At 90% optical size, with the shared TO stem aligned with TOTE and TOKI.',
+    0x2A708: 'Native MO stem and return beside TO. MO’s upturned entry is lower and shorter, giving the nearby TO head more space, and its lower return keeps the spacing of native MO. At 90% optical size, with the shared TO stem aligned with TOTE and TOKI.',
     0x2CF00: 'An enlarged SHI dot meets the NO-derived descent directly. Its transverse weight is closer to NO while its length is unchanged.',
     0x2CEFF: 'Native SHI upper stroke with a substantial lower entry and neck. The shoulder sits farther inward and the bowl has less weight.',
     0x2CF02: 'Redrawn NARI retains its upper stroke and rounded foot. The lower wave has steadier weight and Noto E’s full, rounded finish.',
