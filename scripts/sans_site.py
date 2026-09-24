@@ -15,6 +15,7 @@ from sources import ROOT
 
 OUT = ROOT/'build/sans'
 STEM = 'GenZuiSans-Regular'
+BOLD_STEM = 'GenZuiSans-Bold'
 PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかたちを読む。'
 # Files published beside the Serif downloads. Licence and credit files carry the
 # family name because the Serif set already occupies the plain names.
@@ -38,17 +39,20 @@ DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
 def checked():
     """Return the Sans version, checks and package after verifying they agree."""
     checks = json.loads((OUT/'checks.json').read_text())
+    bold = json.loads((OUT/'checks-bold.json').read_text())
     browsers = json.loads((OUT/'browser-checks.json').read_text())
-    assert checks['status'] == browsers['status'] == 'passed'
-    assert checks['family'] == browsers['family'] == 'GenZui Sans'
+    assert checks['status'] == bold['status'] == browsers['status'] == 'passed'
+    assert checks['family'] == bold['family'] == browsers['family'] == 'GenZui Sans'
+    assert checks['version'] == bold['version']
     version = checks['version']
     package = ROOT/'dist'/f'GenZuiSans-{version}.zip'
     assert package.is_file(), 'Package the checked Sans font first: scripts/package_sans.py'
     with ZipFile(package) as archive:
-        for ext in ('ttf', 'woff2'):
-            digest = hashlib.sha256((OUT/f'{STEM}.{ext}').read_bytes()).hexdigest()
-            assert digest == checks[ext+'_sha256'] == browsers[ext+'_sha256'], 'Stale Sans validation: '+ext
-            assert hashlib.sha256(archive.read(f'{STEM}.{ext}')).hexdigest() == digest, 'Rebuild the Sans package: its font bytes are stale.'
+        for stem, record, prefix in ((STEM, checks, ''), (BOLD_STEM, bold, 'bold_')):
+            for ext in ('ttf', 'woff2'):
+                digest = hashlib.sha256((OUT/f'{stem}.{ext}').read_bytes()).hexdigest()
+                assert digest == record[ext+'_sha256'] == browsers[prefix+ext+'_sha256'], f'Stale Sans validation: {stem}.{ext}'
+                assert hashlib.sha256(archive.read(f'{stem}.{ext}')).hexdigest() == digest, 'Rebuild the Sans package: its font bytes are stale.'
     return version, checks, package
 
 
