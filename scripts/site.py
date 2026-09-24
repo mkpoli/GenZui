@@ -63,6 +63,15 @@ def build():
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
     provenance = json.loads((FONT_OUT/'sources.json').read_text())
     entries = character_data(font, audit, provenance['source_kinds'], provenance['added'])
+    # Bold credits its own sources where they differ: the Minnan tone letters are
+    # GenZui Bold masters of the FRB outlines, and 卄 comes from the CJK Bold.
+    bold_added = json.loads((FONT_OUT/'sources-bold.json').read_text())['added']
+    for entry in entries:
+        key = f"U+{entry['cp']:04X}"
+        if key in bold_added and bold_added[key] != provenance['added'].get(key):
+            entry['bold_description'] = bold_added[key]
+            if entry['source'] == 'frb':
+                entry['bold_source'] = 'GenZui Bold master of FRB Taiwanese Kana'
     source_counts = dict(Counter(e['source'] for e in entries))
     assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32 + len(OKINAWAN_PUA), 'frb': 15, 'cjk': 1}
     assert len(entries) == checks['encoded_characters']
@@ -74,6 +83,7 @@ def build():
     page = (ROOT/'site/serif.html').read_text()
     replacement = {
         '{{FONT}}': font_data,
+        '{{BOLD_FONT}}': base64.b64encode((FONT_OUT/(BOLD_STEM+'.woff2')).read_bytes()).decode(),
         '{{CHARACTER_COUNT}}': f'{len(entries):,}',
         '{{CONSTRUCTION_COUNT}}': str(source_counts['genzui']),
         '{{OKINAWAN_DATA}}': json.dumps(OKINAWAN_DATA, ensure_ascii=False).replace('<', '\\u003c'),

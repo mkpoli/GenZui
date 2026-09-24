@@ -97,6 +97,13 @@ def check():
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review
     assert gallery.count('class="glyph-card"')==21
+    # The public gallery offers both weights; its Bold face is the Bold font.
+    assert '<select id="weight">' in gallery and 'data-bold="源萃明朝 / BOLD' in gallery
+    bold_proof=re.search(r"@font-face\{font-family:GenZui;src:url\(assets/(proof-[0-9a-f]{16}\.woff2)\) format\('woff2'\);font-weight:700",gallery)
+    assert bold_proof,'public gallery Bold face'
+    from fontTools.ttLib import TTFont as _Font
+    proof=_Font(OUT/'assets'/bold_proof[1]);full_bold=_Font(ROOT/'build/serif'/(BOLD_STEM+'.ttf'))
+    assert proof['glyf'][proof.getBestCmap()[0x1B124]].getCoordinates(proof['glyf'])[0]==full_bold['glyf'][full_bold.getBestCmap()[0x1B124]].getCoordinates(full_bold['glyf'])[0]
     assert 'value="hooked"' in gallery and 'value="curved"' in gallery
     bold=json.loads((ROOT/'build/serif/checks-bold.json').read_text())
     for stem,record in ((STEM,checks),(BOLD_STEM,bold)):
@@ -128,6 +135,7 @@ def check():
     from fontTools.ttLib import TTFont
     chunk_cases=0
     for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
+                                            (home,'GenZui',BOLD_STEM,ROOT/'build/serif'/(BOLD_STEM+'.ttf')),
                                             (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
                                             (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
@@ -146,7 +154,10 @@ def check():
             assert not covered&declared,filename
             covered|=declared;chunk_cases+=1
         assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
-        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif'
+        # Bold loads on demand, so only Regular text chunks are preloaded.
+        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif' or stem==BOLD_STEM
+        text_face=re.search(rf'@font-face\{{font-family:{family};src:url\(assets/{re.escape(stem)}-text-[^}}]*\}}',page_text)[0]
+        assert ('font-weight:700' in text_face)==(stem==BOLD_STEM),(family,stem)
         # Every character the page itself sets comes from the preloaded text chunk.
         visible=set(re.sub(r'<(script|style)\b[^>]*>.*?</\1>|<[^>]+>|&[#a-zA-Z0-9]+;',' ',page_text,flags=re.S))
         text_chunk=TTFont(OUT/'assets'/next(f for f,_ in faces if '-text-' in f))

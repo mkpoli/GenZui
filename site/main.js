@@ -30,10 +30,32 @@
     const missing = [...new Set(points.filter(c => !/[\r\n\t]/.test(c) && !byCode.has(c.codePointAt(0))))];
     $('#type-status').textContent = loadFailed ? 'The embedded font could not load. Try reopening this page in a current browser.'
       : !loaded ? 'Loading the font…'
-      : !inventoryLoaded ? `${number([...typeInput.value].length)} characters · ${familyName} Regular`
+      : isBold() && boldState === 'failed' ? 'GenZui Serif Bold could not load. Try Regular, or reopen this page in a current browser.'
+      : isBold() && boldState !== 'loaded' ? 'Loading GenZui Serif Bold…'
+      : !inventoryLoaded ? `${number([...typeInput.value].length)} characters · ${familyName} ${weightName()}`
       : missing.length ? `${number(points.length)} characters · ${missing.length} outside this font: ${missing.slice(0, 4).map(c => code(c.codePointAt(0))).join(', ')}${missing.length > 4 ? '…' : ''}`
-      : `${number(points.length)} characters · ${familyName} Regular`;
+      : `${number(points.length)} characters · ${familyName} ${weightName()}`;
   }
+  // One weight for the page's samples: the specimen, the Okinawan input and the
+  // character list follow it, and both switches show the current choice.
+  const isBold = () => document.body.dataset.weight === '700';
+  const weightName = () => isBold() ? 'Bold' : 'Regular';
+  // Bold loads only when chosen, so the status waits for it.
+  let boldState = 'idle';
+  function setWeight(weight) {
+    document.body.dataset.weight = weight;
+    $$('[data-weight]').forEach(button => { if (button.tagName === 'BUTTON') button.setAttribute('aria-pressed', String(button.dataset.weight === weight)); });
+    if (weight === '700' && boldState === 'idle') {
+      boldState = 'loading';
+      document.fonts.load('700 48px GenZui', '源萃𛄤').then(faces => {
+        if (!faces.length) throw new Error('GenZui Bold unavailable');
+        boldState = 'loaded'; typeStatus();
+      }).catch(() => { boldState = 'failed'; typeStatus(); });
+    }
+    typeStatus();
+    document.dispatchEvent(new CustomEvent('genzui:weight'));
+  }
+  $$('button[data-weight]').forEach(button => button.addEventListener('click', () => setWeight(button.dataset.weight)));
   function setPreset() { typeInput.value = presets[$('#preset').value]; typeInput.scrollTop = 0; typeInput.scrollLeft = 0; typeStatus(); }
   $('#preset').addEventListener('change', setPreset);
   typeInput.addEventListener('input', typeStatus);
@@ -124,6 +146,7 @@
     return element;
     }
 
+    document.addEventListener('genzui:weight', () => { if (selected) updateInspector(selected); });
     function updateInspector(item) {
     selected = item;
     const picture = display(item);
@@ -136,13 +159,14 @@
     $('#detail-description').textContent = picture.invisible
       ? 'This code point has no visible outline in ordinary text.'
       : picture.mark ? 'Combining mark, shown with a base character. Copy copies the mark only.'
+      : isBold() && item.bold_description ? item.bold_description
       : item.description ? item.description
       : item.provisional ? 'Noto components and original drawing. Joins, proportions and weight remain under review.'
       : item.source === 'jp' ? `Original ${origins.jp} outline, with its Japanese layout behaviour preserved.`
       : `Original ${origins[item.source]} outline, preserved in GenZui.`;
     $('#detail-age').textContent = item.age;
     $('#detail-block').textContent = item.block;
-    $('#detail-source').textContent = origins[item.source];
+    $('#detail-source').textContent = isBold() && item.bold_source ? item.bold_source : origins[item.source];
     $('#copy-status').textContent = '';
     $$('.glyph-button').forEach(button => {
       button.setAttribute('aria-pressed', String(Number(button.dataset.cp) === item.cp));
