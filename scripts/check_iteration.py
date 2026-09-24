@@ -6,7 +6,7 @@ from PIL import ImageChops
 from check_refinements import mask
 from honkoku import HONKOKU, TALLIES
 from okinawan import PUA as OKINAWAN_PUA
-from serif_forms import REVISION_0115
+from serif_forms import REVISION_0115, REVISION_0117
 from sources import ROOT
 
 
@@ -20,8 +20,9 @@ def check_iteration(path, font):
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
     assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+7
-    # 0.115 recentres TOMO, TOTE and TOKI and reduces YORI; nothing else moves.
-    revised = {cmap[cp] for cp in REVISION_0115}
+    # 0.115 recentres TOMO, TOTE and TOKI and reduces YORI; 0.117 raises TOMO's
+    # lower return. Nothing else moves.
+    revised = {cmap[cp] for cp in (*REVISION_0115, *REVISION_0117)}
     for name in old_order:
         same = before['glyf'][name].getCoordinates(before['glyf']) == font['glyf'][name].getCoordinates(font['glyf'])
         assert same != (name in revised), name
@@ -98,7 +99,7 @@ def check_iteration(path, font):
         assert ImageChops.difference(native, rasters[-1]).getbbox() is None, size
         tally_checks.append({'size_px':size, 'increasing_ink_area':True, 'fifth_matches_native_zheng':True})
     before.close()
-    return {'baseline':'0.112', 'changed_outlines':[f'U+{cp:04X}' for cp in REVISION_0115],
+    return {'baseline':'0.112', 'changed_outlines':[f'U+{cp:04X}' for cp in dict.fromkeys((*REVISION_0115, *REVISION_0117))],
             'unchanged_glyphs':len(old_order),
             'added_codepoints':[f'U+{cp:X}' for cp in sorted(set(HONKOKU) | set(OKINAWAN_PUA))],
             'other_previous_outlines_and_metrics_unchanged':True,
