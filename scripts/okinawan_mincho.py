@@ -10,6 +10,7 @@ kana body runs from about -60 to 800.
 """
 import pathops
 from fontTools.pens.boundsPen import BoundsPen
+from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
 
 DRAWINGS = {}
@@ -165,76 +166,145 @@ def hwe(k):
     return fu_left(k) + [k.box(k.part('ぇ', 0), 500, -40, 960)]
 
 
-def stem(k, x, bottom, top):
-    """は's left stroke as the glottal mark before や, ゆ and よ."""
-    return k.box(k.part('は', 1), x, bottom, None, top)
+def stretch(k, pen, top, bottom):
+    """Stretch a stroke along its length only, so its weight is unchanged."""
+    y0, y1 = k.bounds(pen)[1::2]
+    return k.move(pen, sx=1, sy=(top - bottom) / (y1 - y0), dy=bottom - y0)
 
 
-@drawing(0xF45D)  # glottal YA
+@drawing(0xF45D)  # glottal YA: は's left stroke before や, its flick aimed at the arm
 def glottal_ya(k):
-    return [stem(k, 60, 250, 760), k.box(k.part('や'), 230, -54, 940)]
+    mark = stretch(k, k.part('は', 1), 780, 170)
+    return [k.move(mark, dx=-70), k.move(k.part('や'), sx=.84, sy=1, origin=(929, 0), dx=40)]
 
 
-@drawing(0xF45E)  # glottal YU
+@drawing(0xF45E)  # glottal YU: い's first stroke beside ゆ's own left stroke
 def glottal_yu(k):
-    return [stem(k, 40, 250, 760), k.box(k.part('ゆ'), 200, -62, 950)]
+    # ゆ's left stroke descends and hooks up into the loop; い's first stroke
+    # makes the same movement, so the two run parallel and the mark's hook
+    # points at the start of ゆ.
+    mark = stretch(k, k.part('い', 0), 720, 90)
+    return [k.move(mark, dx=-85), k.move(k.part('ゆ'), sx=.82, sy=1, origin=(910, 0), dx=60)]
 
 
-@drawing(0xF45F)  # glottal YO
+@drawing(0xF45F)  # glottal YO: は's left stroke with よ in place of は's right half
 def glottal_yo(k):
-    return [stem(k, 90, 60, 760), k.move(k.part('よ'), dx=80)]
+    # は's flick is drawn toward the next stroke; よ takes the room of は's
+    # right half, so the spacing is は's own.
+    right = k.box(k.part('よ'), 330, -37, 900)
+    return [k.part('は', 1), right]
 
 
-def bar_over(k, ch):
-    """こ's upper stroke set over a kana squeezed down to make room."""
-    body = k.box(k.part(ch), 140, -50, 860, 640)
-    return [k.box(k.part('こ', 1), 260, 690, 660), body]
+def dot(k):
+    """こ's upper stroke, the short mark set above the glottal W letters."""
+    return k.box(k.part('こ', 1), 330, 720, 640)
 
 
-@drawing(0xF460)  # glottal WA
+def dotted(k, body):
+    """A body set a little smaller under the dot, keeping its proportions."""
+    return [dot(k)] + [k.move(p, sx=.88, origin=(470, -40)) for p in body]
+
+
+@drawing(0xF460)  # glottal WA: ゐ's zig and rising loop, closing with わ's loop
 def glottal_wa(k):
-    return bar_over(k, 'ろ')
+    # The chart's WA is WI without the small inner loop. Lowered by 42, わ's
+    # loop runs on top of ゐ's along the bottom arc from x = 720 to 800 with
+    # the same width, so they are joined at x = 740: ゐ loses its small loop
+    # and the rest of its bottom, and わ supplies the end of the loop.
+    top = k.drop(k.part('ゐ'), (410, -100), (740, -100), (740, 245), (410, 245))
+    bottom = k.keep(k.move(k.part('わ', 0), dy=-42), (410, -100), (740, -100), (740, 245), (410, 245))
+    return dotted(k, [top, bottom])
 
 
 @drawing(0xF461)  # glottal WI
 def glottal_wi(k):
-    return bar_over(k, 'る')
+    return dotted(k, [k.part('ゐ')])
 
 
 @drawing(0xF462)  # glottal WE
 def glottal_we(k):
-    return bar_over(k, 'ゑ')
+    return dotted(k, [k.part('ゑ')])
 
 
 @drawing(0xF463)  # glottal N: ん with い's falling stroke at the upper right
 def glottal_n(k):
-    return [k.part('ん'), k.box(k.part('い', 1), 640, 440, None, 740)]
+    mark = stretch(k, k.part('ぃ', 1), 590, 400)
+    return [k.move(k.part('ん'), dx=-40), k.move(mark, dx=70)]
 
 
-@drawing(0xF465)  # WU: を's bar and cross stroke over the body of TU
+@drawing(0xF465)  # WU: を's bar, a ノ, a short tick and the body of TU
 def wu(k):
-    # The chart's third stroke runs from the upper right down to the left,
-    # turns and swells into a bulge: the body of TU, set lower. Its diagonal
-    # crosses を's tail, which is cut there so its end lies inside it.
-    body = [k.move(p, sx=.95, sy=.9, origin=(500, -40), dy=-10) for p in tu_body(k)]
-    cross = k.drop(k.part('を', 1), (440, -100), (1000, -100), (1000, 390), (440, 390))
-    return [k.part('を', 2), cross] + body
+    # The chart draws を's cross stroke as a plain ノ that ends in a free tip,
+    # then a short tick below the bar whose foot rests on the third stroke,
+    # which runs from the upper right into TU's turn and bulge.
+    slash = stretch(k, k.part('な', 1), 800, 390)
+    body = [k.move(p, sx=1, sy=.8, origin=(0, -40)) for p in tu_body(k)]
+    tick = k.keep(k.part('い', 0), (0, 470), (1000, 470), (1000, 900), (0, 900))
+    tick = k.move(tick, dx=330, dy=-110)
+    return [k.part('を', 2), k.move(slash, dx=-40), tick] + body
 
 
-@drawing(0xF467)  # SI: す with い's second stroke
+@drawing(0xF467)  # SI: す with a long falling stroke on the right
 def si(k):
-    return [k.move(k.part('す'), dx=-130), k.box(k.part('い', 1), 660, -20, 860, 520)]
+    # す moves left; its bar is shortened along its length only. The right
+    # stroke is ぃ's lighter second stroke, lengthened the same way.
+    bar = k.move(k.part('す', 2), sx=.84, sy=1, origin=(540, 0), dx=-140)
+    # The loop and its counter stay one outline so the counter keeps its winding.
+    rest = k.move(k.part('す', 0, 1, 3), dx=-140)
+    right = stretch(k, k.part('ぃ', 1), 500, 20)
+    return [bar, rest, k.move(right, dx=60)]
 
 
-@drawing(0xF469)  # TSI: つ's top over ぃ
+@drawing(0xF469)  # TSI: つ whose tail runs into い's first stroke
 def tsi(k):
-    top = k.box(k.part('つ'), 60, 420, 910, 790)
-    return [top] + small_i(k, 180, -20, 700)
+    # つ is raised and shortened; its tail ends where い's first stroke
+    # begins, so the two read as one turning stroke, as in the chart.
+    top = k.move(k.part('つ'), sx=1, sy=.77, origin=(0, 617), dy=233)
+    first = k.move(stretch(k, k.part('い', 0), 450, 20), dx=225)
+    second = k.move(stretch(k, k.part('い', 1), 330, 40), dx=60)
+    return [top, first, second]
 
 
-def dakuten(k):
-    """ど's dakuten, raised to clear the wider Okinawan letters."""
-    return k.move(k.part('ど', 0, 3), dx=-15, dy=70)
+CLEARANCE = 35
+
+
+def _clear(parts, mark, margin):
+    """Whether no part comes within margin units of the mark."""
+    mark_path = pathops.Path()
+    mark.replay(mark_path.getPen())
+    grown = pathops.Path()
+    for dx in (-margin, 0, margin):
+        for dy in (-margin, 0, margin):
+            moved = pathops.Path()
+            mark_path.draw(TransformPen(moved.getPen(), (1, 0, 0, 1, dx, dy)))
+            grown = pathops.op(grown, moved, pathops.PathOp.UNION)
+    for part in parts:
+        shape = pathops.Path()
+        part.replay(shape.getPen())
+        if list(pathops.op(shape, grown, pathops.PathOp.INTERSECTION).segments):
+            return False
+    return True
+
+
+def voiced(k, parts):
+    """A letter with ど's dakuten, fitted the way Noto's voiced kana are.
+
+    The dakuten starts from Noto's position. The letter may be narrowed from
+    its left edge or lowered toward the baseline (as Noto sets つ lower in
+    づ), and the mark raised by at most 90 units to stay inside the line,
+    until CLEARANCE units separate them. The least change wins, with changes
+    to the letter weighed a little heavier than raising the mark.
+    """
+    left = min(k.bounds(p)[0] for p in parts)
+    options = sorted(((2 - sx - sy) * 1000 + dy * .8, sx, sy, dy)
+                     for sx in (1, .96, .92, .88, .84, .8, .76)
+                     for sy in (1, .95, .9, .85) for dy in (0, 30, 60, 90))
+    for _, sx, sy, dy in options:
+        mark = k.move(k.part('ど', 0, 3), dy=dy)
+        narrowed = [k.move(p, sx=sx, sy=sy, origin=(left, -40)) for p in parts]
+        if _clear(narrowed, mark, CLEARANCE):
+            return narrowed + [mark]
+    raise ValueError('no dakuten fit')
 
 
 # The ordinary kana each letter is read against, shown beside it on the

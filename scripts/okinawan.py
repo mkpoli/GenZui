@@ -81,7 +81,6 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
     # The kit reads the source kana before any Okinawan glyph is added.
     kit = okinawan_mincho.Kit(font, contours, transform)
     recipes = okinawan_mincho.outlines(kit)
-    dakuten = okinawan_mincho.dakuten(kit)
     recipes.update({cp: raised(source, radius) for cp, (source, radius) in RAISED.items()})
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
@@ -104,8 +103,7 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
         if len(e['output']) != 2 or int(e['output'][0], 16) not in recipes:
             continue
         cp = int(e['output'][0], 16)
-        name = add(font, f"okinawa.{e['id']}", unite([
-            transform(p, (.90, 0, 0, 1, 12, 0)) for p in recipes[cp]] + [dakuten]))
+        name = add(font, f"okinawa.{e['id']}", unite(okinawan_mincho.voiced(kit, recipes[cp])))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name

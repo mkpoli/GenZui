@@ -100,19 +100,30 @@ topology and proportions; FK Okinawa Mincho, FROkinawanMoji, MgenKana+ and
 Nishiki-teki provide further comparisons. No outlines from those fonts or Xim
 Sans are included in GenZui.
 
-TU is と’s tick and diagonal running into the turn and bulge of ち; WU sets the
-same body under を’s bar and cross stroke. TI moves the curve of て left to make
-room for ぃ; KWI and TSI set ぃ beside く and under the top of つ, and SI adds the
-second stroke of い to す. KWA and KWE keep く’s upper arm and flatten its lower
-arm into a near-level connector, as the chart draws it, leading into the stem
-and loop of わ or the zigzag of え. The labial forms keep ふ’s top, centre stroke
-and left dot and replace the right dot with ゎ, ぃ or ぇ. Glottal YA, YU and YO
-take the left stroke of は before や, ゆ and よ; glottal WA, WI and WE set the
-upper stroke of こ above ろ, る and ゑ; glottal N adds the second stroke of い to
-ん. Voiced forms narrow the letter slightly and add the dakuten of ど. YI and YE
-use Noto’s own い゙ and え゙ composition. Noto’s original outlines and layout
-tables remain intact; one appended composition lookup selects the voiced
-Okinawan forms.
+TU is と’s tick and diagonal running into the turn and bulge of ち. WU sets that
+body under を’s bar, with な’s ノ ending in a free tip and a short tick resting on
+the third stroke, as the chart draws it. TI moves the curve of て left to make
+room for ぃ; KWI sets ぃ beside く. TSI raises つ so its tail runs into い’s first
+stroke, which turns as one movement; い’s second stroke stands apart. SI adds
+ぃ’s lighter second stroke, lengthened, beside す. KWA and KWE keep く’s upper
+arm and flatten its lower arm into a near-level connector leading into the
+stem and loop of わ or the zigzag of え. The labial forms keep ふ’s top, centre
+stroke and left dot and replace the right dot with ゎ, ぃ or ぇ.
+
+The glottal marks follow brush movement: a stroke ends pointing at the start
+of the next, and neighbouring strokes run parallel. Glottal YU sets い’s first
+stroke beside ゆ, parallel to ゆ’s own left stroke. Glottal YA and YO take は’s
+left stroke, whose flick points at the next stroke; YO keeps は’s spacing with
+よ in place of its right half. Glottal WA, WI and WE set the upper stroke of こ
+over ゐ-based bodies: WI is ゐ, WA is ゐ without its small inner loop, closing
+with わ’s loop, and WE is ゑ. Glottal N adds ぃ’s second stroke to ん.
+
+Strokes are lengthened or shortened only along their length, so the stroke
+weight stays Noto’s. Voiced forms add ど’s dakuten at Noto’s position; each
+letter is narrowed or lowered, and the mark raised, only as far as it takes
+to leave clear space between them. YI and YE use Noto’s own い゙ and え゙
+composition. Noto’s original outlines and layout tables remain intact; one
+appended composition lookup selects the voiced Okinawan forms.
 
 The eight raised katakana are not drawn separately. The prefectural guide sets
 them as the text face’s own katakana at about half size, top-aligned with the
