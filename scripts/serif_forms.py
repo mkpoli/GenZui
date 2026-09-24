@@ -172,18 +172,21 @@ def reshape(outline, point):
     return result
 
 
-def koto_entry_point(x, y, amount):
+def koto_entry_point(x, y, amount, bar=700):
+    """Lower the top bar's entry. Points at or above `bar` belong to the bar."""
     t = max(0, min(1, (610-x)/351))
-    return x, y - amount*t*t*(3-2*t) if y >= 700 else y
+    return x, y - amount*t*t*(3-2*t) if y >= bar else y
 
 
-def balanced_koto(parts):
+def balanced_koto(parts, bold=False):
     """Accepted E: lower and shift the upper curve, extend the rising stroke."""
+    # The heavier Bold bar reaches down to 689; its connector stays below 685.
+    bar = 685 if bold else 700
     def smooth(t):
         t = max(0, min(1, t))
         return t*t*(3-2*t)
     def upper(x, y):
-        px, py = koto_entry_point(x, y, 44)
+        px, py = koto_entry_point(x, y, 44, bar)
         blend = smooth((y-350)/210)
         return px-22*blend, py-40*blend
     def lower(x, y):
@@ -275,17 +278,14 @@ def refinements(part, transform, bold=False):
             'C467 394 439 443 441 496 C438 561 476 616 537 670 '
             'C556 687 578 710 598 727 C536 716 468 706 418 706 '
             'C350 706 295 738 259 773 Z',
-            'M243.3 772 L273.4 809.3 C330 779 368.4 774 426 770.3 '
-            'C479 773 545 771.3 600 798.5 '
-            'C627 803.7 651.4 814.4 677 815 '
-            'C711.4 813.7 751 796.5 770.6 764.4 '
-            'C791 732.7 763 695 732 691 C665 671.3 612 654 575 624 '
-            'C536 586 517.6 542 515 501 '
-            'C519.4 447 517 442 569.7 382 L503.4 333.4 '
-            'C440 395 424 430.4 421 496 C417 569 463 629.5 526 682 '
-            'C526.4 674 599.7 775.7 553 705.7 '
-            'C599.4 705 440.3 687 418 688.7 '
-            'C339.4 693 295.3 716 243.3 772 Z')],
+            'M243 772 L273 809 C311 788 368 770 426 770 '
+            'C482 770 545 781 602 792 C629 798 653 815 677 815 '
+            'C711 814 751 797 771 764 C791 733 763 695 732 691 '
+            'C665 671 612 654 575 624 C536 586 518 542 515 501 '
+            'C512 450 532 408 570 382 L503 333 '
+            'C447 394 419 443 421 496 C418 568 465 627 526 681 '
+            'C531 687 537 695 542 701 C500 694 462 689 418 689 '
+            'C340 693 295 716 243 772 Z')],
 
         # A shear makes KI more upright while keeping width at each height.
         # The two crossbars start inside the shared
@@ -481,7 +481,7 @@ def refinements(part, transform, bold=False):
     for cp, scale in ((0x1B125, .92), (0x1B124, .90)):
         forms[cp] = [transform(p, (scale, 0, 0, scale,
                                   500*(1-scale), 365*(1-scale))) for p in forms[cp]]
-    forms[0x1B123] = balanced_koto(forms[0x1B123])
+    forms[0x1B123] = balanced_koto(forms[0x1B123], bold)
     return forms
 
 
