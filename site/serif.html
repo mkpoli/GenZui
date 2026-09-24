@@ -12,6 +12,7 @@
     @font-face {font-family:GenZui;src:url(data:font/woff2;base64,{{BOLD_FONT}}) format('woff2');font-weight:700;font-style:normal;font-display:swap}
     {{CSS}}
     {{FAMILY_SWITCH_CSS}}
+    {{WEIGHT_SWITCH_CSS}}
   </style>
 </head>
 <body>
@@ -20,8 +21,9 @@
     <a class="brand" href="./" aria-label="GenZui, both families"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SERIF</span></span></a>
     {{FAMILY_SWITCH}}
     <nav aria-label="Main navigation">
-      <a href="gallery.html">Design gallery</a><a href="#specimen">Specimen</a><a href="#okinawan">Okinawan input</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
+      <a href="gallery.html">Design gallery</a><a href="#specimen">Specimen</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
     </nav>
+    <div class="weight-control header-weight" role="group" aria-label="Weight for every sample on this page"><button type="button" data-weight="400" aria-pressed="true" title="Regular"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Regular</span></button><button type="button" data-weight="700" aria-pressed="false" title="Bold"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Bold</span></button></div>
     <a class="header-download" href="downloads/GenZuiSerif-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
   </header>
 
@@ -69,7 +71,7 @@
           <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="drawings">GenZui drawings</option><option value="small">Small kana adaptations</option><option value="ligatures">Kana ligatures</option><option value="okinawan">Okinawan kana</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="numerals">Han numerals</option><option value="tallies">Ideographic tally marks</option><option value="ideographic-description">Ideographic description characters</option></select></label>
           <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="type-size">48 px</output></span><input id="type-size" type="range" min="20" max="112" value="48" step="1"></label>
           <label class="range-control spacing-control"><span class="control-label">SPACING <output id="spacing-value" for="type-spacing">0 em</output></span><input id="type-spacing" type="range" min="0" max="20" value="0" step="1"></label>
-          <div class="weight-control" role="group" aria-label="Weight"><button type="button" data-weight="400" aria-pressed="true">Regular</button><button type="button" data-weight="700" aria-pressed="false">Bold</button></div><div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
+          <div class="weight-control" role="group" aria-label="Weight"><button type="button" data-weight="400" aria-pressed="true"><span class="swatch" lang="ja" aria-hidden="true">源</span>Regular</button><button type="button" data-weight="700" aria-pressed="false"><span class="swatch" lang="ja" aria-hidden="true">源</span>Bold</button></div><div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
         </div>
         <div class="type-canvas"><textarea id="type-input" class="face" lang="ja" spellcheck="false" aria-label="Editable GenZui specimen">春はあけぼの。
 かなのかたちを読む。
@@ -77,12 +79,11 @@
 この𛄣、その𛄤𛄦</textarea></div>
         <div class="type-footer"><span id="type-status" role="status">Loading the font…</span><button type="button" id="reset-type">Reset sample <span aria-hidden="true">↺</span></button></div>
       </div>
-      <p class="small-note">Switch between Regular and Bold; the choice also applies to the Okinawan input and the character list. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
-    </section>
+      <p class="small-note">Regular or Bold applies to every sample on the page, and the link keeps the choice. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
 
-    <section class="section wrap" id="okinawan" aria-labelledby="okinawan-title">
-      <div class="section-label"><span>02 / OKINAWAN INPUT</span><span lang="ja">沖縄語の文字入力</span></div>
-      <div class="section-heading"><h2 id="okinawan-title">Write in Okinawan.</h2><p>Compose with Funatsu’s New Okinawan Kana or the prefecture’s raised katakana. Copy the result into an app that uses GenZui.</p></div>
+      <section class="specimen-part" id="okinawan" aria-labelledby="okinawan-title">
+      <div class="section-label"><span>OKINAWAN INPUT</span><span lang="ja">沖縄語の文字入力</span></div>
+      <div class="section-heading"><h3 id="okinawan-title">Write in Okinawan.</h3><p>Compose with Funatsu’s New Okinawan Kana or the prefecture’s raised katakana. Copy the result into an app that uses GenZui.</p></div>
       <div class="okinawan-composer">
         <div class="type-controls">
           <label><span class="control-label">WRITING SYSTEM</span><select id="okinawan-system"><option value="funatsu">Funatsu · 新沖縄文字</option><option value="prefecture">Prefecture · 上付きカタカナ</option></select></label>
@@ -119,11 +120,12 @@
         <p>GenZui uses its own Noto-based drawings. Toranekoman’s kana fonts, FROkinawaMoji and しま書体 were consulted as implementation references; their glyph outlines are not included.</p>
         <p class="control-label">CODE POINTS IN YOUR RESULT</p><output id="okinawan-codepoints" class="okinawan-codepoints" for="okinawan-source okinawan-system okinawan-method"></output>
       </details>
+      </section>
     </section>
 
     <section class="unicode-section" id="unicode18" aria-labelledby="unicode-title">
       <div class="wrap">
-        <div class="section-label"><span>03 / UNICODE 18</span><span lang="ja">七つの文字</span></div>
+        <div class="section-label"><span>02 / UNICODE 18</span><span lang="ja">七つの文字</span></div>
         <div class="section-heading"><h2 id="unicode-title">Seven additions.</h2><p>Historical digraphs, alternate katakana and a small archaic ye.<br>All seven are included. Their outlines are provisional.</p></div>
         <div class="unicode-grid" id="unicode-grid"></div>
         <a class="text-link" href="#characters" id="browse-unicode">Inspect the Unicode 18 characters <span aria-hidden="true">↗</span></a>
@@ -131,13 +133,13 @@
     </section>
 
     <section class="section wrap" id="characters" aria-labelledby="characters-title">
-      <div class="section-label"><span>04 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
+      <div class="section-label"><span>03 / CHARACTER INVENTORY</span><span lang="ja">収録文字</span></div>
       <div class="section-heading"><h2 id="characters-title">See what’s inside.</h2><p>Browse by character type, or search all {{CHARACTER_COUNT}} characters.<br>Select a character to see its encoding, source and design status.</p></div>
       <p class="small-note">All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/kana-coverage.json">Coverage audit</a>. Unencoded historical variants and arbitrary combining sequences fall outside this count.</p>
       <p class="small-note">Try <a href="?sample=numerals#specimen">Han numerals</a>, <a href="?sample=tallies#specimen">ideographic tally marks</a> or <a href="?sample=ideographic-description#specimen">ideographic description characters</a>. Description characters display as visible operators; they do not assemble a new glyph from the following components.</p>
       <div class="inventory-tools">
         <label class="search-box"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="8.3" cy="8.3" r="5.8"/><path d="m12.6 12.6 4.6 4.6"/></svg><span class="sr-only">Search characters</span><input id="character-search" type="search" placeholder="Character, name, or U+1B124" autocomplete="off" spellcheck="false"></label>
-        <label class="source-filter"><span class="sr-only">Filter by outline source</span><select id="source-filter"><option value="all">All sources</option><option value="jp">Noto Serif JP</option><option value="hentaigana">Noto Serif Hentaigana</option><option value="frb">FRB Taiwanese Kana</option><option value="genzui">GenZui constructions</option><option value="cjk">Noto Serif CJK JP</option></select></label><div class="weight-control" role="group" aria-label="Weight"><button type="button" data-weight="400" aria-pressed="true">Regular</button><button type="button" data-weight="700" aria-pressed="false">Bold</button></div>
+        <label class="source-filter"><span class="sr-only">Filter by outline source</span><select id="source-filter"><option value="all">All sources</option><option value="jp">Noto Serif JP</option><option value="hentaigana">Noto Serif Hentaigana</option><option value="frb">FRB Taiwanese Kana</option><option value="genzui">GenZui constructions</option><option value="cjk">Noto Serif CJK JP</option></select></label>
       </div>
       <div class="inventory-filters" role="group" aria-label="Character collections">
         <button type="button" data-filter="historical" aria-pressed="true">Extended kana <span>329</span></button>
@@ -172,7 +174,7 @@
 
     <section class="sources-section" id="sources" aria-labelledby="sources-title">
       <div class="wrap">
-        <div class="section-label"><span>05 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
+        <div class="section-label"><span>04 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
         <div class="section-heading"><h2 id="sources-title">Built on established type.</h2><p>Most of GenZui comes directly from existing fonts.<br>Counts show each source’s contribution to GenZui.</p></div>
         <div class="source-rows">
           <div class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notoserifjp" target="_blank" rel="noopener noreferrer">Noto Serif JP <span aria-hidden="true">↗</span></a></h3><p>The Japanese subset of Noto Serif CJK, with its character repertoire, outlines and Japanese layout preserved.</p></div><strong>16,726<span>characters · OFL 1.1</span></strong></div>
@@ -186,7 +188,7 @@
     </section>
 
     <section class="download-section wrap" id="download" aria-labelledby="download-title">
-      <div class="download-intro"><div class="section-label"><span>06 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃明朝</h2><p>GenZui Serif Regular and Bold · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/OFL.txt">SIL Open Font License 1.1</a>.</p>
+      <div class="download-intro"><div class="section-label"><span>05 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃明朝</h2><p>GenZui Serif Regular and Bold · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/OFL.txt">SIL Open Font License 1.1</a>.</p>
         <div class="install-notes"><h3>Install the font</h3><p><strong>Windows</strong> — Download the TTF, open it and select <b>Install</b>.</p><p><strong>macOS</strong> — Open the TTF in Font Book and select <b>Install</b>.</p><p><strong>Linux</strong> — Copy the TTF to <code>~/.local/share/fonts/</code> and run <code>fc-cache</code>, or open it in your font manager.</p><p><strong>iOS / Android</strong> — Install through a font-installer app or a configuration profile; the system apps then list it.</p><p>Choose <b>GenZui Serif</b> in your app’s font menu.</p></div>
       </div>
       <div class="download-options">
