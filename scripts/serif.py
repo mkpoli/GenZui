@@ -31,7 +31,10 @@ OUT = ROOT / 'build/serif'
 FAMILY = 'GenZui Serif'
 FAMILY_JA = '源萃明朝'
 STEM = 'GenZuiSerif-Regular'
+BOLD_STEM = 'GenZuiSerif-Bold'
 VERSION = '0.115'
+# One archive carries both faces.
+PACKAGE = f'GenZuiSerif-{VERSION}.zip'
 SMALL = {0x1B132: 0x3053, 0x1B150: 0x3090, 0x1B151: 0x3091,
          0x1B152: 0x3092, 0x1B155: 0x30B3, 0x1B164: 0x30F0,
          0x1B165: 0x30F1, 0x1B166: 0x30F2, 0x1B167: 0x30F3,
