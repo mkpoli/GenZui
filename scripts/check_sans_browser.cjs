@@ -8,10 +8,13 @@ const { chromium, firefox } = require(process.env.PLAYWRIGHT_MODULE || 'playwrig
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'build/sans');
 const url = process.env.SANS_SPECIMEN_URL || pathToFileURL(path.join(out, 'index.html')).href;
-const fontData = Object.fromEntries(['ttf', 'woff2'].map(ext => [ext,
-  fs.readFileSync(path.join(out, 'GenZuiSans-Regular.' + ext)).toString('base64')]));
-const hashes = Object.fromEntries(['ttf', 'woff2'].map(ext => [ext + '_sha256',
-  crypto.createHash('sha256').update(fs.readFileSync(path.join(out, 'GenZuiSans-Regular.' + ext))).digest('hex')]));
+// Both faces: Regular's hashes keep their plain keys, Bold's take a bold_ prefix.
+const faces = { '': 'GenZuiSans-Regular', bold_: 'GenZuiSans-Bold' };
+const fontData = Object.entries(faces).map(([prefix, stem]) => ({ prefix,
+  ...Object.fromEntries(['ttf', 'woff2'].map(ext => [ext,
+    fs.readFileSync(path.join(out, stem + '.' + ext)).toString('base64')])) }));
+const hashes = Object.fromEntries(Object.entries(faces).flatMap(([prefix, stem]) => ['ttf', 'woff2'].map(ext =>
+  [prefix + ext + '_sha256', crypto.createHash('sha256').update(fs.readFileSync(path.join(out, stem + '.' + ext))).digest('hex')])));
 
 (async () => {
   const results = [];
@@ -27,11 +30,15 @@ const hashes = Object.fromEntries(['ttf', 'woff2'].map(ext => [ext + '_sha256',
         await document.fonts.ready;
       });
       assert.equal(await page.title(), 'GenZui Sans — 源萃ゴシック');
-      const raster = await page.evaluate(async data => {
-        const desktop = new FontFace('Desktop', `url(data:font/ttf;base64,${data.ttf})`);
-        const web = new FontFace('Web', `url(data:font/woff2;base64,${data.woff2})`);
-        await Promise.all([desktop.load(), web.load()]);
-        document.fonts.add(desktop); document.fonts.add(web);
+      const raster = await page.evaluate(async faces => {
+        const loaded = [];
+        for (const data of faces) {
+          const desktop = new FontFace('Desktop' + data.prefix, `url(data:font/ttf;base64,${data.ttf})`);
+          const web = new FontFace('Web' + data.prefix, `url(data:font/woff2;base64,${data.woff2})`);
+          await Promise.all([desktop.load(), web.load()]);
+          document.fonts.add(desktop); document.fonts.add(web);
+          loaded.push(desktop.status, web.status);
+        }
         const samples = ['日本語かなカナ', '𛀁𛀂𛀆𛀋𛀗𛂒𛄍', '𛄣𛄤𛄥𛄦𛄧𛄨𛅨',
           '𛄟\u3099𛀆\u309a', 'チウ\u0305 チゥ\u0323 チア𚿰', '卄𝍲𝍳𝍴𝍵𝍶⿼⿽⿾⿿㇯'];
         function pixels(family, text, size) {
@@ -43,15 +50,17 @@ const hashes = Object.fromEntries(['ttf', 'woff2'].map(ext => [ext + '_sha256',
           return context.getImageData(0, 0, 1200, 160).data;
         }
         let cases = 0;
-        for (const text of samples) for (const size of [24, 48, 72]) {
-          const a = pixels('Desktop', text, size), b = pixels('Web', text, size);
+        for (const data of faces) for (const text of samples) for (const size of [24, 48, 72]) {
+          const a = pixels('Desktop' + data.prefix, text, size), b = pixels('Web' + data.prefix, text, size);
           if (!a.some(value => value)) throw new Error('Empty font rendering');
-          if (!a.every((value, i) => value === b[i])) throw new Error('TTF/WOFF2 raster mismatch: ' + text);
+          if (!a.every((value, i) => value === b[i])) throw new Error('TTF/WOFF2 raster mismatch: ' + data.prefix + text);
           cases++;
         }
-        return { cases, ttf: desktop.status, woff2: web.status };
+        // Bold must draw heavier than Regular.
+        const ink = family => pixels(family, '日本語かな𛀁𛄣', 48).reduce((sum, value, i) => sum + (i % 4 === 3 ? value : 0), 0);
+        return { cases, loaded, heavier: ink('Desktopbold_') > ink('Desktop') * 1.2 };
       }, fontData);
-      assert.equal(raster.ttf, 'loaded'); assert.equal(raster.woff2, 'loaded');
+      assert(raster.loaded.every(status => status === 'loaded')); assert(raster.heavier);
       await page.locator('#size').fill('60');
       assert.equal(await page.locator('#sample').evaluate(e => getComputedStyle(e).fontSize), '60px');
       await page.locator('#direction').click();
