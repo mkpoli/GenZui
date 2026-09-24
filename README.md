@@ -6,10 +6,10 @@ kana and Unicode 18.0 additions.
 | | 源萃明朝 GenZui Serif | 源萃ゴシック GenZui Sans |
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
-| Release | Regular 0.114 · 17,090 characters | Regular 0.101 · 17,070 characters |
+| Release | Regular and Bold 0.115 · 17,090 characters | Regular 0.101 · 17,070 characters |
 | Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
-| TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) |
-| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular-0.114.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-Regular-0.101.zip) |
+| TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) · [GenZuiSerif-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Bold.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) |
+| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.115.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-Regular-0.101.zip) |
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -29,7 +29,7 @@ Browser fallback depends on the website and browser settings.
 ### On the web
 
 ```html
-<link rel="stylesheet" href="https://genzui.mkpo.li/v0.114/genzui.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/v0.115/genzui.css">
 <link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.101/genzui-sans.css">
 ```
 
@@ -61,14 +61,14 @@ Extensions, Kana Supplement, Kana Extended-A, Kana Extended-B and Small Kana
 Extension blocks is present. The Hiragana and Katakana script properties and
 script extensions together cover **all 763 characters**, including halfwidth
 kana, enclosed kana, squared katakana and shared marks. Audits:
-[Serif 0.114](research/kana-coverage-0.114.json) ·
+[Serif 0.115](research/kana-coverage-0.115.json) ·
 [Sans 0.101](research/sans-kana-coverage-0.101.json). These are encoding
 checks; historical variants and arbitrary combining-mark sequences need
 separate typographic assessment.
 
 Shared ideographs keep Japanese regional forms. Chinese and Korean coverage
 follows each face’s Noto base, with 卄 from the matching Noto CJK font.
-Regular is the only weight.
+GenZui Serif has Regular and Bold; GenZui Sans is Regular only.
 
 ### GenZui Serif additions
 
