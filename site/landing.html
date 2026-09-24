@@ -261,7 +261,7 @@ a.dl{text-decoration:none}
     <h1 class="sr">GenZui: GenZui Serif and GenZui Sans</h1>
 
     <div class="choose" id="choose">
-      <article class="card serif" data-family="serif">
+      <article class="card serif" data-family="serif" aria-label="GenZui Serif">
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">01</span><span>Mincho · Noto Serif JP</span></div>
         <div class="hero">
@@ -280,7 +280,7 @@ a.dl{text-decoration:none}
         </div>
       </article>
 
-      <article class="card sans" data-family="sans">
+      <article class="card sans" data-family="sans" aria-label="GenZui Sans">
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">02</span><span>Gothic · Noto Sans JP</span></div>
         <div class="hero">
@@ -332,7 +332,7 @@ a.dl{text-decoration:none}
           <a href="downloads/GenZuiSans-Regular-{{SANS_VERSION}}.zip" download>Complete package <small>ZIP</small></a></nav></div>
         <div class="group"><h3 class="hud">Use on a website</h3><div class="css"><code>&lt;link rel="stylesheet" href="https://genzui.mkpo.li/genzui-sans.css"&gt;</code><button class="copy hud" type="button">Copy</button></div></div>
       </article>
-      <p class="fine hud">SIL Open Font License 1.1 · free for any use · <a href="https://github.com/mkpoli/GenZui">GitHub</a> · <a href="https://mkpo.li/" rel="author">まくぽり</a></p>
+      <p class="fine hud"><a href="downloads/OFL.txt">SIL Open Font License 1.1</a> · <a href="downloads/NOTICE.txt">credits</a> · free for any use · <a href="https://github.com/mkpoli/GenZui">GitHub</a> · <a href="https://mkpo.li/" rel="author">まくぽり</a></p>
     </section>
 
     <div class="menu">
@@ -351,7 +351,7 @@ a.dl{text-decoration:none}
 (() => {
   // Links to the Serif page's sections used to be anchors on this URL.
   const moved = ['#specimen', '#okinawan', '#unicode18', '#characters', '#sources', '#download'];
-  if (moved.includes(location.hash)) { location.replace('serif' + location.search + location.hash); return; }
+  if (moved.includes(location.hash)) { location.replace('serif.html' + location.search + location.hash); return; }
 
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
   const screen = $('#screen'), cards = $$('.card'), status = $('#status');
@@ -571,7 +571,8 @@ a.dl{text-decoration:none}
     // ease the parallax toward the pointer
     const tx = pointer.seen ? pointer.x / W * 2 - 1 : 0, ty = pointer.seen ? pointer.y / H * 2 - 1 : 0;
     par.x += (tx - par.x) * .06; par.y += (ty - par.y) * .06;
-    root.setProperty('--px', par.x.toFixed(4)); root.setProperty('--py', par.y.toFixed(4));
+    const px = par.x.toFixed(3), py = par.y.toFixed(3);   // restyle only when the offset moves
+    if (px !== lastPar[0] || py !== lastPar[1]) { root.setProperty('--px', px); root.setProperty('--py', py); lastPar = [px, py]; }
 
     // far layer: large faint kana drifting upward
     const since = (now - bg.t0) / 1000, mix = Math.min(1, since / .7);
@@ -659,6 +660,8 @@ a.dl{text-decoration:none}
     if (!still) requestAnimationFrame(draw);
   };
   const root = document.documentElement.style;
+  let lastPar = [];
+  if (still) addEventListener('resize', () => requestAnimationFrame(draw));   // resizing clears the static frame
   document.fonts.ready.then(() => requestAnimationFrame(draw));
 })();
 </script>
