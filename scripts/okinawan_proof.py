@@ -203,6 +203,30 @@ def fmt(box):
     return f'{box[3] - box[1]:.2f} × {box[2] - box[0]:.2f}'
 
 
+# Source pages shown whole on the study page: file, page, caption.
+SOURCE_PAGES = [
+    ('funatsu-chart.pdf', 1, 'Funatsu’s complete chart (2016), the page the letters are drawn after.'),
+    ('prefecture-guide.pdf', 5, 'Okinawa Prefecture, 「しまくとぅば」の表記について (2022), page 5: '
+     'raised katakana as the guide sets them.'),
+]
+
+
+def source_pages(reference_dir, out):
+    """Render each source page at reading size and at a zoomable size."""
+    out.mkdir(parents=True, exist_ok=True)
+    shown = []
+    for filename, number, caption in SOURCE_PAGES:
+        pdf = reference_dir/filename
+        if not pdf.is_file():
+            continue
+        stem = Path(filename).stem
+        for dpi, suffix in ((110, ''), (300, '-large')):
+            subprocess.run(['pdftoppm', '-r', str(dpi), '-f', str(number), '-l', str(number), '-png',
+                            '-singlefile', str(pdf), str(out/(stem+suffix))], check=True, capture_output=True)
+        shown.append(dict(stem=stem, caption=caption))
+    return shown
+
+
 def build(reference_dir=None):
     OUT.mkdir(parents=True, exist_ok=True)
     fonts = OUT/'fonts'
@@ -213,7 +237,7 @@ def build(reference_dir=None):
     shutil.copyfile(ROOT/'build/serif'/f'{STEM}.woff2', fonts/'genzui.woff2')
     shutil.copyfile(ROOT/'releases'/f'v{0.114}'/f'{STEM}.woff2', fonts/'previous.woff2')
     references = {}
-    runs, boxes = [], []
+    runs, boxes, sources = [], [], []
     if reference_dir:
         for key, filename in [('fk', 'FK-Okinawa-reference.ttf'), ('nishiki', 'nishiki-teki.ttf'),
                               ('mgen', 'mgenkanaplus.woff2'), ('xim', 'Xim-Sans-Handwritten.ttf')]:
@@ -239,6 +263,7 @@ def build(reference_dir=None):
         image = reference_dir/'frokinawa-sample.jpg'
         if image.is_file():
             shutil.copyfile(image, OUT/'frokinawa-sample.jpg')
+        sources = source_pages(reference_dir, OUT/'sources')
     revisions_file = fonts/'revisions.json'
     revisions = json.loads(revisions_file.read_text()) if revisions_file.is_file() else []
     groups = {'funatsu': [], 'prefecture': []}
@@ -261,16 +286,20 @@ def build(reference_dir=None):
                       f'<small>{html.escape(r["label"])}</small></div>' for r in revisions)
             + f'<p class="codes">{" + ".join("U+" + cp for cp in entry["output"])}</p></article>')
     page = (ROOT/'templates/okinawan.html').read_text()
-    if not (OUT/'frokinawa-sample.jpg').is_file():
-        start = page.index('<figure>')
-        end = page.index('</figure>', start) + len('</figure>')
-        page = page[:start] + page[end:]
     stamp = f'?v={int(time.time())}'
     faces = ''.join(f"@font-face{{font-family:{r['key']};src:url(fonts/{r['key']}.woff2)}}" for r in revisions)
     values = {
         '{{REVISION_FACES}}': faces,
         '{{FUNATSU}}': ''.join(groups['funatsu']),
         '{{RAISED}}': ''.join(groups['prefecture']),
+        '{{SOURCES}}': ''.join(
+            f'<figure class="source"><a href="sources/{x["stem"]}-large.png"><img src="sources/{x["stem"]}.png{stamp}" '
+            f'alt="{html.escape(x["caption"], quote=True)}" loading="lazy"></a>'
+            f'<figcaption>{html.escape(x["caption"])} Open the image for full resolution.</figcaption></figure>'
+            for x in sources) + (
+            '<figure class="source"><img src="frokinawa-sample.jpg" alt="FROkinawanMoji specimen" loading="lazy">'
+            '<figcaption>FROkinawanMoji specimen, published by まいりわ on BOOTH.</figcaption></figure>'
+            if (OUT/'frokinawa-sample.jpg').is_file() else ''),
         '{{TYPESETTING}}': ''.join(
             f'<figure class="run"><img src="runs/chart-{r["id"]}.png{stamp}" alt="Funatsu’s chart, {html.escape(r["id"])} set beside its examples">'
             f'<img src="runs/genzui-{r["id"]}.png{stamp}" alt="GenZui, the same text at the same size">'
