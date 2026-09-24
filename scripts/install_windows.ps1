@@ -12,17 +12,29 @@ function Get-GenZuiFontRegistration([string]$Path, [string]$Name) {
     if ($property) { [string]$property.Value }
 }
 
-$fontName = 'GenZuiSerif-Regular.ttf'
-$source = Join-Path $FontDirectory $fontName
-$checks = Get-Content -LiteralPath (Join-Path $FontDirectory 'checks.json') -Raw | ConvertFrom-Json
-if ($checks.status -ne 'passed' -or $checks.family -ne 'GenZui Serif') {
-    throw 'The GenZui validation report is missing or does not match this family.'
-}
-$expected = $checks.ttf_sha256
-$version = [regex]::Match($checks.font_version, '^Version ([0-9]+\.[0-9]+)$')
-if (!$version.Success) { throw 'The validation report has an invalid font version.' }
-if ((Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) {
-    throw 'The font checksum does not match the validation report.'
+# Each face ships with its own validation report.
+$faces = @(
+    @{ Style = 'Regular'; File = 'GenZuiSerif-Regular.ttf'; Report = 'checks.json'; Weight = 'Normal' },
+    @{ Style = 'Bold'; File = 'GenZuiSerif-Bold.ttf'; Report = 'checks-bold.json'; Weight = 'Bold' }
+)
+foreach ($face in $faces) {
+    $checks = Get-Content -LiteralPath (Join-Path $FontDirectory $face.Report) -Raw | ConvertFrom-Json
+    if ($checks.status -ne 'passed' -or $checks.family -ne 'GenZui Serif') {
+        throw "The GenZui $($face.Style) validation report is missing or does not match this family."
+    }
+    $version = [regex]::Match($checks.font_version, '^Version ([0-9]+\.[0-9]+)$')
+    if (!$version.Success) { throw "The $($face.Style) validation report has an invalid font version." }
+    $face.Version = $checks.font_version
+    $face.Expected = $checks.ttf_sha256
+    $face.Source = Join-Path $FontDirectory $face.File
+    if ((Get-FileHash -LiteralPath $face.Source -Algorithm SHA256).Hash.ToLowerInvariant() -ne $face.Expected) {
+        throw "The $($face.Style) font checksum does not match its validation report."
+    }
+    # A revision can be rebuilt during outline development. A content suffix
+    # keeps a new build separate from font files held open by applications.
+    $face.Stem = [IO.Path]::GetFileNameWithoutExtension($face.File)
+    $face.InstalledName = $face.Stem + '-' + $version.Groups[1].Value + '-' + $face.Expected.Substring(0, 12) + '.ttf'
+    $face.Entry = "GenZui Serif $($face.Style) (TrueType)"
 }
 
 Add-Type -TypeDefinition @'
@@ -40,43 +52,43 @@ public static class GenZuiFontInstall {
 '@
 
 $folder = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Microsoft\Windows\Fonts'
-# A revision can be rebuilt during outline development. A content suffix
-# keeps a new build separate from font files held open by applications.
-$installedName = 'GenZuiSerif-Regular-' + $version.Groups[1].Value + '-' + $expected.Substring(0, 12) + '.ttf'
-$destination = Join-Path $folder $installedName
 $key = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts'
-$entry = 'GenZui Serif Regular (TrueType)'
 New-Item -ItemType Directory -Path $folder -Force | Out-Null
-$previous = Get-GenZuiFontRegistration -Path $key -Name $entry
-$same = (Test-Path -LiteralPath $destination) -and (
-    (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant() -eq $expected)
-if (!$same) {
-    Copy-Item -LiteralPath $source -Destination $destination -Force
-}
-# Stage the new version before changing registration. Open applications can
-# keep their old file handles while newly started applications see the update.
-if ($previous -and $previous -ne $destination -and (Test-Path -LiteralPath $previous)) {
-    while ([GenZuiFontInstall]::RemoveFontResourceEx($previous, 0, [IntPtr]::Zero)) { }
-}
-New-ItemProperty -Path $key -Name $entry -PropertyType String -Value $destination -Force | Out-Null
-$added = [GenZuiFontInstall]::AddFontResourceEx($destination, 0, [IntPtr]::Zero)
-if ($added -eq 0) {
-    if ($previous) {
-        New-ItemProperty -Path $key -Name $entry -PropertyType String -Value $previous -Force | Out-Null
-        [void][GenZuiFontInstall]::AddFontResourceEx($previous, 0, [IntPtr]::Zero)
-    } else {
-        Remove-ItemProperty -Path $key -Name $entry -ErrorAction SilentlyContinue
+foreach ($face in $faces) {
+    $face.Destination = Join-Path $folder $face.InstalledName
+    $face.Previous = Get-GenZuiFontRegistration -Path $key -Name $face.Entry
+    $same = (Test-Path -LiteralPath $face.Destination) -and (
+        (Get-FileHash -LiteralPath $face.Destination -Algorithm SHA256).Hash.ToLowerInvariant() -eq $face.Expected)
+    if (!$same) {
+        Copy-Item -LiteralPath $face.Source -Destination $face.Destination -Force
     }
-    throw 'Windows could not register the new font resource.'
+    # Stage the new version before changing registration. Open applications can
+    # keep their old file handles while newly started applications see the update.
+    if ($face.Previous -and $face.Previous -ne $face.Destination -and (Test-Path -LiteralPath $face.Previous)) {
+        while ([GenZuiFontInstall]::RemoveFontResourceEx($face.Previous, 0, [IntPtr]::Zero)) { }
+    }
+    New-ItemProperty -Path $key -Name $face.Entry -PropertyType String -Value $face.Destination -Force | Out-Null
+    $face.Added = [GenZuiFontInstall]::AddFontResourceEx($face.Destination, 0, [IntPtr]::Zero)
+    if ($face.Added -eq 0) {
+        if ($face.Previous) {
+            New-ItemProperty -Path $key -Name $face.Entry -PropertyType String -Value $face.Previous -Force | Out-Null
+            [void][GenZuiFontInstall]::AddFontResourceEx($face.Previous, 0, [IntPtr]::Zero)
+        } else {
+            Remove-ItemProperty -Path $key -Name $face.Entry -ErrorAction SilentlyContinue
+        }
+        throw "Windows could not register the new $($face.Style) font resource."
+    }
 }
 [UIntPtr]$result = [UIntPtr]::Zero
 [void][GenZuiFontInstall]::SendMessageTimeout([IntPtr]0xffff, 0x001D, [UIntPtr]::Zero,
     [IntPtr]::Zero, 2, 3000, [ref]$result)
-if ((Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash.ToLowerInvariant() -ne $expected) {
-    throw 'Installed font verification failed.'
-}
-if ((Get-ItemPropertyValue -Path $key -Name $entry) -ne $destination) {
-    throw 'Font registration verification failed.'
+foreach ($face in $faces) {
+    if ((Get-FileHash -LiteralPath $face.Destination -Algorithm SHA256).Hash.ToLowerInvariant() -ne $face.Expected) {
+        throw "Installed $($face.Style) font verification failed."
+    }
+    if ((Get-ItemPropertyValue -Path $key -Name $face.Entry) -ne $face.Destination) {
+        throw "$($face.Style) font registration verification failed."
+    }
 }
 # GDI+ can retain the font list from before installation. Verify discovery in
 # a fresh process, as an application started after installation would do.
@@ -88,16 +100,22 @@ Add-Type -AssemblyName PresentationCore
 $fonts = New-Object System.Drawing.Text.InstalledFontCollection
 try {
     $family = @($fonts.Families | Where-Object { $_.GetName(1033) -eq 'GenZui Serif' })
-    if (!$family.Count -or !$family[0].IsStyleAvailable([Drawing.FontStyle]::Regular)) {
-        throw 'GenZui Serif Regular is not visible in the Windows font collection.'
+    if (!$family.Count) { throw 'GenZui Serif is not visible in the Windows font collection.' }
+    $resolved = @{}
+    foreach ($style in 'Regular', 'Bold') {
+        if (!$family[0].IsStyleAvailable([Drawing.FontStyle]::$style)) {
+            throw "GenZui Serif $style is not visible in the Windows font collection."
+        }
+        $weight = if ($style -eq 'Bold') { [System.Windows.FontWeights]::Bold } else { [System.Windows.FontWeights]::Normal }
+        $face = [System.Windows.Media.Typeface]::new([System.Windows.Media.FontFamily]::new('GenZui Serif'),
+            [System.Windows.FontStyles]::Normal, $weight, [System.Windows.FontStretches]::Normal)
+        [System.Windows.Media.GlyphTypeface]$glyphFace = $null
+        if (!$face.TryGetGlyphTypeface([ref]$glyphFace)) {
+            throw "Windows could not resolve the installed GenZui $style glyph face."
+        }
+        $resolved[$style] = (Get-FileHash -LiteralPath $glyphFace.FontUri.LocalPath -Algorithm SHA256).Hash.ToLowerInvariant()
     }
-    $face = [System.Windows.Media.Typeface]::new('GenZui Serif')
-    [System.Windows.Media.GlyphTypeface]$glyphFace = $null
-    if (!$face.TryGetGlyphTypeface([ref]$glyphFace)) {
-        throw 'Windows could not resolve the installed GenZui glyph face.'
-    }
-    $resolvedHash = (Get-FileHash -LiteralPath $glyphFace.FontUri.LocalPath -Algorithm SHA256).Hash.ToLowerInvariant()
-    $data = @{family=$family[0].GetName(1033);family_ja=$family[0].GetName(1041);resolved_sha256=$resolvedHash} | ConvertTo-Json -Compress
+    $data = @{family=$family[0].GetName(1033);family_ja=$family[0].GetName(1041);resolved=$resolved} | ConvertTo-Json -Compress
     [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($data))
 } finally { $fonts.Dispose() }
 '@
@@ -106,32 +124,41 @@ $shell = (Get-Process -Id $PID).Path
 $answer = & $shell -NoProfile -NonInteractive -EncodedCommand $encoded
 if ($LASTEXITCODE -ne 0) { throw 'Fresh-process font verification failed.' }
 $names = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($answer)) | ConvertFrom-Json
-if ($names.resolved_sha256 -ne $expected) {
-    throw 'Windows resolved a different font version. Registration is updated; restart applications and run the installer again.'
+foreach ($face in $faces) {
+    if ($names.resolved.($face.Style) -ne $face.Expected) {
+        throw "Windows resolved a different $($face.Style) font version. Registration is updated; restart applications and run the installer again."
+    }
 }
-$oldFileRemoved = $false
-if ($previous -and $previous -ne $destination -and
-    [IO.Path]::GetDirectoryName($previous) -eq $folder -and
-    [IO.Path]::GetFileName($previous) -match '^GenZuiSerif-Regular(?:-[0-9]+\.[0-9]+(?:-[0-9a-f]{12})?)?\.ttf$' -and
-    (Test-Path -LiteralPath $previous)) {
-    try {
-        Remove-Item -LiteralPath $previous -Force -ErrorAction Stop
-        $oldFileRemoved = $true
-    } catch [System.IO.IOException] {
-        # In-use old files can remain until the applications using them exit.
-    } catch [System.UnauthorizedAccessException] {
-        # Registration is already verified; cleanup can wait.
+foreach ($face in $faces) {
+    $face.PreviousRemoved = $false
+    if ($face.Previous -and $face.Previous -ne $face.Destination -and
+        [IO.Path]::GetDirectoryName($face.Previous) -eq $folder -and
+        [IO.Path]::GetFileName($face.Previous) -match ('^' + $face.Stem + '(?:-[0-9]+\.[0-9]+(?:-[0-9a-f]{12})?)?\.ttf$') -and
+        (Test-Path -LiteralPath $face.Previous)) {
+        try {
+            Remove-Item -LiteralPath $face.Previous -Force -ErrorAction Stop
+            $face.PreviousRemoved = $true
+        } catch [System.IO.IOException] {
+            # In-use old files can remain until the applications using them exit.
+        } catch [System.UnauthorizedAccessException] {
+            # Registration is already verified; cleanup can wait.
+        }
     }
 }
 [ordered]@{
     family = $names.family
     family_ja = $names.family_ja
     installed = $true
-    version = $checks.font_version
-    sha256 = $expected
+    faces = @($faces | ForEach-Object {
+        [ordered]@{
+            style = $_.Style
+            version = $_.Version
+            sha256 = $_.Expected
+            previous_file_removed = $_.PreviousRemoved
+            added_resources = $_.Added
+        }
+    })
     registry_verified = $true
     windows_font_collection_verified = $true
     resolved_font_bytes_verified = $true
-    previous_file_removed = $oldFileRemoved
-    added_resources = $added
-} | ConvertTo-Json
+} | ConvertTo-Json -Depth 4
