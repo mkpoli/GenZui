@@ -77,7 +77,7 @@ input[type=range]{width:100%;height:18px;display:block;accent-color:var(--green)
 .header-weight{margin-right:14px}
 .header-weight button{height:34px;padding:0 9px}
 .header-weight .swatch{font-size:21px}
-@media(max-width:760px){.typesetter .type-controls .range-control{flex-basis:100%}.header-weight{margin-right:0}}
+@media(max-width:760px){.typesetter .type-controls .range-control{flex-basis:100%;max-width:none}.header-weight{margin-right:0}}
 @media(prefers-reduced-motion:reduce){.face{transition:none}.weight-control button[aria-busy=true] .swatch{animation:none;opacity:.5}}
 .direction-control button{border:0;background:none;width:36px;height:36px;font-size:16px}
 .direction-control button[aria-pressed=true]{background:var(--green);color:white}
@@ -211,3 +211,9 @@ input[type=range]{width:100%;height:18px;display:block;accent-color:var(--green)
 .okinawan-portability strong{display:block;font-size:15px}
 .okinawan-portability p{max-width:960px;margin:6px 0 0}
 .okinawan-portability a{text-decoration:underline;text-underline-offset:3px}
+/* The header weight switch appears where the header has room; the specimen switch covers the rest. */
+@media(max-width:1360px){.header-weight{display:none}}
+@media(max-width:1200px) and (min-width:761px){.site-header{gap:20px}.site-header nav{gap:22px;margin-right:12px}}
+@media(max-width:960px) and (min-width:761px){.site-header{gap:16px}.site-header nav{gap:16px;margin-right:0}.site-header nav a[href="gallery.html"]{display:none}}
+@media(max-width:760px) and (min-width:421px){.header-weight{display:flex}}
+@media(max-width:359px){.typesetter .weight-control button{padding:0 7px;gap:5px}.typesetter .direction-control{margin-left:0}}
