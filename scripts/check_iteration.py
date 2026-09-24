@@ -31,8 +31,9 @@ def check_iteration(path, font):
             else:
                 assert font[table][name] == before[table][name], (table, name)
     # Appending symbols must leave every previous layout rule and IVS intact.
-    # Mark anchors follow each base's bounds, so the revised bases take their
-    # previous anchors back before GPOS is compared byte for byte.
+    # Mark anchors follow each base's bounds. A revised base's anchors must
+    # move with its bounds; they then take their previous values back so the
+    # rest of GPOS can be compared byte for byte.
     gpos = copy.deepcopy(font['GPOS'])
     for lookup, old_lookup in zip(gpos.table.LookupList.Lookup, before['GPOS'].table.LookupList.Lookup):
         for sub, old_sub in zip(lookup.SubTable, old_lookup.SubTable):
@@ -41,7 +42,20 @@ def check_iteration(path, font):
             old_index = {g: i for i, g in enumerate(old_sub.BaseCoverage.glyphs)}
             for i, g in enumerate(sub.BaseCoverage.glyphs):
                 if g in revised:
-                    sub.BaseArray.BaseRecord[i] = old_sub.BaseArray.BaseRecord[old_index[g]]
+                    old_record = old_sub.BaseArray.BaseRecord[old_index[g]]
+                    # Each anchor must move exactly as one edge or centre of the base did.
+                    new_glyph, old_glyph = font['glyf'][g], before['glyf'][g]
+                    dx = {0, new_glyph.xMin-old_glyph.xMin, new_glyph.xMax-old_glyph.xMax,
+                          (new_glyph.xMin+new_glyph.xMax-old_glyph.xMin-old_glyph.xMax)/2}
+                    dy = {0, new_glyph.yMin-old_glyph.yMin, new_glyph.yMax-old_glyph.yMax,
+                          (new_glyph.yMin+new_glyph.yMax-old_glyph.yMin-old_glyph.yMax)/2}
+                    for new_anchor, old_anchor in zip(sub.BaseArray.BaseRecord[i].BaseAnchor, old_record.BaseAnchor):
+                        if new_anchor is None or old_anchor is None:
+                            assert new_anchor is old_anchor, g
+                            continue
+                        assert any(abs(new_anchor.XCoordinate-old_anchor.XCoordinate-d) <= 1 for d in dx), (g, 'x')
+                        assert any(abs(new_anchor.YCoordinate-old_anchor.YCoordinate-d) <= 1 for d in dy), (g, 'y')
+                    sub.BaseArray.BaseRecord[i] = old_record
     assert gpos.compile(font) == before['GPOS'].compile(before), 'GPOS'
     assert font['BASE'].compile(font) == before['BASE'].compile(before), 'BASE'
     # Okinawan voicing appends exactly one ccmp lookup. Removing only that
