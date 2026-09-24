@@ -8,6 +8,8 @@ use Noto's Mincho kana stroke vocabulary.
 Every drawn stroke has a Regular and a Bold master with the same points. Bold
 takes its native strokes from Noto Serif JP at wght 700, and its drawn strokes
 match that weight; scripts/draft_bold.py drafts a Bold master for review.
+YORI packs two kana into one cell, so Bold draws it lighter: its native RI
+stroke comes from wght 550 and its drawn strokes blend between the masters.
 """
 import re
 from math import hypot, sqrt
@@ -513,7 +515,7 @@ DESCRIPTIONS = {
     0x1B123: 'KOTO E: a lower upper curve shifted left, with a longer rising right stroke and a shallow Noto TO bowl.',
     0x1B124: 'Noto TO stem and an upright KI diagonal with joined crossbars, at 90% optical size like TOMO. The shared TO stem aligns with TOMO and TOTE, and the ink centres in the cell.',
     0x1B125: 'Noto Serif JP TO stem and TE strokes with a drawn connecting bar, at 92% optical size. The shared TO stem aligns with TOMO and TOKI, and the ink centres in the cell.',
-    0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and full-weight RI descending stroke, at 90% optical size and centred in the cell. Bold draws its strokes at the weight of Noto Serif JP 550, keeping the three verticals open.',
+    0x1B126: 'Noto Serif JP RI short stroke; redrawn YO bars and an RI descending stroke of full width, at 90% optical size and centred in the cell. Bold draws its strokes at the weight of Noto Serif JP 550, keeping the three verticals open.',
     0x1B127: 'A modulated upper bar and lighter return above a hooked stem. The middle crossbar sits halfway between its 0.107 and 0.108 positions.',
     0x1B128: 'Noto WI bars join a NA-derived left descent and the native right stem. Stem spacing is halfway between 0.107 and 0.108; stroke weights are preserved.',
     0x2A708: 'Native MO stem and return beside TO. MO’s upturned entry is lower and shorter, giving the nearby TO head more space. At 90% optical size, with the shared TO stem aligned with TOTE and TOKI.',
