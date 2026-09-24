@@ -19,7 +19,7 @@ REFITS = {
     },
     700: {
         0x1B123: {'scale': 1.12, 'erode': 7, 'shift': (0, 0),
-                  'reason': 'KOTO body raised from 733 to 807 units, the range of TOKI, TOTE and TOMO'},
+                  'reason': 'KOTO body raised from 733 to 806 units, the range of TOKI, TOTE and TOMO'},
         0x1B127: {'scale': 1.125, 'erode': 7, 'shift': (0, 0),
                   'reason': 'Alternate NE raised from 735 to 813 units, matching the Bold katakana cap height'},
         0x1B168: {'scale': 1.0, 'erode': 0, 'shift': (0, -30),

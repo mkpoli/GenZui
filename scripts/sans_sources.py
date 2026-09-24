@@ -20,7 +20,7 @@ GENSEKI = SOURCE / 'GenSekiHentaiganaGothic'
 # (69.5 units) matches Noto Sans JP Regular's hiragana (69.3), for the
 # hentaigana beside ordinary kana.
 # Bold follows the same rule against Noto Sans JP Bold: at axis 720 the
-# hentaigana's median stem is 108.3 units against 108.5 for the hiragana, and at
+# hentaigana's median stem is 108.3 units against 108.6 for the hiragana, and at
 # axis 780 the four archaic kana sit with the Bold katakana (114.3).
 INSTANCES = CACHE / 'instances'
 STUDY = CACHE / 'NotoSansHentaigana-GenZui.glyphs'

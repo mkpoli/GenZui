@@ -35,7 +35,7 @@ matching ordinary katakana stems of 72–75 units. The stem estimate is twice
 the filled area over the perimeter, the median over the set.
 
 Bold applies the same rule to Noto Sans JP Bold. Upstream's Bold instance
-(axis 700) gives the hentaigana a median stem of 106.0 units against 108.5 for
+(axis 700) gives the hentaigana a median stem of 106.0 units against 108.6 for
 the Bold hiragana; axis 720 gives 108.3. The archaic kana use axis 780, where
 their median stem is 114.1 against 114.3 for the Bold katakana. The checks
 hold both pairs within two units in each face.
@@ -53,7 +53,7 @@ width so it grows without getting heavier (`scripts/sans_forms.py`):
 | 𛅨 U+1B168 small archaic YE | Lowered 30 units onto the small-kana baseline |
 
 GenSeki's Bold drawings have the same proportions and get the same fits:
-KOTO 733 → 807 units (scale 1.12, eroded 7), alternate NE 735 → 813 units
+KOTO 733 → 806 units (scale 1.12, eroded 7), alternate NE 735 → 813 units
 (scale 1.125, eroded 7), small YE lowered 30 units.
 
 The other eighteen GenSeki outlines and all Noto outlines are unchanged, which
