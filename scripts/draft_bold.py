@@ -4,8 +4,7 @@ GenZui's drawn strokes carry a Regular and a Bold master with the same
 commands and points. This tool proposes the Bold one. It measures the local
 stroke width along the Regular outline (the largest inscribed circle touching
 each point) and moves the outline outward by the weight Noto Serif JP gains
-there from wght 400 to 700: about 1.72 times for strokes up to 60 units,
-easing to 1.5 times for the heaviest. Ends and tips stay close to their
+there from wght 400 to 700 (see `gain`). Ends and tips stay close to their
 Regular size, and counters shrink as the ink grows. Anchors move once, along
 the bisector of their two normals; handles are refit to the offset outline.
 
@@ -146,8 +145,14 @@ def tangent(p, t):
     return d if hypot(*d) > 1e-6 else p[-1] - p[0]
 
 
-def gain(width):
-    ratio = 1.72 if width <= 60 else max(1.5, 1.72 - (width - 60) * .0055)
+def gain(width, normal=(1, 0)):
+    """Outward offset for a Regular stroke of this width, from Noto Serif JP.
+
+    From wght 400 to 700 its vertical stems gain about 1.72 times, bar bodies
+    1.64-1.70 and the swelling heads of bars (60-76 units) only 1.5.
+    """
+    body = 1.72 - .06 * abs(normal[1])
+    ratio = body if width <= 60 else max(1.5, body - (width - 60) * (body - 1.5) / 12)
     return max(2.0, width * (ratio - 1) / 2)
 
 
@@ -221,7 +226,8 @@ def draft_contour(d, width):
 
     def offset(p, t):
         q = bezier(p, t)
-        return q + outward(tangent(p, t)) * gain(width(q))
+        n = outward(tangent(p, t))
+        return q + n * gain(width(q), n)
 
     anchors = []
     for k, (_, p) in enumerate(segments):
@@ -229,7 +235,7 @@ def draft_contour(d, width):
         n1, n2 = outward(tangent(before, 1)), outward(tangent(p, 0))
         bisector = (n1 + n2) / (hypot(*(n1 + n2)) or 1)
         miter = max(.5, float(bisector @ n1))
-        anchors.append(p[0] + bisector * gain(width(p[0])) / miter)
+        anchors.append(p[0] + bisector * gain(width(p[0]), bisector) / miter)
 
     moved = {}
     ts = np.linspace(0, 1, 30)[2:-2]
