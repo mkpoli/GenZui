@@ -30,10 +30,19 @@
     const missing = [...new Set(points.filter(c => !/[\r\n\t]/.test(c) && !byCode.has(c.codePointAt(0))))];
     $('#type-status').textContent = loadFailed ? 'The embedded font could not load. Try reopening this page in a current browser.'
       : !loaded ? 'Loading the font…'
-      : !inventoryLoaded ? `${number([...typeInput.value].length)} characters · ${familyName} Regular`
+      : !inventoryLoaded ? `${number([...typeInput.value].length)} characters · ${familyName} ${weightName()}`
       : missing.length ? `${number(points.length)} characters · ${missing.length} outside this font: ${missing.slice(0, 4).map(c => code(c.codePointAt(0))).join(', ')}${missing.length > 4 ? '…' : ''}`
-      : `${number(points.length)} characters · ${familyName} Regular`;
+      : `${number(points.length)} characters · ${familyName} ${weightName()}`;
   }
+  // One weight for the page's samples: the specimen, the Okinawan input and the
+  // character list follow it, and both switches show the current choice.
+  const weightName = () => document.body.dataset.weight === '700' ? 'Bold' : 'Regular';
+  function setWeight(weight) {
+    document.body.dataset.weight = weight;
+    $$('[data-weight]').forEach(button => { if (button.tagName === 'BUTTON') button.setAttribute('aria-pressed', String(button.dataset.weight === weight)); });
+    typeStatus();
+  }
+  $$('button[data-weight]').forEach(button => button.addEventListener('click', () => setWeight(button.dataset.weight)));
   function setPreset() { typeInput.value = presets[$('#preset').value]; typeInput.scrollTop = 0; typeInput.scrollLeft = 0; typeStatus(); }
   $('#preset').addEventListener('change', setPreset);
   typeInput.addEventListener('input', typeStatus);
