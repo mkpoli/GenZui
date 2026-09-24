@@ -107,11 +107,11 @@ character encoding.
 
 | Source | Contribution |
 | --- | --- |
-| [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weight 400 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
-| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from a stem-matched instance at weight axis 380, and four archaic kana from the Regular instance |
-| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular | 21 historical kana, small kana and ligatures |
-| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular | U+5344 卄 |
-| [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
+| [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
+| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold) |
+| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 21 historical kana, small kana and ligatures |
+| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
+| [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
 | GenZui constructions | Squared PAATU and the transcription symbols |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
@@ -163,14 +163,16 @@ the ZIP.
 python3 -m venv .venv-sans
 .venv-sans/bin/python -m pip install -r requirements-sans.lock
 .venv-sans/bin/python scripts/sans.py
+.venv-sans/bin/python scripts/sans_bold.py
 .venv-sans/bin/python scripts/check_sans.py
+.venv-sans/bin/python scripts/check_sans_bold.py
 PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node scripts/check_sans_browser.cjs
 .venv-sans/bin/python scripts/package_sans.py
 ```
 
 Outputs are in `build/sans/`. The [build guide](research/genzui-sans.md)
-covers the stem-matched hentaigana instance, the GenSeki refits, the browser
-check and packaging to `dist/`.
+covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
+drawings, the browser check and packaging to `dist/`.
 
 ## Build the specimen website
 
