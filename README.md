@@ -139,8 +139,10 @@ python3 -m venv .venv
 .venv/bin/python scripts/repertoire.py
 .venv/bin/python scripts/serif.py
 .venv/bin/python scripts/check_serif.py
+.venv/bin/python scripts/bold.py
+.venv/bin/python scripts/check_bold.py
 node scripts/check_okinawan_input.cjs
-cp research/browser-checks-0.114.json build/serif/browser-checks.json
+.venv/bin/python scripts/check_serif_browsers.py
 .venv/bin/python scripts/package_serif.py
 ```
 
@@ -148,8 +150,12 @@ Outputs are in `build/serif/`. The checks cover the historical and
 transcription inventory, preservation of upstream glyphs and metrics, Japanese
 layout, marks, Minnan tones, WU variants, the Okinawan forms and TTF/WOFF2
 parity. `scripts/check_coverage.py` checks the pinned Unicode Script and
-Script_Extensions properties. Release packaging stages the Chrome, Vivaldi and
-Firefox report for the exact font bytes, then writes the ZIP.
+Script_Extensions properties. `scripts/check_serif_browsers.py` runs from WSL
+and checks both faces in headless Windows Chrome, Vivaldi and Firefox, whose
+paths it reads from `~/.config/genzui/windows-browsers.json`
+(`{"chrome.exe": {"path": "C:\\..."}, "vivaldi.exe": {...}, "firefox.exe": {...}}`).
+Release packaging requires that report for the exact font bytes, then writes
+the ZIP.
 
 ### GenZui Sans
 

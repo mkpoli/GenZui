@@ -11,7 +11,7 @@ from fontTools.ttLib import TTFont
 
 from refinement_proof import NAMES
 from serif import OUT, SMALL, STEM, VERSION
-from serif_forms import DESCRIPTIONS, REVISION_0112, wu_alternate
+from serif_forms import DESCRIPTIONS, REVISION_0112, REVISION_0115, wu_alternate
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
 from honkoku import HONKOKU
@@ -20,7 +20,7 @@ REFERENCES = {0x1B124:'トキ', 0x2A708:'トモ', 0x1B123:'こと', 0x2CEFF:'シ
               0x2CF02:'んえへ', 0x2CF00:'シノ', 0x1B11F:'けほ', 0x1B125:'トテ',
               0x1B126:'ヨリ', 0x1B127:'ネヰ', 0x1B128:'ナヰ'}
 
-REVIEW_FORMS = REVISION_0112
+REVIEW_FORMS = tuple(dict.fromkeys((*REVISION_0112, *REVISION_0115)))
 
 APPROVED = {0x1B11F, 0x1B123, 0x1B126, 0x2A708, 0x2CF00, 0x2CEFF, 0x1B128}
 
@@ -47,8 +47,8 @@ def contexts(cp):
             f'<div class="reading vertical-reading" lang="ja">{text}</div></div></div>')
 
 
-def comparison(font, cp, before):
-    return (f'<div class="current-outline">{drawing(font,cp,before)}</div>'
+def comparison(font, cp, before, bold=None):
+    return (f'<div class="current-outline">{drawing(font,cp,before,bold)}</div>'
             f'<div class="previous-outline">{drawing(before,cp)}</div>'+contexts(cp))
 
 
@@ -66,7 +66,7 @@ def shape_names(font, cp):
     return default, alternate
 
 
-def drawing(font, cp, old=None):
+def drawing(font, cp, old=None, bold=None):
     paths = ''
     if old:
         curved, hooked = shape_names(old, cp)
@@ -77,6 +77,11 @@ def drawing(font, cp, old=None):
     paths += outline(font, cp, curved, 'default-shape')
     if hooked:
         paths += outline(font, cp, hooked, 'alternate-shape')
+    if bold:
+        curved, hooked = shape_names(bold, cp)
+        paths += outline(bold, cp, curved, 'bold-default')
+        if hooked:
+            paths += outline(bold, cp, hooked, 'bold-alternate')
     return ('<svg viewBox="0 0 1000 1000" aria-hidden="true">'
             '<g class="guides"><path d="M0 880H1000 M0 120H1000 M500 0V1000"/></g>'
             + paths + '</svg>')
@@ -95,7 +100,7 @@ def historical_reference(cp):
             f'<figcaption><a href="{url}">{label}</a><br>National Diet Library · public domain</figcaption></figure>')
 
 
-def stroke_references(font, cp):
+def stroke_references(font, cp, bold=None):
     if cp == 0x1B11F:
         chars = 'かカ'
         caption = ('Noto か and カ show the turn and taper of a kana hook. '
@@ -114,7 +119,7 @@ def stroke_references(font, cp):
                    'diagonal is unchanged.')
     else:
         return ''
-    glyphs = ''.join('<figure>'+drawing(font,ord(ch))+'<figcaption>'+ch+'</figcaption></figure>' for ch in chars)
+    glyphs = ''.join('<figure>'+drawing(font,ord(ch),bold=bold)+'<figcaption>'+ch+'</figcaption></figure>' for ch in chars)
     return '<div class="stroke-study"><h4>Noto kana references</h4><div class="stroke-glyphs">'+glyphs+'</div><p>'+caption+'</p></div>'
 
 
@@ -134,6 +139,12 @@ def build_gallery(public=False):
     assert hashlib.sha256(raw).hexdigest() == manifest['subset_woff2_sha256']
     before = TTFont(io.BytesIO(raw))
     after = TTFont(OUT/(STEM+'.ttf'), recalcTimestamp=False)
+    bold = None
+    if not public:
+        bold_path = OUT/'GenZuiSerif-Bold.ttf'
+        if not bold_path.is_file():
+            raise FileNotFoundError('Build GenZui Serif Bold first: python scripts/bold.py')
+        bold = TTFont(bold_path, recalcTimestamp=False)
     sources = json.loads((OUT/'sources.json').read_text())
     own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui' and int(cp[2:],16) not in (0x332C, *HONKOKU, *OKINAWAN_PUA)}
     assert own == set(DESCRIPTIONS) | set(SMALL) and len(own) == 21
@@ -161,23 +172,26 @@ def build_gallery(public=False):
         if single:
             specimens = (f'<div class="pair single"><div class="sample current">'
                          f'<div class="sample-heading"><h3>GenZui · {VERSION}</h3></div>'
-                         + drawing(after,cp)+contexts(cp)+'</div></div>')
+                         + drawing(after,cp,bold=bold)+contexts(cp)+'</div></div>')
         else:
             specimens = (f'<div class="pair"><div class="sample before"><div class="sample-heading"><h3>Previous · 0.111</h3></div>{drawing(before,cp)}{contexts(cp)}</div>'
                          f'<div class="sample current"><div class="sample-heading"><h3>GenZui · <span class="version-label" aria-live="polite">{VERSION}</span></h3>'
                          f'<button type="button" class="swap" aria-pressed="false" data-current="{VERSION}" data-previous="0.111">Swap to 0.111</button></div>'
-                         f'{comparison(after,cp,before)}</div></div>')
+                         f'{comparison(after,cp,before,bold)}</div></div>')
         source_note = note if public else sources['added'][f'U+{cp:04X}']
         cards.append(f'''<article class="glyph-card" id="u{cp:x}" data-kind="{group}" data-revised="{str(cp in REVIEW_FORMS).lower()}">
 <div class="card-heading"><h2>{html.escape(title)}</h2><div><span class="code">U+{cp:X}</span>{previous}</div></div>
 {specimens}
 <p class="description">{html.escape(note)}</p>
-<details><summary>Construction & references</summary><div class="reference"><span class="current native" lang="ja">{ref}</span><p>Stroke reference · Noto Serif {'Hentaigana' if cp==0x1B168 else 'JP'}<br>{html.escape(source_note)}</p></div><div class="reference-links"><a href="https://www.unicode.org/charts/PDF/Unicode-18.0/U180-{chart}.pdf">Unicode character chart</a>{history}</div>{stroke_references(after,cp)}{historical_reference(cp)}</details></article>''')
-    current = webfont(after, before.getBestCmap())
+<details><summary>Construction & references</summary><div class="reference"><span class="current native" lang="ja">{ref}</span><p>Stroke reference · Noto Serif {'Hentaigana' if cp==0x1B168 else 'JP'}<br>{html.escape(source_note)}</p></div><div class="reference-links"><a href="https://www.unicode.org/charts/PDF/Unicode-18.0/U180-{chart}.pdf">Unicode character chart</a>{history}</div>{stroke_references(after,cp,bold)}{historical_reference(cp)}</details></article>''')
+    points = set(before.getBestCmap())
+    current = webfont(after, points)
+    bold_font = base64.b64encode(webfont(bold, points)).decode() if bold else ''
     page = (ROOT/'templates'/('gallery-public.html' if public else 'gallery.html')).read_text()
     for key, value in {'{{VERSION}}':VERSION, '{{REVISED_COUNT}}':str(len(REVIEW_FORMS)), '{{CARDS}}':''.join(cards),
         '{{WU_CONTEXT}}':contexts(0x1B11F),
-        '{{FONT}}':base64.b64encode(current).decode(), '{{BEFORE_FONT}}':base64.b64encode(raw).decode(),
+        '{{FONT}}':base64.b64encode(current).decode(), '{{BOLD_FONT}}':bold_font,
+        '{{BEFORE_FONT}}':base64.b64encode(raw).decode(),
         '{{CSS}}':(ROOT/'site/gallery.css').read_text(), '{{JS}}':(ROOT/'site/gallery.js').read_text()}.items():
         page = page.replace(key,value)
     assert '{{' not in page and '/home/' not in page

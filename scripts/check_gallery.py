@@ -10,7 +10,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from check_refinements import components
 from serif import OUT, STEM, VERSION
-from serif_forms import wu_alternate, REVISION_0112
+from serif_forms import wu_alternate, REVISION_0112, REVISION_0115
 from check_serif import shaper, shape, serialized
 from sources import ROOT
 
@@ -32,23 +32,27 @@ class Readings(HTMLParser):
 
 def check():
     page=ROOT/'build/site/gallery.html'; source=page.read_text()
-    embedded=re.findall(r'font-family:(GenZui|Previous);src:url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)',source)
-    assert len(embedded)==2
-    fonts={name:TTFont(io.BytesIO(base64.b64decode(raw))) for name,raw in embedded}
-    current=fonts['GenZui']; full=TTFont(OUT/(STEM+'.ttf'))
+    embedded=re.findall(r'font-family:(GenZui|Previous);src:url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\) format\(\'woff2\'\);font-weight:(\d+)',source)
+    assert {(name, weight) for name, _, weight in embedded} == {('GenZui','400'),('GenZui','700'),('Previous','400')}, embedded
+    fonts={(name, weight): TTFont(io.BytesIO(base64.b64decode(raw))) for name, raw, weight in embedded}
+    current=fonts[('GenZui','400')]; full=TTFont(OUT/(STEM+'.ttf'))
+    bold_face=fonts[('GenZui','700')]; bold_full=TTFont(OUT/'GenZuiSerif-Bold.ttf')
     parser=Readings();parser.feed(source); points=set(map(ord,''.join(parser.text)))
     for name,font in fonts.items():
         assert points <= font.getBestCmap().keys(),(name,points-font.getBestCmap().keys())
         assert 'ss01' in [r.FeatureTag for r in font['GSUB'].table.FeatureList.FeatureRecord]
+    for cp,name in bold_face.getBestCmap().items():
+        other=bold_full.getBestCmap()[cp]
+        assert bold_face['glyf'][name].getCoordinates(bold_face['glyf'])==bold_full['glyf'][other].getCoordinates(bold_full['glyf'])
     for cp,name in current.getBestCmap().items():
         other=full.getBestCmap()[cp]
         assert current['glyf'][name].getCoordinates(current['glyf'])==full['glyf'][other].getCoordinates(full['glyf'])
         assert current['hmtx'][name]==full['hmtx'][other]
         assert current['vmtx'][name]==full['vmtx'][other]
     assert current['glyf'][wu_alternate(current)].getCoordinates(current['glyf'])==full['glyf'][wu_alternate(full)].getCoordinates(full['glyf'])
-    old=fonts['Previous']
+    old=fonts[('Previous','400')]
     changed=[cp for cp,name in old.getBestCmap().items() if old['glyf'][name].getCoordinates(old['glyf'])!=full['glyf'][full.getBestCmap()[cp]].getCoordinates(full['glyf'])]
-    assert set(changed)==set(REVISION_0112)
+    assert set(changed)==set(REVISION_0112)|set(REVISION_0115)
     # The curved default is unchanged in both full and proof fonts.
     assert old['glyf'][old.getBestCmap()[0x1B11F]].getCoordinates(old['glyf'])==current['glyf'][current.getBestCmap()[0x1B11F]].getCoordinates(current['glyf'])
     # Minnan also demonstrates the two current forms, using the same feature.

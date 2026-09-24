@@ -142,6 +142,12 @@
       "size": 24573864
     },
     {
+      "path": "sources/upstream/NotoSerifCJKjp/NotoSerifCJKjp-Bold.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/OTF/Japanese/NotoSerifCJKjp-Bold.otf",
+      "sha256": "861a2b2c0e24b23745c262be8c3fdef63f12628f0492fb120ee51aa55c503af8",
+      "size": 25552244
+    },
+    {
       "path": "sources/upstream/NotoSerifCJKjp/OFL.txt",
       "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/LICENSE",
       "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
