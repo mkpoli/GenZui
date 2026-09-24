@@ -23,8 +23,6 @@ from serif_forms import DESCRIPTIONS, REVISED, REVISION_0103, REVISION_0104, REV
 from sources import ROOT, verify
 from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
-from mincho_weight import RADIUS, expand_outline
-
 from okinawan import add_okinawan, PUA as OKINAWAN_PUA, DESCRIPTIONS as OKINAWAN_DESCRIPTIONS, ENTRIES as OKINAWAN_ENTRIES
 
 CJK_BOLD = CJK_SOURCE.with_name('NotoSerifCJKjp-Bold.otf')
@@ -260,9 +258,6 @@ def build(weight=400):
     heavier = instance('NotoSerifJP', small_weight, set(SMALL.values()) - {0x1B121})
     h_heavier = instance('NotoSerifHentaigana', small_weight, {0x1B121})
     donor = instance('NotoSerifHentaigana', weight)
-    # Drawn joins use coordinates measured on Regular. Bold rebuilds those
-    # drawings from Regular, then dilates them to the Bold stem.
-    drawing_font = jp if weight == 400 else instance('NotoSerifJP', 400)
     originals = set(font.getBestCmap())
     points = {ord(item['character']) for item in repertoire()}
     historical = points - originals - {PAATU} - set(HONKOKU)
@@ -270,22 +265,16 @@ def build(weight=400):
                 for cp in sorted(historical & set(donor.getBestCmap()))}
     retained = len(cmap_add)
     minnan_points = set(MINNAN_TONES) | set(MINNAN_MARKS)
-    cmap_add.update(import_minnan(font, add))
-    if weight != 400:
-        for cp in MINNAN_TONES:
-            name = cmap_add[cp]
-            outline = expand_outline(font['glyf'][name], font['glyf'], glyph)
-            outline.recalcBounds(font['glyf'])
-            font['glyf'][name] = outline
-            font['hmtx'][name] = (font['hmtx'][name][0], outline.xMin)
-            font['vmtx'][name] = (font['vmtx'][name][0], 880 - outline.yMax)
+    cmap_add.update(import_minnan(font, add, weight >= 700))
+    frb = 'FRB Taiwanese Kana outline' if weight == 400 else 'GenZui Bold master of the FRB Taiwanese Kana outline'
     for cp in minnan_points:
-        PROVENANCE[f'U+{cp:04X}'] = ('FRB Taiwanese Kana outline; GenZui kana mark attachment.'
-            if cp in MINNAN_MARKS else 'FRB Taiwanese Kana outline; 500-unit horizontal advance and contextual vertical placement.')
+        PROVENANCE[f'U+{cp:04X}'] = (f'{frb}; GenZui kana mark attachment.'
+            if cp in MINNAN_MARKS else f'{frb}; 500-unit horizontal advance and contextual vertical placement.')
+    # Drawings take their native strokes from the instance being built.
     def part(ch, indices=None):
-        return contours(drawing_font, ord(ch), indices)
+        return contours(jp, ord(ch), indices)
     recipes = {}
-    recipes.update(refinements(part, transform))
+    recipes.update(refinements(part, transform, weight >= 700))
     descriptions = dict(DESCRIPTIONS)
     vertical = {}
     for cp, source_cp in SMALL.items():
@@ -296,10 +285,7 @@ def build(weight=400):
         descriptions[cp] = f'Noto Serif {"Hentaigana" if cp == 0x1B168 else "JP"} U+{source_cp:04X}, weight {small_weight}, scale 0.72.'
     for cp, parts in sorted(recipes.items()):
         name = f'hist.u{cp:05X}'
-        outline = glyph(parts)
-        if weight != 400 and cp not in SMALL:
-            outline = expand_outline(outline, font['glyf'], glyph, RADIUS)
-        add(font, name, outline)
+        add(font, name, glyph(parts))
         cmap_add[cp] = name
         if cp in SMALL:
             vertical[name] = add(font, name+'.vert', glyph([transform(p, (1,0,0,1,140,190)) for p in parts]))
@@ -308,10 +294,7 @@ def build(weight=400):
         if table.isUnicode() and table.format in (4, 12):
             table.cmap.update({cp: name for cp, name in cmap_add.items()
                                if cp <= (0xFFFF if table.format == 4 else 0x10FFFF)})
-    alternate_outline = glyph(hooked_wu(part, transform))
-    if weight != 400:
-        alternate_outline = expand_outline(alternate_outline, font['glyf'], glyph, RADIUS)
-    alternate = add(font, 'hist.u1B11F.ss01', alternate_outline)
+    alternate = add(font, 'hist.u1B11F.ss01', glyph(hooked_wu(part, transform, weight >= 700)))
     sub = otTables.SingleSubst()
     sub.mapping = {cmap_add[0x1B11F]: alternate}
     lookup = otTables.Lookup()
@@ -325,7 +308,7 @@ def build(weight=400):
     next(r for r in font['GSUB'].table.FeatureList.FeatureRecord
          if r.FeatureTag == 'ss01').Feature.FeatureParams = params
     layout(font, donor, vertical, historical-minnan_points, [alternate])
-    layout_minnan(font, add, add_feature)
+    layout_minnan(font, add, add_feature, weight >= 700)
     add_paatu(font, add, glyph, add_feature)
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
     add_honkoku(font, add, glyph, contours, transform,
@@ -333,11 +316,7 @@ def build(weight=400):
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
     if weight != 400:
         PROVENANCE[f'U+{0x5344:04X}'] = HONKOKU_DESCRIPTIONS[0x5344].replace('Regular', 'Bold')
-    okinawan_source = {} if weight == 400 else {
-        'source': drawing_font,
-        'thicken': lambda outline: expand_outline(outline, font['glyf'], glyph),
-    }
-    add_okinawan(font, add, glyph, contours, transform, add_feature, **okinawan_source)
+    add_okinawan(font, add, glyph, contours, transform, add_feature, weight >= 700)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in OKINAWAN_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
@@ -471,10 +450,7 @@ def _write_bold_record(stem, font, originals, points, retained, recipes, alterna
         'target_characters': len(points), 'retained_historical': retained,
         'provisional_forms': len(recipes),
         'small_source_weight': small_weight,
-        'drawing_dilation': {
-            'regular_stem': 60, 'bold_stem': 105, 'radius': RADIUS,
-            'note': 'Noto Serif JP Bold supplies every glyph in that variable font, including hentaigana at wght 700. GenZui drawings measured on Regular are dilated horizontally so a 60-unit stem becomes 105, matching ト.',
-        },
+        'drawings': 'GenZui constructions take their native strokes from Noto Serif JP Bold. Each drawn stroke has its own Bold master, drawn to the stroke weight of the Bold kana.',
         'stylistic_sets': {'ss01': {'name': 'Hooked WU', 'glyph': alternate}},
         'minnan_source_forms': len(minnan_points),
         'added': PROVENANCE,

@@ -1,10 +1,19 @@
 """Check GenZui Serif Bold against the Noto Serif Bold instances."""
 import hashlib
+import re
 
+import numpy as np
 import pathops
 from fontTools.ttLib import TTFont
+from skimage.morphology import medial_axis
 
+from draft_bold import glyph_path, mask, parse
+from minnan import BOLD as MINNAN_BOLD, source_font
+from sources import ROOT
+from okinawan import PUA as OKINAWAN_PUA
+from repertoire import MINNAN_TONES
 from serif import CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
+from serif_forms import DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
 
 BOLD = OUT / 'GenZuiSerif-Bold.ttf'
 
@@ -18,25 +27,27 @@ def signature(font, codepoint):
     return points
 
 
-def stem(font, codepoint):
+def weight(font, name):
+    """Median stroke width along the glyph's medial axis, in font units."""
     path = pathops.Path()
-    font.getGlyphSet()[font.getBestCmap()[codepoint]].draw(path.getPen())
-    bounds = path.bounds
-    samples = []
-    for y in range(int(bounds[1]) + 40, int(bounds[3]) - 40, 12):
-        spans, inside, start = [], False, None
-        for x in range(int(bounds[0]) - 2, int(bounds[2]) + 3):
-            hit = path.contains((x + 0.5, y))
-            if hit and not inside:
-                start, inside = x, True
-            elif not hit and inside:
-                spans.append(x - start)
-                inside = False
-        stems = [span for span in spans if 20 <= span <= 180]
-        if stems:
-            samples.append(min(stems))
-    samples.sort()
-    return samples[len(samples) // 2]
+    font.getGlyphSet()[name].draw(path.getPen())
+    skeleton, distance = medial_axis(mask(pathops.simplify(path)), return_distance=True)
+    widths = 2 * distance[skeleton]
+    return float(np.median(widths[widths > 6]))
+
+
+def masters():
+    """Each drawn Regular and Bold master pair, as SVG path data."""
+    for module in ('serif_forms', 'okinawan'):
+        source = (ROOT/'scripts'/f'{module}.py').read_text()
+        for match in re.finditer(r"drawn\(\s*((?:'[^']*'\s*)+),\s*((?:'[^']*'\s*)+)\)", source):
+            yield tuple(''.join(re.findall(r"'([^']*)'", match.group(k))) for k in (1, 2))
+    yield HOOKED_WU[False]['stem'], HOOKED_WU[True]['stem']
+    yield from zip(HOOKED_WU[False]['bars'], HOOKED_WU[True]['bars'])
+    yield NARI_WAVE[False][0], NARI_WAVE[True][0]
+    frb = source_font()
+    for cp in MINNAN_TONES:
+        yield glyph_path(frb.getGlyphSet(), frb.getBestCmap()[cp]), MINNAN_BOLD[f'U+{cp:04X}']
 
 
 def main():
@@ -65,10 +76,32 @@ def main():
     henta = instance('NotoSerifHentaigana', 700, {0x1B002})
     assert signature(font, 0x1B002) == signature(henta, 0x1B002)
 
-    # Drawn WU is dilated from Regular, so its stem sits with Bold ト (105).
-    wu = stem(font, 0x1B11F)
-    assert 90 <= wu <= 125, wu
-    assert abs(stem(font, 0x30C8) - 105) <= 8
+    # Masters share their commands and points, so the pair stays interpolable.
+    pairs = list(masters())
+    shapes = [[[(c, len(v)) for c, v in parse(d)] for d in pair] for pair in pairs]
+    assert len(pairs) >= 39 and all(r == b for r, b in shapes)
+
+    # Every GenZui drawing gains weight as Noto's own kana do, 400 to 700.
+    regular = TTFont(OUT / (STEM + '.ttf'), recalcTimestamp=False)
+    assert font.getBestCmap().keys() == regular.getBestCmap().keys()
+    native = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
+              for cp in map(ord, 'トあけほんえヨリキテふゆゐゑすつ')]
+    low, high = min(native) - .12, max(native) + .12
+    drawn = {f'U+{cp:04X}': regular.getBestCmap()[cp]
+             for cp in (*DESCRIPTIONS, *OKINAWAN_PUA, *MINNAN_TONES)}
+    drawn['ss01'] = wu_alternate(regular)
+    gains = {}
+    for label, name in drawn.items():
+        heavy = wu_alternate(font) if label == 'ss01' else font.getBestCmap()[int(label[2:], 16)]
+        gains[label] = round(weight(font, heavy) / weight(regular, name), 2)
+    # Filled teardrop tones gain as Noto's dots do.
+    dots = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
+            for cp in map(ord, '・、')]
+    bands = {label: (min(dots) - .12, max(dots) + .12) if label in ('U+1AFF2', 'U+1AFF6')
+             else (low, high) for label in gains}
+    off = {k: (v, tuple(round(b, 2) for b in bands[k]))
+           for k, v in gains.items() if not bands[k][0] <= v <= bands[k][1]}
+    assert not off, off
 
     def bounds(source, codepoint):
         path = pathops.Path()
@@ -79,14 +112,10 @@ def main():
         # Cubic-to-quadratic conversion can move a bound by a fraction of a unit.
         assert all(abs(a - b) <= 1 for a, b in zip(bounds(font, 0x5344), bounds(cjk, 0x5344)))
 
-    regular = OUT / (STEM + '.ttf')
-    if regular.exists():
-        regular_font = TTFont(regular, recalcTimestamp=False)
-        assert font.getBestCmap().keys() == regular_font.getBestCmap().keys()
-        assert stem(regular_font, 0x1B11F) < wu
-
     digest = hashlib.sha256(BOLD.read_bytes()).hexdigest()
-    print(f'GenZui Serif Bold {VERSION}: {len(font.getBestCmap()):,} characters, WU stem {wu}, sha256 {digest}')
+    print(f'GenZui Serif Bold {VERSION}: {len(font.getBestCmap()):,} characters; '
+          f'{len(pairs)} compatible masters; {len(gains)} drawings gain {min(gains.values())}-{max(gains.values())}x '
+          f'(Noto kana {min(native):.2f}-{max(native):.2f}x); sha256 {digest}')
 
 
 if __name__ == '__main__':

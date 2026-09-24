@@ -5,12 +5,14 @@ placement beside one to four fullwidth kana in vertical text. No kana outline
 or advance is changed. Longer annotations can use separate ruby runs.
 """
 import copy
+import json
 
 from fontTools.otlLib.builder import (buildAnchor, buildCoverage,
     buildMarkBasePosSubtable, buildSinglePosSubtable, buildValue)
 from fontTools.pens.cu2quPen import Cu2QuPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
+from fontTools.svgLib.path import parse_path
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.tables import otTables
 
@@ -23,20 +25,27 @@ def source_font():
                   recalcTimestamp=False)
 
 
-def source_outline(source, name, matrix=(1, 0, 0, 1, 0, 0)):
+BOLD = json.loads((ROOT/'data/minnan/bold.json').read_text())['forms']
+
+
+def source_outline(source, cp, bold=False, matrix=(1, 0, 0, 1, 0, 0)):
+    """The FRB outline, or its Bold master drawn on the same points."""
     pen = TTGlyphPen(None)
-    source.getGlyphSet()[name].draw(TransformPen(
-        Cu2QuPen(pen, max_err=0.3, reverse_direction=True), matrix))
+    target = TransformPen(Cu2QuPen(pen, max_err=0.3, reverse_direction=True), matrix)
+    if bold:
+        parse_path(BOLD[f'U+{cp:04X}'], target)
+    else:
+        source.getGlyphSet()[source.getBestCmap()[cp]].draw(target)
     return pen.glyph()
 
 
-def import_forms(font, add):
+def import_forms(font, add, bold=False):
     source = source_font()
     assert source['head'].unitsPerEm == font['head'].unitsPerEm == 1000
     cmap = source.getBestCmap()
     added = {}
     for cp in (*MINNAN_TONES, *MINNAN_MARKS):
-        name = add(font, f'minnan.u{cp:05X}', source_outline(source, cmap[cp]))
+        name = add(font, f'minnan.u{cp:05X}', source_outline(source, cp, bold))
         font['hmtx'][name] = (source['hmtx'][cmap[cp]][0], font['glyf'][name].xMin)
         font['vmtx'][name] = (0 if cp in MINNAN_MARKS else 1000,
                               880-font['glyf'][name].yMax)
@@ -82,7 +91,7 @@ def contextual_substitution(font, bases, substitutions, count=1):
     return sub
 
 
-def layout(font, add, add_feature):
+def layout(font, add, add_feature, bold=False):
     cmap = font.getBestCmap()
     kana_cps = {cp for cp in cmap if 0x30A1 <= cp <= 0x30FA or 0x31F0 <= cp <= 0x31FF}
     kana_cps |= {cp for cp in cmap if cp in (0x1B000, 0x1B155) or 0x1B120 <= cp <= 0x1B128 and cp != 0x1B123 or 0x1B164 <= cp <= 0x1B168}
@@ -98,7 +107,7 @@ def layout(font, add, add_feature):
     # A narrower overline keeps its original thickness above small kana.
     source = source_font()
     short = add(font, 'minnan.overline.small', source_outline(
-        source, source.getBestCmap()[0x0305], (.72, 0, 0, 1, 140, 0)))
+        source, 0x0305, bold, (.72, 0, 0, 1, 140, 0)))
     font['hmtx'][short] = (0, font['glyf'][short].xMin)
     font['vmtx'][short] = (0, 880-font['glyf'][short].yMax)
     classes[short] = 3
