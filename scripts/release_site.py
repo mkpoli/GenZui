@@ -250,8 +250,10 @@ def build():
     # download links resolve to the immutable copy in each version folder.
     # Earlier combined packages keep their links through their version folders.
     earlier = sorted(f'/downloads/{archive.name} /{archive.parent.name}/{archive.name} 301\n'
-                     for archive in (ROOT/'releases').glob('v*/GenZuiSerif-[0-9]*.zip')
-                     if archive.name != PACKAGE)
+                     for pattern, current in (('v*/GenZuiSerif-[0-9]*.zip', PACKAGE),
+                                              ('sans-v*/GenZuiSans-[0-9]*.zip', sans_archive.name))
+                     for archive in (ROOT/'releases').glob(pattern)
+                     if archive.name != current)
     (OUT/'_redirects').write_text('/index.html / 301\n'
         f'/downloads/{STEM}-{VERSION}.zip /downloads/{PACKAGE} 301\n'
         f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n'

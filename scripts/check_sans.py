@@ -236,7 +236,7 @@ def check(weight=400):
         embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', text)
         assert len(embedded) == 1 and base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
         assert '/home/' not in text and 'GenZui Serif' not in text
-    coverage = check_coverage(path, None if bold else OUT/'kana-coverage.json')
+    coverage = check_coverage(path, OUT/('kana-coverage-bold.json' if bold else 'kana-coverage.json'))
     report = {
         'status': 'passed', 'family': FAMILY, 'family_ja': FAMILY_JA, 'style': style, 'version': VERSION,
         'ttf_sha256': hashlib.sha256(data).hexdigest(),
