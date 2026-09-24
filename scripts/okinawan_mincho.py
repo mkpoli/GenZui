@@ -103,7 +103,10 @@ def stem(k, x, bottom, top):
 
 @drawing(0xF45E)  # glottal YU
 def glottal_yu(k):
-    return [stem(k, 40, 250, 760), k.box(k.part('ゆ'), 200, -62, 950)]
+    # は's left stroke at a little under full weight, lengthened to most of
+    # ゆ's height, before a slightly reduced ゆ.
+    mark = stretch(k, k.move(k.part('は', 1), sx=.85, sy=.85), 760, 155)
+    return [k.move(mark, dx=35 - k.bounds(mark)[0]), k.box(k.part('ゆ'), 230, -62, 955)]
 
 
 @drawing(0xF45F)  # glottal YO
