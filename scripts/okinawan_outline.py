@@ -65,7 +65,10 @@ def crossings(ring, axis, value):
                     lo = mid
                 else:
                     hi = mid
-            out.append((i, (lo + hi) / 2))
+            t = (lo + hi) / 2
+            # a line passing through an outline point is found from both sides once
+            if not any(np.linalg.norm(point(ring[j], u) - point(seg, t)) < 1 for j, u in out):
+                out.append((i, t))
     return out
 
 
@@ -104,3 +107,34 @@ def draw(segs_list):
             pen.curveTo(tuple(s[1]), tuple(s[2]), tuple(s[3]))
         pen.closePath()
     return pen
+
+
+def curvature(seg, t):
+    """Signed curvature of a cubic at t."""
+    p0, c1, c2, p3 = seg; mt = 1 - t
+    d1 = 3 * mt**2 * (c1 - p0) + 6 * mt * t * (c2 - c1) + 3 * t**2 * (p3 - c2)
+    d2 = 6 * mt * (c2 - 2 * c1 + p0) + 6 * t * (p3 - 2 * c2 + c1)
+    return (d1[0] * d2[1] - d1[1] * d2[0]) / (np.linalg.norm(d1) ** 3 + 1e-12)
+
+
+def fair(p0, t0, k0, p1, t1, k1, fullness=1.0):
+    """A cubic from p0 (leaving along t0) to p1 (arriving along t1) whose
+    curvature starts at k0, ends at k1 and changes as evenly as it can between:
+    the handle lengths are solved for, not guessed."""
+    from scipy.optimize import minimize
+    span = np.linalg.norm(p1 - p0)
+    ts = np.linspace(0, 1, 41)
+
+    def seg(h):
+        return (p0, p0 + t0 * h[0], p1 - t1 * h[1], p1)
+
+    def cost(h):
+        s = seg(h)
+        k = np.array([curvature(s, t) for t in ts])
+        pts = np.array([point(s, t) for t in ts])
+        ds = np.linalg.norm(np.diff(pts, axis=0), axis=1) + 1e-9
+        dk = np.diff(k) / ds
+        return (((k[0] - k0) * span) ** 2 + ((k[-1] - k1) * span) ** 2) * 4 + np.sum(dk ** 2 * ds) * span ** 3
+
+    best = minimize(cost, [span * .4, span * .4], bounds=[(span * .05, span * 1.2)] * 2, method='L-BFGS-B')
+    return seg(best.x * fullness)
