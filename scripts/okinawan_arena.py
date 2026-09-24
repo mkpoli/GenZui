@@ -38,9 +38,10 @@ LETTERS = {
     'glottal-ya': dict(
         code=0xF45D, label='Glottal YA', build=okinawan_merge.glottal_ya,
         defaults=okinawan_merge.YA_DEFAULTS,
-        ranges=dict(shift=(35, 95), arm_cut=(245, 315), mark_cut=(430, 530), mark_x=(-30, 30),
-                    mark_dy=(-30, 30), mark_len=(0.82, 1.12), outer_drop=(10, 80),
-                    outer_k=(0.35, 0.75), inner_k=(0.28, 0.62)),
+        # narrowed after round 1: joints are now curvature-fair, and the kept
+        # forms moved や further right and cut the arm later
+        ranges=dict(shift=(45, 100), arm_cut=(250, 300), mark_cut=(460, 500), mark_x=(-25, 20),
+                    mark_dy=(-5, 20), mark_len=(0.82, 1.1), outer_full=(0.8, 1.2), inner_full=(0.8, 1.2)),
         chart='glottal-ya',
         big='やや', vertical='ー、やー。',
         passages=[('Beside や', 'やや　やゆよ　ゆよ'),
@@ -119,7 +120,8 @@ def build(slug, round_no, kept=None):
     text = text_of(letter)
     source = TTFont(BASE)
     if kept:
-        centres = [kept[t] for t in kept]
+        # forms from an earlier round keep their shared parameters; new ones take defaults
+        centres = [{k: kept[t].get(k, v) for k, v in letter['defaults'].items()} for t in kept]
         params = centres + around(centres, letter['ranges'], 24 - len(centres), 1000 * round_no)
     else:
         params = [dict(letter['defaults'])] + sample(letter['ranges'], 23, 1000 * round_no)
