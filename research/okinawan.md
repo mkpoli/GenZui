@@ -91,27 +91,28 @@ receiving application needs GenZui or a font with matching PUA mappings.
 
 ## Drawings
 
-The 27 Funatsu forms use original contours drawn as complete strokes in
-[`scripts/okinawan_drawings.py`](../scripts/okinawan_drawings.py). Funatsu’s chart
-and FK Okinawa Mincho establish the distinguishing strokes. FROkinawanMoji,
-MgenKana+ and Nishiki-teki provide further comparisons of letter proportions.
-No outlines from those fonts or Xim Sans are included in GenZui.
+The 27 Funatsu forms are composed in
+[`scripts/okinawan_mincho.py`](../scripts/okinawan_mincho.py) from whole strokes
+of Noto Serif JP’s own hiragana, so their brush entries, thick–thin contrast and
+terminals are Noto’s. Where two kana are joined, a stroke is cut only where the
+cut end lies inside the stroke that continues it. Funatsu’s chart establishes the
+topology and proportions; FK Okinawa Mincho, FROkinawanMoji, MgenKana+ and
+Nishiki-teki provide further comparisons. No outlines from those fonts or Xim
+Sans are included in GenZui.
 
-TU and WU have a broad lower return. TI, KWI and TSI continue into a full lower
-stroke. The labial forms share a continuous ふ body, widened to keep the weight
-of a full ふ; the following vowel is drawn at its own size, HWI’s close to full
-height as in the chart. Glottal YA carries its diagonal above the arc, glottal
-YU and YO a full-height stroke on the left, and glottal WA, WI and WE a level
-bar above the letter, all following the chart. Voiced forms have consistent
-dakuten placement. YI and YE also have dedicated drawings, reached through
-their existing Unicode sequences. Noto’s original outlines and layout tables
-remain intact; two appended composition lookups select the Okinawan forms.
-
-When the font is assembled, each joined letter is fitted to the Noto kana it
-extends (`BASES`): the same vertical extent and baseline, centred in the em,
-uniformly scaled, and never wider than 920 units. Every stroke is then
-thickened by a small radius (`WEIGHT` sets exceptions) so the hairlines match
-Noto’s kana weight in running text.
+TU is と’s tick and diagonal running into the turn and bulge of ち; WU sets the
+same body under を’s bar and cross stroke. TI moves the curve of て left to make
+room for ぃ; KWI and TSI set ぃ beside く and under the top of つ, and SI adds the
+second stroke of い to す. KWA and KWE keep く’s upper arm and flatten its lower
+arm into a near-level connector, as the chart draws it, leading into the stem
+and loop of わ or the zigzag of え. The labial forms keep ふ’s top, centre stroke
+and left dot and replace the right dot with ゎ, ぃ or ぇ. Glottal YA, YU and YO
+take the left stroke of は before や, ゆ and よ; glottal WA, WI and WE set the
+upper stroke of こ above ろ, る and ゑ; glottal N adds the second stroke of い to
+ん. Voiced forms narrow the letter slightly and add the dakuten of ど. YI and YE
+use Noto’s own い゙ and え゙ composition. Noto’s original outlines and layout
+tables remain intact; one appended composition lookup selects the voiced
+Okinawan forms.
 
 The eight raised katakana are not drawn separately. The prefectural guide sets
 them as the text face’s own katakana at about half size, top-aligned with the

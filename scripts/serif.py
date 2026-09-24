@@ -303,7 +303,7 @@ def build():
     PROVENANCE[f'U+{PAATU:04X}'] = PAATU_DESCRIPTION
     add_honkoku(font, add, glyph, contours, transform)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in HONKOKU_DESCRIPTIONS.items()})
-    add_okinawan(font, add, glyph, transform, add_feature)
+    add_okinawan(font, add, glyph, contours, transform, add_feature)
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in OKINAWAN_DESCRIPTIONS.items()})
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):

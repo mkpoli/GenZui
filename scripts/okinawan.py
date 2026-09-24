@@ -1,19 +1,17 @@
-"""Funatsu kana drawn as complete strokes, and prefectural raised katakana
-derived from Noto's own small katakana.
+"""Funatsu kana composed from Noto's own hiragana strokes, and prefectural
+raised katakana derived from Noto's own small katakana.
 
 Mapping references describe character identity, not an upstream outline licence.
 No outlines are imported from Nishiki-teki, Xim Sans or legacy Okinawan fonts.
 """
 import json
 import math
-import os
 import pathops
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
-from okinawan_drawings import outlines, BASES, WEIGHT, RAISED, RAISED_BOX, RAISED_TOP, DAKUTEN
-from serif_forms import path
+import okinawan_mincho
 from sources import ROOT
 
 DATA = json.loads((ROOT/'data/okinawan/mappings.json').read_text())
@@ -21,13 +19,27 @@ ENTRIES = DATA['characters']
 PUA = {int(e['output'][0], 16): e for e in ENTRIES
        if len(e['output']) == 1 and 0xE000 <= int(e['output'][0], 16) <= 0xF8FF}
 DESCRIPTIONS = {cp: (f"{e['label']}. " +
-    ('Funatsu New Okinawan Kana; Nishiki-teki PUA convention. ' if e['system'] == 'funatsu' else
-     'Okinawa prefectural raised katakana; Xim Sans PUA convention. ') +
-    'Original GenZui drawing. This is a private-use mapping, not a Unicode assignment.')
+    ('Funatsu New Okinawan Kana; Nishiki-teki PUA convention. '
+     'Composed by GenZui from Noto Serif JP hiragana strokes. ' if e['system'] == 'funatsu' else
+     'Okinawa prefectural raised katakana; Xim Sans PUA convention. '
+     'Reduced by GenZui from Noto Serif JP small katakana. ') +
+    'This is a private-use mapping, not a Unicode assignment.')
     for cp, e in PUA.items()}
 
+# Raised katakana: the Noto small kana each sign is reduced from, and the
+# thickening that restores its stroke weight at the smaller size. ン has no
+# small kana, so the full letter is reduced with more thickening. The signs
+# fill at most a 420 x 380 box, top-aligned at 815, in a 500-unit advance.
+RAISED = {
+    0xE532: (0x30A1, 7), 0xE533: (0x30A3, 7), 0xE534: (0x30A5, 7),
+    0xE535: (0x30A7, 7), 0xE536: (0x30A9, 7), 0xE537: (0x30C3, 7),
+    0xE4EF: (0x31F7, 7), 0xE5AA: (0x30F3, 11),
+}
+RAISED_BOX = (420, 380)
+RAISED_TOP = 815
 
-def add_okinawan(font, add, make_glyph, transform, add_feature):
+
+def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
     def unite(parts):
         # Union independently filled components: opposite native/custom winding
         # must not punch holes into a shared join.
@@ -40,64 +52,43 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
         merged.draw(pen)
         return make_glyph([pen])
 
-    def fit(parts, base):
-        # Joined letters share the vertical extent of the Noto kana they
-        # extend, so they sit on the same baseline at the same size. They
-        # are centred in the em and never wider than 920 units.
-        shape = pathops.Path()
-        for part in parts:
-            part.replay(shape.getPen())
-        left, bottom, right, top = shape.bounds
-        targets = [font['glyf'][font.getBestCmap()[ord(c)]] for c in base]
-        low, high = min(t.yMin for t in targets), max(t.yMax for t in targets)
-        scale = min((high - low) / (top - bottom), 920 / (right - left))
-        dx = 500 - scale * (left + right) / 2
-        dy = low - scale * bottom
-        return [transform(part, (scale, 0, 0, scale, dx, dy)) for part in parts]
-
-    radius_scale = float(os.environ.get('GENZUI_OKINAWAN_WEIGHT', '1'))
-
-    def embolden(parts, radius):
-        # Thicken every stroke by uniting copies offset around a small
-        # circle, so the hairlines match Noto's kana weight.
-        merged = pathops.Path()
-        for part in parts:
-            shape = pathops.Path()
-            part.replay(shape.getPen())
-            for k in range(12):
-                angle = k * math.pi / 6
-                moved = pathops.Path()
-                shape.draw(TransformPen(moved.getPen(), (1, 0, 0, 1, radius * math.cos(angle), radius * math.sin(angle))))
-                merged = pathops.op(merged, moved, pathops.PathOp.UNION)
-        pen = RecordingPen()
-        merged.draw(pen)
-        return [pen]
-
     def raised(source, radius):
         # The prefectural guide sets raised katakana as the text face's own
         # katakana at about half size, top-aligned with the line. Noto's
         # small kana already carry the optical correction for that size, so
-        # each raised sign is the small kana reduced further, thickened, and
-        # moved to the top of a half-width cell.
+        # each raised sign is the small kana reduced further, thickened by
+        # uniting copies offset around a small circle, and moved to the top
+        # of a half-width cell.
         pen = RecordingPen()
         font.getGlyphSet()[font.getBestCmap()[source]].draw(pen)
         shape = pathops.Path()
         pen.replay(shape.getPen())
         left, bottom, right, top = shape.bounds
         scale = min(RAISED_BOX[1] / (top - bottom), RAISED_BOX[0] / (right - left))
-        dx = 250 - scale * (left + right) / 2
-        dy = RAISED_TOP - scale * top
-        return embolden([transform(pen, (scale, 0, 0, scale, dx, dy))], radius)
+        reduced = pathops.Path()
+        transform(pen, (scale, 0, 0, scale, 250 - scale * (left + right) / 2,
+                        RAISED_TOP - scale * top)).replay(reduced.getPen())
+        merged = pathops.Path()
+        for k in range(12):
+            angle = k * math.pi / 6
+            moved = pathops.Path()
+            reduced.draw(TransformPen(moved.getPen(), (1, 0, 0, 1, radius * math.cos(angle), radius * math.sin(angle))))
+            merged = pathops.op(merged, moved, pathops.PathOp.UNION)
+        out = RecordingPen()
+        merged.draw(out)
+        return [out]
 
-    recipes = {cp: embolden(fit(parts, BASES[cp]), WEIGHT.get(cp, 8) * radius_scale)
-               for cp, parts in outlines().items()}
-    recipes.update({cp: raised(source, radius * radius_scale) for cp, (source, radius) in RAISED.items()})
+    # The kit reads the source kana before any Okinawan glyph is added.
+    kit = okinawan_mincho.Kit(font, contours, transform)
+    recipes = okinawan_mincho.outlines(kit)
+    dakuten = okinawan_mincho.dakuten(kit)
+    recipes.update({cp: raised(source, radius) for cp, (source, radius) in RAISED.items()})
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]
-        raised = PUA[cp]['system'] == 'prefecture'
-        font['hmtx'][name] = (500 if raised else 1000, g.xMin)
-        font['vmtx'][name] = (500 if raised else 1000, 880-g.yMax)
+        raised_sign = PUA[cp]['system'] == 'prefecture'
+        font['hmtx'][name] = (500 if raised_sign else 1000, g.xMin)
+        font['vmtx'][name] = (500 if raised_sign else 1000, 880-g.yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         for table in font['cmap'].tables:
             if table.isUnicode() and table.format in (4, 12):
@@ -114,8 +105,7 @@ def add_okinawan(font, add, make_glyph, transform, add_feature):
             continue
         cp = int(e['output'][0], 16)
         name = add(font, f"okinawa.{e['id']}", unite([
-            transform(p, (.90, 0, 0, 1, 12, 0)) for p in recipes[cp]]
-            + [path(stroke) for stroke in DAKUTEN]))
+            transform(p, (.90, 0, 0, 1, 12, 0)) for p in recipes[cp]] + [dakuten]))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name

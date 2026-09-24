@@ -150,8 +150,8 @@ layout, marks, Minnan tones, WU variants, the Okinawan forms and TTF/WOFF2
 parity. `scripts/check_coverage.py` checks the pinned Unicode Script and
 Script_Extensions properties. Release packaging stages the Chrome, Vivaldi and
 Firefox report for the exact font bytes, then writes the ZIP. Okinawan
-contours are in `scripts/okinawan_drawings.py`, with shaping in
-`scripts/okinawan.py`.
+letters are composed from Noto’s hiragana strokes in
+`scripts/okinawan_mincho.py`, with shaping in `scripts/okinawan.py`.
 
 ### GenZui Sans
 

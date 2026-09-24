@@ -1,4 +1,6 @@
 """Storage and shaping checks for both Okinawan repertoires."""
+from fontTools.pens.areaPen import AreaPen
+from fontTools.pens.recordingPen import RecordingPen
 from okinawan import DATA, ENTRIES, PUA
 
 
@@ -11,9 +13,23 @@ def check_okinawan(font, engine, web_engine, shape, boxes):
     assert not set(PUA) & set(range(0xFA80, 0xFA9B))
     assert 0x1B168 not in PUA
     assert not {0xF464, 0xF466} & set(cmap)
-    # Glottal WE is a bar above a connected body with one counter. Extra
-    # contours here previously revealed disconnected stroke joins.
-    assert font['glyf'][cmap[0xF462]].numberOfContours == 3
+    # Funatsu letters are cut from Noto strokes; a cut that misses the stroke
+    # it should hide in leaves a sliver contour.
+    glyphs = font.getGlyphSet()
+    for cp, entry in PUA.items():
+        if entry['system'] != 'funatsu':
+            continue
+        pen = RecordingPen()
+        glyphs[cmap[cp]].draw(pen)
+        contour = []
+        for op, args in pen.value:
+            contour.append((op, args))
+            if op == 'closePath':
+                area = AreaPen()
+                for o, a in contour:
+                    getattr(area, o)(*a)
+                assert abs(area.value) > 1500, (hex(cp), area.value)
+                contour = []
     cases = 0
     for entry in ENTRIES:
         text = ''.join(chr(int(c, 16)) for c in entry['output'])

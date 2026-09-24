@@ -24,8 +24,8 @@ from fontTools import subset
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.ttLib import TTFont
 
-from okinawan import ENTRIES
-from okinawan_drawings import BASES, RAISED
+from okinawan import ENTRIES, RAISED
+from okinawan_mincho import BASES
 from sources import ROOT
 
 OUT = ROOT/'build/okinawan'

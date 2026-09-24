@@ -1,4 +1,4 @@
-"""Build the Okinawan letters at earlier revisions and weight scales.
+"""Build the Okinawan letters at earlier revisions.
 
 Each revision is built in a throwaway worktree that shares this checkout's
 downloaded sources, so the study page can show the same letter at every step
@@ -7,7 +7,6 @@ output; nothing here is packaged with GenZui.
 """
 import argparse
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -24,12 +23,11 @@ def git(*args):
     return subprocess.run(['git', *args], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
 
 
-def serif(cwd, **env):
-    subprocess.run([sys.executable, 'scripts/serif.py'], cwd=cwd, check=True, capture_output=True,
-                   env={**os.environ, **env})
+def serif(cwd):
+    subprocess.run([sys.executable, 'scripts/serif.py'], cwd=cwd, check=True, capture_output=True)
 
 
-def build(revisions, weights):
+def build(revisions):
     FONTS.mkdir(parents=True, exist_ok=True)
     made = []
     for ref in revisions:
@@ -52,11 +50,6 @@ def build(revisions, weights):
             finally:
                 git('worktree', 'remove', '--force', str(tree))
         made.append({'key': key, 'label': label})
-    for weight in weights:
-        key = 'weight-' + str(weight).replace('.', '')
-        serif(ROOT, GENZUI_OKINAWAN_WEIGHT=str(weight))
-        shutil.copyfile(ROOT/STEM, FONTS/(key+'.woff2'))
-        made.append({'key': key, 'label': f'stroke weight ×{weight}'})
     # Leave the ordinary build in place for the rest of the page and the checks.
     serif(ROOT)
     shutil.copyfile(ROOT/STEM, FONTS/'genzui.woff2')
@@ -68,6 +61,5 @@ def build(revisions, weights):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('revisions', nargs='*', help='commits to build, oldest first')
-    parser.add_argument('--weights', nargs='*', type=float, default=[], help='stroke weight scales')
     args = parser.parse_args()
-    build(args.revisions, args.weights)
+    build(args.revisions)
