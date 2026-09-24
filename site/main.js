@@ -49,7 +49,7 @@
   function setWeight(weight, remember = true) {
     document.body.dataset.weight = weight;
     weightButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.weight === weight)));
-    if (weight === '700' && boldState === 'idle') {
+    if (weight === '700' && (boldState === 'idle' || boldState === 'failed')) {
       boldState = 'loading';
       weightButtons.forEach(button => { if (button.dataset.weight === '700') button.setAttribute('aria-busy', 'true'); });
       document.fonts.load('700 48px GenZui', '源萃𛄤').then(faces => {
