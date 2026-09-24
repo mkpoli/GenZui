@@ -92,7 +92,9 @@
 
   const params = new URLSearchParams(location.search);
   const initialPreset = params.get('sample');
-  if (Object.hasOwn(presets, initialPreset)) { $('#preset').value = initialPreset; setPreset(); }
+  // The Serif and Sans pages share these presets but each offers only its own.
+  const offered = [...$('#preset').options].map(option => option.value);
+  if (Object.hasOwn(presets, initialPreset) && offered.includes(initialPreset)) { $('#preset').value = initialPreset; setPreset(); }
   typeStatus();
 
   (async () => {
