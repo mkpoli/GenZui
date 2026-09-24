@@ -1,4 +1,4 @@
-# GenZui Serif 0.114
+# GenZui Serif 0.115
 
 GenZui Serif / 源萃明朝 is a Japanese Mincho derived from
 Noto Serif JP, Noto Serif Hentaigana, Noto Serif CJK JP and FRB Taiwanese Kana.
@@ -8,7 +8,13 @@ Unicode 18 kana additions, historical kana ligatures, and 13 Minnan tone
 letters. Twenty-one historical kana forms are GenZui constructions. Archaic WU has a curved
 default and a hooked alternate selected by `ss01`.
 
-Version 0.114 adds an Okinawan composer to the Serif page, with Funatsu’s 27 forms and
+Version 0.115 adds GenZui Serif Bold, with the same characters as Regular. Its
+Noto outlines come from the fonts' own Bold instances, and every stroke GenZui
+draws has a Bold version of matching weight. TOMO, TOTE and TOKI now share one
+position for their TO stem, with their weight centred in the cell. YORI is set
+at 90%, and Bold draws it with lighter strokes so its three verticals stay apart.
+
+The Serif page includes an Okinawan composer with Funatsu’s 27 forms and
 eight raised katakana. The font uses 26 documented PUA positions; voiced forms
 and YI/YE use combining dakuten where possible. The specimen also retains
 separate collections for Han numerals, tally marks and description characters.
@@ -17,7 +23,7 @@ Script_Extensions properties are covered.
 Unencoded historical variants and arbitrary combining sequences remain outside
 this encoding audit.
 
-Regular is the available weight. Shared ideographs use Japanese regional forms.
+Regular and Bold are available. Shared ideographs use Japanese regional forms.
 The font is distributed under SIL OFL 1.1; source notices accompany the download.
 
 The site is https://genzui.mkpo.li/: a landing page with both families, the Serif page at /serif and the Sans page at /sans. Related typeface:
@@ -48,9 +54,11 @@ and `build/sans/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`; deploy with `bun run deploy` after committing the release.
 
-`releases/v0.114/` and `releases/sans-v0.101/` contain the immutable font assets.
+`releases/v0.115/` and `releases/sans-v0.101/` contain the immutable font assets;
+`releases/v0.115/` holds both Serif faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
-CSS (`/v0.114/genzui.css`) and a current alias (`/genzui.css`).
+CSS (`/v0.115/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
+alias (`/genzui.css`).
 
 The home page's share image shows both families from the distributed fonts'
 glyphs. Its text alternative is: “源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui

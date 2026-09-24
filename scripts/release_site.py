@@ -13,7 +13,7 @@ from fontTools.ttLib import TTFont
 
 from design_gallery import build_gallery
 from release_copy import FORM_DESCRIPTIONS
-from serif import OUT as FONT_OUT, STEM, VERSION
+from serif import BOLD_STEM, OUT as FONT_OUT, PACKAGE, STEM, VERSION
 from social_card import build_card
 from sans_card import build_card as build_sans_card
 from font_chunks import build as build_chunks
@@ -115,22 +115,26 @@ def external_data(page, prefix, descriptions=None):
 def build():
     checks = json.loads((FONT_OUT/'checks.json').read_text())
     assert checks['status'] == 'passed'
-    archive = ROOT/'dist'/f'{STEM}-{VERSION}.zip'
+    bold = json.loads((FONT_OUT/'checks-bold.json').read_text())
+    assert bold['status'] == 'passed'
+    archive = ROOT/'dist'/PACKAGE
     versioned = ROOT/'releases'/('v'+VERSION)
     versioned.mkdir(parents=True, exist_ok=True)
     # Versioned release assets are immutable and survive subsequent builds.
-    for source in [FONT_OUT/(STEM+'.ttf'), FONT_OUT/(STEM+'.woff2'), archive]:
+    records = {STEM: checks, BOLD_STEM: bold}
+    for source in [FONT_OUT/(stem+'.'+ext) for stem in records for ext in ('ttf', 'woff2')] + [archive]:
         data = source.read_bytes()
         if source.suffix != '.zip':
-            assert hashlib.sha256(data).hexdigest() == checks[source.suffix[1:]+'_sha256']
+            assert hashlib.sha256(data).hexdigest() == records[source.stem][source.suffix[1:]+'_sha256']
         target = versioned/source.name
         if target.exists():
             assert target.read_bytes() == data, 'Bump the font version before replacing a published asset.'
         else:
             target.write_bytes(data)
-    css = ("@font-face {\n  font-family: 'GenZui Serif';\n"
-           f"  src: url('./{STEM}.woff2') format('woff2');\n"
-           "  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n")
+    css = ''.join("@font-face {\n  font-family: 'GenZui Serif';\n"
+                  f"  src: url('./{stem}.woff2') format('woff2');\n"
+                  f"  font-weight: {weight};\n  font-style: normal;\n  font-display: swap;\n}}\n"
+                  for stem, weight in ((STEM, 400), (BOLD_STEM, 700)))
     css_path = versioned/'genzui.css'
     if css_path.exists():
         assert css_path.read_text() == css, 'Versioned CSS is immutable.'
@@ -236,7 +240,11 @@ def build():
     (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+URL+'/sitemap.xml\n')
     (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/serif', '/sans', '/gallery', '/minnan'])+'</urlset>')
     (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/serif\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
-    (OUT/'_redirects').write_text('/index.html / 301\n')
+    # Earlier packages carried only Regular and were named for it; their
+    # download links resolve to the immutable copy in each version folder.
+    (OUT/'_redirects').write_text('/index.html / 301\n'
+        f'/downloads/{STEM}-{VERSION}.zip /downloads/{PACKAGE} 301\n'
+        f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n')
     for name in ['announcement-ja', 'announcement-en', 'announcement-sans-ja', 'announcement-sans-en']:
         shutil.copyfile(ROOT/'release'/(name+'.txt'), OUT/(name+'.txt'))
     for name in ['index.html','serif.html','sans.html','gallery.html','minnan.html']:

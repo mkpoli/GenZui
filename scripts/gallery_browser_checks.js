@@ -43,7 +43,7 @@
   check(id+' swaps drawing and both contexts',button.getAttribute('aria-pressed')==='true'&&sample.querySelector('.version-label').textContent==='0.111'&&uses(sample,'Previous')&&getComputedStyle(sample.querySelector('.previous-outline')).display!=='none');
   check(id+' keeps comparison position',Math.abs(sample.getBoundingClientRect().height-height)<1);
   if(id==='u1b11f')check('swapped WU stays hooked',feature(sample.querySelector('.reading'))==='"ss01"');
-  button.click();check(id+' restores current',!sample.classList.contains('is-previous')&&uses(sample,'GenZui')&&sample.querySelector('.version-label').textContent==='0.114');
+  button.click();check(id+' restores current',!sample.classList.contains('is-previous')&&uses(sample,'GenZui')&&sample.querySelector('.version-label').textContent==='0.115');
  }
  change('#wu-style','curved');
  check('return to curved clears previous state',!$('#u1b11f .current').classList.contains('is-previous')&&getComputedStyle($('#u1b11f .current .default-shape')).display!=='none'&&getComputedStyle($('#u1b11f .current .alternate-shape')).display==='none');
@@ -52,7 +52,7 @@
  check('size changes both directions',getComputedStyle($('#u1b124 .horizontal-reading')).fontSize==='72px'&&getComputedStyle($('#u1b124 .vertical-reading')).fontSize==='72px');
  $('#reading-size').value=40;$('#reading-size').dispatchEvent(new Event('input',{bubbles:true}));
  check('two historical NARI scans',$$('.historical-reference img').length===2&&$$('.historical-reference a').every(a=>a.href.startsWith('https://dl.ndl.go.jp/pid/')));
- check('current download',$('footer a[href$=".zip"]').href.includes('0.114'));
+ check('current download',$('footer a[href$=".zip"]').href.includes('GenZuiSerif-0.115.zip'));
  check('no page overflow',document.documentElement.scrollWidth<=innerWidth);
  // Execute the real fallback userscript, then inspect each leaf text node.
  const fixture=document.createElement('p');fixture.textContent='𛄣';document.body.append(fixture);
