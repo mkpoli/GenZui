@@ -97,6 +97,13 @@ def check():
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):
         assert review not in visible_gallery,review
     assert gallery.count('class="glyph-card"')==21
+    # The public gallery offers both weights; its Bold face is the Bold font.
+    assert '<select id="weight">' in gallery and 'data-bold="源萃明朝 / BOLD' in gallery
+    bold_proof=re.search(r"@font-face\{font-family:GenZui;src:url\(assets/(proof-[0-9a-f]{16}\.woff2)\) format\('woff2'\);font-weight:700",gallery)
+    assert bold_proof,'public gallery Bold face'
+    from fontTools.ttLib import TTFont as _Font
+    proof=_Font(OUT/'assets'/bold_proof[1]);full_bold=_Font(ROOT/'build/serif'/(BOLD_STEM+'.ttf'))
+    assert proof['glyf'][proof.getBestCmap()[0x1B124]].getCoordinates(proof['glyf'])[0]==full_bold['glyf'][full_bold.getBestCmap()[0x1B124]].getCoordinates(full_bold['glyf'])[0]
     assert 'value="hooked"' in gallery and 'value="curved"' in gallery
     bold=json.loads((ROOT/'build/serif/checks-bold.json').read_text())
     for stem,record in ((STEM,checks),(BOLD_STEM,bold)):
