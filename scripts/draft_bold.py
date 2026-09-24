@@ -31,13 +31,17 @@ X0, Y0, SIZE = -300, -400, 1700
 
 
 def parse(d):
-    tokens = re.findall(r'[MLQCZ]|-?\d*\.?\d+(?:e-?\d+)?', d)
+    tokens = re.findall(r'[A-Za-z]|-?\d*\.?\d+(?:e-?\d+)?', d)
     commands, i, last = [], 0, None
     while i < len(tokens):
         c = tokens[i]
         if c.isalpha():
+            if c not in ARITY:
+                raise ValueError(f'unsupported path command {c!r}; use absolute M, L, Q, C and Z')
             i += 1
         else:  # An implicit repeat; a repeated moveto is a lineto.
+            if last in (None, 'Z'):
+                raise ValueError(f'coordinates without a command at token {i}')
             c = 'L' if last == 'M' else last
         last = c
         commands.append([c, [float(v) for v in tokens[i:i + ARITY[c]]]])
