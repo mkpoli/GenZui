@@ -25,12 +25,33 @@
     $('#count').textContent = `${count} ${names[value]}`;
   }
   $('#collection').addEventListener('change', filter);
-  $('#weight')?.addEventListener('change', e => {
-    const bold = e.target.value === '700';
+  // Earlier versions exist only in Regular, so Swap and Overlay compare
+  // Regular revisions and rest while Bold is shown.
+  const REGULAR_ONLY = 'Earlier versions exist in Regular only';
+  function applyWeight(bold) {
     document.body.classList.toggle('weight-bold', bold);
     const label = $('#weight-label');
     if (label) label.textContent = label.dataset[bold ? 'bold' : 'regular'];
-  });
+    const overlay = $('#overlay');
+    if (overlay) {
+      if (bold && overlay.checked) {
+        overlay.checked = false;
+        document.body.classList.remove('overlay-on');
+      }
+      overlay.disabled = bold;
+      overlay.closest('label').title = bold ? REGULAR_ONLY : '';
+    }
+    document.querySelectorAll('.swap').forEach(button => {
+      const sample = button.closest('.sample');
+      if (bold && sample.classList.contains('is-previous')) {
+        sample.classList.remove('is-previous');
+        showSwapState(sample, button);
+      }
+      button.disabled = bold;
+      button.title = bold ? REGULAR_ONLY : '';
+    });
+  }
+  $('#weight')?.addEventListener('change', e => applyWeight(e.target.value === '700'));
   $('#reading-size').addEventListener('input', e => {
     document.documentElement.style.setProperty('--reading', `${e.target.value}px`);
     $('#size-value').textContent = `${e.target.value} px`;
@@ -64,6 +85,7 @@
       showSwapState(sample, button);
     });
   });
+  if ($('#weight')) applyWeight($('#weight').value === '700');
   if (document.querySelector('.before')) document.fonts.load('40px Previous', '𛄣𛄟').catch(() => {});
   const target = document.getElementById(location.hash.slice(1));
   if (target?.matches('.glyph-card')) { $('#collection').value = target.dataset.kind; filter(); }
