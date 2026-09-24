@@ -1,5 +1,5 @@
-"""Funatsu kana, drawn or composed from Noto's own hiragana strokes, and
-prefectural raised katakana derived from Noto's own small katakana.
+"""Funatsu kana composed from Noto's own hiragana strokes, and prefectural
+raised katakana derived from Noto's own small katakana.
 
 Mapping references describe character identity, not an upstream outline licence.
 No outlines are imported from Nishiki-teki, Xim Sans or legacy Okinawan fonts.
@@ -11,9 +11,7 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
-import okinawan_drawings
 import okinawan_mincho
-from serif_forms import path
 from sources import ROOT
 
 DATA = json.loads((ROOT/'data/okinawan/mappings.json').read_text())
@@ -22,7 +20,7 @@ PUA = {int(e['output'][0], 16): e for e in ENTRIES
        if len(e['output']) == 1 and 0xE000 <= int(e['output'][0], 16) <= 0xF8FF}
 DESCRIPTIONS = {cp: (f"{e['label']}. " +
     ('Funatsu New Okinawan Kana; Nishiki-teki PUA convention. '
-     'Original GenZui drawing or composition from Noto Serif JP hiragana strokes. ' if e['system'] == 'funatsu' else
+     'Composed by GenZui from Noto Serif JP hiragana strokes. ' if e['system'] == 'funatsu' else
      'Okinawa prefectural raised katakana; Xim Sans PUA convention. '
      'Reduced by GenZui from Noto Serif JP small katakana. ') +
     'This is a private-use mapping, not a Unicode assignment.')
@@ -84,26 +82,9 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
         return embolden([transform(pen, (scale, 0, 0, scale, 250 - scale * (left + right) / 2,
                                          RAISED_TOP - scale * top))], radius)
 
-    def fit(parts, base):
-        # Drawn letters share the vertical extent of the Noto kana they
-        # extend, so they sit on the same baseline at the same size. They
-        # are centred in the em and never wider than 920 units.
-        shape = pathops.Path()
-        for part in parts:
-            part.replay(shape.getPen())
-        left, bottom, right, top = shape.bounds
-        targets = [font['glyf'][font.getBestCmap()[ord(c)]] for c in base]
-        low, high = min(t.yMin for t in targets), max(t.yMax for t in targets)
-        scale = min((high - low) / (top - bottom), 920 / (right - left))
-        return [transform(part, (scale, 0, 0, scale, 500 - scale * (left + right) / 2, low - scale * bottom))
-                for part in parts]
-
     # The kit reads the source kana before any Okinawan glyph is added.
     kit = okinawan_mincho.Kit(font, contours, transform)
     recipes = okinawan_mincho.outlines(kit)
-    drawn = {cp: embolden(fit(parts, okinawan_drawings.BASES[cp]), okinawan_drawings.RADIUS)
-             for cp, parts in okinawan_drawings.outlines().items()}
-    recipes.update(drawn)
     recipes.update({cp: raised(source, radius) for cp, (source, radius) in RAISED.items()})
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
@@ -126,13 +107,7 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature):
         if len(e['output']) != 2 or int(e['output'][0], 16) not in recipes:
             continue
         cp = int(e['output'][0], 16)
-        if cp in drawn:
-            # Drawn letters narrow to 0.90 under their own dakuten.
-            parts = [transform(p, (.90, 0, 0, 1, 12, 0)) for p in recipes[cp]]
-            parts += [path(stroke) for stroke in okinawan_drawings.DAKUTEN]
-        else:
-            parts = okinawan_mincho.voiced(kit, recipes[cp])
-        name = add(font, f"okinawa.{e['id']}", unite(parts))
+        name = add(font, f"okinawa.{e['id']}", unite(okinawan_mincho.voiced(kit, recipes[cp])))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name
