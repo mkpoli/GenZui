@@ -77,6 +77,15 @@ def check():
     assert '変体仮名286字' in landing and '"alternateName"' in landing and '"@type": "WebSite"' in landing
     assert 'og:title" content="源萃明朝 — GenZui Serif｜変体仮名・歴史的仮名のフリーフォント"' in home and 'rel="canonical" href="https://genzui.mkpo.li/serif"' in home
     assert 'id="layer-serif"' in landing and 'id="download-both"' in landing and 'href="serif#okinawan"' in landing
+    # The landing is a select screen: both cards, the three views, and one archive for both families.
+    for marker in ('class="card serif"', 'class="card sans"', 'data-view="compare"', 'data-view="details"', 'id="field"'):
+        assert marker in landing, marker
+    both=re.search(r'id="download-both" href="(downloads/GenZui-Serif-[0-9.]+-Sans-[0-9.]+\.zip)"', landing)
+    assert both and (OUT/both[1]).is_file(), 'the landing links the combined archive'
+    with ZipFile(OUT/both[1]) as z:
+        assert z.testzip() is None
+        names=set(z.namelist())
+        assert f'GenZui Serif/{STEM}.ttf' in names and f'GenZui Sans/{SANS_STEM}.ttf' in names
     assert '/serif\n  Cache-Control' in (OUT/'_headers').read_text()
     assert 'noindex' in (OUT/'404.html').read_text()
     assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')
@@ -168,7 +177,6 @@ def check():
     for label in ('serif','sans'):
         assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', home), label
         assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', sans), label
-        assert re.search(rf'font-family:GenZuiLabel-{label};src:url\(assets/proof-[0-9a-f]+\.woff2\)', landing), label
     assert len(set(re.findall(r'GenZuiLabel-(?:serif|sans);src:url\((assets/proof-[0-9a-f]+\.woff2)\)', home)))==2
     for suffix in ('ttf','woff2'):
         for folder in ('downloads','sans-v'+sans_version):
