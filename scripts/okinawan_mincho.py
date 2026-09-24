@@ -144,8 +144,8 @@ def glottal_we(k):
 
 @drawing(0xF463)  # glottal N: ん with い's falling stroke at the upper right
 def glottal_n(k):
-    mark = stretch(k, k.part('ぃ', 1), 590, 400)
-    return [k.move(k.part('ん'), dx=-40), k.move(mark, dx=70)]
+    mark = k.box(k.part('い', 1), 650, 420, None, 670)
+    return [k.move(k.part('ん'), dx=-20), mark]
 
 
 @drawing(0xF467)  # SI: す with a long falling stroke on the right
@@ -162,10 +162,11 @@ def si(k):
 @drawing(0xF469)  # TSI: つ whose tail runs into い's first stroke
 def tsi(k):
     # つ is raised and shortened; its tail ends where い's first stroke
-    # begins, so the two read as one turning stroke, as in the chart.
+    # begins, so the two read as one turning stroke, as in the chart. い's
+    # second stroke sits under つ's curve, which keeps the letter compact.
     top = k.move(k.part('つ'), sx=1, sy=.77, origin=(0, 617), dy=233)
     first = k.move(stretch(k, k.part('い', 0), 450, 20), dx=225)
-    second = k.move(stretch(k, k.part('い', 1), 330, 40), dx=60)
+    second = k.move(stretch(k, k.part('い', 1), 350, 40), dx=-60)
     return [top, first, second]
 
 
