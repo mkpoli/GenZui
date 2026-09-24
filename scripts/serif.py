@@ -178,7 +178,7 @@ def add_feature(font, table_tag, feature_tag, lookup):
     table.ScriptList.ScriptCount = len(table.ScriptList.ScriptRecord)
 
 
-def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830):
+def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830, mark_drop=626):
     cmap = font.getBestCmap()
     bases = {cmap[cp] for cp in points} | set(vertical.values()) | set(alternates)
     marks, mark_mapping = {}, {}
@@ -227,7 +227,7 @@ def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830):
     for name in bases:
         g = font['glyf'][name]
         # Keep both marks clear of the top outline and within the em's width.
-        anchors[name] = {0: buildAnchor(mark_anchor_x, g.yMax - 626),
+        anchors[name] = {0: buildAnchor(mark_anchor_x, g.yMax - mark_drop),
                          1: buildAnchor(g.xMax + 148, 0)}
     lookup = otTables.Lookup()
     lookup.LookupType, lookup.LookupFlag = 4, 0
@@ -242,7 +242,7 @@ def layout(font, donor, vertical, points, alternates=(), mark_anchor_x=830):
             font['vmtx'][name] = (0 if name in marks else 1000,
                                 880 - getattr(font['glyf'][name], 'yMax', 0))
     # Includes the highest positioned mark; Windows must not clip it.
-    top = max(font['glyf'][name].yMax + 252 for name in bases)
+    top = max(font['glyf'][name].yMax + 252 + 626 - mark_drop for name in bases)
     font['OS/2'].usWinAscent = max(font['OS/2'].usWinAscent, top)
 
 
