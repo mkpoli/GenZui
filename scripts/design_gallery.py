@@ -139,12 +139,10 @@ def build_gallery(public=False):
     assert hashlib.sha256(raw).hexdigest() == manifest['subset_woff2_sha256']
     before = TTFont(io.BytesIO(raw))
     after = TTFont(OUT/(STEM+'.ttf'), recalcTimestamp=False)
-    bold = None
-    if not public:
-        bold_path = OUT/'GenZuiSerif-Bold.ttf'
-        if not bold_path.is_file():
-            raise FileNotFoundError('Build GenZui Serif Bold first: python scripts/bold.py')
-        bold = TTFont(bold_path, recalcTimestamp=False)
+    bold_path = OUT/'GenZuiSerif-Bold.ttf'
+    if not bold_path.is_file():
+        raise FileNotFoundError('Build GenZui Serif Bold first: python scripts/bold.py')
+    bold = TTFont(bold_path, recalcTimestamp=False)
     sources = json.loads((OUT/'sources.json').read_text())
     own = {int(cp[2:],16) for cp, kind in sources['source_kinds'].items() if kind == 'genzui' and int(cp[2:],16) not in (0x332C, *HONKOKU, *OKINAWAN_PUA)}
     assert own == set(DESCRIPTIONS) | set(SMALL) and len(own) == 21
@@ -186,7 +184,7 @@ def build_gallery(public=False):
 <details><summary>Construction & references</summary><div class="reference"><span class="current native" lang="ja">{ref}</span><p>Stroke reference · Noto Serif {'Hentaigana' if cp==0x1B168 else 'JP'}<br>{html.escape(source_note)}</p></div><div class="reference-links"><a href="https://www.unicode.org/charts/PDF/Unicode-18.0/U180-{chart}.pdf">Unicode character chart</a>{history}</div>{stroke_references(after,cp,bold)}{historical_reference(cp)}</details></article>''')
     points = set(before.getBestCmap())
     current = webfont(after, points)
-    bold_font = base64.b64encode(webfont(bold, points)).decode() if bold else ''
+    bold_font = base64.b64encode(webfont(bold, points)).decode()
     page = (ROOT/'templates'/('gallery-public.html' if public else 'gallery.html')).read_text()
     for key, value in {'{{VERSION}}':VERSION, '{{REVISED_COUNT}}':str(len(REVIEW_FORMS)), '{{CARDS}}':''.join(cards),
         '{{WU_CONTEXT}}':contexts(0x1B11F),
