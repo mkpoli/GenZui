@@ -1,5 +1,7 @@
 """Funatsu's Okinawan kana composed from GenZui's own hiragana strokes.
 
+The letters that keep their hand-drawn form are in okinawan_drawings.py.
+
 Each letter is assembled from whole strokes of the Noto Serif kana it
 extends, so the brush entries, the thick-thin contrast and the terminals are
 Noto's. A stroke is cut only where the cut end is buried in another stroke.
@@ -77,93 +79,15 @@ def small_i(k, left, bottom, right):
     return [k.box(k.part('ぃ'), left, bottom, right)]
 
 
-def tu_body(k):
-    """と's diagonal running into ち's turn and bulge.
-
-    と and ち turn at nearly the same point. ち loses its descending stroke
-    just inside と's diagonal (whose outer edge runs along y = x); と loses
-    its bottom sweep on a slanted cut through ち's thick turn.
-    """
-    diagonal = k.keep(k.part('と', 0), (320, 130), (1000, 130), (1000, 1000), (0, 1000), (0, 450))
-    bulge = k.drop(k.part('ち', 0), (0, 5), (480, 485), (480, 1000), (0, 1000))
-    return [diagonal, bulge]
-
-
-@drawing(0xF450)  # TU: と's tick over the diagonal and bulge
-def tu(k):
-    return [k.part('と', 1)] + tu_body(k)
-
-
-@drawing(0xF452)  # TI: て with ぃ under its bar
-def ti(k):
-    # て is one contour. It is cut along the underside of the bar, measured
-    # from the outline, across the span where the curve hangs from it. The
-    # curve moves left to make room for ぃ; since the bar rises to the right,
-    # its cut top then lands inside the bar.
-    window = ((395, -100), (640, -100), (640, 617), (560, 620), (520, 612), (460, 594), (395, 576))
-    bar = k.drop(k.part('て'), *window)
-    curve = k.keep(k.part('て'), *window)
-    return [bar, k.move(curve, dx=-140)] + small_i(k, 510, 10, 920)
-
-
-@drawing(0xF456)  # KWI: く with ぃ
-def kwi(k):
-    return [k.move(k.part('く'), sx=1.2, sy=1, dx=-190)] + small_i(k, 470, -30, 960)
-
-
-def ku_halves(k, lower_sy=1):
-    """く split on the horizontal through its turn at y = 360.
-
-    The lower arm may be flattened by scaling about that line, which keeps
-    the two cut edges on top of each other.
-    """
-    upper = k.keep(k.part('く'), (0, 360), (1000, 360), (1000, 1000), (0, 1000))
-    lower = k.keep(k.part('く'), (0, -100), (1000, -100), (1000, 360), (0, 360))
-    return upper, k.move(lower, sx=1, sy=lower_sy, origin=(0, 360))
-
-
-@drawing(0xF458)  # KWE: く's long arm, a flat connector and え's zigzag
-def kwe(k):
-    upper, lower = ku_halves(k, .3)
-    # The chart draws く's arm long and shallow, and its lower arm as a near
-    # level connector into え. え loses the left part of its top stroke; the
-    # cut sits inside the connector's end.
-    upper = k.move(upper, sx=1.45, sy=1, origin=(272, 360))
-    lower = k.move(lower, sx=1.25, sy=1, origin=(272, 360))
-    zigzag = k.drop(k.part('え', 0), (0, 390), (400, 390), (520, 470), (520, 700), (0, 700))
-    zigzag = k.move(zigzag, sx=.8, sy=.5, origin=(600, 520), dx=110, dy=-280)
-    return [k.move(p, dx=-170) for p in (upper, lower, zigzag)]
-
-
-@drawing(0xF454)  # KWA: く with its lower arm flattened into わ's stem
-def kwa(k):
-    upper, lower = ku_halves(k, .3)
-    # The flattened arm ends near (500, 235); わ's stem hangs from it with its
-    # cut top inside the arm.
-    loop = k.move(k.part('わ', 0), sx=.7, origin=(0, 0))
-    stem = k.keep(k.move(k.part('わ', 2), sx=.7, origin=(0, 0)), (0, -100), (1000, -100), (1000, 250), (0, 250))
-    return [k.move(upper, dx=-150), k.move(lower, dx=-150)] + [k.move(p, dx=254, dy=-10) for p in (loop, stem)]
-
-
 def fu_left(k):
     """ふ's top and centre stroke with its left dot; the right dot gives way."""
     parts = [k.part('ふ', 0), k.keep(k.part('ふ', 1), (0, -100), (330, -100), (330, 400), (0, 400))]
     return [k.move(p, sx=.82, sy=1, origin=(0, 0), dx=40) for p in parts]
 
 
-@drawing(0xF45A)  # HWA
-def hwa(k):
-    return fu_left(k) + [k.box(k.part('ゎ'), 520, -40, 960)]
-
-
 @drawing(0xF45B)  # HWI
 def hwi(k):
     return fu_left(k) + small_i(k, 540, -20, 960)
-
-
-@drawing(0xF45C)  # HWE
-def hwe(k):
-    return fu_left(k) + [k.box(k.part('ぇ', 0), 500, -40, 960)]
 
 
 def stretch(k, pen, top, bottom):
@@ -172,27 +96,19 @@ def stretch(k, pen, top, bottom):
     return k.move(pen, sx=1, sy=(top - bottom) / (y1 - y0), dy=bottom - y0)
 
 
-@drawing(0xF45D)  # glottal YA: は's left stroke before や, its flick aimed at the arm
-def glottal_ya(k):
-    mark = stretch(k, k.part('は', 1), 780, 170)
-    return [k.move(mark, dx=-70), k.move(k.part('や'), sx=.84, sy=1, origin=(929, 0), dx=40)]
+def stem(k, x, bottom, top):
+    """は's left stroke as the glottal mark before ゆ and よ."""
+    return k.box(k.part('は', 1), x, bottom, None, top)
 
 
-@drawing(0xF45E)  # glottal YU: い's first stroke beside ゆ's own left stroke
+@drawing(0xF45E)  # glottal YU
 def glottal_yu(k):
-    # ゆ's left stroke descends and hooks up into the loop; い's first stroke
-    # makes the same movement, so the two run parallel and the mark's hook
-    # points at the start of ゆ.
-    mark = stretch(k, k.part('い', 0), 720, 90)
-    return [k.move(mark, dx=-85), k.move(k.part('ゆ'), sx=.82, sy=1, origin=(910, 0), dx=60)]
+    return [stem(k, 40, 250, 760), k.box(k.part('ゆ'), 200, -62, 950)]
 
 
-@drawing(0xF45F)  # glottal YO: は's left stroke with よ in place of は's right half
+@drawing(0xF45F)  # glottal YO
 def glottal_yo(k):
-    # は's flick is drawn toward the next stroke; よ takes the room of は's
-    # right half, so the spacing is は's own.
-    right = k.box(k.part('よ'), 330, -37, 900)
-    return [k.part('は', 1), right]
+    return [stem(k, 90, 60, 760), k.move(k.part('よ'), dx=80)]
 
 
 def dot(k):
@@ -230,18 +146,6 @@ def glottal_we(k):
 def glottal_n(k):
     mark = stretch(k, k.part('ぃ', 1), 590, 400)
     return [k.move(k.part('ん'), dx=-40), k.move(mark, dx=70)]
-
-
-@drawing(0xF465)  # WU: を's bar, a ノ, a short tick and the body of TU
-def wu(k):
-    # The chart draws を's cross stroke as a plain ノ that ends in a free tip,
-    # then a short tick below the bar whose foot rests on the third stroke,
-    # which runs from the upper right into TU's turn and bulge.
-    slash = stretch(k, k.part('な', 1), 800, 390)
-    body = [k.move(p, sx=1, sy=.8, origin=(0, -40)) for p in tu_body(k)]
-    tick = k.keep(k.part('い', 0), (0, 470), (1000, 470), (1000, 900), (0, 900))
-    tick = k.move(tick, dx=330, dy=-110)
-    return [k.part('を', 2), k.move(slash, dx=-40), tick] + body
 
 
 @drawing(0xF467)  # SI: す with a long falling stroke on the right

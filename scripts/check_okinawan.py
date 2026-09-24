@@ -13,8 +13,9 @@ def check_okinawan(font, engine, web_engine, shape, boxes):
     assert not set(PUA) & set(range(0xFA80, 0xFA9B))
     assert 0x1B168 not in PUA
     assert not {0xF464, 0xF466} & set(cmap)
-    # Funatsu letters are cut from Noto strokes; a cut that misses the stroke
-    # it should hide in leaves a sliver contour.
+    # Composed Funatsu letters are cut from Noto strokes; a cut that misses
+    # the stroke it should hide in leaves a sliver or pinhole. Genuine small
+    # counters, where a loop crosses a stem, are larger than 800 units².
     glyphs = font.getGlyphSet()
     for cp, entry in PUA.items():
         if entry['system'] != 'funatsu':
@@ -28,7 +29,7 @@ def check_okinawan(font, engine, web_engine, shape, boxes):
                 area = AreaPen()
                 for o, a in contour:
                     getattr(area, o)(*a)
-                assert abs(area.value) > 1500, (hex(cp), area.value)
+                assert abs(area.value) > 800, (hex(cp), area.value)
                 contour = []
     cases = 0
     for entry in ENTRIES:
