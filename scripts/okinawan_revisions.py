@@ -30,9 +30,10 @@ def serif(cwd):
 def build(revisions):
     FONTS.mkdir(parents=True, exist_ok=True)
     made = []
-    for ref in revisions:
+    for spec in revisions:
+        ref, _, label = spec.partition('=')
         key = 'rev-' + git('rev-parse', '--short', ref)
-        label = f'{key[4:]} {git("log", "-1", "--format=%s", ref)}'
+        label = label or f'{key[4:]} {git("log", "-1", "--format=%s", ref)}'
         with tempfile.TemporaryDirectory() as tmp:
             tree = Path(tmp)/'tree'
             git('worktree', 'add', '--detach', str(tree), ref)
@@ -60,6 +61,6 @@ def build(revisions):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('revisions', nargs='*', help='commits to build, oldest first')
+    parser.add_argument('revisions', nargs='*', help='commits to build, oldest first, as ref or ref=label')
     args = parser.parse_args()
     build(args.revisions)
