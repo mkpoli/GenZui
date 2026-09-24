@@ -349,6 +349,7 @@ def build(weight=400):
     else:
         font['OS/2'].fsSelection = (font['OS/2'].fsSelection & ~65) | 32
         font['head'].macStyle = 1
+        font['OS/2'].panose.bWeight = 8  # PANOSE Bold.
     for tag in ('STAT','DSIG'):
         if tag in font: del font[tag]
     font.save(OUT/(stem+'.ttf'))

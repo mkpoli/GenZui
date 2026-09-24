@@ -77,6 +77,7 @@ def main():
     assert font['name'].getName(16, 3, 1, 0x409).toUnicode() == FAMILY
     assert font['name'].getName(17, 3, 1, 0x409).toUnicode() == 'Bold'
     assert font['OS/2'].usWeightClass == 700
+    assert font['OS/2'].panose.bWeight == 8
     assert font['head'].macStyle & 1
     assert font['OS/2'].fsSelection & 32
     assert not font['OS/2'].fsSelection & 64
