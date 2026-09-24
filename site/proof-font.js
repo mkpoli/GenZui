@@ -12,7 +12,7 @@
   }
   function scan(root) {
     if (root instanceof HTMLElement) protect(root);
-    root.querySelectorAll?.('.face, .face *').forEach(protect);
+    root?.querySelectorAll?.('.face, .face *').forEach(protect);
     if (root instanceof HTMLElement && root.closest('.face')) root.querySelectorAll('*').forEach(protect);
   }
   scan(document.body);

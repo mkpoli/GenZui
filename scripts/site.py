@@ -5,7 +5,7 @@ import html
 import json
 import shutil
 from collections import Counter
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from fontTools.ttLib import TTFont
 from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
@@ -20,6 +20,26 @@ from family_switch import css as switch_css, html as switch_html
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
 OUT = ROOT / 'build/site'
+
+
+def both_package(serif_package, sans_package, serif_version, sans_version):
+    """The installable fonts of both families with their licences, each family in its own folder."""
+    archive = ROOT/'dist'/f'GenZui-Serif-{serif_version}-Sans-{sans_version}.zip'
+    with ZipFile(archive, 'w') as out:
+        for folder, package in (('GenZui Serif', serif_package), ('GenZui Sans', sans_package)):
+            with ZipFile(package) as z:
+                assert z.testzip() is None
+                for name in sorted(z.namelist()):
+                    if not name.endswith(('.ttf', '.txt', '.md', '.ps1')):
+                        continue
+                    info = ZipInfo(f'{folder}/{name}', (2025, 6, 5, 0, 0, 0))
+                    info.create_system = 3
+                    info.external_attr = 0o644 << 16
+                    out.writestr(info, z.read(name), ZIP_DEFLATED, 9)
+    with ZipFile(archive) as z:
+        assert z.testzip() is None
+    assert archive.stat().st_size < 25 << 20, 'Cloudflare static assets are limited to 25 MiB per file.'
+    return archive
 
 def build():
     verify()
@@ -79,16 +99,18 @@ def build():
     (OUT/'serif.html').write_text(page)
     sans_checks = json.loads((SANS_OUT/'checks.json').read_text())
     sans_provenance = json.loads((SANS_OUT/'sources.json').read_text())['source_kinds']
+    sans_version, _, sans_package = sans_checked()
+    both = both_package(package, sans_package, VERSION, sans_version)
     landing = (ROOT/'site/landing.html').read_text()
     for token, value in {
+        '{{BOTH_ZIP}}': both.name, '{{BOTH_SIZE}}': f'{both.stat().st_size/1048576:.1f}',
         '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
         '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
-        '{{CSS}}': replacement['{{CSS}}'], '{{FAMILY_SWITCH_CSS}}': switch_css(), '{{FAMILY_SWITCH}}': switch_html(None),
         '{{VERSION}}': html.escape(VERSION), '{{SANS_VERSION}}': html.escape(sans_checks['version']),
         '{{CHARACTER_COUNT}}': replacement['{{CHARACTER_COUNT}}'], '{{CONSTRUCTION_COUNT}}': replacement['{{CONSTRUCTION_COUNT}}'],
         '{{SANS_CHARACTER_COUNT}}': f"{sans_checks['encoded_characters']:,}",
         '{{SANS_CONSTRUCTION_COUNT}}': str(sum('GenZui' in v.split(';')[0] or 'squared-katakana' in v for v in sans_provenance.values())),
-        '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'],
+        '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'], '{{BOLD_FONT_SIZE}}': replacement['{{BOLD_FONT_SIZE}}'],
         '{{SANS_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Regular.ttf').stat().st_size/1048576:.1f}",
     }.items():
         landing = landing.replace(token, value)
@@ -104,7 +126,10 @@ def build():
         if old.name != package.name:
             old.unlink()
     shutil.copyfile(package, downloads/package.name)
-    sans_version, _, sans_package = sans_checked()
+    for old in downloads.glob('GenZui-Serif-*-Sans-*.zip'):
+        if old.name != both.name:
+            old.unlink()
+    shutil.copyfile(both, downloads/both.name)
     for old in downloads.glob('GenZuiSans-Regular-*.zip'):
         if old.name != sans_package.name:
             old.unlink()
