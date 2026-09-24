@@ -5,7 +5,7 @@ import html
 import json
 import shutil
 from collections import Counter
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from fontTools.ttLib import TTFont
 from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
@@ -20,6 +20,23 @@ from family_switch import css as switch_css, html as switch_html
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
 OUT = ROOT / 'build/site'
+
+
+def both_package(serif_package, sans_package, serif_version, sans_version):
+    """One archive holding both families' complete packages, each in its own folder."""
+    archive = ROOT/'dist'/f'GenZui-Serif-{serif_version}-Sans-{sans_version}.zip'
+    with ZipFile(archive, 'w', ZIP_DEFLATED, compresslevel=9) as out:
+        for folder, package in (('GenZui Serif', serif_package), ('GenZui Sans', sans_package)):
+            with ZipFile(package) as z:
+                assert z.testzip() is None
+                for name in sorted(z.namelist()):
+                    info = ZipInfo(f'{folder}/{name}', (2025, 6, 5, 0, 0, 0))
+                    info.compress_type = ZIP_DEFLATED
+                    info.external_attr = 0o644 << 16
+                    out.writestr(info, z.read(name))
+    with ZipFile(archive) as z:
+        assert z.testzip() is None
+    return archive
 
 def build():
     verify()
@@ -73,8 +90,11 @@ def build():
     (OUT/'serif.html').write_text(page)
     sans_checks = json.loads((SANS_OUT/'checks.json').read_text())
     sans_provenance = json.loads((SANS_OUT/'sources.json').read_text())['source_kinds']
+    sans_version, _, sans_package = sans_checked()
+    both = both_package(package, sans_package, VERSION, sans_version)
     landing = (ROOT/'site/landing.html').read_text()
     for token, value in {
+        '{{BOTH_ZIP}}': both.name, '{{BOTH_SIZE}}': f'{both.stat().st_size/1048576:.1f}',
         '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
         '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
         '{{CSS}}': replacement['{{CSS}}'], '{{FAMILY_SWITCH_CSS}}': switch_css(), '{{FAMILY_SWITCH}}': switch_html(None),
@@ -98,7 +118,10 @@ def build():
         if old.name != package.name:
             old.unlink()
     shutil.copyfile(package, downloads/package.name)
-    sans_version, _, sans_package = sans_checked()
+    for old in downloads.glob('GenZui-Serif-*-Sans-*.zip'):
+        if old.name != both.name:
+            old.unlink()
+    shutil.copyfile(both, downloads/both.name)
     for old in downloads.glob('GenZuiSans-Regular-*.zip'):
         if old.name != sans_package.name:
             old.unlink()
