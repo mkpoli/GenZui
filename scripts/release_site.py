@@ -185,6 +185,7 @@ def build():
     for copy in (TITLE, SANS_TITLE, GALLERY_TITLE, MINNAN_TITLE):
         site_text.update(ord(c) for c in copy)
     serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
+    bold_css, _ = build_chunks(FONT_OUT/(BOLD_STEM+'.ttf'), 'GenZui', BOLD_STEM, OUT/'assets', site_text, weight=700)
     sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets', site_text)
     preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-text-' in f)
     # The landing declares a second family name for the Sans face.
@@ -192,8 +193,11 @@ def build():
     landing_sans_css = sans_css.replace('font-family:GenZui;', 'font-family:GenZuiSans;')
     sans_serif_css = serif_css.replace('font-family:GenZui;', 'font-family:GenZuiSerif;').replace('font-display:block', 'font-display:swap')
     page = (ROOT/'build/site/serif.html').read_text()
+    # The Serif page offers Bold; its chunks load only when bold text appears.
+    page = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*font-weight:700[^}]*\}\n?",
+                  '', page, count=1)
     page = re.sub(r"@font-face \{font-family:GenZui;src:url\(data:font/woff2;base64,[A-Za-z0-9+/=]+\)[^}]*\}",
-                  lambda m: serif_css, page, count=1)
+                  lambda m: serif_css+'\n'+bold_css, page, count=1)
     page = page.replace('</head>', preload(serif_chunks)+'</head>')
     page = external_fonts(page)
     page = external_data(page, 'characters', FORM_DESCRIPTIONS)

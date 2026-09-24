@@ -78,7 +78,7 @@ def subset_woff2(path, points, variant_glyphs=(), selectors=()):
     return stream.getvalue()
 
 
-def build(path, family, stem, out_dir, text_points=()):
+def build(path, family, stem, out_dir, text_points=(), weight=400):
     """Write the chunks under out_dir and return (css, [chunk file names])."""
     font = TTFont(path)
     cmap = font.getBestCmap()
@@ -89,8 +89,9 @@ def build(path, family, stem, out_dir, text_points=()):
         filename = f'{stem}-{name}-{hashlib.sha256(data).hexdigest()[:16]}.woff2'
         (out_dir/filename).write_bytes(data)
         files.append(filename)
-        # The page waits briefly for its own text; further slices swap in.
-        display = 'block' if name == 'text' else 'swap'
+        # The page waits briefly for its own Regular text; further slices, and
+        # every Bold slice, which loads only when bold text appears, swap in.
+        display = 'block' if name == 'text' and weight == 400 else 'swap'
         faces.append(f"@font-face{{font-family:{family};src:url(assets/{filename}) format('woff2');"
-                     f"font-weight:400;font-style:normal;font-display:{display};unicode-range:{ranges(points)}}}")
+                     f"font-weight:{weight};font-style:normal;font-display:{display};unicode-range:{ranges(points)}}}")
     return '\n'.join(faces), files

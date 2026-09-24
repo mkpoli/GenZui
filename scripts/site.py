@@ -74,6 +74,7 @@ def build():
     page = (ROOT/'site/serif.html').read_text()
     replacement = {
         '{{FONT}}': font_data,
+        '{{BOLD_FONT}}': base64.b64encode((FONT_OUT/(BOLD_STEM+'.woff2')).read_bytes()).decode(),
         '{{CHARACTER_COUNT}}': f'{len(entries):,}',
         '{{CONSTRUCTION_COUNT}}': str(source_counts['genzui']),
         '{{OKINAWAN_DATA}}': json.dumps(OKINAWAN_DATA, ensure_ascii=False).replace('<', '\\u003c'),
