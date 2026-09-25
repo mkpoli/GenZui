@@ -9,6 +9,7 @@ from zipfile import ZipFile
 from fontTools.ttLib import TTFont
 
 from family_switch import css as switch_css, html as switch_html
+from weight_switch import css as weight_css
 from inventory import KANA_GROUPS, character_data
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
@@ -33,6 +34,7 @@ DESCRIPTIONS = {
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
            'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP'}
 DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
+             BOLD_STEM+'.ttf': BOLD_STEM+'.ttf', BOLD_STEM+'.woff2': BOLD_STEM+'.woff2',
              'OFL.txt': 'GenZuiSans-OFL.txt', 'NOTICE.txt': 'GenZuiSans-NOTICE.txt',
              'checks.json': 'GenZuiSans-checks.json', 'kana-coverage.json': 'GenZuiSans-kana-coverage.json'}
 
@@ -76,7 +78,7 @@ def inventory(font, provenance):
     return entries
 
 
-def build_page(sans_font, serif_font, webfont_usage=''):
+def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     """Render the page; font arguments are the URLs the page loads."""
     version, checks, package = checked()
     provenance = json.loads((OUT/'sources.json').read_text())['source_kinds']
@@ -94,6 +96,8 @@ def build_page(sans_font, serif_font, webfont_usage=''):
     page = (ROOT/'templates/sans.html').read_text()
     replacement = {
         '{{SANS_FONT}}': sans_font, '{{SERIF_FONT}}': serif_font,
+        '{{SANS_BOLD_FONT}}': sans_bold_font or data_uri(OUT/(BOLD_STEM+'.woff2')),
+        '{{WEIGHT_SWITCH_CSS}}': weight_css(OUT/(STEM+'.woff2'), OUT/(BOLD_STEM+'.woff2')),
         '{{CSS}}': (ROOT/'site/style.css').read_text(),
         '{{FAMILY_SWITCH_CSS}}': switch_css(),
         '{{FAMILY_SWITCH}}': switch_html('sans'),
@@ -107,6 +111,7 @@ def build_page(sans_font, serif_font, webfont_usage=''):
         '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),
         '{{JS}}': (ROOT/'site/main.js').read_text(),
         '{{FONT_SIZE}}': f'{(OUT/(STEM+".ttf")).stat().st_size/1048576:.1f}',
+        '{{BOLD_FONT_SIZE}}': f'{(OUT/(BOLD_STEM+".ttf")).stat().st_size/1048576:.1f}',
         '{{ZIP_SIZE}}': f'{package.stat().st_size/1048576:.1f}',
         '{{WEBFONT_SIZE}}': f'{(OUT/(STEM+".woff2")).stat().st_size/1048576:.1f}',
         '{{WEBFONT_USAGE}}': webfont_usage,

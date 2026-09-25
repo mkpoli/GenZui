@@ -123,7 +123,7 @@ hashes and writes `dist/GenZuiSans-0.103.zip`.
 
 `scripts/sans_site.py` renders `templates/sans.html` for the development
 specimen (`build/site/sans.html`, embedded fonts) and the public site
-(`/sans`, fonts from `/sans-v0.101/`). The public build also publishes the
+(`/sans`, fonts from `/sans-v0.102/`). The public build also publishes the
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
-Version reports live in `research/sans-browser-checks-0.101.json` and
-`research/sans-kana-coverage-0.101.json`.
+Version reports live in `research/sans-browser-checks-0.102.json` and
+`research/sans-kana-coverage-0.102.json`.

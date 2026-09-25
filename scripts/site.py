@@ -17,6 +17,7 @@ from browser_setup import build as build_browser_setup
 from minnan_proof import build_study
 from design_gallery import build_gallery
 from family_switch import css as switch_css, html as switch_html
+from weight_switch import css as weight_css
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
 OUT = ROOT / 'build/site'
@@ -91,6 +92,7 @@ def build():
         '{{NUMERAL_COUNT}}': str(sum(e['group'] == 'han-numeral' for e in entries)),
         '{{CSS}}': (ROOT/'site/style.css').read_text(),
         '{{FAMILY_SWITCH_CSS}}': switch_css(),
+        '{{WEIGHT_SWITCH_CSS}}': weight_css(FONT_OUT/(STEM+'.woff2'), FONT_OUT/(BOLD_STEM+'.woff2')),
         '{{FAMILY_SWITCH}}': switch_html('serif'),
         '{{JS}}': (ROOT/'site/main.js').read_text(),
         '{{DATA}}': json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c'),
@@ -122,6 +124,7 @@ def build():
         '{{SANS_CONSTRUCTION_COUNT}}': str(sum('GenZui' in v.split(';')[0] or 'squared-katakana' in v for v in sans_provenance.values())),
         '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'], '{{BOLD_FONT_SIZE}}': replacement['{{BOLD_FONT_SIZE}}'],
         '{{SANS_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Regular.ttf').stat().st_size/1048576:.1f}",
+        '{{SANS_BOLD_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Bold.ttf').stat().st_size/1048576:.1f}",
     }.items():
         landing = landing.replace(token, value)
     assert '{{' not in landing and '/home/' not in landing

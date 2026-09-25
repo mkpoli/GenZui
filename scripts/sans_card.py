@@ -4,10 +4,10 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from fontTools.ttLib import TTFont
 
-from sans_site import OUT, STEM, checked
+from sans_site import BOLD_STEM, OUT, STEM, checked
 
-ALT = ('源萃ゴシック / GenZui Sans. Archaic WU, then GenZui drawings: refitted KOTO, alternate NE and small archaic YE, '
-       'SQUARE PAATU and a tally mark. {count} characters; 286 hentaigana; Unicode 18.0. Based on Noto Sans JP, '
+ALT = ('源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU in Bold, then GenZui drawings: refitted KOTO, alternate NE and small archaic YE, '
+       'SQUARE PAATU and a tally mark, all in Bold. {count} characters; 286 hentaigana. Based on Noto Sans JP, '
        'Noto Sans Hentaigana and GenSeki Hentaigana Gothic. genzui.mkpo.li/sans.')
 
 
@@ -16,21 +16,21 @@ def build_card(destination):
     scale = 2
     image = Image.new('RGB', (1200*scale, 630*scale), '#f7f8f2')
     draw = ImageDraw.Draw(image)
-    font = str(OUT/(STEM+'.ttf'))
+    font, bold = str(OUT/(STEM+'.ttf')), str(OUT/(BOLD_STEM+'.ttf'))
     ink, green, muted = '#25382e', '#214e3c', '#63776a'
 
     def rect(box, fill):
         draw.rectangle(tuple(round(x*scale) for x in box), fill=fill)
 
-    def text(x, y, value, size, color=ink, sans=False, features=None):
-        face = ImageFont.truetype('DejaVuSans.ttf' if sans else font, round(size*scale))
+    def text(x, y, value, size, color=ink, sans=False, features=None, heavy=False):
+        face = ImageFont.truetype('DejaVuSans.ttf' if sans else bold if heavy else font, round(size*scale))
         draw.text((x*scale, y*scale), value, font=face, fill=color, anchor='ls', features=features)
 
     count = f"{len(TTFont(font).getBestCmap()):,}"
     rect((628, 0, 1200, 630), green)
     text(58, 64, 'GENZUI SANS', 20, green, True)
-    text(435, 64, 'Unicode 18.0', 17, green, True)
-    text(58, 222, '源萃ゴシック', 84)
+    text(398, 64, 'Regular · Bold', 17, green, True)
+    text(58, 222, '源萃ゴシック', 84, heavy=True)
     text(65, 275, 'げんずい', 24, muted)
     text(60, 369, count, 46, green)
     text(357, 369, '286', 46, green)
@@ -47,9 +47,9 @@ def build_card(destination):
               ('𛅨', 'SMALL YE', None), ('㌬', 'PAATU', None), ('𝍵', 'TALLY', None)]
     for i, (character, label, features) in enumerate(points):
         x, y = 666+(i%3)*174, 238+(i//3)*232
-        text(x, y, character, 142, '#f4f6ed', features=features)
+        text(x, y, character, 142, '#f4f6ed', features=features, heavy=True)
         text(x+36, y+44, label, 16, '#bdd1c0', True)
-    text(666, 63, 'HISTORICAL KANA', 17, '#bdd1c0', True)
+    text(666, 63, 'HISTORICAL KANA · BOLD', 17, '#bdd1c0', True)
     rect((666, 540, 1160, 541), '#4d725e')
     text(666, 588, '源萃ゴシック', 21, '#f4f6ed')
     text(1060, 588, version, 18, '#bdd1c0', True)

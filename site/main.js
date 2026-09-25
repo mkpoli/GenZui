@@ -33,32 +33,47 @@
     const missing = [...new Set(points.filter(c => !/[\r\n\t]/.test(c) && !byCode.has(c.codePointAt(0))))];
     $('#type-status').textContent = loadFailed ? 'The embedded font could not load. Try reopening this page in a current browser.'
       : !loaded ? 'Loading the font…'
-      : isBold() && boldState === 'failed' ? 'GenZui Serif Bold could not load. Try Regular, or reopen this page in a current browser.'
-      : isBold() && boldState !== 'loaded' ? 'Loading GenZui Serif Bold…'
+      : isBold() && boldState === 'failed' ? `${familyName} Bold could not load. Try Regular, or reopen this page in a current browser.`
+      : isBold() && boldState !== 'loaded' ? `Loading ${familyName} Bold…`
       : !inventoryLoaded ? `${number([...typeInput.value].length)} characters · ${familyName} ${weightName()}`
       : missing.length ? `${number(points.length)} characters · ${missing.length} outside this font: ${missing.slice(0, 4).map(c => code(c.codePointAt(0))).join(', ')}${missing.length > 4 ? '…' : ''}`
       : `${number(points.length)} characters · ${familyName} ${weightName()}`;
   }
-  // One weight for the page's samples: the specimen, the Okinawan input and the
-  // character list follow it, and both switches show the current choice.
+  // One weight for every sample on the page. The header and specimen switches
+  // show the current choice, and ?weight=bold keeps it in the link.
+  const weightButtons = $$('button[data-weight]');
   const isBold = () => document.body.dataset.weight === '700';
   const weightName = () => isBold() ? 'Bold' : 'Regular';
-  // Bold loads only when chosen, so the status waits for it.
+  // Bold loads only when chosen, so the status and the Bold buttons wait for it.
   let boldState = 'idle';
-  function setWeight(weight) {
+  function setWeight(weight, remember = true) {
     document.body.dataset.weight = weight;
-    $$('[data-weight]').forEach(button => { if (button.tagName === 'BUTTON') button.setAttribute('aria-pressed', String(button.dataset.weight === weight)); });
-    if (weight === '700' && boldState === 'idle') {
+    weightButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.weight === weight)));
+    if (weight === '700' && (boldState === 'idle' || boldState === 'failed')) {
       boldState = 'loading';
+      weightButtons.forEach(button => { if (button.dataset.weight === '700') button.setAttribute('aria-busy', 'true'); });
       document.fonts.load('700 48px GenZui', '源萃𛄤').then(faces => {
         if (!faces.length) throw new Error('GenZui Bold unavailable');
-        boldState = 'loaded'; typeStatus();
-      }).catch(() => { boldState = 'failed'; typeStatus(); });
+        boldState = 'loaded';
+      }).catch(() => { boldState = 'failed'; }).finally(() => {
+        weightButtons.forEach(button => button.removeAttribute('aria-busy'));
+        typeStatus();
+      });
+    }
+    // Samples fade until every face the new layout requests has arrived.
+    document.body.classList.add('weight-switching');
+    requestAnimationFrame(() => requestAnimationFrame(() => document.fonts.ready
+      .finally(() => document.body.classList.remove('weight-switching'))));
+    if (remember) {
+      const url = new URL(location.href);
+      if (weight === '700') url.searchParams.set('weight', 'bold'); else url.searchParams.delete('weight');
+      history.replaceState(history.state, '', url);
     }
     typeStatus();
     document.dispatchEvent(new CustomEvent('genzui:weight'));
   }
-  $$('button[data-weight]').forEach(button => button.addEventListener('click', () => setWeight(button.dataset.weight)));
+  weightButtons.forEach(button => button.addEventListener('click', () => setWeight(button.dataset.weight)));
+  if (weightButtons.length && new URLSearchParams(location.search).get('weight') === 'bold') setWeight('700', false);
   function setPreset() { typeInput.value = presets[$('#preset').value]; typeInput.scrollTop = 0; typeInput.scrollLeft = 0; typeStatus(); }
   $('#preset').addEventListener('change', setPreset);
   typeInput.addEventListener('input', typeStatus);

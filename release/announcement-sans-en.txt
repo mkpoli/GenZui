@@ -8,6 +8,7 @@ Built on Noto Sans JP and Noto Sans Hentaigana, with
 ・every encoded kana ligature
 ・the full Ainu katakana set
 ・Minnan (Taiwanese) kana tone letters
+・Regular and Bold
 
 A free, open font (SIL OFL 1.1) 🚀 The same historical repertoire as GenZui Serif, in a gothic face.
 
