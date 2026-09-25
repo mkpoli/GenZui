@@ -117,6 +117,8 @@ BESIDE_DEFAULTS = dict(
     gap=60,            # closest distance between the mark and the kana
     mark_dy=60,        # vertical offset of the mark
     mark_angle=1.5,    # degrees the mark turns; positive leans it left
+    mark_bend=0,       # units the middle of the mark bows sideways; positive to the right
+    mark_slant=0,      # units the top of the mark moves sideways over the foot
     neck_w=YA['neck_w'],
     head_w=YA['head_w'],
     kana_sx=0.88,      # horizontal scale of the kana, about its right edge
@@ -174,20 +176,38 @@ def _widen_strokes(rings, d):
 
 
 def beside_pieces(font, contours, kana, p):
-    """The unplaced mark (widened and turned, with the point it is sized
-    about) and the kana, narrowed and weighted, where it stays."""
+    """The mark at its widths, with the point it turns about, and the kana,
+    narrowed and weighted, where it stays."""
     ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
     mark = _widened(ring(p['mark_char'], p['mark_index']), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
-    mark = _turned(mark, p['ramp_lo'], p['mark_angle'])
-    foot = min(q[1] for seg in mark for q in seg)
-    fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
+    xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
+    pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
     body = O.rings(contours(font, ord(kana)))
     xs = [q[0] for r in body for seg in r for q in seg]
     edge = max(xs) if p['kana_anchor'] == 'right' else min(xs)
     mid = 360
     body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
                         (edge * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
-    return mark, (fx, foot), _widen_strokes(body, p['kana_bold'])
+    return mark, pivot, _widen_strokes(body, p['kana_bold'])
+
+
+def shaped(mark, pivot, p):
+    """The mark turned about its pivot, bowed and slanted, with the point it
+    is sized about: its foot, level with its lowest point under its middle.
+    The placement page repeats these steps point for point."""
+    a = np.radians(p['mark_angle'])
+    m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
+    mark = O.transform(mark, m, np.array(pivot) - m @ np.array(pivot))
+    ys = [q[1] for seg in mark for q in seg]
+    y0, y1 = min(ys), max(ys)
+    def bend(q):
+        u = (q[1] - y0) / (y1 - y0)
+        # bow: the middle moves sideways, the ends stay; slant: the top moves, the foot stays
+        return np.array([q[0] + p['mark_bend'] * 4 * u * (1 - u) + p['mark_slant'] * u, q[1]])
+    mark = [tuple(bend(np.asarray(q, float)) for q in seg) for seg in mark]
+    foot = min(q[1] for seg in mark for q in seg)
+    fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
+    return mark, (fx, foot)
 
 
 def sized(mark, origin, p):
@@ -215,8 +235,8 @@ def glottal_beside(font, contours, kana, **params):
     """The glottal mark standing beside a Noto kana. The mark is placed by
     `mark_x` when given, otherwise by its gap to the kana."""
     p = {**BESIDE_DEFAULTS, **params}
-    mark, origin, body = beside_pieces(font, contours, kana, p)
-    mark = sized(mark, origin, p)
+    mark, pivot, body = beside_pieces(font, contours, kana, p)
+    mark = sized(*shaped(mark, pivot, p), p)
     mark = _moved(mark, p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap']))
     # centre the letter in the em
     xs = [q[0] for r in [mark, *body] for seg in r for q in seg]
