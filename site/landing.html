@@ -105,22 +105,18 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 html[data-weight="700"]{--w:700}
 .kind .w{transition:opacity .4s}.kind .w-b{opacity:.4}
 html[data-weight="700"] .kind .w-r{opacity:.4}html[data-weight="700"] .kind .w-b{opacity:1}
-.weighing :is(.big,.name,.roll){animation:weigh .52s cubic-bezier(.2,.9,.3,1)}
-@keyframes weigh{0%{filter:none}38%{filter:blur(2.5px) brightness(1.7) drop-shadow(0 0 14px var(--glow));transform:scaleX(1.035) skewX(-4deg)}
-  62%{filter:blur(.5px) drop-shadow(0 0 8px var(--glow))}100%{filter:none;transform:none}}
-.wt{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;align-items:center;padding:0;border:1px solid var(--line);
-  color:var(--mint);letter-spacing:.24em;text-transform:uppercase;cursor:pointer;background:none;overflow:hidden}
-.wt>span{position:relative;z-index:1;padding:12px 16px;display:flex;gap:8px;align-items:center;justify-content:center;transition:color .35s}
-.wt>span b{font:400 17px/1 var(--serif);letter-spacing:0;text-transform:none;font-synthesis:none}
+/* A weight change dips the card's lettering out and back in the other weight. */
+.reweigh .hero{animation:reweigh .5s cubic-bezier(.4,0,.2,1)}
+@keyframes reweigh{0%{opacity:1;transform:none}35%,65%{opacity:0;transform:translateY(.05em)}100%{opacity:1;transform:none}}
+.prompt::after{order:1}
+.wt{order:2;position:relative;display:inline-grid;grid-template-columns:1fr 1fr;padding:2px;border:1px solid var(--line);background:none;cursor:pointer;color:var(--mint)}
+.wt>span{position:relative;z-index:1;display:flex;gap:6px;align-items:center;padding:4px 9px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;transition:color .3s}
+.wt>span b{color:inherit;font:400 14px/1 var(--serif);letter-spacing:0;text-transform:none;font-synthesis:none}
 .wt>span+span b{font-weight:700}
-.wt>i{position:absolute;inset:3px auto 3px 3px;width:calc(50% - 3px);background:var(--white);box-shadow:0 0 0 1px var(--white),0 0 22px rgba(63,174,132,.55);
-  transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
-.wt[aria-checked=true]>i{transform:translateX(calc(100% - 3px))}
+.wt>i{position:absolute;top:2px;bottom:2px;left:2px;width:calc(50% - 2px);background:var(--white);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.wt[aria-checked=true]>i{transform:translateX(100%)}
 .wt[aria-checked=false]>span:first-of-type,.wt[aria-checked=true]>span+span{color:var(--field)}
 .wt:hover{border-color:var(--mint)}
-.wt::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(244,247,241,.5) 50%,transparent 70%);transform:translateX(-120%)}
-.wt.flash::after{transition:transform .6s cubic-bezier(.2,.8,.2,1);transform:translateX(120%)}
-.wt kbd{font:inherit;opacity:.55;margin-left:2px}
 .card.on .big{transform:scale(1.04);color:var(--green)}
 .serif .big,.serif .name,.serif .roll{font-family:var(--serif)}
 .sans .big,.sans .name,.sans .roll{font-family:var(--sans)}
@@ -264,7 +260,7 @@ a.dl{text-decoration:none}
   .links{grid-template-columns:1fr}
   .card{min-height:0}
   .big{font-size:clamp(88px,26vw,140px)}
-  .tabs,.wt{width:100%}.tabs button{flex:1}
+  .tabs{width:100%}.tabs button{flex:1}
   .status{flex-basis:100%;order:3}
   .dl{width:100%;justify-content:center}
   .enter{display:none}
@@ -279,7 +275,7 @@ a.dl{text-decoration:none}
 <canvas class="field" id="field" aria-hidden="true"></canvas>
 <main class="screen" id="screen" data-view="choose">
   <div class="stack">
-    <p class="prompt hud"><span><b>源萃 GenZui</b>&ensp;select a typeface</span><span class="caret" aria-hidden="true"></span></p>
+    <p class="prompt hud"><span><b>源萃 GenZui</b>&ensp;select a typeface</span><span class="caret" aria-hidden="true"></span><button class="wt hud" id="weight" type="button" role="switch" aria-checked="false" aria-label="Bold" title="Weight (B)"><i aria-hidden="true"></i><span><b aria-hidden="true">源</b>Regular</span><span><b aria-hidden="true">源</b>Bold</span></button></p>
     <h1 class="sr">GenZui: GenZui Serif and GenZui Sans</h1>
 
     <div class="choose" id="choose">
@@ -364,7 +360,6 @@ a.dl{text-decoration:none}
         <button type="button" data-view="compare" aria-pressed="false">Compare</button>
         <button type="button" data-view="details" aria-pressed="false">Details</button>
       </div>
-      <button class="wt hud" id="weight" type="button" role="switch" aria-checked="false" aria-label="Bold" title="Weight (B)"><i aria-hidden="true"></i><span><b aria-hidden="true">源</b>Regular</span><span><b aria-hidden="true">源</b>Bold</span></button>
       <p class="status hud" id="status" role="status">← → select · Enter open</p>
       <a class="dl hud" id="download-both" href="downloads/{{BOTH_ZIP}}" download><span>Download both</span><small>ZIP · <span class="num">{{BOTH_SIZE}}</span> MB</small><span aria-hidden="true">↓</span></a>
     </div>
@@ -471,13 +466,14 @@ a.dl{text-decoration:none}
   // Weight switch: both cards change together; B toggles it from anywhere.
   const weight = $('#weight');
   function setWeight(bold) {
-    document.documentElement.dataset.weight = bold ? '700' : '400';
+    const root = document.documentElement, apply = () => { root.dataset.weight = bold ? '700' : '400'; };
     weight.setAttribute('aria-checked', String(bold));
-    if (still) return;
-    document.documentElement.classList.remove('weighing'); weight.classList.remove('flash');
-    void weight.offsetWidth;
-    document.documentElement.classList.add('weighing'); weight.classList.add('flash');
-    setTimeout(() => { document.documentElement.classList.remove('weighing'); weight.classList.remove('flash'); }, 650);
+    if (still) { apply(); return; }
+    // Swap the face while every line is out of sight, then let them rise back.
+    clearTimeout(setWeight.swap); clearTimeout(setWeight.end);
+    root.classList.remove('reweigh'); void root.offsetWidth; root.classList.add('reweigh');
+    setWeight.swap = setTimeout(apply, 250);
+    setWeight.end = setTimeout(() => root.classList.remove('reweigh'), 540);
     const r = weight.getBoundingClientRect();
     document.dispatchEvent(new CustomEvent('weight', { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
   }
