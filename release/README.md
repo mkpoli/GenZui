@@ -64,8 +64,8 @@ carry the post. The card's text alternative is:
 card, shows archaic WU, KOTO, TOKI, TOTE, YORI, the alternate NE and WI, TOMO
 and NARI in Regular above Bold. 源萃ゴシック GenZui Sans, on a dark card, shows the
 refitted KOTO, alternate NE and small archaic YE, SQUARE PAATU, two tally marks,
-and three ideographic description characters in Regular above Bold.
-genzui.mkpo.li.”
+and three ideographic description characters in Regular above Bold. Footer:
+genzui.mkpo.li; 286 hentaigana, Unicode 18.0, free under SIL OFL 1.1.”
 
 ## Site build
 

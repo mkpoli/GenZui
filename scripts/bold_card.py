@@ -18,7 +18,7 @@ SANS_FORMS = '𛄣𛄧𛅨㌬𝍴𝍶⿾⿿㇯'
 ALT = ('GenZui, Regular and Bold, on a dark green grid. 源萃明朝 GenZui Serif, on a light card, shows archaic WU, '
        'KOTO, TOKI, TOTE, YORI, the alternate NE and WI, TOMO and NARI in Regular above Bold. 源萃ゴシック GenZui '
        'Sans, on a dark card, shows the refitted KOTO, alternate NE and small archaic YE, SQUARE PAATU, two tally '
-       'marks, and three ideographic description characters in Regular above Bold. genzui.mkpo.li.')
+       'marks, and three ideographic description characters in Regular above Bold. Footer: genzui.mkpo.li; 286 hentaigana, Unicode 18.0, free under SIL OFL 1.1.')
 
 
 def build_card(destination):
@@ -68,6 +68,7 @@ def build_card(destination):
                 text(262 + k*96, y, form, 58, ink, font)
         draw.line((88*s, (top+151)*s, 1112*s, (top+151)*s), fill=accent, width=s)
     text(60, 610, 'genzui.mkpo.li', 18, MINT, spacing=1)
+    text(1140, 608, '286 HENTAIGANA · UNICODE 18.0 · FREE UNDER SIL OFL 1.1', 12, GLOW, anchor='rs', spacing=3)
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
     image.save(destination/'genzui-bold-2x.png', optimize=True)
