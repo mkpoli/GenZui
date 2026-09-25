@@ -191,23 +191,33 @@ def ink_in(cell, b):
     return int(np.count_nonzero(cell[b[1]:b[3], b[0]:b[2]]))
 
 
-def absorb(cell, boxes, typical):
+def absorb(cell, boxes, typical, extent):
     """Merge stroke fragments left over by `forms` into whole letters.
 
     The two strokes of ハ, or a dot set off from its letter, can stand further
-    apart than JOIN. A box holding less than half the plate's typical ink per
-    form is a fragment; it joins its nearest box within FRAGMENT px when the
-    union still fits one letter, nearest pair first.
+    apart than JOIN. A box is a fragment when it holds less than half the
+    plate's typical ink per form and is also well under a letter's typical
+    size; a whole but lightly inked letter such as ツ or ヘ is neither. A
+    fragment joins its nearest box within FRAGMENT px when the union still
+    fits one letter, nearest pair first. Two parts that each stand 15 px or
+    taller one above the other are separate forms and never join.
     """
     cell = without_rules(cell)
     boxes = [list(b) for b in boxes]
+
+    def fragment(b):
+        return ink_in(cell, b) < typical / 2 and max(b[2] - b[0], b[3] - b[1]) < extent * 0.6
+
+    def stacked(a, b):
+        return max(a[1], b[1]) - min(a[3], b[3]) >= 4 and min(a[3] - a[1], b[3] - b[1]) >= 15
+
     while True:
         best = None
         for i, a in enumerate(boxes):
-            if ink_in(cell, a) >= typical / 2:
+            if not fragment(a):
                 continue
             for j, b in enumerate(boxes):
-                if i == j:
+                if i == j or stacked(a, b):
                     continue
                 g = gap(a, b)
                 u = [min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])]
@@ -302,9 +312,11 @@ def plate(name):
             raw.append((keys[k], box, sub, forms(sub)))
     areas = [ink_in(without_rules(sub), b) for _, _, sub, fs in raw for b in fs]
     typical = float(np.median(areas)) if areas else 0
+    sizes = [max(b[2] - b[0], b[3] - b[1]) for _, _, _, fs in raw for b in fs]
+    extent = float(np.median(sizes)) if sizes else LETTER[1]
     cells = []
     for kana, box, sub, fs in raw:
-        found_forms = absorb(sub, fs, typical)
+        found_forms = absorb(sub, fs, typical, extent)
         entry = {'kana': kana, 'cell': box, 'forms': []}
         for i, (a, b, c, d) in enumerate(found_forms):
             pad = 4
