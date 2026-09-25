@@ -140,6 +140,16 @@ LETTERS['glottal-n'] = dict(
               ('The glottal set', '\uF45D\uF45E\uF45F\uF463　\uF460\uF461\uF462')],
 )
 
+for _slug, _code, _label, _kana in (('glottal-wi', 0xF461, 'Glottal WI', 'ゐ'), ('glottal-we', 0xF462, 'Glottal WE', 'ゑ')):
+    _g = chr(_code)
+    LETTERS[_slug] = dict(
+        code=_code, label=_label, build=functools.partial(okinawan_merge.glottal_beside, kana=_kana),
+        defaults=okinawan_merge.W_DEFAULTS, ranges={}, chart=_slug,
+        big=f'{_kana}{_g}{_kana}', vertical=f'{_g}ー、{_kana}{_g}。',
+        passages=[(f'Beside {_kana}', f'{_kana}{_g}{_kana}　わゐゑを'), ('Among kana', f'あいう{_g}えお　かきく'),
+                  ('The glottal set', f'\uF460\uF461\uF462　\uF45D\uF45E\uF45F\uF463')],
+    )
+
 
 def sample(ranges, n, seed):
     rng = random.Random(seed)
@@ -350,7 +360,7 @@ def tune(slug, round_no, base):
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS, NARROWS=NARROWS,
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS, NARROWS=NARROWS,
                                                  START=start, LINES=lines))
 
 
