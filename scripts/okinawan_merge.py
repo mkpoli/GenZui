@@ -42,15 +42,15 @@ def _moved(segs, dx=0, dy=0):
     return O.transform(segs, np.eye(2), (dx, dy))
 
 
-def _widened(segs, cut, neck, head):
+def _widened(segs, cut, neck, head, head_y=HEAD_Y):
     """The mark with its width scaled about its centre line: `neck` at the cut,
-    `head` from HEAD_Y up, varying linearly in between."""
+    `head` from head_y up, varying linearly in between."""
     def centre(y):
         xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, y))
         return (xs[0] + xs[1]) / 2
-    c0, c1 = centre(cut), centre(HEAD_Y)
+    c0, c1 = centre(cut), centre(head_y)
     def move(q):
-        u = min(1, max(0, (q[1] - cut) / (HEAD_Y - cut)))
+        u = min(1, max(0, (q[1] - cut) / (head_y - cut)))
         cx, k = c0 + (c1 - c0) * u, neck + (head - neck) * u
         return np.array([cx + (q[0] - cx) * k, q[1]])
     return [tuple(move(np.asarray(q, float)) for q in seg) for seg in segs]
@@ -102,11 +102,16 @@ def glottal_ya(font, contours, **params):
     return O.draw([body + [inner] + top + outer, rest])
 
 
-# Glottal YU and YO: in Funatsu's chart the mark stands free beside the kana.
-# It is the same stroke as YA's mark, at YA's widths, drawn whole
-# down to its foot; the kana is Noto's own, narrowed only as far as the mark
-# needs room, and the pair is centred in the em.
+# Glottal YU, YO and N: in Funatsu's chart the mark stands free beside the
+# kana. For YU and YO it is the same stroke as YA's mark, drawn whole down to
+# its foot; the kana is Noto's own, narrowed only as far as the mark needs
+# room, and the pair is centred in the em.
 BESIDE_DEFAULTS = dict(
+    mark_char='は',    # the Noto stroke used as the mark: character and contour
+    mark_index=1,
+    ramp_lo=YA['mark_cut'],  # heights between which the mark's width passes from neck_w to head_w
+    ramp_hi=HEAD_Y,
+    kana_anchor='right',     # the kana narrows toward this side, away from the mark
     mark_len=0.9,      # height of the mark relative to は's left stroke, from its foot
     mark_scale=0.85,   # size of the whole mark, about its foot
     gap=60,            # closest distance between the mark and the kana
@@ -129,6 +134,12 @@ YU = dict(BESIDE_DEFAULTS, mark_len=0.838, mark_scale=0.864, gap=38, mark_dy=148
 # mark sits high over よ's loop, as in Funatsu's chart.
 YO = dict(BESIDE_DEFAULTS, mark_x=-51, mark_dy=300, mark_scale=0.884, mark_len=0.698, mark_angle=4.875,
           neck_w=1.2, head_w=1.1, kana_sx=0.92, kana_sy=0.98, kana_bold=8)
+
+# N: い's falling stroke at the upper right of ん, where the earlier drawing
+# put it; the arena starts from that placement.
+N_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='い', mark_index=1, ramp_lo=300, ramp_hi=500, kana_anchor='left',
+                  mark_scale=0.658, mark_len=1.0, mark_angle=0.0, neck_w=1.0, head_w=1.0,
+                  kana_sx=1.0, kana_sy=1.0, kana_bold=0, mark_x=-21, mark_dy=214)
 
 
 def _widen_strokes(rings, d):
@@ -166,15 +177,16 @@ def beside_pieces(font, contours, kana, p):
     """The unplaced mark (widened and turned, with the point it is sized
     about) and the kana, narrowed and weighted, where it stays."""
     ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
-    mark = _widened(ring('は', 1), YA['mark_cut'], p['neck_w'], p['head_w'])
-    mark = _turned(mark, YA['mark_cut'], p['mark_angle'])
+    mark = _widened(ring(p['mark_char'], p['mark_index']), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
+    mark = _turned(mark, p['ramp_lo'], p['mark_angle'])
     foot = min(q[1] for seg in mark for q in seg)
     fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
     body = O.rings(contours(font, ord(kana)))
-    right = max(q[0] for r in body for seg in r for q in seg)
+    xs = [q[0] for r in body for seg in r for q in seg]
+    edge = max(xs) if p['kana_anchor'] == 'right' else min(xs)
     mid = 360
     body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
-                        (right * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
+                        (edge * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
     return mark, (fx, foot), _widen_strokes(body, p['kana_bold'])
 
 
