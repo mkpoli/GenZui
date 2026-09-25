@@ -109,10 +109,10 @@ character encoding.
 | --- | --- |
 | [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
 | [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold) |
-| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 21 historical kana, small kana and ligatures |
+| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures |
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
-| GenZui constructions | Squared PAATU and the transcription symbols |
+| GenZui constructions | Alternate WI 𛄨 from Noto Sans JP strokes, squared PAATU and the transcription symbols |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)

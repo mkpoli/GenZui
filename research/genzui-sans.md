@@ -1,7 +1,7 @@
 # GenZui Sans
 
 GenZui Sans / 源萃ゴシック is a Japanese sans-serif with historical kana.
-Version 0.102 contains 17,070 encoded characters in Regular and Bold: the
+Version 0.103 contains 17,070 encoded characters in Regular and Bold: the
 repertoire of GenZui Serif 0.113 on the Noto Sans JP base. The experimental
 Okinawan forms and historical katakana variants are not part of the Sans family.
 
@@ -12,10 +12,10 @@ Okinawan forms and historical katakana variants are not part of the Sans family.
 | Noto Sans JP | weight 400 | weight 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
 | Noto Sans Hentaigana | instance at axis 380 | instance at axis 720 | 286 hentaigana |
 | Noto Sans Hentaigana | Regular instance | instance at axis 780 | Four archaic kana: 𛀀 𛄠 𛄡 𛄢 |
-| GenSeki Hentaigana Gothic 1.201 | Regular | Bold | 21 historical kana, small kana and ligatures |
+| GenSeki Hentaigana Gothic 1.201 | Regular | Bold | 20 historical kana, small kana and ligatures |
 | Noto Sans CJK JP | Regular | Bold | U+5344 卄 |
 | FRB Taiwanese Kana | outlines | blend toward GenZui Bold masters | 13 Minnan tone letters and two combining marks |
-| GenZui | drawings | Bold masters | Squared PAATU and the transcription symbols |
+| GenZui | Noto Sans JP Regular strokes, drawings | Noto Sans JP Bold strokes, Bold masters | Alternate WI 𛄨, squared PAATU and the transcription symbols |
 
 The Noto Sans Hentaigana instances are compiled from the Glyphs package at
 upstream commit `3aa4d30ee04254d3d0a69c500de7fda494e3b302`. The unencoded
@@ -56,8 +56,18 @@ GenSeki's Bold drawings have the same proportions and get the same fits:
 KOTO 733 → 806 units (scale 1.12, eroded 7), alternate NE 735 → 813 units
 (scale 1.125, eroded 7), small YE lowered 30 units.
 
-The other eighteen GenSeki outlines and all Noto outlines are unchanged, which
+The other seventeen GenSeki outlines and all Noto outlines are unchanged, which
 the checks verify against the compiled instances.
+
+## Alternate WI
+
+GenSeki's 𛄨 is narrower and lower than the katakana around it. GenZui Sans
+builds it like GenZui Serif's alternate WI, from Noto Sans JP's own strokes:
+WI's two bars and right stem, with NA's falling stroke as the left descent.
+The descent moves 197 units left and its foot returns up to 67 units inward;
+the right stem moves 30 units right; the upper bar drops 22 units and the lower
+bar rises 30, as in Serif. Each weight applies the same moves to its own
+strokes, so the letter keeps WI's height and bar width (`scripts/sans_forms.py`).
 
 ## Bold drawings
 
@@ -105,7 +115,7 @@ compare TTF with WOFF2. The coverage audit requires all 763 characters in
 Unicode 18's Hiragana/Katakana scripts and script extensions. The browser check
 validates the offline specimen in Chromium and Firefox, compares TTF and WOFF2
 rasters for both faces and records their hashes; the packager rejects stale
-hashes and writes `dist/GenZuiSans-0.102.zip`.
+hashes and writes `dist/GenZuiSans-0.103.zip`.
 
 ## Site
 
