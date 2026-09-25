@@ -140,13 +140,14 @@ LETTERS['glottal-n'] = dict(
               ('The glottal set', '\uF45D\uF45E\uF45F\uF463　\uF460\uF461\uF462')],
 )
 
-for _slug, _code, _label, _kana in (('glottal-wi', 0xF461, 'Glottal WI', 'ゐ'), ('glottal-we', 0xF462, 'Glottal WE', 'ゑ')):
+for _slug, _code, _label, _kana in (('glottal-wi', 0xF461, 'Glottal WI', 'ゐ'), ('glottal-we', 0xF462, 'Glottal WE', 'ゑ'),
+                                    ('glottal-wa', 0xF460, 'Glottal WA', 'ゐわ')):
     _g = chr(_code)
     LETTERS[_slug] = dict(
         code=_code, label=_label, build=functools.partial(okinawan_merge.glottal_beside, kana=_kana),
         defaults=okinawan_merge.W_DEFAULTS, ranges={}, chart=_slug,
-        big=f'{_kana}{_g}{_kana}', vertical=f'{_g}ー、{_kana}{_g}。',
-        passages=[(f'Beside {_kana}', f'{_kana}{_g}{_kana}　わゐゑを'), ('Among kana', f'あいう{_g}えお　かきく'),
+        big=f'{_kana[-1]}{_g}{_kana[-1]}', vertical=f'{_g}ー、{_kana[-1]}{_g}。',
+        passages=[(f'Beside {_kana[-1]}', f'{_kana[-1]}{_g}{_kana[-1]}　わゐゑを'), ('Among kana', f'あいう{_g}えお　かきく'),
                   ('The glottal set', f'\uF460\uF461\uF462　\uF45D\uF45E\uF45F\uF463')],
     )
 
@@ -362,7 +363,7 @@ def tune(slug, round_no, base):
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', STROKE=stroke, KANAS=kanas, KANA=kana, BOLDS=BOLDS, NARROWS=NARROWS,
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', STROKE=stroke, KANAS=kanas, KANA=kana if len(kana) == 1 else 'Body', BOLDS=BOLDS, NARROWS=NARROWS,
                                                  START=start, LINES=lines))
 
 
@@ -375,7 +376,7 @@ if __name__ == '__main__':
     parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round, '
                         'or around a shipped form named in okinawan_merge (YA, YU)')
     parser.add_argument('--tune', metavar='ROUND:TOKEN', help='place the mark by hand, starting from a form of an earlier round '
-                        'or from a form named in okinawan_merge (N_DEFAULTS, YO)')
+                        'or from a form named in okinawan_merge (N_DEFAULTS, WI)')
     parser.add_argument('--group', default='axes', help='which set of factors to vary (axes, thickness)')
     parser.add_argument('--set', nargs='*', default=[], metavar='NAME=VALUE', help='change the base form before varying it')
     args = parser.parse_args()
