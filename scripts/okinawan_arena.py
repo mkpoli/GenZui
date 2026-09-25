@@ -2,6 +2,7 @@
 
     okinawan_arena.py <slug> <round> [--kept previous-cull.json]
     okinawan_arena.py <slug> <round> --compare this-cull.json
+    okinawan_arena.py <slug> <round> --axes <earlier round>:<token>
 
 Variants are the letter's merge builder sampled around its defaults: a
 Latin-hypercube sample over each parameter's range, plus the defaults
@@ -43,6 +44,17 @@ LETTERS = {
         # forms moved や further right and cut the arm later
         ranges=dict(shift=(45, 100), arm_cut=(250, 300), mark_cut=(460, 500), mark_x=(-25, 20),
                     mark_dy=(-5, 20), mark_len=(0.82, 1.1), outer_full=(0.8, 1.2), inner_full=(0.8, 1.2)),
+        # one factor at a time: seven steps, the base in the middle; each step
+        # changes only the listed parameters, by these amounts
+        axes=[
+            ('gap', 'Gap between the mark and や', 'The mark moves toward or away from や; や stays.', {'mark_x': 15}),
+            ('position', 'Position of the whole letter', 'Mark and や move together within the em.', {'mark_x': 20, 'shift': 20}),
+            ('mark_len', 'Length of the mark', 'The mark grows or shrinks above the turn.', {'mark_len': 0.05}),
+            ('mark_height', 'Height of the mark', 'The mark moves up or down; the turn follows.', {'mark_dy': 15}),
+            ('arm_join', 'Where the turn meets the arm', 'The turn joins the arm nearer to or further from the start.', {'arm_cut': 14}),
+            ('mark_join', 'Where the mark enters the turn', 'The mark is cut higher or lower above the turn.', {'mark_cut': 14}),
+            ('turn', 'Fullness of the turn', 'Both curves of the turn together, tighter to fuller.', {'outer_full': 0.07, 'inner_full': 0.07}),
+        ],
         chart='glottal-ya',
         big='やや', vertical='ー、やー。',
         passages=[('Beside や', 'やや　やゆよ　ゆよ'),
@@ -132,7 +144,7 @@ def variants(letter, params):
     return fonts, forms
 
 
-def page(slug, round_no, stage, fonts):
+def page(slug, round_no, stage, fonts, extra=None):
     """The cull or compare page for a round, with every font embedded."""
     letter = LETTERS[slug]
     text = text_of(letter)
@@ -150,7 +162,7 @@ def page(slug, round_no, stage, fonts):
                        f'src="data:image/png;base64,{base64.b64encode(chart.read_bytes()).decode()}"></div>')
     config = dict(EXPERIMENT=f'okinawan-{slug}-{round_no}', CANDIDATES=list(fonts),
                   PASSAGES=[t for _, t in letter['passages']], PASSAGE_LABELS=[l for l, _ in letter['passages']],
-                  BIG=letter['big'], VERTICAL=letter['vertical'])
+                  BIG=letter['big'], VERTICAL=letter['vertical'], LETTER=chr(letter['code']), **(extra or {}))
     config_js = ''.join(f'const {k}={json.dumps(v, ensure_ascii=False)};' for k, v in config.items())
     body = (TEMPLATES/f'{stage}.html').read_text()
     body = body.replace('__GLYPH__', f'<span class="glyph">{html.escape(letter["label"])}</span>')
@@ -192,14 +204,42 @@ def compare(slug, round_no, cull):
     return page(slug, round_no, 'compare', fonts)
 
 
+def axes(slug, round_no, base):
+    """One row per factor: seven steps around the base, only that factor changed."""
+    letter = LETTERS[slug]
+    rows, params = [], []
+    for key, label, note, deltas in letter['axes']:
+        steps = []
+        for i in range(-3, 4):
+            p = dict(base)
+            for name, step in deltas.items():
+                p[name] = round(base[name] + step * i, 3) if isinstance(step, float) else base[name] + step * i
+            steps.append(p); params.append(p)
+        rows.append((key, label, note, steps))
+    unique = [dict(t) for t in {tuple(sorted(p.items())) for p in params}]
+    fonts, forms = variants(letter, unique)
+    token_of = {json.dumps(v, sort_keys=True): t for t, v in forms.items()}
+    config = [dict(key=k, label=l, note=n, steps=[token_of.get(json.dumps(p, sort_keys=True)) for p in steps])
+              for k, l, n, steps in rows]
+    (OUT/slug).mkdir(parents=True, exist_ok=True)
+    (OUT/slug/f'round{round_no}-forms.json').write_text(json.dumps(forms, indent=1) + '\n')
+    (OUT/slug/f'round{round_no}-axes.json').write_text(json.dumps(dict(base=base, axes=config), indent=1) + '\n')
+    return page(slug, round_no, 'axes', fonts, dict(AXES=config))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('slug', choices=sorted(LETTERS))
     parser.add_argument('round', type=int)
     parser.add_argument('--kept', help='the previous round’s copied cull result (JSON file)')
     parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
+    parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round')
     args = parser.parse_args()
-    if args.compare:
+    if args.axes:
+        source, token = args.axes.split(':')
+        base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        axes(args.slug, args.round, {**LETTERS[args.slug]['defaults'], **base})
+    elif args.compare:
         compare(args.slug, args.round, json.loads(open(args.compare).read()))
     else:
         kept = None
