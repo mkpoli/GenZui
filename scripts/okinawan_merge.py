@@ -100,3 +100,37 @@ def glottal_ya(font, contours, **params):
     inner = O.fair(Q, tQ, kQ, R, -tR, O.curvature(top[0], 0), p['inner_full'])
     outer = [O.fair(L, tL, kL, P, -tP, O.curvature(body[0], 0), p['outer_full'])]
     return O.draw([body + [inner] + top + outer, rest])
+
+
+# Glottal YU and YO: in Funatsu's chart the mark stands free beside the kana.
+# It is the same stroke as YA's mark, at YA's widths and angle, drawn whole
+# down to its foot; the kana is Noto's own, narrowed only as far as the mark
+# needs room.
+BESIDE_DEFAULTS = dict(
+    mark_len=0.82,     # height of the mark relative to は's left stroke, from its foot
+    mark_x=0,          # horizontal offset of the mark
+    mark_dy=40,        # vertical offset of the mark
+    mark_angle=YA['mark_angle'],
+    neck_w=YA['neck_w'],
+    head_w=YA['head_w'],
+    kana_sx=0.8,       # horizontal scale of the kana, about its right edge
+    kana_sy=0.96,      # vertical scale of the kana, about the middle of the body
+    kana_right=940,    # where the kana's right edge ends up
+)
+
+
+def glottal_beside(font, contours, kana, **params):
+    """The glottal mark standing beside a Noto kana."""
+    p = {**BESIDE_DEFAULTS, **params}
+    ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
+    mark = _widened(ring('は', 1), YA['mark_cut'], p['neck_w'], p['head_w'])
+    mark = _turned(mark, YA['mark_cut'], p['mark_angle'])
+    foot = min(q[1] for seg in mark for q in seg)
+    mark = O.transform(mark, np.array([[1, 0], [0, p['mark_len']]]),
+                       (p['mark_x'], foot * (1 - p['mark_len']) + p['mark_dy']))
+    body = O.rings(contours(font, ord(kana)))
+    right = max(q[0] for r in body for seg in r for q in seg)
+    mid = 360
+    body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
+                        (p['kana_right'] - p['kana_sx'] * right, mid * (1 - p['kana_sy']))) for r in body]
+    return O.draw([mark, *body])

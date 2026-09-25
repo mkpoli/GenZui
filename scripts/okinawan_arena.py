@@ -13,6 +13,7 @@ with that variant in place of the letter; every font is embedded, so the page
 opens from disk. Output stays in the ignored build directory.
 """
 import argparse
+import functools
 import base64
 import hashlib
 import html
@@ -75,6 +76,20 @@ LETTERS = {
                   ('Chart word', 'ー（君、お前）　ーー')],
     ),
 }
+
+BESIDE_RANGES = dict(mark_len=(0.7, 0.95), mark_x=(-60, 30), mark_dy=(0, 90), mark_angle=(-10.0, 4.0),
+                     kana_sx=(0.72, 0.9), kana_sy=(0.88, 1.0), kana_right=(900, 960))
+for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU', 'ゆ', 'やゆよ'),
+                                             ('glottal-yo', 0xF45F, 'Glottal YO', 'よ', 'やゆよ')):
+    _g = chr(_code)
+    LETTERS[_slug] = dict(
+        code=_code, label=_label, build=functools.partial(okinawan_merge.glottal_beside, kana=_kana),
+        defaults=okinawan_merge.BESIDE_DEFAULTS, ranges=BESIDE_RANGES, chart=_slug,
+        big=f'{_kana}{_g}{_kana}', vertical=f'{chr(0xF45D)}{_g}{chr(0xF45F if _kana == "ゆ" else 0xF45E)}、{_kana}{_g}。',
+        passages=[(f'Beside {_kana}', f'{_kana}{_g}{_kana}　{_vowels}'),
+                  ('Among kana', f'あいう{_g}えお　かきく'),
+                  ('The glottal set', f'{chr(0xF45D)}{chr(0xF45E)}{chr(0xF45F)}　い{_g}は{_g}')],
+    )
 
 
 def sample(ranges, n, seed):
