@@ -64,9 +64,10 @@ the checks verify against the compiled instances.
 GenSeki's 𛄨 is narrower and lower than the katakana around it. GenZui Sans
 builds it like GenZui Serif's alternate WI, from Noto Sans JP's own strokes:
 WI's two bars and right stem, with NA's falling stroke as the left descent.
-The descent moves 197 units left and its foot returns up to 67 units inward;
-the right stem moves 30 units right; the upper bar drops 22 units and the lower
-bar rises 30, as in Serif. Each weight applies the same moves to its own
+NA's stroke is thinned about its centreline to the stem's width. The descent
+moves 160 units left and its foot returns up to 67 units inward; the right stem
+keeps WI's position; the upper bar drops 22 units and the lower bar rises 30,
+as in Serif. Each weight applies the same moves to its own
 strokes, so the letter keeps WI's height and bar width (`scripts/sans_forms.py`).
 
 ## Bold drawings

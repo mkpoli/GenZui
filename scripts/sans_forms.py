@@ -81,9 +81,9 @@ BOLD_TONE_BLEND = 0.76
 # WI's bars and right stem, with NA's falling stroke as the left descent.
 # NA's stroke is heavier than WI's stems, so it is thinned about its own
 # centreline to the right stem's width. The descent then moves left and its
-# foot comes back inward; the right stem widens the gap and the bars move
+# foot comes back inward; the right stem keeps WI's position and the bars move
 # closer, as in Serif. Both weights measure and move their own strokes.
-WI_DESCENT_SHIFT, WI_FOOT_RETURN, WI_STEM_SHIFT = -197, 67, 30
+WI_DESCENT_SHIFT, WI_FOOT_RETURN, WI_STEM_SHIFT = -160, 67, 0
 WI_UPPER_DROP, WI_LOWER_RISE = 22, 30
 
 
