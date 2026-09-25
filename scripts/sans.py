@@ -11,7 +11,7 @@ from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
 from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from minnan import import_forms, layout as minnan_layout
-from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_BOLD_SYMBOLS, refit
+from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_SYMBOLS, refit
 from sans_sources import (BOLD_ARCHAIC, BOLD_ARCHAIC_AXIS, BOLD_TEXT, BOLD_TEXT_AXIS, CACHE, CJK, CJK_BOLD,
                           DONOR, GENSEKI, NOTO, TEXT, TEXT_AXIS, prepare)
 
@@ -141,7 +141,7 @@ def build(weight=400):
     add_paatu(font, add, glyph, add_feature)
     provenance[f'U+{PAATU:04X}'] = 'Noto Sans JP squared-katakana components'
     add_honkoku(font, add, glyph, contours, transform, source=face['cjk'],
-                tally_order=(0, 3, 1, 4, 2), symbols=SANS_BOLD_SYMBOLS if bold else None)
+                tally_order=(0, 3, 1, 4, 2), symbols=SANS_SYMBOLS[weight])
     provenance.update({f'U+{cp:04X}': (f'Noto Sans CJK JP {style}' if cp == 0x5344 else
                        'Noto Sans JP components and GenZui transcription-symbol drawing')
                        for cp in HONKOKU})
