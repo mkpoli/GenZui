@@ -99,6 +99,17 @@ Raised katakana have a half-em advance and sit in the upper half of the line.
 Their design target is horizontal text; the cited material does not establish a
 vertical-layout convention for these eight signs.
 
+The glottal letters and SI keep Noto’s kana whole and add one Noto stroke. In
+glottal YA the top of は’s left stroke joins the head of や’s arm as one outline;
+two new curves meet each edge with its own direction and curvature. The others
+set the stroke apart: は’s left stroke beside ゆ and above よ’s loop, い’s falling
+stroke beside ん, ぃ’s second stroke beside す, and こ’s upper stroke over ゐ, ゑ
+and the WA body, which is ゐ with わ’s loop in place of its inner loop. A kana
+narrowed to make room gets the lost width back sideways. Positions, sizes and
+stroke widths were chosen by comparing variants side by side; the choices are
+kept in [research/okinawan-arena](okinawan-arena). Bold takes the same strokes
+from Noto Serif JP at weight 700.
+
 ## References
 
 - [Funatsu’s 2016 complete chart](https://raw.githubusercontent.com/ctrlcctrlv/OkinawanKanaUnicodePaper/main/mojiichiran.pdf): all 27 forms, contrasts, examples and word-initial restrictions.
