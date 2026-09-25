@@ -101,6 +101,15 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
             ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.03}),
             ('kana_h', 'Height of the kana', 'The kana is shorter or taller; the mark stays.', {'kana_sy': 0.02}),
         ],
+        # the rows still open once the mark's height is settled, in finer steps
+        refine=[
+            ('mark_height', 'Height of the mark', 'Finer steps around the chosen height.', {'mark_dy': 12}),
+            ('mark_size', 'Size of the mark', 'The whole mark grows or shrinks about its foot.', {'mark_scale': 0.04}),
+            ('mark_len', 'Length of the mark', 'The mark is stretched or shortened upward only.', {'mark_len': 0.05}),
+            ('mark_angle', 'Angle of the mark', 'Positive steps lean the mark left.', {'mark_angle': 2.0}),
+            ('gap', 'Gap between the mark and the kana', 'The mark moves toward or away from the kana.', {'gap': 9}),
+            ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.025}),
+        ],
     )
 
 
