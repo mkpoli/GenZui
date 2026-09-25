@@ -152,6 +152,14 @@ for _slug, _code, _label, _kana in (('glottal-wi', 0xF461, 'Glottal WI', 'ゐ'),
                   ('The glottal set', f'\uF460\uF461\uF462　\uF45D\uF45E\uF45F\uF463')],
     )
 
+LETTERS['si'] = dict(
+    code=0xF467, label='SI', build=functools.partial(okinawan_merge.glottal_beside, kana='す'),
+    defaults=okinawan_merge.SI_DEFAULTS, ranges={}, chart='si',
+    big='す\uF467す', vertical='\uF467ー、す\uF467。',
+    passages=[('Beside す', 'す\uF467す　さしすせそ'), ('Among kana', 'あいう\uF467えお　かきく'),
+              ('Okinawan', '\uF467\uF469\uF450\uF452　\uF45D\uF460')],
+)
+
 
 def sample(ranges, n, seed):
     rng = random.Random(seed)

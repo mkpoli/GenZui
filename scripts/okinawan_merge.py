@@ -167,6 +167,12 @@ WE = dict(WI, mark_x=-34, mark_dy=172, kana_sy=0.8)
 # shorter, heavier body.
 WA = dict(WI, kana_sy=0.86, kana_bold=14)
 
+# SI: ぃ's second stroke, lengthened, standing to the right of す, where the
+# earlier drawing put it; the arena starts from that placement.
+SI_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='ぃ', mark_index=1, ramp_lo=200, ramp_hi=350, kana_anchor='left',
+                   mark_scale=1.0, mark_len=1.627, mark_angle=0.0, neck_w=1.0, head_w=1.0,
+                   kana_sx=0.9, kana_sy=1.0, kana_bold=0, mark_x=200, mark_dy=-109)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
