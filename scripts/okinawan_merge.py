@@ -196,14 +196,27 @@ def _widen_strokes(rings, d):
         from fontTools.pens.areaPen import AreaPen
         pen = AreaPen(); path.draw(pen)
         return abs(pen.value)
-    ys = [q[1] for r in rings for seg in r for q in seg]
-    limit = area(base) + d * 2 * sum(abs(seg[3][1] - seg[0][1]) for r in rings for seg in r) / 2 + 1
+    # A sweep by d adds at most d along each level line for every pair of
+    # crossings, i.e. d/2 per unit of the outline's vertical travel, measured
+    # along its curves; and it keeps every counter the strokes do not reach.
+    travel = sum(abs(O.point(seg, b)[1] - O.point(seg, a)[1])
+                 for r in rings for seg in r for a, b in zip(np.linspace(0, 1, 16), np.linspace(0, 1, 16)[1:]))
+    limit = area(base) + d * travel / 2 + 1
+    def counters(path):
+        from fontTools.pens.areaPen import AreaPen
+        rings_ = O.RecordingPen(); path.draw(rings_)
+        signs = []
+        for r in O.rings(rings_):
+            a = AreaPen(); O.draw([r]).replay(a); signs.append(a.value)
+        outer = max(signs, key=abs)
+        return sum(1 for v in signs if v * outer < 0 and abs(v) > 100)
+    holes = counters(base)
     def sound(shape):
         try:
             missing = area(pathops.op(base, shape, pathops.PathOp.DIFFERENCE))
         except pathops.PathOpsError:
             return False
-        return missing < 1 and area(base) <= area(shape) <= limit
+        return missing < 1 and area(base) <= area(shape) <= limit and counters(shape) == holes
     # Copies about 2 units apart (closer ones leave near-coincident edges Skia
     # cannot resolve); a count that fails is followed by its neighbours, and
     # each count is tried as one nonzero pass and as a chain of unions.
