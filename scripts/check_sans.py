@@ -17,6 +17,7 @@ from serif import contours
 import pathops
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
+from gugyeol import PUA as GUGYEOL_PUA
 from check_coverage import check_coverage
 
 
@@ -77,9 +78,9 @@ def check(weight=400):
     base, base_engine = TTFont(io.BytesIO(base_data)), shaper(base_data)
     cmap, base_cmap = font.getBestCmap(), base.getBestCmap()
     targets = {ord(item['character']) for item in repertoire()}
-    assert set(cmap) == set(base_cmap) | targets
-    assert len(cmap) == 17070
-    assert not any(0xE000 <= cp <= 0xF8FF or cp >= 0xF0000 for cp in cmap)
+    assert set(cmap) == set(base_cmap) | targets | set(GUGYEOL_PUA)
+    assert len(cmap) == 17070 + len(GUGYEOL_PUA)
+    assert not any((0xE000 <= cp <= 0xF8FF or cp >= 0xF0000) and cp not in GUGYEOL_PUA for cp in cmap)
     assert web.getBestCmap() == cmap
     assert font.getGlyphOrder() == web.getGlyphOrder()
     assert font.getGlyphOrder()[:len(base.getGlyphOrder())] == base.getGlyphOrder()
@@ -273,6 +274,7 @@ def check(weight=400):
         'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
         'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in refits.items()},
         'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'kana_coverage': coverage['coverage'],
+        'gugyeol_pua_characters': len(GUGYEOL_PUA),
         'woff2_matches_ttf': True,
     }
     (OUT/('checks-bold.json' if bold else 'checks.json')).write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')

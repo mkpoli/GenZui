@@ -13,6 +13,7 @@ from fontTools.pens.recordingPen import RecordingPen
 from release_site import OUT, URL
 from serif import BOLD_STEM, PACKAGE, VERSION, STEM
 from okinawan import PUA as OKINAWAN_PUA, DATA as OKINAWAN_DATA
+from gugyeol import PUA as GUGYEOL_PUA, DATA as GUGYEOL_DATA
 from sans_site import BOLD_STEM as SANS_BOLD_STEM, OUT as SANS_OUT, STEM as SANS_STEM, checked as sans_checked
 from sources import ROOT
 
@@ -216,24 +217,27 @@ def check():
         assert json.loads((OUT/'downloads/GenZuiSans-kana-coverage.json').read_text())==json.loads(z.read('kana-coverage.json'))
     sans_data=json.loads(next((OUT/'assets').glob('sans-characters-*.json')).read_text())
     assert sans_data['family']=='GenZui Sans' and sans_data['total']==sans_checks['encoded_characters']==len(sans_data['characters'])
-    assert sans_data['historical']==329 and sans_data['counts']=={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12}
+    assert sans_data['historical']==329 and sans_data['counts']=={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12,'gugyeol':len(GUGYEOL_PUA)}
     assert 'sans-characters-' in sans and 'id="character-grid"' in sans and 'id="unicode-grid"' in sans
     assert {c['cp'] for c in sans_data['characters'] if c['description']}>= {0x1B123,0x1B127,0x1B128,0x1B168}
     assert 'HISTORICAL KANA · DRAWINGS' not in sans and 'Windows / macOS / Linux' in sans and 'Windows / macOS / Linux' in home
     assert (OUT/'genzui-sans.css').read_text()==f"@import url('/sans-v{sans_version}/genzui-sans.css');\n"
     assert '/sans-v*' in (OUT/'_headers').read_text() and f'{URL}/sans</loc>' in (OUT/'sitemap.xml').read_text()
     data=json.loads(next((OUT/'assets').glob('characters-*.json')).read_text())
-    assert data['total']==17064+len(OKINAWAN_PUA) and len(data['characters'])==17064+len(OKINAWAN_PUA)
+    assert data['total']==17064+len(OKINAWAN_PUA)+len(GUGYEOL_PUA) and len(data['characters'])==17064+len(OKINAWAN_PUA)+len(GUGYEOL_PUA)
     assert data['historical']==329
     groups = {name: {c['cp'] for c in data['characters'] if c['group']==name}
-              for name in ('han-numeral','tally-mark','ideographic-description')}
+              for name in ('han-numeral','tally-mark','ideographic-description','gugyeol')}
     assert len(groups['han-numeral'])==80 and {0x5344,0x5EFF,0x5345} <= groups['han-numeral']
     assert groups['tally-mark']==set(range(0x1D372,0x1D377))
     assert groups['ideographic-description']==set(range(0x2FF0,0x3000))|{0x31EF}
+    assert groups['gugyeol']==set(GUGYEOL_PUA)
     assert 'Honkoku additions' not in home and 'sample=honkoku' not in home
     assert sum(c['source']=='genzui' for c in data['characters'])==32+len(OKINAWAN_PUA)
+    assert sum(c['source']=='gugyeol' for c in data['characters'])==len(GUGYEOL_PUA)
     assert {c['cp'] for c in data['characters'] if c['group']=='okinawan'} == set(OKINAWAN_PUA)
     assert json.loads((OUT/'downloads/okinawan-mappings.json').read_text()) == OKINAWAN_DATA
+    assert json.loads((OUT/'downloads/gugyeol-forms.json').read_text()) == GUGYEOL_DATA
     assert 'id="okinawan-source"' in home and 'id="okinawan-output"' in home
     report={'version':VERSION,'font_sha256':checks['ttf_sha256'],
             'sans_version':sans_version,'sans_font_sha256':sans_checks['ttf_sha256'],'local_links_checked':count,

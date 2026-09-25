@@ -5,6 +5,7 @@ from bisect import bisect_right
 from repertoire import properties
 from honkoku import TALLIES
 from okinawan import PUA as OKINAWAN_PUA
+from gugyeol import PUA as GUGYEOL_PUA, TWIN_CHARS as GUGYEOL_TWIN_CHARS
 from sources import ROOT
 
 KANA_GROUPS = {'hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph',
@@ -53,14 +54,18 @@ def character_data(font, audit, source_kinds, descriptions=None):
         assert index >= 0 and cp <= blocks[index][1]
         h = historic.get(cp)
         key = f'U+{cp:04X}'
-        source = source_kinds[key] if h or cp in OKINAWAN_PUA else 'jp'
+        source = source_kinds[key] if h or cp in OKINAWAN_PUA or cp in GUGYEOL_PUA else 'jp'
         if cp in OKINAWAN_PUA:
             name = 'OKINAWAN ' + OKINAWAN_PUA[cp]['label'].upper() + ' (PRIVATE USE)'
-        group = ('okinawan' if cp in OKINAWAN_PUA else 'han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
+        elif cp in GUGYEOL_PUA:
+            name = f'GUGYEOL TWIN {GUGYEOL_TWIN_CHARS[cp]} (PRIVATE USE)'
+        group = ('okinawan' if cp in OKINAWAN_PUA else 'gugyeol' if cp in GUGYEOL_PUA else
+                 'han-numeral' if cp in numeric and scripts.get(cp) == 'Han' else
                  'ideographic-description' if 0x2FF0 <= cp <= 0x2FFF or cp == 0x31EF else
                  'tally-mark' if cp in TALLIES else h['group'] if h else 'base')
         entries.append({'cp': cp, 'name': name, 'category': category,
-                        'block': blocks[index][2], 'age': 'Private use' if cp in OKINAWAN_PUA else ages[cp],
+                        'block': blocks[index][2],
+                        'age': 'Private use' if cp in OKINAWAN_PUA or cp in GUGYEOL_PUA else ages[cp],
                         'source': source, 'group': group,
                         'label': h.get('label', name) if h else name,
                         'provisional': source == 'genzui',

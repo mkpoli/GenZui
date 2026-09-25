@@ -9,6 +9,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 from fontTools.ttLib import TTFont
 from okinawan import DATA as OKINAWAN_DATA, PUA as OKINAWAN_PUA
+from gugyeol import DATA as GUGYEOL_DATA, PUA as GUGYEOL_PUA
 from inventory import KANA_GROUPS, character_data
 from serif import BOLD_STEM, FAMILY, OUT as FONT_OUT, PACKAGE, STEM, VERSION
 from sources import ROOT, verify
@@ -74,7 +75,8 @@ def build():
             if entry['source'] == 'frb':
                 entry['bold_source'] = 'GenZui Bold master of FRB Taiwanese Kana'
     source_counts = dict(Counter(e['source'] for e in entries))
-    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32 + len(OKINAWAN_PUA), 'frb': 15, 'cjk': 1}
+    assert source_counts == {'jp': 16726, 'hentaigana': 290, 'genzui': 32 + len(OKINAWAN_PUA), 'frb': 15,
+                              'cjk': 1, 'gugyeol': len(GUGYEOL_PUA)}
     assert len(entries) == checks['encoded_characters']
     data = {'version': VERSION, 'family': FAMILY, 'characters': entries,
             'counts': source_counts, 'total': len(entries),
@@ -155,7 +157,8 @@ def build():
     for name in (STEM+'.ttf', STEM+'.woff2', BOLD_STEM+'.ttf', BOLD_STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',
                  'Jigmo-CC0.txt', 'Jigmo-README.txt', 'Jigmo-THANKS.txt',
                  'FRB-OFL.txt', 'FRB-README.md',
-                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt', 'okinawan-mappings.json'):
+                 'Unicode-LICENSE.txt', 'LICENSE-scripts.txt', 'kana-coverage.json', 'NotoSerifCJK-OFL.txt',
+                 'okinawan-mappings.json', 'gugyeol-forms.json'):
         shutil.copyfile(FONT_OUT/name, downloads/name)
     (OUT/'README.txt').write_text(
         'GenZui specimen site\n\nOpen index.html in a current browser.\n'

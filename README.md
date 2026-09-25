@@ -6,7 +6,7 @@ kana and Unicode 18.0 additions.
 | | 源萃明朝 GenZui Serif | 源萃ゴシック GenZui Sans |
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
-| Release | Regular and Bold 0.117 · 17,090 characters | Regular and Bold 0.103 · 17,070 characters |
+| Release | Regular and Bold 0.117 · 17,271 characters | Regular and Bold 0.103 · 17,251 characters |
 | Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) · [GenZuiSerif-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Bold.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) · [GenZuiSans-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Bold.ttf) |
 | Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.117.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.103.zip) |
@@ -50,6 +50,7 @@ Both faces include:
   rewritten into ligatures, because those depend on the word and the hand.
 - Small kana, the 16 Katakana Phonetic Extensions used for Ainu, and older kana forms.
 - 13 Minnan tone letters, with overline and dot-below support.
+- 181 구결자 (Korean gugyeol) at the Hanyang private-use convention.
 
 The [Minnan specimen](https://genzui.mkpo.li/minnan) shows tone placement,
 combining marks, ruby and both WU forms. Vertical tone placement supports one
@@ -79,6 +80,13 @@ Both families have Regular and Bold.
   [mapping registry](data/okinawan/mappings.json) document the keyboard.
 - 21 historical kana constructions from Noto components and original drawing.
 
+### 구결자
+
+181 of the 255 구결자 that 한/글 places at U+F67E–U+F77C are drawn from each
+face's own glyph of the ideograph they reproduce; the other 74 are not yet
+drawn. PUA assignments need a matching font on the reading side. The
+registry is [data/gugyeol/forms.json](data/gugyeol/forms.json).
+
 ### Hooked WU
 
 In GenZui Serif, 𛄟 U+1B11F has a curved descent by default. Stylistic set 1
@@ -100,8 +108,9 @@ character encoding.
 | [Noto Serif JP](https://github.com/google/fonts/tree/main/ofl/notoserifjp) | Japanese subset of Noto Serif CJK; 16,726 encoded characters and kana components |
 | [Noto Serif Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana and four other historical forms |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks |
-| [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms |
+| [Noto Serif CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Serif) | 卄 (twenty), absent from the JP subset, from the same family’s full CJK font with Japanese default forms; also the twin ideograph for 6 of the 181 drawn 구결자, where the twin is absent from Noto Serif JP |
 | [GenZui constructions](https://genzui.mkpo.li/serif?source=genzui#characters) | 21 historical kana constructions, SQUARE PAATU, ten transcription symbols and 26 Okinawan PUA characters, from Noto components and original drawing |
+| [구결 registry](data/gugyeol/forms.json) | 181 구결자, each drawn from the face’s own glyph of its twin ideograph, or from Noto Serif CJK JP where that twin is absent |
 
 ### GenZui Sans
 
@@ -110,9 +119,10 @@ character encoding.
 | [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
 | [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold) |
 | [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures |
-| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
+| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄; also the twin ideograph for 6 of the 181 drawn 구결자, where the twin is absent from Noto Sans JP |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
 | GenZui constructions | Alternate WI 𛄨 from Noto Sans JP strokes, squared PAATU and the transcription symbols |
+| [구결 registry](data/gugyeol/forms.json) | 181 구결자, each drawn from the face’s own glyph of its twin ideograph, or from Noto Sans CJK JP where that twin is absent |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)

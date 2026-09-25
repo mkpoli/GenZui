@@ -23,7 +23,7 @@ PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかた�
 # Short source keys for the inventory, from the build's provenance strings.
 SOURCE_KEYS = {'Noto Sans JP Regular': 'jp', 'Noto Sans Hentaigana': 'hentaigana',
                'GenSeki Hentaigana Gothic': 'genseki', 'FRB Taiwanese Kana': 'frb',
-               'Noto Sans CJK JP Regular': 'cjk'}
+               'Noto Sans CJK JP Regular': 'cjk', '구결자': 'gugyeol'}
 # Reader-facing notes for the characters GenZui reworked in this family.
 DESCRIPTIONS = {
     0x1B123: 'GenSeki’s KOTO, enlarged to the body height of TOKI, TOTE and TOMO and thinned back to their stroke width.',
@@ -32,7 +32,8 @@ DESCRIPTIONS = {
     0x1B128: 'Noto Sans JP’s WI bars and right stem with NA’s falling stroke as the left descent, built like GenZui Serif’s alternate WI.',
 }
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
-           'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP'}
+           'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
+           'gugyeol': 'Twin ideograph (구결자)'}
 DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
              BOLD_STEM+'.ttf': BOLD_STEM+'.ttf', BOLD_STEM+'.woff2': BOLD_STEM+'.woff2',
              'OFL.txt': 'GenZuiSans-OFL.txt', 'NOTICE.txt': 'GenZuiSans-NOTICE.txt',
@@ -70,8 +71,10 @@ def inventory(font, provenance):
     """Every encoded character with its Unicode name, block, source and group."""
     audit = json.loads((ROOT/'research/repertoire.json').read_text())
     kinds = {key: source_key(value) for key, value in provenance.items()}
+    # A 구결자 carries the build's own note on which glyph it was drawn from.
+    notes = {key: value for key, value in provenance.items() if kinds[key] == 'gugyeol'}
     entries = character_data(font, audit, kinds,
-                             {f'U+{cp:04X}': text for cp, text in DESCRIPTIONS.items()})
+                             {**notes, **{f'U+{cp:04X}': text for cp, text in DESCRIPTIONS.items()}})
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
         entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
@@ -87,7 +90,8 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 20
     entries = inventory(TTFont(OUT/(STEM+'.ttf')), provenance)
     counts = dict(Counter(e['source'] for e in entries))
-    assert counts == {'jp': 16732, 'hentaigana': 290, 'genseki': 20, 'frb': 15, 'cjk': 1, 'genzui': genzui}, counts
+    assert counts == {'jp': 16732, 'hentaigana': 290, 'genseki': 20, 'frb': 15, 'cjk': 1,
+                       'genzui': genzui, 'gugyeol': 181}, counts
     assert len(entries) == checks['encoded_characters']
     data = {'version': version, 'family': 'GenZui Sans', 'origins': ORIGINS, 'characters': entries,
             'counts': counts, 'total': len(entries),

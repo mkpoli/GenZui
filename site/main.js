@@ -125,6 +125,7 @@
     const origins = data.origins || {
       jp: 'Noto Serif JP', hentaigana: 'Noto Serif Hentaigana',
        genzui: 'GenZui construction', frb: 'FRB Taiwanese Kana', cjk: 'Noto Serif CJK JP',
+       gugyeol: 'Twin ideograph (구결자)',
     };
     const filters = {
     historical: item => ['hentaigana', 'historic-kana', 'small-kana', 'bmp-digraph', 'cjk-kana-ligature', 'minnan-tone', 'phonetic-mark', 'compatibility-kana'].includes(item.group),
