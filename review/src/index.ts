@@ -11,7 +11,7 @@ export interface Env {
   ASSETS: Fetcher;
   ACCESS_TEAM?: string;   // team name, as in <team>.cloudflareaccess.com
   ACCESS_AUD?: string;    // the Access application's audience tag
-  DEV_ACTOR?: string;     // local development only, set in .dev.vars
+  DEV_ACTOR?: string;     // local development only (.dev.vars); ignored once Access is configured
 }
 
 const MAX_CHANGES = 100;
@@ -33,8 +33,11 @@ const json = (body: unknown, status = 200) =>
 let jwks: ReturnType<typeof createRemoteJWKSet> | undefined;
 
 async function reviewer(request: Request, env: Env): Promise<string> {
-  if (env.DEV_ACTOR) return env.DEV_ACTOR;
-  if (!env.ACCESS_TEAM || !env.ACCESS_AUD) throw new Problem(503, 'Access is not configured for this Worker.');
+  if (!env.ACCESS_TEAM || !env.ACCESS_AUD) {
+    // Local development only: with Access configured, DEV_ACTOR is ignored.
+    if (env.DEV_ACTOR) return env.DEV_ACTOR;
+    throw new Problem(503, 'Access is not configured for this Worker.');
+  }
   const token = request.headers.get('cf-access-jwt-assertion');
   if (!token) throw new Problem(401, 'Sign in through Cloudflare Access.');
   const issuer = `https://${env.ACCESS_TEAM}.cloudflareaccess.com`;
