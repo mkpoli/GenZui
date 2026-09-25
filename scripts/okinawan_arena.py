@@ -309,20 +309,35 @@ def svg_path(rings):
         f'C{a[0]:.1f} {a[1]:.1f} {b[0]:.1f} {b[1]:.1f} {c[0]:.1f} {c[1]:.1f}' for _, a, b, c in r) + 'Z' for r in rings)
 
 
+WIDTHS = [round(0.7 + 0.05 * i, 2) for i in range(13)]   # mark widths the tuner offers
+BOLDS = list(range(0, 21, 2))                              # kana weights the tuner offers
+
+
 def tune(slug, round_no, base):
-    """A page for placing the mark by hand beside a kana that stays put."""
+    """A page for placing the mark by hand beside a kana that stays put. Width
+    and weight change the outlines themselves, so each offered step is drawn
+    here and the page switches between them."""
     letter = LETTERS[slug]
     kana = letter['build'].keywords['kana']
     p = {**letter['defaults'], **base}
-    mark, origin, body = okinawan_merge.beside_pieces(TTFont(BASE), contours, kana, p)
+    font = TTFont(BASE)
+    mark, origin, body = okinawan_merge.beside_pieces(font, contours, kana, p)
     if p.get('mark_x') is None:
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(mark, origin, p), body, p['gap']))
-    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len')}
-    g = chr(letter['code'])
+    snap = lambda v, grid: min(grid, key=lambda g: abs(g - v))
+    p['neck_w'], p['head_w'], p['kana_bold'] = snap(p['neck_w'], WIDTHS), snap(p['head_w'], WIDTHS), snap(p['kana_bold'], BOLDS)
+    marks, kanas = {}, {}
+    for neck in WIDTHS:
+        for head in WIDTHS:
+            m, o, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'neck_w': neck, 'head_w': head, 'kana_bold': 0})
+            marks[f'{neck:.2f},{head:.2f}'] = [svg_path([m]), *o]
+    for bold in BOLDS:
+        kanas[str(bold)] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_bold': bold})[2])
+    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'neck_w', 'head_w', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(MARK_D=svg_path([mark]), KANA_D=svg_path(body), ORIGIN=list(origin),
+    return page(slug, round_no, 'tune', {}, dict(MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS,
                                                  START=start, LINES=lines))
 
 
@@ -340,7 +355,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.tune:
         source, token = args.tune.split(':')
-        tune(args.slug, args.round, json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token])
+        base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        for item in args.set:
+            name, value = item.split('=')
+            base[name] = float(value)
+        tune(args.slug, args.round, base)
     elif args.axes:
         if ':' in args.axes:
             source, token = args.axes.split(':')
