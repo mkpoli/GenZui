@@ -111,7 +111,9 @@ BESIDE_DEFAULTS = dict(
     mark_index=1,
     ramp_lo=YA['mark_cut'],  # heights between which the mark's width passes from neck_w to head_w
     ramp_hi=HEAD_Y,
-    kana_anchor='right',     # the kana narrows toward this side, away from the mark
+    mark_lie=False,          # the stroke lies flat: widths, bow and slant work across it
+    kana_anchor='right',     # the kana narrows toward this side, away from the mark;
+                             # 'bottom' shrinks it evenly toward the middle of its foot
     mark_len=0.9,      # height of the mark relative to は's left stroke, from its foot
     mark_scale=0.85,   # size of the whole mark, about its foot
     gap=60,            # closest distance between the mark and the kana
@@ -147,6 +149,12 @@ N_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='い', mark_index=1, ramp_lo=300, r
 N = dict(N_DEFAULTS, mark_x=-11, mark_dy=144, mark_scale=0.658, mark_len=1.04, neck_w=1.3, head_w=1.25,
          mark_angle=-4.0, mark_bend=-20)
 
+# WI and WE: こ's upper stroke as a dot above ゐ and ゑ, shrunk evenly under it,
+# where the earlier drawing put them; the arena starts from that placement.
+W_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='こ', mark_index=1, mark_lie=True, ramp_lo=-650, ramp_hi=-350,
+                  kana_anchor='bottom', kana_sx=0.88, kana_bold=0, mark_scale=0.64, mark_len=1.0,
+                  mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_x=-24, mark_dy=252)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
@@ -163,10 +171,12 @@ def _widen_strokes(rings, d):
     # each resolved copy winds 0 or 1 everywhere, so one nonzero pass unites them
     # copies about 2 units apart: closer ones leave near-coincident edges that
     # Skia cannot resolve, and the scallops between them stay far below a unit.
-    # A rare layout still defeats it; a copy count one higher then does not.
-    for extra in range(4):
+    # Some layouts still defeat it at one count and not at a neighbouring one,
+    # so nearby counts are tried, denser first.
+    n = int(np.ceil(d / 2)) + 1
+    for count in [*range(n, n + 6), *range(n - 1, 1, -1)]:
         shape = pathops.Path()
-        for dx in np.linspace(-d / 2, d / 2, int(np.ceil(d / 2)) + 1 + extra):
+        for dx in np.linspace(-d / 2, d / 2, count):
             base.transform(1, 0, 0, 1, dx, 0).draw(shape.getPen())
         try:
             shape.simplify(fix_winding=True, keep_starting_points=False)
@@ -179,26 +189,35 @@ def _widen_strokes(rings, d):
     return O.rings(pen)
 
 
+LIE = np.array([[0, 1], [-1, 0]])      # a lying stroke turned upright: (x, y) -> (y, -x)
+
+
 def beside_pieces(font, contours, kana, p):
-    """The mark at its widths, with the point it turns about, and the kana,
-    narrowed and weighted, where it stays."""
+    """The mark at its widths, upright (a lying stroke is turned to stand, so
+    its width runs across and its head is at the top), with the point it turns
+    about; and the kana, sized and weighted, where it stays."""
     ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
-    mark = _widened(ring(p['mark_char'], p['mark_index']), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
+    mark = ring(p['mark_char'], p['mark_index'])
+    if p['mark_lie']:
+        mark = O.transform(mark, LIE, (0, 0))
+    mark = _widened(mark, p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
     xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
     pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
     body = O.rings(contours(font, ord(kana)))
     xs = [q[0] for r in body for seg in r for q in seg]
-    edge = max(xs) if p['kana_anchor'] == 'right' else min(xs)
-    mid = 360
-    body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
-                        (edge * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
+    ys = [q[1] for r in body for seg in r for q in seg]
+    sy = p['kana_sx'] if p['kana_anchor'] == 'bottom' else p['kana_sy']
+    ox, oy = {'right': (max(xs), 360), 'left': (min(xs), 360),
+              'bottom': ((min(xs) + max(xs)) / 2, min(ys))}[p['kana_anchor']]
+    body = [O.transform(r, np.diag([p['kana_sx'], sy]), (ox * (1 - p['kana_sx']), oy * (1 - sy))) for r in body]
     return mark, pivot, _widen_strokes(body, p['kana_bold'])
 
 
 def shaped(mark, pivot, p):
-    """The mark turned about its pivot, bowed and slanted, with the point it
-    is sized about: its foot, level with its lowest point under its middle.
-    The placement page repeats these steps point for point."""
+    """The mark turned about its pivot, bowed and slanted, laid back down if
+    it lies, with the point it is sized about: its foot, level with its lowest
+    point under its middle. The placement page repeats these steps point for
+    point."""
     a = np.radians(p['mark_angle'])
     m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
     mark = O.transform(mark, m, np.array(pivot) - m @ np.array(pivot))
@@ -209,6 +228,8 @@ def shaped(mark, pivot, p):
         # bow: the middle moves sideways, the ends stay; slant: the top moves, the foot stays
         return np.array([q[0] + p['mark_bend'] * 4 * u * (1 - u) + p['mark_slant'] * u, q[1]])
     mark = [tuple(bend(np.asarray(q, float)) for q in seg) for seg in mark]
+    if p['mark_lie']:
+        mark = O.transform(mark, LIE.T, (0, 0))
     foot = min(q[1] for seg in mark for q in seg)
     fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
     return mark, (fx, foot)
