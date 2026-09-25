@@ -20,7 +20,12 @@ YA_DEFAULTS = dict(
     mark_len=1.0,    # length of the mark above the cut, along the stroke
     outer_full=1.0,  # fullness of the outer turn, relative to the fairest curve
     inner_full=1.0,  # fullness of the inner corner, relative to the fairest curve
+    neck_w=1.0,      # width of the mark where it enters the turn
+    head_w=1.0,      # width of the mark from its widest point up through the head
+    mark_angle=0.0,  # degrees the mark turns about where it enters the turn; positive leans it left
 )
+
+HEAD_Y = 620         # height where は's left stroke is widest, below its head
 
 
 def _reverse(segs):
@@ -31,13 +36,37 @@ def _moved(segs, dx=0, dy=0):
     return O.transform(segs, np.eye(2), (dx, dy))
 
 
+def _widened(segs, cut, neck, head):
+    """The mark with its width scaled about its centre line: `neck` at the cut,
+    `head` from HEAD_Y up, varying linearly in between."""
+    def centre(y):
+        xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, y))
+        return (xs[0] + xs[1]) / 2
+    c0, c1 = centre(cut), centre(HEAD_Y)
+    def move(q):
+        u = min(1, max(0, (q[1] - cut) / (HEAD_Y - cut)))
+        cx, k = c0 + (c1 - c0) * u, neck + (head - neck) * u
+        return np.array([cx + (q[0] - cx) * k, q[1]])
+    return [tuple(move(np.asarray(q, float)) for q in seg) for seg in segs]
+
+
+def _turned(segs, cut, degrees):
+    """The mark turned about the middle of its cut."""
+    xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, cut))
+    pivot = np.array([(xs[0] + xs[1]) / 2, cut])
+    a = np.radians(degrees)
+    m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
+    return O.transform(segs, m, pivot - m @ pivot)
+
+
 def glottal_ya(font, contours, **params):
     """や with the glottal mark merged into the head of its arm."""
     p = {**YA_DEFAULTS, **params}
     ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
     arm = _moved(ring('や', 1), p['shift'])
     rest = _moved(ring('や', 0), p['shift'])
-    mark = ring('は', 1)
+    mark = _widened(ring('は', 1), p['mark_cut'], p['neck_w'], p['head_w'])
+    mark = _turned(mark, p['mark_cut'], p['mark_angle'])
     # lengthen or shorten the mark above its cut, along its length only
     m = np.array([[1, 0], [0, p['mark_len']]])
     mark = O.transform(mark, m, (p['mark_x'], p['mark_cut'] * (1 - p['mark_len']) + p['mark_dy']))

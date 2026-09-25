@@ -55,6 +55,19 @@ LETTERS = {
             ('mark_join', 'Where the mark enters the turn', 'The mark is cut higher or lower above the turn.', {'mark_cut': 14}),
             ('turn', 'Fullness of the turn', 'Both curves of the turn together, tighter to fuller.', {'outer_full': 0.07, 'inner_full': 0.07}),
         ],
+        # the same, for the thickness of each part of the mark
+        thickness=[
+            ('mark_w', 'Width of the whole mark', 'The mark is thinner or thicker from the turn to its head.', {'neck_w': 0.09, 'head_w': 0.09}),
+            ('head_w', 'Width of the head', 'Only the upper mark and its head; the neck stays.', {'head_w': 0.1}),
+            ('neck_w', 'Width of the neck', 'Only where the mark enters the turn; the head stays.', {'neck_w': 0.1}),
+            ('turn_w', 'Thickness of the turn', 'The outer curve swells as the inner corner tightens, or the reverse.', {'outer_full': 0.13, 'inner_full': -0.13}),
+        ],
+        # the angle of the mark, with a check on its thickness
+        angle=[
+            ('angle_neck', 'Angle of the mark, turning about its foot', 'The head swings left or right; the join stays.', {'mark_angle': 4.0}),
+            ('angle_head', 'Angle of the mark, turning about its head', 'The foot and the join swing; the head stays.', {'mark_angle': 4.0, 'mark_x': 20}),
+            ('mark_w', 'Width of the whole mark', 'A finer check around the chosen widths.', {'neck_w': 0.05, 'head_w': 0.05}),
+        ],
         chart='glottal-ya',
         big='やや', vertical='ー、やー。',
         passages=[('Beside や', 'やや　やゆよ　ゆよ'),
@@ -204,11 +217,11 @@ def compare(slug, round_no, cull):
     return page(slug, round_no, 'compare', fonts)
 
 
-def axes(slug, round_no, base):
+def axes(slug, round_no, base, group='axes'):
     """One row per factor: seven steps around the base, only that factor changed."""
     letter = LETTERS[slug]
     rows, params = [], []
-    for key, label, note, deltas in letter['axes']:
+    for key, label, note, deltas in letter[group]:
         steps = []
         for i in range(-3, 4):
             p = dict(base)
@@ -234,11 +247,17 @@ if __name__ == '__main__':
     parser.add_argument('--kept', help='the previous round’s copied cull result (JSON file)')
     parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
     parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round')
+    parser.add_argument('--group', default='axes', help='which set of factors to vary (axes, thickness)')
+    parser.add_argument('--set', nargs='*', default=[], metavar='NAME=VALUE', help='change the base form before varying it')
     args = parser.parse_args()
     if args.axes:
         source, token = args.axes.split(':')
         base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
-        axes(args.slug, args.round, {**LETTERS[args.slug]['defaults'], **base})
+        base = {**LETTERS[args.slug]['defaults'], **base}
+        for item in args.set:
+            name, value = item.split('=')
+            base[name] = type(base[name])(float(value)) if isinstance(base[name], int) else float(value)
+        axes(args.slug, args.round, base, args.group)
     elif args.compare:
         compare(args.slug, args.round, json.loads(open(args.compare).read()))
     else:
