@@ -132,6 +132,14 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
         ],
     )
 
+LETTERS['glottal-n'] = dict(
+    code=0xF463, label='Glottal N', build=functools.partial(okinawan_merge.glottal_beside, kana='ん'),
+    defaults=okinawan_merge.N_DEFAULTS, ranges={}, chart='glottal-n',
+    big='ん\uF463ん', vertical='\uF463ー、ん\uF463。',
+    passages=[('Beside ん', 'ん\uF463ん　あんいん'), ('Among kana', 'あいう\uF463えお　かきく'),
+              ('The glottal set', '\uF45D\uF45E\uF45F\uF463　\uF460\uF461\uF462')],
+)
+
 
 def sample(ranges, n, seed):
     rng = random.Random(seed)
@@ -311,6 +319,7 @@ def svg_path(rings):
 
 WIDTHS = [round(0.7 + 0.05 * i, 2) for i in range(13)]   # mark widths the tuner offers
 BOLDS = list(range(0, 21, 2))                              # kana weights the tuner offers
+NARROWS = [round(0.8 + 0.02 * i, 2) for i in range(11)]    # kana widths the tuner offers
 
 
 def tune(slug, round_no, base):
@@ -326,18 +335,20 @@ def tune(slug, round_no, base):
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(mark, origin, p), body, p['gap']))
     snap = lambda v, grid: min(grid, key=lambda g: abs(g - v))
     p['neck_w'], p['head_w'], p['kana_bold'] = snap(p['neck_w'], WIDTHS), snap(p['head_w'], WIDTHS), snap(p['kana_bold'], BOLDS)
+    p['kana_sx'] = snap(p['kana_sx'], NARROWS)
     marks, kanas = {}, {}
     for neck in WIDTHS:
         for head in WIDTHS:
             m, o, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'neck_w': neck, 'head_w': head, 'kana_bold': 0})
             marks[f'{neck:.2f},{head:.2f}'] = [svg_path([m]), *o]
-    for bold in BOLDS:
-        kanas[str(bold)] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_bold': bold})[2])
-    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'neck_w', 'head_w', 'kana_bold')}
+    for sx in NARROWS:
+        for bold in BOLDS:
+            kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
+    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS,
+    return page(slug, round_no, 'tune', {}, dict(MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS, NARROWS=NARROWS,
                                                  START=start, LINES=lines))
 
 
@@ -349,13 +360,17 @@ if __name__ == '__main__':
     parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
     parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round, '
                         'or around a shipped form named in okinawan_merge (YA, YU)')
-    parser.add_argument('--tune', metavar='ROUND:TOKEN', help='place the mark by hand, starting from a form of an earlier round')
+    parser.add_argument('--tune', metavar='ROUND:TOKEN', help='place the mark by hand, starting from a form of an earlier round '
+                        'or from a form named in okinawan_merge (N_DEFAULTS, YO)')
     parser.add_argument('--group', default='axes', help='which set of factors to vary (axes, thickness)')
     parser.add_argument('--set', nargs='*', default=[], metavar='NAME=VALUE', help='change the base form before varying it')
     args = parser.parse_args()
     if args.tune:
-        source, token = args.tune.split(':')
-        base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        if ':' in args.tune:
+            source, token = args.tune.split(':')
+            base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        else:
+            base = dict(getattr(okinawan_merge, args.tune))
         for item in args.set:
             name, value = item.split('=')
             base[name] = float(value)
