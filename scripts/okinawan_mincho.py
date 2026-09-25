@@ -4,8 +4,9 @@ Each letter is assembled from whole strokes of the Noto Serif kana it
 extends, so the brush entries, the thick-thin contrast and the terminals are
 Noto's. A stroke is cut only where the cut end is buried in another stroke.
 Topology and placement follow the letters embedded in Funatsu's 2016 chart.
-Glottal YA and YU are the exceptions, drawn in okinawan_merge: YA's added
-stroke is merged into や's outline, and YU sets the same stroke beside ゆ.
+Glottal YA, YU and YO are the exceptions, drawn in okinawan_merge: YA's
+added stroke is merged into や's outline, and YU and YO set the same stroke
+beside ゆ and above よ's loop.
 
 Coordinates are font units on a 1000-unit em with the baseline at 0; the
 kana body runs from about -60 to 800.
@@ -204,21 +205,6 @@ def stretch(k, pen, top, bottom):
     return k.move(pen, sx=1, sy=(top - bottom) / (y1 - y0), dy=bottom - y0)
 
 
-def glottal_mark(k):
-    """い's first stroke, the same size before や, ゆ and よ.
-
-    Its hook points at the start of the kana that follows, and it has the
-    height and weight of the left half of い.
-    """
-    return k.move(k.part('い', 0), sx=.9, sy=.95, origin=(85, 682), dx=-50, dy=90)
-
-
-def after_mark(k, ch):
-    """A kana narrowed to the right half, beside the glottal mark."""
-    x0, y0, x1, y1 = k.bounds(k.part(ch))
-    return k.move(k.part(ch), sx=.78, sy=.94, origin=(x1, y0), dx=960 - x1)
-
-
 @drawing(0xF45D)  # glottal YA
 def glottal_ya(k):
     """や with は's left stroke merged into the head of its arm."""
@@ -233,7 +219,8 @@ def glottal_yu(k):
 
 @drawing(0xF45F)  # glottal YO
 def glottal_yo(k):
-    return [glottal_mark(k), after_mark(k, 'よ')]
+    """YA's mark set high over よ's loop."""
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'よ', **okinawan_merge.YO)
 
 
 def dot(k):

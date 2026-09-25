@@ -125,6 +125,11 @@ BESIDE_DEFAULTS = dict(
 YU = dict(BESIDE_DEFAULTS, mark_len=0.838, mark_scale=0.864, gap=38, mark_dy=148, mark_angle=4.875,
           neck_w=1.0, head_w=0.9, kana_sx=0.812, kana_sy=0.981, kana_bold=8)
 
+# YO, placed by hand in the arena (research/okinawan-arena/glottal-yo): the
+# mark sits high over よ's loop, as in Funatsu's chart.
+YO = dict(BESIDE_DEFAULTS, mark_x=-51, mark_dy=300, mark_scale=0.884, mark_len=0.698, mark_angle=4.875,
+          neck_w=1.2, head_w=1.1, kana_sx=0.92, kana_sy=0.98, kana_bold=8)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
