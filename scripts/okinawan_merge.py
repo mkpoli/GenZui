@@ -25,6 +25,12 @@ YA_DEFAULTS = dict(
     mark_angle=0.0,  # degrees the mark turns about where it enters the turn; positive leans it left
 )
 
+# The form GenZui ships, chosen in the arena (research/okinawan-arena/glottal-ya):
+# rounds 1-2 culled and compared samples, rounds 3-5 moved one factor at a time
+# from the round-2 leader (position, cut, widths, turn, angle).
+YA = dict(YA_DEFAULTS, shift=32, arm_cut=299, mark_cut=452, mark_x=-75, mark_dy=-2, mark_len=0.974,
+          outer_full=1.102, inner_full=0.829, neck_w=1.0, head_w=0.9, mark_angle=-4.0)
+
 HEAD_Y = 620         # height where は's left stroke is widest, below its head
 
 
