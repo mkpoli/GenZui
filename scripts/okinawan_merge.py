@@ -118,7 +118,7 @@ BESIDE_DEFAULTS = dict(
     mark_bend=0,       # units the middle of the mark bows sideways; positive to the right
     mark_slant=0,      # units the top of the mark moves sideways over the foot
     mark_bold=0,       # for a small-kana mark: units of width added sideways to its strokes
-    ring_offsets={},   # for a small-kana mark: its strokes moved one by one, by Noto contour index
+    parts=None,        # per-contour transforms and weights (see beside_pieces); None keeps the whole-kana path
     head_angle=0,      # degrees the mark's head turns on its own; positive counterclockwise
     tail_angle=0,      # the same for its tail
     neck_w=YA['neck_w'],
@@ -183,7 +183,7 @@ SI = dict(SI_DEFAULTS, mark_x=80, mark_dy=-119, mark_scale=0.88, mark_len=1.607,
 # narrowed ふ, at the small kana's own height.
 HW_DEFAULTS = dict(BESIDE_DEFAULTS, mark_index=None, kana_anchor='left', mark_scale=0.68, mark_len=1.0,
                    mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_bold=0, kana_sx=0.66, kana_sy=0.94,
-                   kana_bold=14, gap=25, mark_dy=0)
+                   kana_bold=14, gap=25, mark_dy=0, parts={})
 
 
 def _widen_strokes(rings, d):
@@ -335,36 +335,65 @@ def _smooth_seam(rings, x, half, ys):
 BODIES = {'ゐわ': wa_body}
 
 
+def part_centre(ring):
+    """The middle of a contour's control box, which its own scaling and turning are about."""
+    xs = [q[0] for seg in ring for q in seg]
+    ys = [q[1] for seg in ring for q in seg]
+    return ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
+
+
+def part_affine(ring, centre, t):
+    """One part's own transform: scaled by sx, sy and turned by rot degrees
+    about its centre, then moved by dx, dy. The placement page does the same."""
+    a = np.radians(t.get('rot', 0))
+    m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]]) @ np.diag([t.get('sx', 1), t.get('sy', 1)])
+    c = np.array(centre)
+    return O.transform(ring, m, c - m @ c + np.array([t.get('dx', 0), t.get('dy', 0)]))
+
+
 def beside_pieces(font, contours, kana, p):
     """The mark at its widths, upright (a lying stroke is turned to stand, so
     its width runs across and its head is at the top), with the point it turns
-    about; and the kana, sized and weighted, where it stays."""
+    about; and the kana, sized and weighted, where it stays, as groups of rings.
+
+    With `parts` given, every Noto contour is a part with its own transform
+    and weight: parts['k2'] is the kana's third contour, parts['m0'] the
+    mark's first. Each contour is weighted on its own (a sweep of a union is
+    the union of the sweeps), then transformed as a part, then as its group."""
+    parts = p.get('parts')
     mark = upright_mark(font, contours, p)
     if len(mark) == 1:
         # one stroke: its width ramps from neck_w to head_w along its length
         mark = [_widened(mark[0], p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])]
         pivot = (centre_at(mark[0], p['ramp_lo']), p['ramp_lo'])
     else:
-        # a small kana: each stroke weighted sideways on its own, so its rings
-        # stay in Noto's contour order; turned about its middle; a stroke can
-        # be moved within it by ring_offsets (contour index -> dx, dy)
-        groups = [_widen_strokes([r], p['mark_bold']) for r in mark]
-        mark = [r for g in groups for r in g]
-        xs = [q[0] for r in mark for seg in r for q in seg]
-        ys = [q[1] for r in mark for seg in r for q in seg]
+        # a small kana: each stroke weighted sideways on its own; turned about
+        # the middle of the strokes at the group's weight
+        plain = [r for c in mark for r in _widen_strokes([c], p['mark_bold'])]
+        xs = [q[0] for r in plain for seg in r for q in seg]
+        ys = [q[1] for r in plain for seg in r for q in seg]
         pivot = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
-        offsets = p['ring_offsets']
-        mark = [_moved(r, *offsets.get(str(i), (0, 0))) for i, g in enumerate(groups) for r in g]
-    body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
-    origin = kana_origin(body, p['kana_anchor'])
+        if parts is None:
+            mark = plain
+        else:
+            mark = [part_affine(r, part_centre(c), parts.get(f'm{i}', {}))
+                    for i, c in enumerate(mark)
+                    for r in _widen_strokes([c], p['mark_bold'] + parts.get(f'm{i}', {}).get('bold', 0))]
+    raw = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
+    origin = kana_origin(raw, p['kana_anchor'])
     # weight first, then the scaling: sweeping by d and then scaling by sx is
     # sweeping by d * sx after scaling, so the page can scale a drawn weight
     # by itself
-    body = _widen_strokes(body, p['kana_bold'])
+    if parts is None:
+        groups = [_widen_strokes(raw, p['kana_bold'])]
+    else:
+        groups = [[part_affine(r, part_centre(c), parts.get(f'k{i}', {}))
+                   for r in _widen_strokes([c], p['kana_bold'] + parts.get(f'k{i}', {}).get('bold', 0))]
+                  for i, c in enumerate(raw)]
     sx, sy = p['kana_sx'], p['kana_sy']
-    body = [O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx) + p['kana_dx'], origin[1] * (1 - sy) + p['kana_dy']))
-            for r in body]
-    return mark, pivot, body
+    groups = [[O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx) + p['kana_dx'], origin[1] * (1 - sy) + p['kana_dy']))
+               for r in g] for g in groups]
+    return mark, pivot, groups
 
 
 def kana_origin(body, anchor):
@@ -446,7 +475,8 @@ def glottal_beside(font, contours, kana, **params):
     `mark_x` when given (BESIDE_DEFAULTS has none, so YU is placed by its gap
     to ゆ), otherwise by its gap to the kana."""
     p = {**BESIDE_DEFAULTS, **params}
-    mark, pivot, body = beside_pieces(font, contours, kana, p)
+    mark, pivot, groups = beside_pieces(font, contours, kana, p)
+    body = [r for g in groups for r in g]
     mark = sized(*shaped(mark, pivot, p), p)
     side = 'right' if p['kana_anchor'] == 'left' else 'left'   # the mark sits away from the kana's anchor
     shift = p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap'], side)
@@ -454,5 +484,5 @@ def glottal_beside(font, contours, kana, **params):
     # centre the letter in the em
     xs = [q[0] for r in [*mark, *body] for seg in r for q in seg]
     dx = 500 - (min(xs) + max(xs)) / 2
-    # two parts, each a whole shape, so the kana's counters stay open
-    return [O.draw([_moved(r, dx) for r in mark]), O.draw([_moved(r, dx) for r in body])]
+    # each group a whole shape, so the kana's counters stay open
+    return [O.draw([_moved(r, dx) for r in mark]), *(O.draw([_moved(r, dx) for r in g]) for g in groups)]
