@@ -1,0 +1,13 @@
+.pair .big{font-size:calc(var(--size)*2.3);line-height:1.25;white-space:nowrap;overflow:hidden;letter-spacing:.06em;margin-bottom:6px}
+.pair .body{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 14px}
+.pair .text{line-height:2}
+.pair .v{writing-mode:vertical-rl;text-orientation:upright;height:8em;padding:0 .3em;border-left:1px solid var(--line);line-height:2}
+.reasons{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.reasons button{font-size:13px;padding:6px 10px}
+.leaders-heading{font-size:18px;margin:28px 0 10px}
+.leaders-list{display:flex;flex-wrap:wrap;gap:18px;list-style:none;padding:0;margin:0}
+.leaders-list li{display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);border-radius:6px;padding:8px 14px}
+.leader-glyph{font-size:40px;line-height:1.3;font-family:var(--face),GenZuiContext,serif}
+.leaders-list small{color:var(--muted);font-size:11px}
+.compare-actions{grid-template-columns:repeat(5,minmax(0,1fr))}
+.compare-actions #copy-status{grid-column:1/-1;margin:0}
+@media(max-width:600px){.compare-actions{grid-template-columns:1fr 1fr}.pair .v{height:6em}}

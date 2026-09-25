@@ -1,6 +1,7 @@
 """A cull round of variants for one Okinawan letter, as a self-contained page.
 
-    okinawan_arena.py <slug> <round> [--kept result.json]
+    okinawan_arena.py <slug> <round> [--kept previous-cull.json]
+    okinawan_arena.py <slug> <round> --compare this-cull.json
 
 Variants are the letter's merge builder sampled around its defaults: a
 Latin-hypercube sample over each parameter's range, plus the defaults
@@ -115,16 +116,9 @@ def face(name, data):
     return f'@font-face{{font-family:{name};src:url(data:font/woff2;base64,{base64.b64encode(data).decode()}) format("woff2")}}'
 
 
-def build(slug, round_no, kept=None):
-    letter = LETTERS[slug]
-    text = text_of(letter)
-    source = TTFont(BASE)
-    if kept:
-        # forms from an earlier round keep their shared parameters; new ones take defaults
-        centres = [{k: kept[t].get(k, v) for k, v in letter['defaults'].items()} for t in kept]
-        params = centres + around(centres, letter['ranges'], 24 - len(centres), 1000 * round_no)
-    else:
-        params = [dict(letter['defaults'])] + sample(letter['ranges'], 23, 1000 * round_no)
+def variants(letter, params):
+    """One small font per parameter set, keyed by an anonymous token."""
+    source, text = TTFont(BASE), text_of(letter)
     fonts, forms = {}, {}
     for p in params:
         try:
@@ -135,6 +129,13 @@ def build(slug, round_no, kept=None):
         token = 't' + hashlib.sha1(json.dumps(p, sort_keys=True).encode()).hexdigest()[:16]
         fonts[token] = with_variant(cut_font(BASE, text), letter['code'], pen)
         forms[token] = p
+    return fonts, forms
+
+
+def page(slug, round_no, stage, fonts):
+    """The cull or compare page for a round, with every font embedded."""
+    letter = LETTERS[slug]
+    text = text_of(letter)
     context = cut_font(BASE, text); context.flavor = 'woff2'
     ctx = io.BytesIO(); context.save(ctx)
     faces = face('GenZuiContext', ctx.getvalue()) + ''.join(face(t, d) for t, d in fonts.items())
@@ -147,25 +148,48 @@ def build(slug, round_no, kept=None):
     if chart.is_file():
         references += (f'<div><small>Funatsu’s chart</small><img alt="The letter in Funatsu’s chart" style="height:120px" '
                        f'src="data:image/png;base64,{base64.b64encode(chart.read_bytes()).decode()}"></div>')
-    experiment = f'okinawan-{slug}-{round_no}'
-    config = dict(EXPERIMENT=experiment, CANDIDATES=list(fonts), PASSAGES=[t for _, t in letter['passages']],
-                  PASSAGE_LABELS=[l for l, _ in letter['passages']], BIG=letter['big'], VERTICAL=letter['vertical'])
+    config = dict(EXPERIMENT=f'okinawan-{slug}-{round_no}', CANDIDATES=list(fonts),
+                  PASSAGES=[t for _, t in letter['passages']], PASSAGE_LABELS=[l for l, _ in letter['passages']],
+                  BIG=letter['big'], VERTICAL=letter['vertical'])
     config_js = ''.join(f'const {k}={json.dumps(v, ensure_ascii=False)};' for k, v in config.items())
-    body = (TEMPLATES/'cull.html').read_text()
+    body = (TEMPLATES/f'{stage}.html').read_text()
     body = body.replace('__GLYPH__', f'<span class="glyph">{html.escape(letter["label"])}</span>')
     body = body.replace('__FOOTER__', f'Round {round_no} · {len(fonts)} forms · GenZui Serif with each variant of {html.escape(letter["label"])}.')
     if references:
         body = body.replace('<section id="tools">', f'<details class="font-references" open><summary>References</summary>'
                             f'<div class="reference-fonts">{references}</div></details><section id="tools">')
-    js = (TEMPLATES/'cull.js').read_text()
     page = ('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{html.escape(letter["label"])} — GenZui arena</title><style>{faces}{(TEMPLATES/"arena.css").read_text()}'
-            f'{(TEMPLATES/"cull.css").read_text()}</style></head><body>{body}<script>{config_js}\n{js}</script></body></html>')
+            f'{(TEMPLATES/f"{stage}.css").read_text()}</style></head><body>{body}'
+            f'<script>{config_js}\n{(TEMPLATES/f"{stage}.js").read_text()}</script></body></html>')
     out = OUT/slug; out.mkdir(parents=True, exist_ok=True)
-    (out/f'round{round_no}.html').write_text(page)
-    (out/f'round{round_no}-forms.json').write_text(json.dumps(forms, indent=1) + '\n')
-    print(f'{slug} round {round_no}: {len(fonts)} forms -> {out/f"round{round_no}.html"}')
-    return out/f'round{round_no}.html'
+    name = f'round{round_no}.html' if stage == 'cull' else f'round{round_no}-{stage}.html'
+    (out/name).write_text(page)
+    print(f'{slug} round {round_no} {stage}: {len(fonts)} forms -> {out/name}')
+    return out/name
+
+
+def build(slug, round_no, kept=None):
+    letter = LETTERS[slug]
+    if kept:
+        # forms from an earlier round keep their shared parameters; new ones take defaults
+        centres = [{k: kept[t].get(k, v) for k, v in letter['defaults'].items()} for t in kept]
+        params = centres + around(centres, letter['ranges'], 24 - len(centres), 1000 * round_no)
+    else:
+        params = [dict(letter['defaults'])] + sample(letter['ranges'], 23, 1000 * round_no)
+    fonts, forms = variants(letter, params)
+    (OUT/slug).mkdir(parents=True, exist_ok=True)
+    (OUT/slug/f'round{round_no}-forms.json').write_text(json.dumps(forms, indent=1) + '\n')
+    return page(slug, round_no, 'cull', fonts)
+
+
+def compare(slug, round_no, cull):
+    """Pairwise comparison of the forms a round's cull kept."""
+    forms = json.loads((OUT/slug/f'round{round_no}-forms.json').read_text())
+    kept = [forms[t] for t in cull['kept']]
+    fonts, _ = variants(LETTERS[slug], kept)
+    assert list(fonts) == cull['kept'], 'rebuilt forms must keep their tokens'
+    return page(slug, round_no, 'compare', fonts)
 
 
 if __name__ == '__main__':
@@ -173,10 +197,14 @@ if __name__ == '__main__':
     parser.add_argument('slug', choices=sorted(LETTERS))
     parser.add_argument('round', type=int)
     parser.add_argument('--kept', help='the previous round’s copied cull result (JSON file)')
+    parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
     args = parser.parse_args()
-    kept = None
-    if args.kept:
-        result = json.loads(open(args.kept).read())
-        forms = json.loads((OUT/args.slug/f'round{args.round - 1}-forms.json').read_text())
-        kept = {t: forms[t] for t in result['kept']}
-    build(args.slug, args.round, kept)
+    if args.compare:
+        compare(args.slug, args.round, json.loads(open(args.compare).read()))
+    else:
+        kept = None
+        if args.kept:
+            result = json.loads(open(args.kept).read())
+            forms = json.loads((OUT/args.slug/f'round{args.round - 1}-forms.json').read_text())
+            kept = {t: forms[t] for t in result['kept']}
+        build(args.slug, args.round, kept)

@@ -1,0 +1,14 @@
+<main><header><h1>__GLYPH__ — GenZui arena</h1><span id="saved"></span></header>
+<ol class="steps"><li class="done"><b>1</b> Cull<small>done</small></li><li class="current"><b>2</b> Compare<small>pairs in running text</small></li><li><b>3</b> Result<small>copy and paste</small></li></ol>
+<p class="intro">Two of the forms the cull kept, in the same text. Choose the better one, or say both are fine or neither is. Keys: ← left, → right, ↑ both fine, ↓ neither. After a preference you can tap a reason. Pairs keep coming until every close pair has met; copy the result whenever you have had enough.</p>
+<div class="status"><span id="round">Compare</span><span id="progress"></span></div>
+<section id="tools"><div class="toolbar"><label>Size <select id="size"><option>24</option><option>32</option><option>40</option><option>48</option><option>64</option></select> px</label><label><input id="dark" type="checkbox">Dark paper</label><button id="undo" type="button">Undo last</button></div></section>
+<div class="panels" id="panels">
+<article class="panel pair" id="left"><div class="panel-heading"><h2>Left</h2></div><div class="kana big"></div><div class="body"><div class="kana text"></div><div class="kana v"></div></div></article>
+<article class="panel pair" id="right"><div class="panel-heading"><h2>Right</h2></div><div class="kana big"></div><div class="body"><div class="kana text"></div><div class="kana v"></div></div></article>
+</div>
+<div class="reasons" id="reasons" hidden></div>
+<section class="intermission" id="done" hidden><h2>Every close pair has met</h2><p>Copy the result below.</p></section>
+<h2 class="leaders-heading">Leading so far</h2><ol class="leaders-list" id="ranking"></ol>
+<p class="footer">__FOOTER__</p></main>
+<div class="actions compare-actions"><button id="vote-left" class="vote" type="button">← Left<small>better</small></button><button id="vote-tie" type="button">↑ Both fine<small>tie</small></button><button id="vote-neither" type="button">↓ Neither<small>both wrong</small></button><button id="vote-right" class="vote" type="button">Right →<small>better</small></button><button id="copy" class="primary" type="button">Copy result</button><p id="copy-status" aria-live="polite"></p></div>
