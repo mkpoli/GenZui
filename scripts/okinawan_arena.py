@@ -160,6 +160,16 @@ LETTERS['si'] = dict(
               ('Okinawan', '\uF467\uF469\uF450\uF452　\uF45D\uF460')],
 )
 
+for _slug, _code, _label, _small in (('hwa', 0xF45A, 'HWA', 'ゎ'), ('hwi', 0xF45B, 'HWI', 'ぃ'), ('hwe', 0xF45C, 'HWE', 'ぇ')):
+    _g = chr(_code)
+    LETTERS[_slug] = dict(
+        code=_code, label=_label, build=functools.partial(okinawan_merge.glottal_beside, kana='ふ'),
+        defaults=dict(okinawan_merge.HW_DEFAULTS, mark_char=_small), ranges={}, chart=_slug,
+        big=f'ふ{_g}ふ', vertical=f'{_g}ー、ふ{_g}。',
+        passages=[('Beside ふ', f'ふ{_g}ふ　はひふへほ'), ('Among kana', f'あいう{_g}えお　かきく'),
+                  ('Okinawan', '\uF45A\uF45B\uF45C　\uF454\uF456\uF458')],
+    )
+
 
 def sample(ranges, n, seed):
     rng = random.Random(seed)
@@ -350,14 +360,27 @@ def tune(slug, round_no, base):
     font = TTFont(BASE)
     mark, pivot, body = okinawan_merge.beside_pieces(font, contours, kana, p)
     if p.get('mark_x') is None:
-        p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap']))
+        side = 'right' if p['kana_anchor'] == 'left' else 'left'
+        p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap'], side))
     bolds = sorted({*BOLDS, p['kana_bold']})   # the starting weight is drawn too, even off the grid
     # the raw upright stroke and its centres at the ends of the width ramp: the
-    # page widens, turns, bows, slants and places it as okinawan_merge does
+    # page widens, turns, bows, slants and places it as okinawan_merge does. A
+    # small-kana mark is weighted by boolean operations, so each weight is drawn here.
     raw = okinawan_merge.upright_mark(font, contours, p)
-    stroke = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in raw],
-                  lo=p['ramp_lo'], hi=p['ramp_hi'],
-                  c0=okinawan_merge.centre_at(raw, p['ramp_lo']), c1=okinawan_merge.centre_at(raw, p['ramp_hi']))
+    flat = lambda ring: [[round(float(v), 2) for q in seg for v in q] for seg in ring]
+    mark_bolds = sorted({*BOLDS, p['mark_bold']})
+    if len(raw) == 1:
+        stroke = dict(multi=False, segs=flat(raw[0]), lo=p['ramp_lo'], hi=p['ramp_hi'],
+                      c0=okinawan_merge.centre_at(raw[0], p['ramp_lo']), c1=okinawan_merge.centre_at(raw[0], p['ramp_hi']))
+    else:
+        stroke = dict(multi=True, by_bold={})
+        for bold in mark_bolds:
+            try:
+                m, pv, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'mark_bold': bold, 'kana_bold': 0})
+            except ValueError as error:
+                print(f'no mark at weight {bold}: {error}')
+                continue
+            stroke['by_bold'][str(bold)] = dict(rings=[flat(r) for r in m], pivot=list(pv))
     kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0, 'kana_dx': 0, 'kana_dy': 0}
     body = okinawan_merge.BODIES[kana](font, contours) if kana in okinawan_merge.BODIES else O.rings(contours(font, ord(kana)))
     origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
@@ -368,11 +391,11 @@ def tune(slug, round_no, base):
         except ValueError as error:   # a weight Skia cannot resolve: the page skips it
             print(f'no kana at weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
+                               'neck_w', 'head_w', 'mark_bold', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANAS=kanas, KANA_ORIGIN=list(origin), KANA=kana if len(kana) == 1 else 'Body', BOLDS=bolds,
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANAS=kanas, KANA_ORIGIN=list(origin), KANA=kana if len(kana) == 1 else 'Body', BOLDS=bolds, MARK_BOLDS=mark_bolds,
                                                  START=start, LINES=lines))
 
 
@@ -393,6 +416,8 @@ if __name__ == '__main__':
         if ':' in args.tune:
             source, token = args.tune.split(':')
             base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        elif args.tune == 'defaults':
+            base = dict(LETTERS[args.slug]['defaults'])
         else:
             base = dict(getattr(okinawan_merge, args.tune))
         for item in args.set:

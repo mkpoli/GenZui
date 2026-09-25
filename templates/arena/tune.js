@@ -10,28 +10,36 @@ function persist(){try{localStorage.setItem(storageKey,JSON.stringify(state))}ca
 
 // ---- geometry, mirrored from okinawan_merge ----
 function markPath(p){
- const {segs,lo,hi,c0,c1}=STROKE,px=c0,py=lo;
  const a=p.mark_angle*Math.PI/180,c=Math.cos(a),s=Math.sin(a);
- // widen about the centre line (neck_w at the ramp's low end, head_w from its high end up), then turn
- let pts=segs.map(seg=>{const q=[];for(let i=0;i<8;i+=2){let x=seg[i],y=seg[i+1];
-  const u=Math.min(1,Math.max(0,(y-lo)/(hi-lo))),cx=c0+(c1-c0)*u,k=p.neck_w+(p.head_w-p.neck_w)*u;x=cx+(x-cx)*k;
-  x-=px;y-=py;q.push([px+c*x-s*y,py+s*x+c*y])}return q});
- const ys=pts.flat().map(q=>q[1]),y0=Math.min(...ys),y1=Math.max(...ys);
+ let rings,px,py;
+ if(STROKE.multi){
+  // a small kana, drawn at this weight ahead of time, turned about its middle
+  const m=STROKE.by_bold[String(p.mark_bold)];[px,py]=m.pivot;
+  rings=m.rings.map(r=>r.map(seg=>{const q=[];for(let i=0;i<8;i+=2)q.push([seg[i],seg[i+1]]);return q}));
+ }else{
+  // one stroke, widened about its centre line (neck_w at the ramp's low end, head_w from its high end up)
+  const {segs,lo,hi,c0,c1}=STROKE;px=c0;py=lo;
+  rings=[segs.map(seg=>{const q=[];for(let i=0;i<8;i+=2){let x=seg[i],y=seg[i+1];
+   const u=Math.min(1,Math.max(0,(y-lo)/(hi-lo))),cx=c0+(c1-c0)*u,k=p.neck_w+(p.head_w-p.neck_w)*u;q.push([cx+(x-cx)*k,y])}return q})];
+ }
+ const turn=([x,y])=>{x-=px;y-=py;return [px+c*x-s*y,py+s*x+c*y]};
+ let pts=rings.map(r=>r.map(seg=>seg.map(turn)));
+ const ys=pts.flat(2).map(q=>q[1]),y0=Math.min(...ys),y1=Math.max(...ys);
  // bow (the middle moves, the ends stay) and slant (the top moves, the foot stays)
- pts=pts.map(seg=>seg.map(([x,y])=>{const u=(y-y0)/(y1-y0);return [x+p.mark_bend*4*u*(1-u)+p.mark_slant*u,y]}));
+ pts=pts.map(r=>r.map(seg=>seg.map(([x,y])=>{const u=(y-y0)/(y1-y0);return [x+p.mark_bend*4*u*(1-u)+p.mark_slant*u,y]})));
  // head (top third) and tail (bottom third) turn on their own, fading in from the middle
  if(p.head_angle||p.tail_angle){
-  const flat=pts.flat(),h=(y1-y0)/3;
+  const flat=pts.flat(2),h=(y1-y0)/3;
   const centre=y=>{const band=flat.filter(q=>Math.abs(q[1]-y)<=h/2);return [band.length?(Math.min(...band.map(q=>q[0]))+Math.max(...band.map(q=>q[0])))/2:flat.reduce((t,q)=>t+q[0],0)/flat.length,y]};
   const turns=[[p.head_angle*Math.PI/180,centre(y1-h),q=>(q[1]-(y1-h))/h],[p.tail_angle*Math.PI/180,centre(y0+h),q=>((y0+h)-q[1])/h]];
-  pts=pts.map(seg=>seg.map(q=>{for(const [t0,cc,weight] of turns){const w=Math.min(1,Math.max(0,weight(q)));if(t0&&w){const dx=q[0]-cc[0],dy=q[1]-cc[1],t=t0*w;q=[cc[0]+Math.cos(t)*dx-Math.sin(t)*dy,cc[1]+Math.sin(t)*dx+Math.cos(t)*dy]}}return q}));
+  pts=pts.map(r=>r.map(seg=>seg.map(q=>{for(const [t0,cc,weight] of turns){const w=Math.min(1,Math.max(0,weight(q)));if(t0&&w){const dx=q[0]-cc[0],dy=q[1]-cc[1],t=t0*w;q=[cc[0]+Math.cos(t)*dx-Math.sin(t)*dy,cc[1]+Math.sin(t)*dx+Math.cos(t)*dy]}}return q})));
  }
- if(LIE)pts=pts.map(seg=>seg.map(([x,y])=>[-y,x]));   // a lying stroke is laid back down
+ if(LIE)pts=pts.map(r=>r.map(seg=>seg.map(([x,y])=>[-y,x])));   // a lying stroke is laid back down
  // size about the foot, stretch upward, move
- const all=pts.flat(),foot=Math.min(...all.map(q=>q[1])),fx=all.reduce((t,q)=>t+q[0],0)/all.length;
- pts=pts.map(seg=>seg.map(([x,y])=>{x=fx+(x-fx)*p.mark_scale;y=foot+(y-foot)*p.mark_scale;return [x+p.mark_x,foot+(y-foot)*p.mark_len+p.mark_dy]}));
+ const all=pts.flat(2),foot=Math.min(...all.map(q=>q[1])),fx=all.reduce((t,q)=>t+q[0],0)/all.length;
+ pts=pts.map(r=>r.map(seg=>seg.map(([x,y])=>{x=fx+(x-fx)*p.mark_scale;y=foot+(y-foot)*p.mark_scale;return [x+p.mark_x,foot+(y-foot)*p.mark_len+p.mark_dy]})));
  const f=v=>v.toFixed(1);
- return 'M'+f(pts[0][0][0])+' '+f(pts[0][0][1])+pts.map(([,b,c2,d])=>`C${f(b[0])} ${f(b[1])} ${f(c2[0])} ${f(c2[1])} ${f(d[0])} ${f(d[1])}`).join('')+'Z';
+ return pts.map(r=>'M'+f(r[0][0][0])+' '+f(r[0][0][1])+r.map(([,b,c2,d])=>`C${f(b[0])} ${f(b[1])} ${f(c2[0])} ${f(c2[1])} ${f(d[0])} ${f(d[1])}`).join('')+'Z').join('');
 }
 const kanaPath=p=>KANAS[String(p.kana_bold)];
 const kanaTransform=p=>{const [ox,oy]=KANA_ORIGIN;return `translate(${ox*(1-p.kana_sx)+p.kana_dx} ${oy*(1-p.kana_sy)+p.kana_dy}) scale(${p.kana_sx} ${p.kana_sy})`};
@@ -46,21 +54,23 @@ const CONTROLS={stroke:[
  ['Shape'],
  ['mark_scale','Size',.2,2,.005,r3],['mark_len','Length',.2,2.5,.005,r3],['mark_angle','Rotate',-60,60,.5,v=>v.toFixed(1)],
  ['mark_bend','Bow',-200,200,1,r1],['mark_slant','Slant',-250,250,1,r1],['head_angle','Head angle',-90,90,.5,v=>v.toFixed(1)],['tail_angle','Tail angle',-90,90,.5,v=>v.toFixed(1)],
- ['Thickness'],
- ['width','Whole stroke',.2,3,.01,r2,both],['head_w','Head',.2,3,.01,r2],['neck_w','Foot',.2,3,.01,r2],
+ ...(STROKE.multi?[['Weight'],['mark_bold','Weight',0,MARK_BOLDS.length-1,1,v=>String(v),null,'mark']]
+  :[['Thickness'],['width','Whole stroke',.2,3,.01,r2,both],['head_w','Head',.2,3,.01,r2],['neck_w','Foot',.2,3,.01,r2]]),
 ],kana:[
  ['kana_dx','Left / right',-300,300,1,r1],['kana_dy','Down / up',-300,300,1,r1],
  ['size','Size',.4,1.4,.005,r3,kanaSize],['kana_sx','Width',.4,1.4,.005,r3],['kana_sy','Height',.4,1.4,.005,r3],
- ['kana_bold','Weight',0,BOLDS.length-1,1,v=>String(v),null,true],
+ ['kana_bold','Weight',0,BOLDS.length-1,1,v=>String(v),null,'kana'],
 ]};
-function getv(c,p){return c[6]?c[6].get(p):c[7]?BOLDS.indexOf(p.kana_bold):p[c[0]]}
-function setv(c,p,v){if(c[6])c[6].set(p,v);else if(c[7]){let i=Math.round(v);while(i>0&&!KANAS[String(BOLDS[i])])i--;p.kana_bold=BOLDS[i]}else p[c[0]]=+(+v).toFixed(4)}
+// weights move along the grid of drawn outlines, skipping any that could not be drawn
+const GRID={kana:[BOLDS,v=>KANAS[String(v)]],mark:[MARK_BOLDS,v=>!STROKE.multi||STROKE.by_bold[String(v)]]};
+function getv(c,p){return c[6]?c[6].get(p):c[7]?GRID[c[7]][0].indexOf(p[c[0]]):p[c[0]]}
+function setv(c,p,v){if(c[6])c[6].set(p,v);else if(c[7]){const [grid,ok]=GRID[c[7]];let i=Math.round(v);while(i>0&&!ok(grid[i]))i--;p[c[0]]=grid[i]}else p[c[0]]=+(+v).toFixed(4)}
 function build(){
  for(const group of ['stroke','kana'])$(group+'-rows').innerHTML=CONTROLS[group].map(c=>c.length===1?`<span class="sub">${c[0]}</span>`:
   `<label for="r-${c[0]}" data-reset="${c[0]}" title="Double-click to reset">${c[1]}</label><input id="r-${c[0]}" type="range" min="${c[2]}" max="${c[3]}" step="${c[4]}"><input id="n-${c[0]}" type="number" step="${c[4]}" aria-label="${c[1]}">`).join('');
  for(const group of ['stroke','kana'])for(const c of CONTROLS[group]){if(c.length===1)continue;
   const upd=v=>{setv(c,state.p,v);render()};
-  $('r-'+c[0]).oninput=e=>upd(e.target.value);$('n-'+c[0]).onchange=e=>upd(c[7]?BOLDS.indexOf(+e.target.value):e.target.value);
+  $('r-'+c[0]).oninput=e=>upd(e.target.value);$('n-'+c[0]).onchange=e=>upd(c[7]?GRID[c[7]][0].indexOf(+e.target.value):e.target.value);
   document.querySelector(`[data-reset="${c[0]}"]`).ondblclick=()=>{if(c[6]){c[6].set(state.p,c[6].get(START))}else state.p[c[0]]=START[c[0]];render()}}
 }
 function glyph(){return `<svg viewBox="0 0 1000 1000" aria-hidden="true"><g class="centre"><g transform="matrix(1 0 0 -1 0 880)"><path d="${kanaPath(state.p)}" transform="${kanaTransform(state.p)}"/><path d="${markPath(state.p)}"/></g></g></svg>`}
@@ -68,7 +78,7 @@ function render(){
  const p=state.p;
  $('mark').setAttribute('d',markPath(p));$('kana').setAttribute('d',kanaPath(p));$('kana').setAttribute('transform',kanaTransform(p));
  for(const group of ['stroke','kana'])for(const c of CONTROLS[group]){if(c.length===1)continue;const v=getv(c,p);
-  const r=$('r-'+c[0]),n=$('n-'+c[0]);if(document.activeElement!==r)r.value=v;if(document.activeElement!==n)n.value=c[7]?p.kana_bold:c[5](v)}
+  const r=$('r-'+c[0]),n=$('n-'+c[0]);if(document.activeElement!==r)r.value=v;if(document.activeElement!==n)n.value=c[7]?p[c[0]]:c[5](v)}
  // the em frame follows the letter, centred on it as the font build centres it
  {const b=$('letter').getBBox(),x=b.x+b.width/2-500;$('em').setAttribute('x',x);$('mid').setAttribute('x1',x+500);$('mid').setAttribute('x2',x+500)}
  $('lines').innerHTML=LINES.map(l=>`<p>${l.replaceAll(LETTER,glyph())}</p>`).join('');
@@ -101,4 +111,5 @@ $('dark').onchange=e=>{state.dark=e.target.checked;applyDark();persist()};
 $('reset').onclick=()=>{state.p={...START};render()};
 $('copy').onclick=async()=>{const text=JSON.stringify({arena:EXPERIMENT,protocol:'tune-v1',params:state.p,notes:$('notes').value});
  try{await navigator.clipboard.writeText(text);$('copy-status').textContent='Copied — paste it into the conversation'}catch{prompt('Copy this result:',text)}};
+if(STROKE.multi){document.querySelector('#stroke-panel h2').textContent='Small kana';$('t-stroke').textContent='Small kana'}
 build();applyDark();render();
