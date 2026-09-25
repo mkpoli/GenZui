@@ -117,8 +117,8 @@ def build():
     for token, value in {
         '{{BOTH_ZIP}}': both.name, '{{BOTH_SIZE}}': f'{both.stat().st_size/1048576:.1f}',
         '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
-        # The cards set 源 in Bold; a few-kilobyte subset keeps the Bold webfonts off the landing.
-        '{{LANDING_BOLD_CSS}}': ''.join(f"@font-face{{font-family:{family};src:url({label_face(path, '源')}) format('woff2');font-weight:700;font-display:block}}\n"
+        # The weight switch sets the cards' mark, name and kana roll in Bold; a few-kilobyte subset keeps the Bold webfonts off the landing.
+        '{{LANDING_BOLD_CSS}}': ''.join(f"@font-face{{font-family:{family};src:url({label_face(path, '源萃明朝ゴシック𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂')}) format('woff2');font-weight:700;font-display:block}}\n"
                                       for family, path in (('GenZui', FONT_OUT/(BOLD_STEM+'.woff2')), ('GenZuiSans', SANS_OUT/'GenZuiSans-Bold.woff2'))),
         '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
         '{{VERSION}}': html.escape(VERSION), '{{SANS_VERSION}}': html.escape(sans_checks['version']),
