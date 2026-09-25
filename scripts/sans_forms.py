@@ -27,17 +27,46 @@ REFITS = {
     },
 }
 
-# Bold masters of the drawn transcription symbols, on the same commands as the
-# Regular drawings in honkoku.py. Noto Sans JP Bold's dashed frame has 37-unit
-# strokes (31 in Regular): the minus takes the frame's stroke, and the
-# half-turn arrow keeps its outer edge while its ring and barbs gain 6-7 units
-# inward.
-SANS_BOLD_SYMBOLS = {
-    0x2FFF: ('M470 710 C642 710 770 589 770 430 '
-             'C770 268 620 126 372 126 '
-             'L470 39 L441 8 L279 146 L441 284 L470 253 L370 164 '
-             'C585 164 727 283 727 430 C727 566 621 667 470 667 Z'),
-    0x31EF: 'M230 362 H770 V399 H230 Z',
+# The drawn transcription symbols share one stroke per face: the half-turn
+# arrow's ring weight, 36 units in Regular and 43 in Bold (Noto Sans JP's dashed
+# frame has 31 and 37). The minus and the double arrow are drawn at that stroke;
+# a scaled Noto arrow would keep Noto's much heavier stroke. The Bold half-turn
+# arrow keeps the Regular drawing's outer edge and commands, its ring and barbs
+# gaining 6-7 units inward.
+SYMBOL_STROKE = {400: 36, 700: 43}
+
+
+def double_arrow(stroke):
+    """A double-headed arrow inside the IDC frame, every stroke `stroke` wide.
+
+    Size and head angle follow Noto's arrow at the 0.72 scale the Serif uses:
+    tips at x 165 and 835 on y 377, arms reaching 200 along and 150 across.
+    """
+    from fontTools.pens.svgPathPen import SVGPathPen
+    reach = stroke/2 / 0.6  # a mitred tip extends half the stroke over sin(arm angle)
+    left, right, y = 165 + reach, 835 - reach, 377
+    shape = pathops.Path()
+    pen = shape.getPen()
+    pen.moveTo((left, y)); pen.lineTo((right, y)); pen.endPath()
+    for x, direction in ((left, 1), (right, -1)):
+        pen.moveTo((x + direction*200, y + 150)); pen.lineTo((x, y)); pen.lineTo((x + direction*200, y - 150))
+        pen.endPath()
+    shape.stroke(stroke, pathops.LineCap.BUTT_CAP, pathops.LineJoin.MITER_JOIN, 4)
+    shape.simplify()
+    svg = SVGPathPen(None, lambda v: f'{v:.1f}'.rstrip('0').rstrip('.'))
+    shape.draw(svg)
+    return svg.getCommands()
+
+
+SANS_SYMBOLS = {
+    400: {0x2FFE: double_arrow(SYMBOL_STROKE[400]),
+          0x31EF: 'M230 362 H770 V398 H230 Z'},
+    700: {0x2FFE: double_arrow(SYMBOL_STROKE[700]),
+          0x2FFF: ('M470 710 C642 710 770 589 770 430 '
+                   'C770 268 620 126 372 126 '
+                   'L470 39 L441 8 L279 146 L441 284 L470 253 L370 164 '
+                   'C585 164 727 283 727 430 C727 566 621 667 470 667 Z'),
+          0x31EF: 'M230 359 H770 V402 H230 Z'},
 }
 
 
