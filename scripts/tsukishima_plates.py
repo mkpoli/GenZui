@@ -18,6 +18,7 @@ Input: the page images extracted with `pdfimages -j` into
     uv run scripts/tsukishima_plates.py
 """
 import json
+import shutil
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -343,6 +344,7 @@ def main():
     names = sorted(p.name for p in PAGES.glob('*.jpg'))
     if not names:
         sys.exit(f'No page images in {PAGES.relative_to(ROOT)}; extract them with pdfimages -j')
+    shutil.rmtree(WORK / 'forms', ignore_errors=True)
     with ProcessPoolExecutor() as pool:
         results = dict(pool.map(plate, names, chunksize=8))
     plates = {k: v for k, v in results.items() if v}
