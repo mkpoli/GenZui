@@ -1,7 +1,7 @@
 <div class="app">
- <header class="bar"><h1>__GLYPH__</h1><span class="lede">Place the added stroke. The kana stays put.</span>
+ <header class="bar"><h1>__GLYPH__</h1><span class="lede">Place the added stroke. The kana stays put; the frame is the em the letter will be centred in.</span>
   <input id="notes" type="text" placeholder="Notes (optional)"><button id="copy" class="primary" type="button">Copy result</button><span id="copy-status" aria-live="polite"></span><span id="saved"></span></header>
- <figure class="stage"><svg id="big" viewBox="0 0 1000 1000" aria-label="The letter at full size"><rect class="em" x="0" y="0" width="1000" height="1000"/><line class="base" x1="0" x2="1000" y1="880" y2="880"/><g transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><path id="mark" class="ink"/></g></svg></figure>
+ <figure class="stage"><svg id="big" viewBox="-175 -175 1350 1350" aria-label="The letter at full size"><rect id="em" class="em" x="0" y="0" width="1000" height="1000"/><line class="base" x1="-175" x2="1175" y1="880" y2="880"/><g id="letter" transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><path id="mark" class="ink"/></g></svg></figure>
  <aside class="controls"><div id="steppers"></div>
   <p class="keys">Keys: arrows move · Shift for fine steps · - + size · [ ] length · Q E rotate · Z C bow · A D slant · W R head angle · X V tail angle · , . width · ; ' kana weight · &lt; &gt; kana width · { } kana height</p>
   <button data-act="reset" type="button">Reset</button></aside>

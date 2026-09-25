@@ -40,6 +40,8 @@ function render(){
  $('mark').setAttribute('d',markPath(p));$('kana').setAttribute('d',kanaOf(p));$('kana').setAttribute('transform',kanaTransform(p));
  for(const [key,,,fmt] of STEPPERS)if(key)$('v-'+key).value=fmt(p);
  $('lines').innerHTML=LINES.map(l=>`<p>${l.replaceAll(LETTER,glyph())}</p>`).join('');
+ // the em frame follows the letter, centred on it as the font build centres it
+ {const b=$('letter').getBBox();$('em').setAttribute('x',b.x+b.width/2-500)}
  // centre each small copy in its em, as the font build does
  for(const svg of document.querySelectorAll('#lines svg')){const g=svg.querySelector('.centre'),b=g.getBBox();g.setAttribute('transform',`translate(${500-(b.x+b.width/2)} 0)`)}
  persist();
