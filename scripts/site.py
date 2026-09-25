@@ -16,7 +16,7 @@ from refinement_proof import build_comparison
 from browser_setup import build as build_browser_setup
 from minnan_proof import build_study
 from design_gallery import build_gallery
-from family_switch import css as switch_css, html as switch_html
+from family_switch import css as switch_css, html as switch_html, label_face
 from weight_switch import css as weight_css
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
 
@@ -117,6 +117,9 @@ def build():
     for token, value in {
         '{{BOTH_ZIP}}': both.name, '{{BOTH_SIZE}}': f'{both.stat().st_size/1048576:.1f}',
         '{{SERIF_FONT}}': 'data:font/woff2;base64,'+font_data,
+        # The cards set 源 in Bold; a few-kilobyte subset keeps the Bold webfonts off the landing.
+        '{{LANDING_BOLD_CSS}}': ''.join(f"@font-face{{font-family:{family};src:url({label_face(path, '源')}) format('woff2');font-weight:700;font-display:block}}\n"
+                                      for family, path in (('GenZui', FONT_OUT/(BOLD_STEM+'.woff2')), ('GenZuiSans', SANS_OUT/'GenZuiSans-Bold.woff2'))),
         '{{SANS_FONT}}': 'data:font/woff2;base64,'+base64.b64encode((SANS_OUT/'GenZuiSans-Regular.woff2').read_bytes()).decode(),
         '{{VERSION}}': html.escape(VERSION), '{{SANS_VERSION}}': html.escape(sans_checks['version']),
         '{{CHARACTER_COUNT}}': replacement['{{CHARACTER_COUNT}}'], '{{CONSTRUCTION_COUNT}}': replacement['{{CONSTRUCTION_COUNT}}'],

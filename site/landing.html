@@ -11,6 +11,7 @@
 <style>
 @font-face {font-family:GenZui;src:url({{SERIF_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
 @font-face {font-family:GenZuiSans;src:url({{SANS_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
+{{LANDING_BOLD_CSS}}
 
 :root{
   --field:#06241a;
@@ -98,7 +99,12 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .slot{display:inline-grid;place-items:center;min-width:2.6em;padding:4px 6px;border:1px solid currentColor}
 
 .hero{align-self:center;min-width:0}
-.big{display:block;font-size:clamp(110px,15vw,210px);line-height:1.05;letter-spacing:-.05em;margin-left:-.04em;transition:transform .7s var(--ease),color .4s;transform-origin:left 70%}
+.big{display:block;font-size:clamp(110px,15vw,210px);line-height:1.05;letter-spacing:-.05em;margin-left:-.04em;transition:transform .7s var(--ease),color .4s;transform-origin:left 70%;font-synthesis:none}
+.big>span{font-weight:400}.big>b{font-weight:700}
+.big>*{position:relative;display:inline-block}
+.big>*::after{content:attr(data-w);position:absolute;left:.06em;top:.02em;font:600 10px/1 var(--hud);letter-spacing:.24em;color:var(--mint);transition:color .4s}
+.card.on .big>*::after{color:var(--green)}
+.kind b{font-weight:800}
 .card.on .big{transform:scale(1.04);color:var(--green)}
 .serif .big,.serif .name,.serif .roll{font-family:var(--serif)}
 .sans .big,.sans .name,.sans .roll{font-family:var(--sans)}
@@ -241,7 +247,7 @@ a.dl{text-decoration:none}
   .choose,.details{grid-template-columns:1fr}
   .links{grid-template-columns:1fr}
   .card{min-height:0}
-  .big{font-size:clamp(88px,26vw,140px)}
+  .big{font-size:clamp(88px,26vw,140px);margin-top:18px}
   .tabs{width:100%}.tabs button{flex:1}
   .status{flex-basis:100%;order:3}
   .dl{width:100%;justify-content:center}
@@ -265,13 +271,13 @@ a.dl{text-decoration:none}
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">01</span><span>Mincho · Noto Serif JP</span></div>
         <div class="hero">
-          <span class="big" aria-hidden="true">源萃</span>
+          <span class="big" aria-hidden="true"><span data-w="REGULAR">源</span><b data-w="BOLD">源</b></span>
           <span class="name" lang="ja">源萃明朝</span>
-          <div class="kind hud">GenZui Serif · {{VERSION}}</div>
+          <div class="kind hud">GenZui Serif · {{VERSION}} · Regular / <b>Bold</b></div>
           <div class="roll" aria-hidden="true" lang="ja"><span>𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　</span></div>
         </div>
         <div class="bottom">
-          <div class="stats hud"><span><b class="num">{{CHARACTER_COUNT}}</b> chars</span><span><b class="num">286</b> hentaigana</span><span><b class="num">{{CONSTRUCTION_COUNT}}</b> drawn</span></div>
+          <div class="stats hud"><span><b class="num">{{CHARACTER_COUNT}}</b> chars</span><span><b class="num">286</b> hentaigana</span><span><b class="num">{{CONSTRUCTION_COUNT}}</b> drawn</span><span><b class="num">2</b> weights</span></div>
           <div class="row">
             <a class="key primary hud" href="serif.html"><span>Open specimen</span></a>
             <a class="key hud" href="downloads/GenZuiSerif-Regular.ttf" download><span>TTF · <span class="num">{{FONT_SIZE}}</span> MB</span></a>
@@ -284,13 +290,13 @@ a.dl{text-decoration:none}
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">02</span><span>Gothic · Noto Sans JP</span></div>
         <div class="hero">
-          <span class="big" aria-hidden="true">源萃</span>
+          <span class="big" aria-hidden="true"><span data-w="REGULAR">源</span><b data-w="BOLD">源</b></span>
           <span class="name" lang="ja">源萃ゴシック</span>
-          <div class="kind hud">GenZui Sans · {{SANS_VERSION}}</div>
+          <div class="kind hud">GenZui Sans · {{SANS_VERSION}} · Regular / <b>Bold</b></div>
           <div class="roll" aria-hidden="true" lang="ja"><span>𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　</span></div>
         </div>
         <div class="bottom">
-          <div class="stats hud"><span><b class="num">{{SANS_CHARACTER_COUNT}}</b> chars</span><span><b class="num">286</b> hentaigana</span><span><b class="num">{{SANS_CONSTRUCTION_COUNT}}</b> drawn</span></div>
+          <div class="stats hud"><span><b class="num">{{SANS_CHARACTER_COUNT}}</b> chars</span><span><b class="num">286</b> hentaigana</span><span><b class="num">{{SANS_CONSTRUCTION_COUNT}}</b> drawn</span><span><b class="num">2</b> weights</span></div>
           <div class="row">
             <a class="key primary hud" href="sans.html"><span>Open specimen</span></a>
             <a class="key hud" href="downloads/GenZuiSans-Regular.ttf" download><span>TTF · <span class="num">{{SANS_FONT_SIZE}}</span> MB</span></a>
