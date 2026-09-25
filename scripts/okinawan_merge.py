@@ -109,8 +109,8 @@ BESIDE_DEFAULTS = dict(
     ramp_lo=YA['mark_cut'],  # heights between which the mark's width passes from neck_w to head_w
     ramp_hi=HEAD_Y,
     mark_lie=False,          # the stroke lies flat: widths, bow and slant work across it
-    kana_anchor='right',     # the kana narrows toward this side, away from the mark;
-                             # 'bottom' shrinks it evenly toward the middle of its foot
+    kana_anchor='right',     # the kana is scaled toward this side, away from the mark,
+                             # or for 'bottom' toward the middle of its foot
     mark_len=0.9,      # height of the mark relative to は's left stroke, from its foot
     mark_scale=0.85,   # size of the whole mark, about its foot
     gap=60,            # closest distance between the mark and the kana
@@ -124,19 +124,19 @@ BESIDE_DEFAULTS = dict(
     head_w=YA['head_w'],
     kana_sx=0.88,      # horizontal scale of the kana, about its right edge
     kana_sy=0.97,      # vertical scale of the kana, about the middle of the body
-    kana_bold=0,       # units of width given back to the kana's strokes after narrowing
+    kana_bold=0,       # units of width added sideways to the kana's strokes, before it is scaled
 )
 
 
 # The form GenZui ships, chosen in the arena (research/okinawan-arena/glottal-yu):
 # two culls, then one factor at a time around the form the second cull kept.
 YU = dict(BESIDE_DEFAULTS, mark_len=0.838, mark_scale=0.864, gap=38, mark_dy=148, mark_angle=4.875,
-          neck_w=1.0, head_w=0.9, kana_sx=0.812, kana_sy=0.981, kana_bold=8)
+          neck_w=1.0, head_w=0.9, kana_sx=0.812, kana_sy=0.981, kana_bold=9.852)
 
 # YO, placed by hand in the arena (research/okinawan-arena/glottal-yo): the
 # mark sits high over よ's loop, as in Funatsu's chart.
 YO = dict(BESIDE_DEFAULTS, mark_x=-51, mark_dy=300, mark_scale=0.884, mark_len=0.698, mark_angle=4.875,
-          neck_w=1.2, head_w=1.1, kana_sx=0.92, kana_sy=0.98, kana_bold=8)
+          neck_w=1.2, head_w=1.1, kana_sx=0.92, kana_sy=0.98, kana_bold=8.696)
 
 # N: い's falling stroke at the upper right of ん, where the earlier drawing
 # put it; the arena starts from that placement.
@@ -151,13 +151,13 @@ N = dict(N_DEFAULTS, mark_x=-11, mark_dy=144, mark_scale=0.658, mark_len=1.04, n
 # WI and WE: こ's upper stroke as a dot above ゐ and ゑ, shrunk evenly under it,
 # where the earlier drawing put them; the arena starts from that placement.
 W_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='こ', mark_index=1, mark_lie=True, ramp_lo=-650, ramp_hi=-350,
-                  kana_anchor='bottom', kana_sx=0.88, kana_bold=0, mark_scale=0.64, mark_len=1.0,
+                  kana_anchor='bottom', kana_sx=0.88, kana_sy=0.88, kana_bold=0, mark_scale=0.64, mark_len=1.0,
                   mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_x=-24, mark_dy=252)
 
 # WI as placed by hand in the arena (research/okinawan-arena/glottal-wi); WE
 # and WA start from the same dot.
 WI = dict(W_DEFAULTS, mark_x=-44, mark_dy=242, mark_scale=0.66, mark_len=0.84, mark_angle=-8.0, mark_bend=20,
-          neck_w=1.45, head_w=1.45, kana_sx=0.88, kana_bold=8)
+          neck_w=1.45, head_w=1.45, kana_sx=0.88, kana_sy=0.88, kana_bold=9.091)
 
 
 def _widen_strokes(rings, d):
@@ -267,13 +267,21 @@ def beside_pieces(font, contours, kana, p):
     xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
     pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
     body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
+    origin = kana_origin(body, p['kana_anchor'])
+    # weight first, in the kana's own units, then the scaling: the sweep and
+    # the scaling commute, so the page can scale a drawn weight by itself
+    body = _widen_strokes(body, p['kana_bold'])
+    sx, sy = p['kana_sx'], p['kana_sy']
+    body = [O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx), origin[1] * (1 - sy))) for r in body]
+    return mark, pivot, body
+
+
+def kana_origin(body, anchor):
+    """The point the kana is scaled about: the middle of the side away from
+    the mark at mid-body height, or for 'bottom' the middle of its foot."""
     xs = [q[0] for r in body for seg in r for q in seg]
     ys = [q[1] for r in body for seg in r for q in seg]
-    sy = p['kana_sx'] if p['kana_anchor'] == 'bottom' else p['kana_sy']
-    ox, oy = {'right': (max(xs), 360), 'left': (min(xs), 360),
-              'bottom': ((min(xs) + max(xs)) / 2, min(ys))}[p['kana_anchor']]
-    body = [O.transform(r, np.diag([p['kana_sx'], sy]), (ox * (1 - p['kana_sx']), oy * (1 - sy))) for r in body]
-    return mark, pivot, _widen_strokes(body, p['kana_bold'])
+    return {'right': (max(xs), 360), 'left': (min(xs), 360), 'bottom': ((min(xs) + max(xs)) / 2, min(ys))}[anchor]
 
 
 def shaped(mark, pivot, p):
