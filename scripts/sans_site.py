@@ -100,6 +100,7 @@ def build_page(sans_font, serif_font, webfont_usage=''):
         '{{VERSION}}': html.escape(version), '{{SERIF_VERSION}}': html.escape(SERIF_VERSION),
         '{{CHARACTER_COUNT}}': f"{checks['encoded_characters']:,}",
         '{{JP_COUNT}}': f"{kinds['Noto Sans JP Regular']:,}", '{{GENZUI_COUNT}}': str(genzui),
+        '{{GENSEKI_COUNT}}': str(kinds['GenSeki Hentaigana Gothic 1.201 Regular']),
         '{{HENTAIGANA}}': hentaigana, '{{PAIRING_TEXT}}': PAIRING_TEXT,
         '{{EXTENDED_KANA_COUNT}}': str(data['historical']),
         '{{NUMERAL_COUNT}}': str(sum(e['group'] == 'han-numeral' for e in entries)),
