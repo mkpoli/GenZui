@@ -51,8 +51,8 @@ declares both weights, and the current alias `/genzui-sans.css`. The release
 image's text alternative is:
 “源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU
 in Bold, then GenZui drawings: refitted KOTO, alternate NE and small archaic YE,
-SQUARE PAATU and a tally mark, all in Bold. 17,070 characters; 286 hentaigana;
-Unicode 18.0. Based on Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana
+SQUARE PAATU and a tally mark, all in Bold. 17,070 characters; 286 hentaigana.
+Based on Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana
 Gothic. genzui.mkpo.li/sans.”
 
 ## Site build

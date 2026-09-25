@@ -7,7 +7,7 @@ from fontTools.ttLib import TTFont
 from sans_site import BOLD_STEM, OUT, STEM, checked
 
 ALT = ('源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU in Bold, then GenZui drawings: refitted KOTO, alternate NE and small archaic YE, '
-       'SQUARE PAATU and a tally mark, all in Bold. {count} characters; 286 hentaigana; Unicode 18.0. Based on Noto Sans JP, '
+       'SQUARE PAATU and a tally mark, all in Bold. {count} characters; 286 hentaigana. Based on Noto Sans JP, '
        'Noto Sans Hentaigana and GenSeki Hentaigana Gothic. genzui.mkpo.li/sans.')
 
 
