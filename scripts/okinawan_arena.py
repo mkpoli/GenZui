@@ -110,6 +110,12 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
             ('gap', 'Gap between the mark and the kana', 'The mark moves toward or away from the kana.', {'gap': 9}),
             ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.025}),
         ],
+        # weight of the narrowed kana and of the mark beside it
+        weight=[
+            ('kana_bold', 'Weight of the kana', 'Width given back to the kana’s strokes, sideways only; -3 is none.', {'kana_bold': 4}),
+            ('mark_w', 'Weight of the mark', 'The mark is thinner or thicker from foot to head.', {'neck_w': 0.05, 'head_w': 0.05}),
+            ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.025}),
+        ],
     )
 
 
@@ -152,14 +158,21 @@ def cut_font(path, text):
 
 
 def with_variant(font, code, pen):
+    """The font with the letter replaced. A builder returns one pen, whose
+    contours are united one by one, or a list of parts, each a whole shape."""
     shape = pathops.Path()
-    part = RecordingPen()
-    for op, args in pen.value:
-        part.value.append((op, args))
-        if op == 'closePath':
+    if isinstance(pen, list):
+        for part in pen:
             piece = pathops.Path(); part.replay(piece.getPen())
             shape = pathops.op(shape, piece, pathops.PathOp.UNION)
-            part = RecordingPen()
+    else:
+        part = RecordingPen()
+        for op, args in pen.value:
+            part.value.append((op, args))
+            if op == 'closePath':
+                piece = pathops.Path(); part.replay(piece.getPen())
+                shape = pathops.op(shape, piece, pathops.PathOp.UNION)
+                part = RecordingPen()
     tt = TTGlyphPen(None)
     shape.draw(Cu2QuPen(tt, max_err=0.5, reverse_direction=False))
     name = font.getBestCmap()[code]

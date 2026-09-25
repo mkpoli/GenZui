@@ -116,7 +116,27 @@ BESIDE_DEFAULTS = dict(
     head_w=YA['head_w'],
     kana_sx=0.88,      # horizontal scale of the kana, about its right edge
     kana_sy=0.97,      # vertical scale of the kana, about the middle of the body
+    kana_bold=0,       # units of width given back to the kana's strokes after narrowing
 )
+
+
+def _widen_strokes(rings, d):
+    """Each stroke made wider by d, sideways only: the outline swept along a
+    horizontal segment, which restores what narrowing took from upright strokes
+    and leaves level strokes as they are."""
+    import pathops
+    if d <= 0:
+        return rings
+    # Noto draws some kana as one self-crossing contour; resolve it first so
+    # the counters stay open when the copies are united
+    base = pathops.Path()
+    O.draw(rings).replay(base.getPen())
+    base.simplify(fix_winding=True, keep_starting_points=False)
+    shape = pathops.Path()
+    for dx in np.linspace(-d / 2, d / 2, 9):
+        shape = pathops.op(shape, base.transform(1, 0, 0, 1, dx, 0), pathops.PathOp.UNION, fix_winding=True)
+    pen = O.RecordingPen(); shape.draw(pen)
+    return O.rings(pen)
 
 
 def glottal_beside(font, contours, kana, **params):
@@ -135,6 +155,7 @@ def glottal_beside(font, contours, kana, **params):
     mid = 360
     body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
                         (right * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
+    body = _widen_strokes(body, p['kana_bold'])
     # slide the mark sideways until its nearest point is `gap` from the kana
     ts = np.linspace(0, 1, 12)
     pts = lambda rs: np.array([O.point(seg, t) for r in rs for seg in r for t in ts])
@@ -148,5 +169,6 @@ def glottal_beside(font, contours, kana, **params):
     # centre the letter in the em
     xs = [q[0] for r in [mark, *body] for seg in r for q in seg]
     dx = 500 - (min(xs) + max(xs)) / 2
-    return O.draw([_moved(r, dx) for r in [mark, *body]])
+    # two parts, each a whole shape, so the kana's counters stay open
+    return [O.draw([_moved(mark, dx)]), O.draw([_moved(r, dx) for r in body])]
 
