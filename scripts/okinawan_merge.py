@@ -163,6 +163,10 @@ WI = dict(W_DEFAULTS, mark_x=-44, mark_dy=242, mark_scale=0.66, mark_len=0.84, m
 # over a shorter ゑ.
 WE = dict(WI, mark_x=-34, mark_dy=172, kana_sy=0.8)
 
+# WA as placed by hand (research/okinawan-arena/glottal-wa): WI's dot over a
+# shorter, heavier body.
+WA = dict(WI, kana_sy=0.86, kana_bold=14)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
@@ -245,7 +249,8 @@ def wa_body(font, contours):
     """Glottal WA's body: in the chart it is WI without the small inner loop.
     Lowered by 42, わ's loop runs on top of ゐ's along the bottom arc from
     x = 720 to 800 with the same width, so they join at x = 740: ゐ loses its
-    small loop and the rest of its bottom, and わ supplies the end of the loop."""
+    small loop and the rest of its bottom, and わ supplies the end of the loop.
+    Both edges are redrawn across the join so the two run into each other."""
     import pathops
     box = pathops.Path(); pen = box.getPen()
     pen.moveTo((410, -100)); pen.lineTo((740, -100)); pen.lineTo((740, 245)); pen.lineTo((410, 245)); pen.closePath()
@@ -256,7 +261,35 @@ def wa_body(font, contours):
     top = pathops.op(path(O.rings(contours(font, ord('ゐ')))), box, pathops.PathOp.DIFFERENCE)
     bottom = pathops.op(path([_moved(O.rings(contours(font, ord('わ'), [0]))[0], dy=-42)]), box, pathops.PathOp.INTERSECTION)
     pen = O.RecordingPen(); pathops.op(top, bottom, pathops.PathOp.UNION).draw(pen)
-    return O.rings(pen)
+    return _smooth_seam(O.rings(pen), 740, 35, (-100, 245))
+
+
+def _smooth_seam(rings, x, half, ys):
+    """Each edge crossing the splice at `x` (between heights `ys`) redrawn over
+    x - half .. x + half as one fair curve meeting both sides with their own
+    direction and curvature, so the two sources run into each other."""
+    length = lambda segs: sum(np.linalg.norm(sg[3] - sg[0]) for sg in segs)
+    y_of = lambda ring, c: O.point(ring[c[0]], c[1])[1]
+    out = []
+    for ring in rings:
+        done = []                       # heights of the seams already redrawn
+        while True:
+            at = lambda v: [c for c in O.crossings(ring, 0, v) if ys[0] < y_of(ring, c) < ys[1]]
+            pairs = [(a, b) for a in at(x - half) for b in at(x + half)
+                     if abs(y_of(ring, a) - y_of(ring, b)) < 2 * half
+                     and not any(abs(y_of(ring, a) - y) < 1 for y in done)]
+            for a, b in sorted(pairs, key=lambda ab: abs(y_of(ring, ab[0]) - y_of(ring, ab[1]))):
+                short, long = sorted((O.arc(ring, a, b), O.arc(ring, b, a)), key=length)
+                if length(short) < 4 * half:    # the edge between the two cuts, not the rest of the letter
+                    break
+            else:
+                break
+            done.append(y_of(ring, a))
+            end, start = long[-1], long[0]
+            ring = long + [O.fair(end[3], O.tangent(end, 1), O.curvature(end, 1),
+                                  start[0], O.tangent(start, 0), O.curvature(start, 0))]
+        out.append(ring)
+    return out
 
 
 # bodies that are not one Noto kana, by the name the letters use for them
