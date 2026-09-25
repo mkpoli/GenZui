@@ -355,7 +355,7 @@ def tune(slug, round_no, base):
     for sx in NARROWS:
         for bold in BOLDS:
             kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
-    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant',
+    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
                                'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
