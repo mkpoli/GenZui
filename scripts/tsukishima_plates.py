@@ -351,15 +351,30 @@ def main():
     names = sorted(p.name for p in PAGES.glob('*.jpg'))
     if not names:
         sys.exit(f'No page images in {PAGES.relative_to(ROOT)}; extract them with pdfimages -j')
-    for old in ('forms', 'plates'):
-        shutil.rmtree(WORK / old, ignore_errors=True)
-    with ProcessPoolExecutor() as pool:
-        results = dict(pool.map(plate, names, chunksize=8))
+    register = json.loads((ROOT / 'data/historical-katakana/tsukishima-plates.json').read_text())
+    expected = {p['page'] for p in register['plates']}
+    outputs = [WORK / 'forms', WORK / 'plates', WORK / 'manifest.json']
+
+    def clear():
+        for path in outputs:
+            shutil.rmtree(path, ignore_errors=True) if path.is_dir() else path.unlink(missing_ok=True)
+
+    clear()
+    try:
+        with ProcessPoolExecutor() as pool:
+            results = dict(pool.map(plate, names, chunksize=8))
+    except BaseException:
+        clear()  # leave no half-written output behind
+        raise
     plates = {k: v for k, v in results.items() if v}
     (WORK / 'manifest.json').write_text(json.dumps(plates, ensure_ascii=False, indent=1))
     bad = [k for k, v in plates.items() if 'error' in v]
+    found = {Path(k).stem for k in plates}
+    missing, extra = sorted(expected - found), sorted(found - expected)
     total = sum(len(c['forms']) for v in plates.values() for c in v.get('cells', []))
     print(f'{len(plates)} plates, {len(bad)} without a column grid {bad}, {total} forms')
+    if missing or extra:
+        sys.exit(f'register mismatch: not detected {missing}; not in the register {extra}')
 
 
 if __name__ == '__main__':
