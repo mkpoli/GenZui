@@ -184,6 +184,22 @@ Outputs are in `build/sans/`. The [build guide](research/genzui-sans.md)
 covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
 drawings, the browser check and packaging to `dist/`.
 
+### GenZui Serif Kugyol and GenZui Sans Kugyol
+
+GenZui Serif Kugyol and GenZui Sans Kugyol are cut from the built Serif and
+Sans faces to exactly the 181 구결자 those faces draw at U+F67E–U+F77C, plus
+SPACE and IDEOGRAPHIC SPACE. Outlines, metrics, and licensing metadata match
+the parent face; only the repertoire is reduced. Use them as a compact 구결
+fallback font where the full GenZui faces are unnecessary.
+
+```sh
+.venv/bin/python scripts/kugyol.py
+.venv/bin/python scripts/check_kugyol.py
+```
+
+Both faces' Regular and Bold TTFs must already be built. Outputs, including a
+contact-sheet `proof.png`, are in `build/kugyol/`.
+
 ## Build the specimen website
 
 After both faces are packaged, generate the public site:
