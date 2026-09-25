@@ -57,19 +57,24 @@ export type Change =
   | { field: 'family' | 'flag'; target: string; seen: { revision: number; family: string; flag: string | null }; new: string | null }
   | { field: 'label'; target: string; seen: { revision: number | null; name: string | null }; new: string | null };
 
+const isName = (v: unknown) => typeof v === 'string' && v.trim() !== '' && v.length <= 40;
+
 function validate(c: Change): string {
   if (c?.field === 'label') {
     const m = FAMILY_ID.exec(c.target);
     if (!m?.[1]) throw new Problem(400, `bad family id ${c.target}`);
-    if (c.new !== null && !(typeof c.new === 'string' && c.new.trim() && c.new.length <= 40))
-      throw new Problem(400, 'a family name needs 1–40 characters');
+    const s = c.seen;
+    if (!s || !(s.revision === null || Number.isInteger(s.revision)) || !(s.name === null || typeof s.name === 'string'))
+      throw new Problem(400, 'missing family state');
+    if (c.new !== null && !isName(c.new)) throw new Problem(400, 'a family name needs 1–40 characters');
     return m[1];
   }
   if (c?.field !== 'family' && c?.field !== 'flag') throw new Problem(400, 'bad field');
   const m = FORM_ID.exec(c.target);
   if (!m) throw new Problem(400, `bad form id ${c.target}`);
   const s = c.seen;
-  if (!s || !Number.isInteger(s.revision) || typeof s.family !== 'string') throw new Problem(400, 'missing form state');
+  if (!s || !Number.isInteger(s.revision) || typeof s.family !== 'string' || !(s.flag === null || typeof s.flag === 'string'))
+    throw new Problem(400, 'missing form state');
   if (c.field === 'family' && !(typeof c.new === 'string' && FAMILY_ID.test(c.new))) throw new Problem(400, 'bad family');
   if (c.field === 'flag' && c.new !== null && !FLAGS.has(c.new)) throw new Problem(400, 'bad flag');
   return m[1];
@@ -80,7 +85,7 @@ function statements(db: D1Database, batch: string, actor: string, at: string, c:
   if (c.field === 'label') {
     const rev = c.seen.revision;
     return [
-      db.prepare(SQL.guardLabel).bind(c.target, rev ?? -1),
+      db.prepare(SQL.guardLabel).bind(c.target, rev ?? -1, c.seen.name),
       db.prepare(SQL.logEvent).bind(batch, c.target, 'label', c.seen.name, c.new, (rev ?? 0) + 1, at),
       c.new === null ? db.prepare(SQL.dropLabel).bind(c.target)
         : db.prepare(SQL.setLabel).bind(c.target, kana, c.new.trim(), actor, at),
@@ -103,6 +108,7 @@ async function commit(env: Env, batch: string, actor: string, changes: Change[],
   if (!Array.isArray(changes) || !changes.length) throw new Problem(400, 'no changes');
   if (changes.length > MAX_CHANGES) throw new Problem(400, `at most ${MAX_CHANGES} changes per batch`);
   if (changes.filter(c => c?.field === 'label').length > 1) throw new Problem(400, 'one family name per batch');
+  if (new Set(changes.map(c => c?.target)).size !== changes.length) throw new Problem(400, 'one change per target per batch');
   const at = new Date().toISOString();
   const db = env.DB;
   const stmts = [db.prepare(SQL.openBatch).bind(batch, actor, undoOf, at)];

@@ -12,7 +12,7 @@ export const SQL = {
   guardForm:
     "SELECT CASE WHEN NOT EXISTS (SELECT 1 FROM forms WHERE id = ?1 AND revision = ?2 AND family IS ?3 AND flag IS ?4) THEN json_extract('conflict', '$') END",
   guardLabel:
-    "SELECT CASE WHEN COALESCE((SELECT revision FROM labels WHERE id = ?1), -1) IS NOT ?2 THEN json_extract('conflict', '$') END",
+    "SELECT CASE WHEN NOT (COALESCE((SELECT revision FROM labels WHERE id = ?1), -1) = ?2 AND (SELECT name FROM labels WHERE id = ?1) IS ?3) THEN json_extract('conflict', '$') END",
   logEvent: 'INSERT INTO events (batch, target, field, old, new, revision, at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)',
   setFamily: 'UPDATE forms SET family = ?2, revision = revision + 1, by = ?3, at = ?4 WHERE id = ?1',
   setFlag: 'UPDATE forms SET flag = ?2, revision = revision + 1, by = ?3, at = ?4 WHERE id = ?1',
