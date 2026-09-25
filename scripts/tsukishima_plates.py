@@ -13,7 +13,8 @@ everything cut from them stay under `build/` as private drawing references.
 Input: the page images extracted with `pdfimages -j` into
 `build/katakana-work/tenzu/pages/` (`a-NNN` = volume 1–2, book page = NNN + 87;
 `b-NNN` = volume 3–4, book page = NNN + 413). Output: one PNG per form under
-`build/katakana-work/tenzu/forms/<kana>/` and `manifest.json` beside them.
+`build/katakana-work/tenzu/forms/<kana>/`, one reduced deskewed image per
+plate under `plates/`, and `manifest.json` beside them.
 
     uv run scripts/tsukishima_plates.py
 """
@@ -44,6 +45,7 @@ PITCH = (62, 95)      # column pitch in pixels at the scans' 233 ppi
 SPECK = 12            # smallest ink component kept, in pixels
 JOIN = 13             # widest gap bridged inside one letter, in pixels
 LETTER = (62, 68)     # largest width and height of one written form
+PLATE_WIDTH = 1100    # width of the reduced plate images, in pixels
 FRAGMENT = 30         # widest gap bridged from a stroke fragment to its letter
 
 
@@ -337,14 +339,20 @@ def plate(name):
             path = out / '_extra' / f'{Path(name).stem}-band{band + 1}.png'
             path.parent.mkdir(parents=True, exist_ok=True)
             cv2.imwrite(str(path), cv2.cvtColor(img[extra[1]:extra[3], extra[0]:extra[2]], cv2.COLOR_BGR2GRAY))
-    return name, {'angle': angle, 'bands': found, 'columns': grid, 'cells': cells}
+    # The deskewed page, reduced, so a crop can be shown where it stands on its plate.
+    scale = PLATE_WIDTH / img.shape[1]
+    small = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+    (WORK / 'plates').mkdir(exist_ok=True)
+    cv2.imwrite(str(WORK / 'plates' / f'{Path(name).stem}.webp'), small, [cv2.IMWRITE_WEBP_QUALITY, 72])
+    return name, {'angle': angle, 'scale': scale, 'bands': found, 'columns': grid, 'cells': cells}
 
 
 def main():
     names = sorted(p.name for p in PAGES.glob('*.jpg'))
     if not names:
         sys.exit(f'No page images in {PAGES.relative_to(ROOT)}; extract them with pdfimages -j')
-    shutil.rmtree(WORK / 'forms', ignore_errors=True)
+    for old in ('forms', 'plates'):
+        shutil.rmtree(WORK / old, ignore_errors=True)
     with ProcessPoolExecutor() as pool:
         results = dict(pool.map(plate, names, chunksize=8))
     plates = {k: v for k, v in results.items() if v}
