@@ -103,19 +103,19 @@ def glottal_ya(font, contours, **params):
 
 
 # Glottal YU and YO: in Funatsu's chart the mark stands free beside the kana.
-# It is the same stroke as YA's mark, at YA's widths and angle, drawn whole
+# It is the same stroke as YA's mark, at YA's widths, drawn whole
 # down to its foot; the kana is Noto's own, narrowed only as far as the mark
-# needs room.
+# needs room, and the pair is centred in the em.
 BESIDE_DEFAULTS = dict(
-    mark_len=0.82,     # height of the mark relative to は's left stroke, from its foot
-    mark_x=0,          # horizontal offset of the mark
-    mark_dy=40,        # vertical offset of the mark
-    mark_angle=YA['mark_angle'],
+    mark_len=0.9,      # height of the mark relative to は's left stroke, from its foot
+    mark_scale=0.85,   # size of the whole mark, about its foot
+    gap=60,            # closest distance between the mark and the kana
+    mark_dy=60,        # vertical offset of the mark
+    mark_angle=1.5,    # degrees the mark turns; positive leans it left
     neck_w=YA['neck_w'],
     head_w=YA['head_w'],
-    kana_sx=0.8,       # horizontal scale of the kana, about its right edge
-    kana_sy=0.96,      # vertical scale of the kana, about the middle of the body
-    kana_right=940,    # where the kana's right edge ends up
+    kana_sx=0.88,      # horizontal scale of the kana, about its right edge
+    kana_sy=0.97,      # vertical scale of the kana, about the middle of the body
 )
 
 
@@ -126,11 +126,27 @@ def glottal_beside(font, contours, kana, **params):
     mark = _widened(ring('は', 1), YA['mark_cut'], p['neck_w'], p['head_w'])
     mark = _turned(mark, YA['mark_cut'], p['mark_angle'])
     foot = min(q[1] for seg in mark for q in seg)
+    fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
+    mark = O.transform(mark, np.eye(2) * p['mark_scale'], (fx, foot) - np.array([fx, foot]) * p['mark_scale'])
     mark = O.transform(mark, np.array([[1, 0], [0, p['mark_len']]]),
-                       (p['mark_x'], foot * (1 - p['mark_len']) + p['mark_dy']))
+                       (0, foot * (1 - p['mark_len']) + p['mark_dy']))
     body = O.rings(contours(font, ord(kana)))
     right = max(q[0] for r in body for seg in r for q in seg)
     mid = 360
     body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
-                        (p['kana_right'] - p['kana_sx'] * right, mid * (1 - p['kana_sy']))) for r in body]
-    return O.draw([mark, *body])
+                        (right * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
+    # slide the mark sideways until its nearest point is `gap` from the kana
+    ts = np.linspace(0, 1, 12)
+    pts = lambda rs: np.array([O.point(seg, t) for r in rs for seg in r for t in ts])
+    ms, ks = pts([mark]), pts(body)
+    near = lambda dx: np.min(np.linalg.norm((ms + [dx, 0])[:, None] - ks[None], axis=2))
+    lo, hi = -400.0, 200.0          # well clear of the kana .. inside it
+    for _ in range(30):
+        dx = (lo + hi) / 2
+        lo, hi = (dx, hi) if near(dx) >= p['gap'] else (lo, dx)
+    mark = _moved(mark, lo)
+    # centre the letter in the em
+    xs = [q[0] for r in [mark, *body] for seg in r for q in seg]
+    dx = 500 - (min(xs) + max(xs)) / 2
+    return O.draw([_moved(r, dx) for r in [mark, *body]])
+

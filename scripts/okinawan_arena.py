@@ -77,8 +77,11 @@ LETTERS = {
     ),
 }
 
-BESIDE_RANGES = dict(mark_len=(0.7, 0.95), mark_x=(-60, 30), mark_dy=(0, 90), mark_angle=(-10.0, 4.0),
-                     kana_sx=(0.72, 0.9), kana_sy=(0.88, 1.0), kana_right=(900, 960))
+# After the round-1 cull of YU: the kept marks stood upright or leant left
+# (angle -1 to 4), and the note asked for a smaller mark, as in YA, beside a
+# bigger ゆ, the two roughly parallel.
+BESIDE_RANGES = dict(mark_len=(0.75, 0.95), mark_scale=(0.65, 0.9), gap=(30, 90), mark_dy=(20, 110),
+                     mark_angle=(-1.0, 4.0), kana_sx=(0.8, 0.92), kana_sy=(0.94, 1.0))
 for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU', 'ゆ', 'やゆよ'),
                                              ('glottal-yo', 0xF45F, 'Glottal YO', 'よ', 'やゆよ')):
     _g = chr(_code)
