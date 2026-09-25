@@ -120,6 +120,10 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
             ('kana_h', 'Height of the kana', 'The kana is shorter or taller; the mark stays.', {'kana_sy': 0.02}),
             ('kana_bold', 'Weight of the kana', 'Width given back to the kana’s strokes, sideways only; -3 is none.', {'kana_bold': 2}),
         ],
+        # where the mark sits: one row per height, the gap to the kana across
+        # (Funatsu sets YO's mark high, above よ's loop)
+        position=[(f'h{dy}', f'Mark raised {dy}', 'Across the row the mark moves from close to far from the kana.',
+                   {'gap': 15}, {'mark_dy': dy}) for dy in (150, 210, 270, 330, 390)],
         # weight of the narrowed kana and of the mark beside it
         weight=[
             ('kana_bold', 'Weight of the kana', 'Width given back to the kana’s strokes, sideways only; -3 is none.', {'kana_bold': 4}),
@@ -280,12 +284,13 @@ def axes(slug, round_no, base, group='axes'):
     """One row per factor: seven steps around the base, only that factor changed."""
     letter = LETTERS[slug]
     rows, params = [], []
-    for key, label, note, deltas in letter[group]:
+    for key, label, note, deltas, *fixed in letter[group]:
         steps = []
+        row_base = {**base, **(fixed[0] if fixed else {})}
         for i in range(-3, 4):
-            p = dict(base)
+            p = dict(row_base)
             for name, step in deltas.items():
-                p[name] = round(base[name] + step * i, 3) if isinstance(step, float) else base[name] + step * i
+                p[name] = round(row_base[name] + step * i, 3) if isinstance(step, float) else row_base[name] + step * i
             steps.append(p); params.append(p)
         rows.append((key, label, note, steps))
     unique = [dict(t) for t in {tuple(sorted(p.items())) for p in params}]
