@@ -187,6 +187,15 @@ def check(weight=400):
         b.moveTo((-100, y-1)); b.lineTo((1100, y-1)); b.lineTo((1100, y+1)); b.lineTo((-100, y+1)); b.closePath()
         cut = pathops.op(wi_outline, band, pathops.PathOp.INTERSECTION).bounds
         assert abs(cut[0] - x0) <= 1 and abs(cut[2] - x1) <= 1, (index, cut, (x0, x1))
+    # The left descent has the weight of the right stem.
+    for y in (450, 650):
+        widths = []
+        for x0, x1 in ((-200, 500), (500, 1200)):
+            band = pathops.Path(); b = band.getPen()
+            b.moveTo((x0, y-.5)); b.lineTo((x1, y-.5)); b.lineTo((x1, y+.5)); b.lineTo((x0, y+.5)); b.closePath()
+            cut = pathops.op(wi_outline, band, pathops.PathOp.INTERSECTION).bounds
+            widths.append(cut[2] - cut[0])
+        assert abs(widths[0] - widths[1]) <= 4, (y, widths)
     assert font['hmtx'][cmap[0x1B128]] == (1000, drawn.xMin) and font['vmtx'][cmap[0x1B128]] == (1000, 880-drawn.yMax)
     # The hentaigana's median stem matches the hiragana's, and the archaic kana
     # the katakana's, within two units.
