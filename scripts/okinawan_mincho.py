@@ -244,15 +244,9 @@ def glottal_n(k):
     return okinawan_merge.glottal_beside(k.font, k.contours, 'ん', **okinawan_merge.N)
 
 
-@drawing(0xF467)  # SI: す with a long falling stroke on the right
+@drawing(0xF467)  # SI: す with ぃ's second stroke standing long on the right
 def si(k):
-    # す moves left; its bar is shortened along its length only. The right
-    # stroke is ぃ's lighter second stroke, lengthened the same way.
-    bar = k.move(k.part('す', 2), sx=.84, sy=1, origin=(540, 0), dx=-140)
-    # The loop and its counter stay one outline so the counter keeps its winding.
-    rest = k.move(k.part('す', 0, 1, 3), dx=-140)
-    right = stretch(k, k.part('ぃ', 1), 500, 20)
-    return [bar, rest, k.move(right, dx=60)]
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'す', **okinawan_merge.SI)
 
 
 @drawing(0xF469)  # TSI: つ whose tail runs into い's first stroke

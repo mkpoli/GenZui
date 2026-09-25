@@ -175,6 +175,9 @@ SI_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='ぃ', mark_index=1, ramp_lo=200, 
                    mark_scale=1.0, mark_len=1.627, mark_angle=0.0, neck_w=1.0, head_w=1.0,
                    kana_sx=0.9, kana_sy=1.0, kana_bold=0, mark_x=200, mark_dy=-109)
 
+# SI as placed by hand in the arena (research/okinawan-arena/si).
+SI = dict(SI_DEFAULTS, mark_x=80, mark_dy=-119, mark_scale=0.88, mark_len=1.607, mark_angle=-10.0, mark_bend=10)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
