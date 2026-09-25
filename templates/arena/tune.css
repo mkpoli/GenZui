@@ -1,22 +1,21 @@
-.tune{display:grid;grid-template-columns:minmax(0,440px) minmax(0,340px) minmax(0,1fr);gap:24px;align-items:start;margin:10px 0 24px}
-.stage,.lines{position:sticky;top:12px}.lines h2{font-size:17px;margin:8px 0}
-.stage{margin:0}.stage svg{width:100%;height:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}
-.stage figcaption{color:var(--muted);font-size:13px}
-.em{fill:none;stroke:var(--line);stroke-width:2}.base{stroke:var(--line);stroke-width:2;stroke-dasharray:8 8}
-.ink{fill:var(--ink)}
-.controls h2{font-size:17px;margin:8px 0}
-.pad{display:grid;grid-template-columns:repeat(3,110px);gap:6px;margin-bottom:14px}.pad .hint{text-align:center;align-self:center}
-.row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.hint{color:var(--muted);font-size:12px}
-#values{display:grid;grid-template-columns:max-content max-content;gap:2px 12px;color:var(--muted);font-size:13px;margin-top:14px}#values dd{margin:0}
-.lines p{font-family:GenZuiContext;font-size:34px;line-height:1.55;margin:0;white-space:nowrap}
-.lines svg{width:1em;height:1em;vertical-align:-.12em}
-/* narrower screens: the text lines ride in a strip above the action bar */
-@media (max-width:1100px){.tune{grid-template-columns:minmax(0,440px) minmax(0,1fr)}
- .lines{position:fixed;top:auto;bottom:90px;left:0;right:0;z-index:4;background:var(--paper);border-top:1px solid var(--line);padding:6px 18px;display:flex;gap:20px;overflow-x:auto}
- .lines h2{display:none}.lines #lines{display:flex;gap:28px}.lines p{font-size:28px}main{padding-bottom:220px}}
-@media (max-width:760px){.tune{grid-template-columns:1fr}.stage{position:static}.pad{grid-template-columns:repeat(3,1fr)}}
-.cull-actions{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);padding:14px max(18px,calc((100vw - 1184px)/2));display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:5}
-.cull-actions #status{color:var(--muted);font-size:13px;margin-right:auto}
-.cull-actions #notes{flex:1 1 22rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:8px 12px}
-.cull-actions .primary{font-weight:600;border-color:var(--accent);padding:12px 18px}
-.cull-actions #copy-status{flex-basis:100%;margin:0}
+/* one screen, nothing to scroll: stage | controls | references and text */
+html,body{height:100%}body{overflow:hidden}
+.app{height:100vh;display:grid;grid-template-columns:minmax(0,auto) 300px minmax(260px,1fr);grid-template-rows:auto minmax(0,1fr);gap:0 20px;padding:0 20px 16px}
+.bar{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:14px}
+.bar h1{font-size:20px;margin:0;white-space:nowrap}.bar .lede{color:var(--muted);font-size:13px;white-space:nowrap}
+#notes{flex:1 1 12rem;min-width:8rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:6px 10px;font:inherit}
+.bar .primary{font-weight:600;border-color:var(--accent);padding:7px 14px}#copy-status,#saved{color:var(--muted);font-size:12px;white-space:nowrap}
+.stage{margin:0;height:100%;aspect-ratio:1;max-width:min(100%,calc(100vw - 620px))}.stage svg{height:100%;width:100%;display:block;border:1px solid var(--line);border-radius:6px}
+.em{fill:none;stroke:var(--line);stroke-width:2}.base{stroke:var(--line);stroke-width:2;stroke-dasharray:8 8}.ink{fill:var(--ink)}
+.controls{display:flex;flex-direction:column;gap:6px;min-height:0;overflow:auto}
+#steppers{display:grid;grid-template-columns:1fr 34px 58px 34px;gap:3px 4px;align-items:center}
+#steppers .group{grid-column:1/-1;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+#steppers label{font-size:13px}#steppers output{text-align:center;font-size:13px;font-variant-numeric:tabular-nums}
+#steppers button{padding:3px 0;font-size:15px;line-height:1.2}
+.keys{color:var(--muted);font-size:11px;line-height:1.5;margin:6px 0}
+.controls [data-act=reset]{align-self:flex-start;padding:4px 12px}
+.side{min-height:0;overflow:auto}.side h2{font-size:14px;color:var(--muted);font-weight:500;margin:10px 0 4px}
+.side .font-references{margin:0;padding:8px 12px}.side .reference-fonts{display:flex;gap:16px;align-items:end;margin-top:6px}
+.side .reference-fonts img{height:90px!important}.side .reference-glyph{font-size:60px;height:auto}
+#lines p{font-family:GenZuiContext;font-size:30px;line-height:1.5;margin:0 0 4px}#lines svg{width:1em;height:1em;vertical-align:-.12em}
+@media (max-width:1000px){body{overflow:auto}.app{height:auto;grid-template-columns:1fr 300px;grid-template-rows:auto auto auto}.stage{max-width:100%;height:auto}.side{grid-column:1/-1}}

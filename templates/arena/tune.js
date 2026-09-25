@@ -26,7 +26,7 @@ function glyph(){return `<svg viewBox="0 0 1000 1000" aria-hidden="true"><g clas
 function render(){
  const p=state.p;
  $('mark').setAttribute('d',markPath(p));$('kana').setAttribute('d',kanaOf(p));
- $('values').innerHTML=`<dt>right</dt><dd>${p.mark_x.toFixed(0)}</dd><dt>up</dt><dd>${p.mark_dy.toFixed(0)}</dd><dt>size</dt><dd>${p.mark_scale.toFixed(3)}</dd><dt>length</dt><dd>${p.mark_len.toFixed(3)}</dd><dt>angle</dt><dd>${p.mark_angle.toFixed(1)}°</dd><dt>bend</dt><dd>${p.mark_bend.toFixed(0)}</dd><dt>slant</dt><dd>${p.mark_slant.toFixed(0)}</dd><dt>foot width</dt><dd>${p.neck_w.toFixed(2)}</dd><dt>head width</dt><dd>${p.head_w.toFixed(2)}</dd><dt>kana ${EVEN?'size':'width'}</dt><dd>${p.kana_sx.toFixed(2)}</dd><dt>kana weight</dt><dd>${p.kana_bold}</dd>`;
+ for(const [key,,,fmt] of STEPPERS)if(key)$('v-'+key).value=fmt(p);
  $('lines').innerHTML=LINES.map(l=>`<p>${l.replaceAll(LETTER,glyph())}</p>`).join('');
  // centre each small copy in its em, as the font build does
  for(const svg of document.querySelectorAll('#lines svg')){const g=svg.querySelector('.centre'),b=g.getBBox();g.setAttribute('transform',`translate(${500-(b.x+b.width/2)} 0)`)}
@@ -46,11 +46,32 @@ function step(p,key,grid,dir){const i=grid.findIndex(v=>Math.abs(v-p[key])<1e-6)
 // widths and weights come in the steps drawn for this page
 function widen(p,key,dir){const i=WIDTHS.findIndex(w=>Math.abs(w-p[key])<1e-6);p[key]=WIDTHS[Math.max(0,Math.min(WIDTHS.length-1,i+dir))]}
 function act(name,fine){ACTS[name](state.p,fine?2:10);render()}
-document.querySelectorAll('[data-act]').forEach(b=>b.onclick=e=>act(b.dataset.act,e.shiftKey));
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;
  const name={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right','+':'bigger','=':'bigger','-':'smaller',']':'longer','[':'shorter',',':'thinner','.':'thicker',';':'kana_lighter',"'":'kana_heavier','<':'kana_narrower','>':'kana_wider',q:'ccw',e:'cw',Q:'ccw',E:'cw',z:'bend_left',c:'bend_right',Z:'bend_left',C:'bend_right',a:'slant_left',d:'slant_right',A:'slant_left',D:'slant_right'}[e.key];
  if(name){e.preventDefault();act(name,e.shiftKey)}});
 $('copy').onclick=async()=>{const text=JSON.stringify({arena:EXPERIMENT,protocol:'tune-v1',params:state.p,notes:$('notes').value});
  try{await navigator.clipboard.writeText(text);$('copy-status').textContent='Copied. Paste it into the conversation.'}catch{prompt('Copy this result:',text)}};
-for(const [act,word] of [['kana_lighter','lighter'],['kana_heavier','heavier'],['kana_narrower',EVEN?'smaller':'narrower'],['kana_wider',EVEN?'larger':'wider']])document.querySelector(`[data-act=${act}]`).textContent=`${KANA} ${word}`;
+// one row per control: − / value / +; the rows are the only place the values show
+const STEPPERS=[
+ [null,'Position'],
+ ['x','Left / right',['left','right'],p=>p.mark_x.toFixed(0)],
+ ['y','Down / up',['down','up'],p=>p.mark_dy.toFixed(0)],
+ [null,'Shape'],
+ ['size','Size',['smaller','bigger'],p=>p.mark_scale.toFixed(3)],
+ ['len','Length',['shorter','longer'],p=>p.mark_len.toFixed(3)],
+ ['angle','Rotate',['cw','ccw'],p=>p.mark_angle.toFixed(1)+'°'],
+ ['bend','Bow',['bend_left','bend_right'],p=>p.mark_bend.toFixed(0)],
+ ['slant','Slant',['slant_left','slant_right'],p=>p.mark_slant.toFixed(0)],
+ [null,'Thickness'],
+ ['width','Whole stroke',['thinner','thicker'],p=>((p.neck_w+p.head_w)/2).toFixed(2)],
+ ['head','Head',['head_thinner','head_thicker'],p=>p.head_w.toFixed(2)],
+ ['foot','Foot',['neck_thinner','neck_thicker'],p=>p.neck_w.toFixed(2)],
+ [null,'Kana'],
+ ['kw',`${KANA} weight`,['kana_lighter','kana_heavier'],p=>String(p.kana_bold)],
+ ['ks',`${KANA} ${EVEN?'size':'width'}`,['kana_narrower','kana_wider'],p=>p.kana_sx.toFixed(2)],
+];
+$('steppers').innerHTML=STEPPERS.map(([key,label,acts])=>key
+ ?`<label for="v-${key}">${label}</label><button type="button" data-act="${acts[0]}" aria-label="${label}: less">−</button><output id="v-${key}"></output><button type="button" data-act="${acts[1]}" aria-label="${label}: more">+</button>`
+ :`<span class="group">${label}</span>`).join('');
+document.querySelectorAll('[data-act]').forEach(b=>b.onclick=e=>act(b.dataset.act,e.shiftKey));
 render();
