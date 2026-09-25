@@ -330,21 +330,23 @@ def tune(slug, round_no, base):
     kana = letter['build'].keywords['kana']
     p = {**letter['defaults'], **base}
     font = TTFont(BASE)
-    mark, origin, body = okinawan_merge.beside_pieces(font, contours, kana, p)
+    mark, pivot, body = okinawan_merge.beside_pieces(font, contours, kana, p)
     if p.get('mark_x') is None:
-        p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(mark, origin, p), body, p['gap']))
+        p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap']))
     snap = lambda v, grid: min(grid, key=lambda g: abs(g - v))
     p['neck_w'], p['head_w'], p['kana_bold'] = snap(p['neck_w'], WIDTHS), snap(p['head_w'], WIDTHS), snap(p['kana_bold'], BOLDS)
     p['kana_sx'] = snap(p['kana_sx'], NARROWS)
     marks, kanas = {}, {}
     for neck in WIDTHS:
         for head in WIDTHS:
-            m, o, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'neck_w': neck, 'head_w': head, 'kana_bold': 0})
-            marks[f'{neck:.2f},{head:.2f}'] = [svg_path([m]), *o]
+            m, pivot, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'neck_w': neck, 'head_w': head, 'kana_bold': 0})
+            # raw control points: the page shapes and places them as okinawan_merge does
+            marks[f'{neck:.2f},{head:.2f}'] = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in m], pivot=list(pivot))
     for sx in NARROWS:
         for bold in BOLDS:
             kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
-    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
+    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant',
+                               'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
