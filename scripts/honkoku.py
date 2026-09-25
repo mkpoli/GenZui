@@ -36,7 +36,7 @@ def add_honkoku(font, add, make_glyph, contours, transform, source=SOURCE,
     """Append the new characters, keeping all existing glyph IDs and mappings.
 
     `symbols` replaces the drawn half-turn arrow and minus, keyed by code point,
-    for a face whose frame strokes are heavier."""
+    and may draw the double arrow in place of Noto's scaled one."""
     symbols = {0x2FFF: HALF_TURN, 0x31EF: MINUS, **(symbols or {})}
     def part(cp, indices=None):
         return contours(font, cp, indices)
@@ -51,7 +51,8 @@ def add_honkoku(font, add, make_glyph, contours, transform, source=SOURCE,
     recipes = {
         0x2FFC: [transform(part(0x2FF7), (-1, 0, 0, 1, 1000, 0))],
         0x2FFD: [transform(part(0x2FFA), (-1, 0, 0, 1, 1000, 0))],
-        0x2FFE: [frame, transform(part(0x2194), (.72, 0, 0, .72, 140, 106.4))],
+        0x2FFE: [frame, path(symbols[0x2FFE]) if 0x2FFE in symbols else
+                 transform(part(0x2194), (.72, 0, 0, .72, 140, 106.4))],
         0x2FFF: [frame, path(symbols[0x2FFF])],
         0x31EF: [frame, path(symbols[0x31EF])],
     }

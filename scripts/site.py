@@ -124,6 +124,7 @@ def build():
         '{{SANS_CONSTRUCTION_COUNT}}': str(sum('GenZui' in v.split(';')[0] or 'squared-katakana' in v for v in sans_provenance.values())),
         '{{FONT_SIZE}}': replacement['{{FONT_SIZE}}'], '{{BOLD_FONT_SIZE}}': replacement['{{BOLD_FONT_SIZE}}'],
         '{{SANS_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Regular.ttf').stat().st_size/1048576:.1f}",
+        '{{SANS_BOLD_FONT_SIZE}}': f"{(SANS_OUT/'GenZuiSans-Bold.ttf').stat().st_size/1048576:.1f}",
     }.items():
         landing = landing.replace(token, value)
     assert '{{' not in landing and '/home/' not in landing

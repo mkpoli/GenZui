@@ -137,6 +137,7 @@ def check():
     for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (home,'GenZui',BOLD_STEM,ROOT/'build/serif'/(BOLD_STEM+'.ttf')),
                                             (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
+                                            (sans,'GenZui',SANS_BOLD_STEM,ROOT/'build/sans'/(SANS_BOLD_STEM+'.ttf')),
                                             (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZuiSans',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf'))):
@@ -155,9 +156,9 @@ def check():
             covered|=declared;chunk_cases+=1
         assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
         # Bold loads on demand, so only Regular text chunks are preloaded.
-        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif' or stem==BOLD_STEM
+        assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif' or stem in (BOLD_STEM,SANS_BOLD_STEM)
         text_face=re.search(rf'@font-face\{{font-family:{family};src:url\(assets/{re.escape(stem)}-text-[^}}]*\}}',page_text)[0]
-        assert ('font-weight:700' in text_face)==(stem==BOLD_STEM),(family,stem)
+        assert ('font-weight:700' in text_face)==(stem in (BOLD_STEM,SANS_BOLD_STEM)),(family,stem)
         # Every character the page itself sets comes from the preloaded text chunk.
         visible=set(re.sub(r'<(script|style)\b[^>]*>.*?</\1>|<[^>]+>|&[#a-zA-Z0-9]+;',' ',page_text,flags=re.S))
         text_chunk=TTFont(OUT/'assets'/next(f for f,_ in faces if '-text-' in f))
@@ -201,7 +202,8 @@ def check():
             assert actual==sans_checks[suffix+'_sha256']
     sans_bold=json.loads((SANS_OUT/'checks-bold.json').read_text())
     for suffix in ('ttf','woff2'):
-        assert hashlib.sha256((OUT/('sans-v'+sans_version)/(SANS_BOLD_STEM+'.'+suffix)).read_bytes()).hexdigest()==sans_bold[suffix+'_sha256']
+        for folder in ('downloads','sans-v'+sans_version):
+            assert hashlib.sha256((OUT/folder/(SANS_BOLD_STEM+'.'+suffix)).read_bytes()).hexdigest()==sans_bold[suffix+'_sha256']
     sans_css=(OUT/('sans-v'+sans_version)/'genzui-sans.css').read_text()
     assert f"url('./{SANS_STEM}.woff2')" in sans_css and f"url('./{SANS_BOLD_STEM}.woff2')" in sans_css and 'font-weight: 700' in sans_css
     assert f'/downloads/{SANS_STEM}-:version.zip /sans-v:version/{SANS_STEM}-:version.zip 301' in (OUT/'_redirects').read_text()

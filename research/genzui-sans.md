@@ -68,10 +68,12 @@ against Noto Sans JP's kana (1.47–1.62, median 1.53):
   masters drawn for GenZui Serif (`data/minnan/bold.json`), which share their
   points. The blend's median gain is 1.53; the full Serif masters gain 1.66.
   The overline and dot keep Regular's clearance from the kana.
-- **Transcription symbols:** Noto Sans JP Bold's dashed frame has 37-unit
-  strokes against 31 in Regular. The minus takes the frame's stroke, and the
-  half-turn arrow keeps its outer edge while its ring and barbs gain 6–7 units
-  inward (`scripts/sans_forms.py`).
+- **Transcription symbols:** the marks inside Noto's dashed frames share one
+  stroke per face, the half-turn arrow's ring weight: 36 units in Regular and
+  43 in Bold (the frames have 31 and 37). The minus and the double arrow are
+  drawn at that stroke; Noto's arrow scaled into the frame would keep a stroke
+  of 50 in Regular and 73 in Bold. The Bold half-turn arrow keeps its outer
+  edge while its ring and barbs gain 6–7 units inward (`scripts/sans_forms.py`).
 - **Dakuten after historical kana:** the Bold handakuten is 31 units wider and
   reaches 16 units lower; the marks keep Regular's right edge and clearance.
 
@@ -111,7 +113,7 @@ hashes and writes `dist/GenZuiSans-0.102.zip`.
 
 `scripts/sans_site.py` renders `templates/sans.html` for the development
 specimen (`build/site/sans.html`, embedded fonts) and the public site
-(`/sans`, fonts from `/sans-v0.101/`). The public build also publishes the
+(`/sans`, fonts from `/sans-v0.102/`). The public build also publishes the
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
-Version reports live in `research/sans-browser-checks-0.101.json` and
-`research/sans-kana-coverage-0.101.json`.
+Version reports live in `research/sans-browser-checks-0.102.json` and
+`research/sans-kana-coverage-0.102.json`.
