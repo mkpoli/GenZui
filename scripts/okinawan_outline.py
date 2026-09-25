@@ -93,12 +93,6 @@ def arc(ring, a, b):
     return segs
 
 
-def hermite(p0, t0, p1, t1, k=0.4):
-    """A cubic from p0 leaving along t0 to p1 arriving along t1."""
-    d = np.linalg.norm(p1 - p0) * k
-    return (p0, p0 + t0 * d, p1 - t1 * d, p1)
-
-
 def transform(segs, m, off):
     m = np.array(m, float); off = np.array(off, float)
     return [tuple(m @ p + off for p in s) for s in segs]
