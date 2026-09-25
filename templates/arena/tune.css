@@ -1,4 +1,5 @@
-.tune{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:28px;align-items:start;margin:10px 0 24px}
+.tune{display:grid;grid-template-columns:minmax(0,440px) minmax(0,340px) minmax(0,1fr);gap:24px;align-items:start;margin:10px 0 24px}
+.stage,.lines{position:sticky;top:12px}.lines h2{font-size:17px;margin:8px 0}
 .stage{margin:0}.stage svg{width:100%;height:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}
 .stage figcaption{color:var(--muted);font-size:13px}
 .em{fill:none;stroke:var(--line);stroke-width:2}.base{stroke:var(--line);stroke-width:2;stroke-dasharray:8 8}
@@ -7,9 +8,13 @@
 .pad{display:grid;grid-template-columns:repeat(3,110px);gap:6px;margin-bottom:14px}.pad .hint{text-align:center;align-self:center}
 .row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.hint{color:var(--muted);font-size:12px}
 #values{display:grid;grid-template-columns:max-content max-content;gap:2px 12px;color:var(--muted);font-size:13px;margin-top:14px}#values dd{margin:0}
-.lines p{font-family:GenZuiContext;font-size:var(--line-size,40px);line-height:1.6;margin:0}
+.lines p{font-family:GenZuiContext;font-size:34px;line-height:1.55;margin:0;white-space:nowrap}
 .lines svg{width:1em;height:1em;vertical-align:-.12em}
-@media (max-width:760px){.tune{grid-template-columns:1fr}.pad{grid-template-columns:repeat(3,1fr)}}
+/* narrower screens: the text lines ride in a strip above the action bar */
+@media (max-width:1100px){.tune{grid-template-columns:minmax(0,440px) minmax(0,1fr)}
+ .lines{position:fixed;top:auto;bottom:90px;left:0;right:0;z-index:4;background:var(--paper);border-top:1px solid var(--line);padding:6px 18px;display:flex;gap:20px;overflow-x:auto}
+ .lines h2{display:none}.lines #lines{display:flex;gap:28px}.lines p{font-size:28px}main{padding-bottom:220px}}
+@media (max-width:760px){.tune{grid-template-columns:1fr}.stage{position:static}.pad{grid-template-columns:repeat(3,1fr)}}
 .cull-actions{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);padding:14px max(18px,calc((100vw - 1184px)/2));display:flex;gap:12px;align-items:center;flex-wrap:wrap;z-index:5}
 .cull-actions #status{color:var(--muted);font-size:13px;margin-right:auto}
 .cull-actions #notes{flex:1 1 22rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:8px 12px}
