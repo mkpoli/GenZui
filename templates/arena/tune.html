@@ -1,9 +1,23 @@
-<div class="app">
- <header class="bar"><h1>__GLYPH__</h1><span class="lede">Place the added stroke. The kana stays put; the frame is the em the letter will be centred in.</span>
-  <input id="notes" type="text" placeholder="Notes (optional)"><button id="copy" class="primary" type="button">Copy result</button><span id="copy-status" aria-live="polite"></span><span id="saved"></span></header>
- <figure class="stage"><svg id="big" viewBox="-175 -175 1350 1350" aria-label="The letter at full size"><rect id="em" class="em" x="0" y="0" width="1000" height="1000"/><line class="base" x1="-175" x2="1175" y1="880" y2="880"/><g id="letter" transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><path id="mark" class="ink"/></g></svg></figure>
- <aside class="controls"><div id="steppers"></div>
-  <p class="keys">Keys: arrows move · Shift for fine steps · - + size · [ ] length · Q E rotate · Z C bow · A D slant · W R head angle · X V tail angle · , . width · ; ' kana weight · &lt; &gt; kana width · { } kana height</p>
-  <button data-act="reset" type="button">Reset</button></aside>
- <section class="side"><section id="tools"></section><h2>In text</h2><div id="lines"></div></section>
+<div class="tune-app">
+ <header class="bar">
+  <h1>__GLYPH__</h1>
+  <div class="seg" role="group" aria-label="Arrow keys move"><span>Arrows move</span><button type="button" id="t-stroke" data-target="stroke">Stroke</button><button type="button" id="t-kana" data-target="kana">Kana</button></div>
+  <label class="toggle"><input id="tint" type="checkbox"> Tint stroke</label>
+  <label class="toggle"><input id="dark" type="checkbox"> Dark</label>
+  <input id="notes" type="text" placeholder="Notes (optional)">
+  <button id="copy" class="primary" type="button">Copy result</button>
+  <span id="copy-status" aria-live="polite"></span>
+ </header>
+ <figure class="stage"><svg id="big" viewBox="-175 -175 1350 1350" aria-label="The letter at full size">
+  <rect id="em" class="em" x="0" y="0" width="1000" height="1000"/><line id="mid" class="guide" x1="500" x2="500" y1="0" y2="1000"/>
+  <line class="guide base" x1="-175" x2="1175" y1="880" y2="880"/>
+  <g id="letter" transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><path id="mark" class="ink mark"/></g></svg>
+  <figcaption>Frame: the em the letter is centred in · dashed: baseline</figcaption></figure>
+ <section class="panel" id="stroke-panel"><h2>Stroke</h2><div class="rows" id="stroke-rows"></div></section>
+ <section class="panel side">
+  <h2>Kana</h2><div class="rows" id="kana-rows"></div>
+  <h2>In text</h2><div id="lines"></div>
+  <section id="tools"></section>
+  <p class="help">Arrows move the selected part (T switches) · Shift: fine · double-click a name to reset it · <button type="button" id="reset" class="link">Reset all</button></p>
+ </section>
 </div>
