@@ -11,7 +11,7 @@ from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
 from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from minnan import import_forms, layout as minnan_layout
-from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_BOLD_SYMBOLS, refit
+from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_BOLD_SYMBOLS, alternate_wi, refit
 from sans_sources import (BOLD_ARCHAIC, BOLD_ARCHAIC_AXIS, BOLD_TEXT, BOLD_TEXT_AXIS, CACHE, CJK, CJK_BOLD,
                           DONOR, GENSEKI, NOTO, TEXT, TEXT_AXIS, prepare)
 
@@ -20,12 +20,14 @@ FAMILY = 'GenZui Sans'
 FAMILY_JA = '源萃ゴシック'
 STEM = 'GenZuiSans-Regular'
 BOLD_STEM = 'GenZuiSans-Bold'
-VERSION = '0.102'
+VERSION = '0.103'
 PACKAGE = f'GenZuiSans-{VERSION}.zip'
 # Simple archaic kana keep the Regular master beside ordinary katakana; the
 # cursive hentaigana use the stem-matched axis-380 instance (see sans_sources).
 # Bold takes both sets from instances matched to Noto Sans JP Bold.
 REGULAR_WEIGHT = {0x1B000, 0x1B120, 0x1B121, 0x1B122}
+# GenZui draws these from Noto Sans JP's own strokes.
+DRAWN = {0x1B128}
 
 
 def sources(weight):
@@ -102,6 +104,14 @@ def build(weight=400):
                 for sub in genseki['GSUB'].table.LookupList.Lookup[index].SubTable:
                     genseki_vertical.update(getattr(sub, 'mapping', {}))
     for cp in sorted(historical):
+        if cp in DRAWN:
+            outline = alternate_wi(font)
+            outline.recalcBounds(font['glyf'])
+            additions[cp] = add(font, f'genzui.u{cp:05X}', outline)
+            font['hmtx'][additions[cp]] = (1000, outline.xMin)
+            font['vmtx'][additions[cp]] = (1000, 880 - outline.yMax)
+            provenance[f'U+{cp:04X}'] = f'GenZui drawing from Noto Sans JP {style} WI bars and right stem with a NA-derived left descent'
+            continue
         if cp in donor_cmap:
             name = donor_cmap[cp]
             if cp in REGULAR_WEIGHT:
@@ -207,7 +217,7 @@ def build(weight=400):
         'Regular instance and an instance at axis 780 (Bold).\n'
         'The upstream unencoded E and YE drawings receive U+1B000 and U+1B001.\n'
         'https://github.com/notofonts/hentaigana\n'
-        'GenSeki Hentaigana Gothic 1.201 Regular and Bold: 21 historical kana, small kana and ligatures.\n'
+        'GenSeki Hentaigana Gothic 1.201 Regular and Bold: 20 historical kana, small kana and ligatures.\n'
         'GenZui refits KOTO, alternate NE and small archaic YE to their kana peers.\n'
         'Its source projects include GenSeki Gothic, Sukima Gothic and Shokaki Hentaigana Gothic.\n'
         'https://github.com/MihailJP/GenSekiHentaiganaGothic\n'
@@ -216,7 +226,7 @@ def build(weight=400):
         'FRB Taiwanese Kana by Fredrick R. Brennan: Minnan tone letters and combining marks.\n'
         'Bold blends them toward GenZui Bold masters drawn on the same points.\n'
         'https://github.com/ctrlcctrlv/FRBTaiwaneseKana\n'
-        'GenZui: transcription symbols, SQUARE PAATU and layout.\n\n'
+        'GenZui: alternate WI, transcription symbols, SQUARE PAATU and layout.\n\n'
         'Fonts and derived outlines are licensed under SIL OFL 1.1.\n'
         'Original copyright notices are retained in OFL.txt and the font metadata.\n')
     print(f'Built {FAMILY} {style} {VERSION}: {len(font.getBestCmap()):,} encoded characters.', flush=True)

@@ -42,7 +42,8 @@ Coverage and features
 763 characters in Unicode 18's Hiragana/Katakana scripts and script extensions.
 Noto Sans JP Regular and Bold supply the Japanese base. Noto Sans Hentaigana
 supplies 290 historical forms from instances matched to each weight; GenSeki
-Hentaigana Gothic Regular and Bold supply 21 further forms.
+Hentaigana Gothic Regular and Bold supply 20 further forms, and GenZui draws
+the alternate WI from Noto Sans JP's strokes.
 
 Minnan tone placement supports one to four fullwidth kana in vertical text
 at default spacing. Longer groups need application-level positioning.

@@ -1,4 +1,4 @@
-"""Outline refits for GenZui Sans."""
+"""Outline refits and drawings for GenZui Sans."""
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
@@ -46,6 +46,29 @@ SANS_BOLD_SYMBOLS = {
 # their median weight gain over Regular is 1.53, the median gain of Noto Sans
 # JP's kana; the full Serif masters gain 1.66.
 BOLD_TONE_BLEND = 0.76
+
+
+# Alternate WI, built like GenZui Serif's from the base font's own strokes:
+# WI's bars and right stem, with NA's falling stroke as the left descent.
+# The descent moves left and its foot comes back inward; the right stem
+# widens the gap and the bars move closer, as in Serif. Both weights use the
+# same moves on their own strokes.
+WI_DESCENT_SHIFT, WI_FOOT_RETURN, WI_STEM_SHIFT = -197, 67, 30
+WI_UPPER_DROP, WI_LOWER_RISE = 22, 30
+
+
+def alternate_wi(font):
+    from serif import contours, glyph, transform
+    from serif_forms import reshape
+
+    def descent(x, y):
+        t = max(0, min(1, (350-y)/380))
+        return x + WI_DESCENT_SHIFT + WI_FOOT_RETURN*t*t, y
+
+    return glyph([reshape(contours(font, ord('ナ'), [0]), descent),
+                  transform(contours(font, ord('ヰ'), [0]), (1, 0, 0, 1, WI_STEM_SHIFT, 0)),
+                  transform(contours(font, ord('ヰ'), [3]), (1, 0, 0, 1, 0, -WI_UPPER_DROP)),
+                  transform(contours(font, ord('ヰ'), [2]), (1, 0, 0, 1, 0, WI_LOWER_RISE))])
 
 
 def refit(glyph_set, name, bounds, spec):

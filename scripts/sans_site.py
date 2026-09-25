@@ -28,6 +28,7 @@ DESCRIPTIONS = {
     0x1B123: 'GenSeki’s KOTO, enlarged to the body height of TOKI, TOTE and TOMO and thinned back to their stroke width.',
     0x1B127: 'GenSeki’s alternate NE, enlarged to the katakana cap height and thinned back to their stroke width.',
     0x1B168: 'GenSeki’s small archaic YE, lowered onto the small-kana baseline.',
+    0x1B128: 'Noto Sans JP’s WI bars and right stem with NA’s falling stroke as the left descent, built like GenZui Serif’s alternate WI.',
 }
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
            'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP'}
@@ -81,10 +82,10 @@ def build_page(sans_font, serif_font, webfont_usage=''):
     provenance = json.loads((OUT/'sources.json').read_text())['source_kinds']
     kinds = Counter(value.split(';')[0] for value in provenance.values())
     genzui = sum(count for kind, count in kinds.items() if 'GenZui' in kind or 'squared-katakana' in kind)
-    assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 21
+    assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 20
     entries = inventory(TTFont(OUT/(STEM+'.ttf')), provenance)
     counts = dict(Counter(e['source'] for e in entries))
-    assert counts == {'jp': 16732, 'hentaigana': 290, 'genseki': 21, 'frb': 15, 'cjk': 1, 'genzui': genzui}, counts
+    assert counts == {'jp': 16732, 'hentaigana': 290, 'genseki': 20, 'frb': 15, 'cjk': 1, 'genzui': genzui}, counts
     assert len(entries) == checks['encoded_characters']
     data = {'version': version, 'family': 'GenZui Sans', 'origins': ORIGINS, 'characters': entries,
             'counts': counts, 'total': len(entries),
