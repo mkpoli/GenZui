@@ -143,6 +143,10 @@ N_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='い', mark_index=1, ramp_lo=300, r
                   mark_scale=0.658, mark_len=1.0, mark_angle=0.0, neck_w=1.0, head_w=1.0,
                   kana_sx=1.0, kana_sy=1.0, kana_bold=0, mark_x=-21, mark_dy=214)
 
+# N as placed by hand in the arena (research/okinawan-arena/glottal-n).
+N = dict(N_DEFAULTS, mark_x=-11, mark_dy=144, mark_scale=0.658, mark_len=1.04, neck_w=1.3, head_w=1.25,
+         mark_angle=-4.0, mark_bend=-20)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
