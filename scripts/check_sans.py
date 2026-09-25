@@ -11,7 +11,7 @@ from fontTools.pens.perimeterPen import PerimeterPen
 from fontTools.ttLib import TTFont
 from statistics import median
 
-from sans import FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
+from sans import DRAWN, FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
 from sans_forms import REFITS
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
@@ -126,7 +126,7 @@ def check(weight=400):
         name = cmap[cp]
         g = font['glyf'][name]
         assert g.numberOfContours != 0, hex(cp)
-        source = ((donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
+        source = (None if cp in DRAWN else (donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
                   else genseki if cp in gen_cmap else None)
         if source and cp in refits:
             old = gen_cmap[cp]
@@ -169,7 +169,11 @@ def check(weight=400):
                     assert actual == shape(engine, text, direction, script=script), (hex(cp), script)
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
-    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 17, 'genseki_refit': 3}, retained
+    # Alternate WI spans the height of WI and its bars keep WI's width.
+    wi, drawn = font['glyf'][cmap[ord('ヰ')]], font['glyf'][cmap[0x1B128]]
+    assert abs(drawn.yMax - wi.yMax) <= 12 and abs(drawn.yMin - wi.yMin) <= 12, (drawn.yMin, drawn.yMax)
+    assert drawn.xMax >= wi.xMax - 1 and drawn.xMin <= wi.xMin + 1, (drawn.xMin, drawn.xMax)
     # The hentaigana's median stem matches the hiragana's, and the archaic kana
     # the katakana's, within two units.
     stems = {label: stem(font, cps) for label, cps in (
