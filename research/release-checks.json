@@ -3,7 +3,7 @@
   "font_sha256": "5a82926802477b79538ecc0f9fb68f31fb4a4ac2c15aa85e166c377e4d08f78c",
   "sans_version": "0.102",
   "sans_font_sha256": "a3e78046d6fc756a0b27f43921e4f32379ea2c10769c9db655a9122a21859068",
-  "local_links_checked": 105,
+  "local_links_checked": 106,
   "public_gallery_forms": 21,
   "release_files_checked": 168,
   "inventory_collections": {
@@ -12,7 +12,7 @@
     "ideographic-description": 17
   },
   "extended_kana_characters": 329,
-  "font_chunks_checked": 8892,
+  "font_chunks_checked": 10374,
   "font_bytes_unchanged": true,
   "status": "passed"
 }
