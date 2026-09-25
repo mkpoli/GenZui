@@ -118,6 +118,7 @@ BESIDE_DEFAULTS = dict(
     mark_bend=0,       # units the middle of the mark bows sideways; positive to the right
     mark_slant=0,      # units the top of the mark moves sideways over the foot
     mark_bold=0,       # for a small-kana mark: units of width added sideways to its strokes
+    ring_offsets={},   # for a small-kana mark: its strokes moved one by one, by Noto contour index
     head_angle=0,      # degrees the mark's head turns on its own; positive counterclockwise
     tail_angle=0,      # the same for its tail
     neck_w=YA['neck_w'],
@@ -344,11 +345,16 @@ def beside_pieces(font, contours, kana, p):
         mark = [_widened(mark[0], p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])]
         pivot = (centre_at(mark[0], p['ramp_lo']), p['ramp_lo'])
     else:
-        # a small kana: weighted sideways as a whole, turned about its middle
-        mark = _widen_strokes(mark, p['mark_bold'])
+        # a small kana: each stroke weighted sideways on its own, so its rings
+        # stay in Noto's contour order; turned about its middle; a stroke can
+        # be moved within it by ring_offsets (contour index -> dx, dy)
+        groups = [_widen_strokes([r], p['mark_bold']) for r in mark]
+        mark = [r for g in groups for r in g]
         xs = [q[0] for r in mark for seg in r for q in seg]
         ys = [q[1] for r in mark for seg in r for q in seg]
         pivot = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
+        offsets = p['ring_offsets']
+        mark = [_moved(r, *offsets.get(str(i), (0, 0))) for i, g in enumerate(groups) for r in g]
     body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     origin = kana_origin(body, p['kana_anchor'])
     # weight first, then the scaling: sweeping by d and then scaling by sx is
