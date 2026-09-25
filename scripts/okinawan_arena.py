@@ -347,58 +347,62 @@ def svg_path(rings):
         f'C{a[0]:.1f} {a[1]:.1f} {b[0]:.1f} {b[1]:.1f} {c[0]:.1f} {c[1]:.1f}' for _, a, b, c in r) + 'Z' for r in rings)
 
 
-BOLDS = list(range(0, 41, 2))     # kana weights the tuner offers, in the kana's own units
+BOLDS = list(range(0, 61, 2))     # weights the tuner offers, in the kana's own units
 
 
 def tune(slug, round_no, base):
-    """A page for placing the mark by hand beside a kana that stays put. The
-    page shapes the mark and scales the kana itself; the kana's weight changes
-    its outline through boolean operations, so each offered weight is drawn here."""
+    """A page for placing the mark by hand beside a kana. Every Noto contour
+    is a part the page can select, move, scale, turn and weight. Transforms
+    are applied on the page point for point as okinawan_merge does; weights
+    change outlines through boolean operations, so each contour is drawn here
+    at every weight on the grid."""
     letter = LETTERS[slug]
     kana = letter['build'].keywords['kana']
     p = {**letter['defaults'], **base}
+    p['parts'] = dict(p.get('parts') or {})
     font = TTFont(BASE)
-    mark, pivot, body = okinawan_merge.beside_pieces(font, contours, kana, p)
     if p.get('mark_x') is None:
+        mark, pivot, groups = okinawan_merge.beside_pieces(font, contours, kana, p)
         side = 'right' if p['kana_anchor'] == 'left' else 'left'
+        body = [r for g in groups for r in g]
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap'], side))
-    bolds = sorted({*BOLDS, p['kana_bold']})   # the starting weight is drawn too, even off the grid
-    # the raw upright stroke and its centres at the ends of the width ramp: the
-    # page widens, turns, bows, slants and places it as okinawan_merge does. A
-    # small-kana mark is weighted by boolean operations, so each weight is drawn here.
-    raw = okinawan_merge.upright_mark(font, contours, p)
     flat = lambda ring: [[round(float(v), 2) for q in seg for v in q] for seg in ring]
-    mark_bolds = sorted({*BOLDS, p['mark_bold']})
+
+    def weighted(contour):
+        """One contour at every weight on the grid (weights Skia cannot resolve are left out)."""
+        out = {}
+        for bold in BOLDS:
+            try:
+                out[str(bold)] = [flat(r) for r in okinawan_merge._widen_strokes([contour], bold)]
+            except ValueError as error:
+                print(f'a contour could not be drawn at weight {bold}: {error}')
+        return dict(centre=list(okinawan_merge.part_centre(contour)), by_bold=out)
+
+    raw = okinawan_merge.upright_mark(font, contours, p)
     if len(raw) == 1:
+        # one stroke: the page widens, turns, bows and slants it itself
         stroke = dict(multi=False, segs=flat(raw[0]), lo=p['ramp_lo'], hi=p['ramp_hi'],
                       c0=okinawan_merge.centre_at(raw[0], p['ramp_lo']), c1=okinawan_merge.centre_at(raw[0], p['ramp_hi']))
     else:
-        stroke = dict(multi=True, by_bold={})
-        for bold in mark_bolds:
+        # a small kana: its strokes are parts; it turns about the middle of
+        # its strokes at the group's weight
+        pivots = {}
+        for bold in BOLDS:
             try:
-                m, pv, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'mark_bold': bold, 'kana_bold': 0, 'ring_offsets': {}})
-            except ValueError as error:
-                print(f'no mark at weight {bold}: {error}')
-                continue
-            # which Noto contour each ring came from, so the page can move a stroke
-            groups = [i for i, r in enumerate(raw) for _ in okinawan_merge._widen_strokes([r], bold)]
-            stroke['by_bold'][str(bold)] = dict(rings=[flat(r) for r in m], groups=groups, pivot=list(pv))
-    kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0, 'kana_dx': 0, 'kana_dy': 0}
+                pivots[str(bold)] = list(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'mark_bold': bold, 'parts': None, 'kana_bold': 0})[1])
+            except ValueError:
+                pass
+        stroke = dict(multi=True, parts=[weighted(c) for c in raw], pivots=pivots)
     body = okinawan_merge.BODIES[kana](font, contours) if kana in okinawan_merge.BODIES else O.rings(contours(font, ord(kana)))
+    kana_parts = [weighted(c) for c in body]
     origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
-    kanas = {}
-    for bold in bolds:
-        try:
-            kanas[str(bold)] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**kana_font, 'kana_bold': bold})[2])
-        except ValueError as error:   # a weight Skia cannot resolve: the page skips it
-            print(f'no kana at weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'mark_bold', 'ring_offsets', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
+                               'neck_w', 'head_w', 'mark_bold', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy', 'parts')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
-    (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANAS=kanas, KANA_ORIGIN=list(origin), KANA=kana if len(kana) == 1 else 'Body', BOLDS=bolds, MARK_BOLDS=mark_bolds,
-                                                 START=start, LINES=lines))
+    (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1, ensure_ascii=False) + '\n')
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANA_PARTS=kana_parts, KANA_ORIGIN=list(origin),
+                                                 KANA=kana if len(kana) == 1 else 'Body', BOLDS=BOLDS, START=start, LINES=lines))
 
 
 if __name__ == '__main__':
