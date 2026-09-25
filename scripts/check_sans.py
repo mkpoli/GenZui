@@ -12,7 +12,9 @@ from fontTools.ttLib import TTFont
 from statistics import median
 
 from sans import DRAWN, FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
-from sans_forms import REFITS
+from sans_forms import REFITS, WI_LOWER_RISE, WI_UPPER_DROP
+from serif import contours
+import pathops
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from check_coverage import check_coverage
@@ -170,10 +172,22 @@ def check(weight=400):
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
     assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 17, 'genseki_refit': 3}, retained
-    # Alternate WI spans the height of WI and its bars keep WI's width.
+    # Alternate WI spans the height of WI, its bars keep WI's width, and its
+    # metrics follow the other historical kana.
     wi, drawn = font['glyf'][cmap[ord('ヰ')]], font['glyf'][cmap[0x1B128]]
     assert abs(drawn.yMax - wi.yMax) <= 12 and abs(drawn.yMin - wi.yMin) <= 12, (drawn.yMin, drawn.yMax)
-    assert drawn.xMax >= wi.xMax - 1 and drawn.xMin <= wi.xMin + 1, (drawn.xMin, drawn.xMax)
+    wi_outline = pathops.Path()
+    font.getGlyphSet()[cmap[0x1B128]].draw(wi_outline.getPen())
+    for index, shift in ((2, WI_LOWER_RISE), (3, -WI_UPPER_DROP)):
+        pen = pathops.Path()
+        contours(font, ord('ヰ'), [index]).replay(pen.getPen())
+        x0, y0, x1, y1 = pen.bounds
+        y = (y0 + y1) / 2 + shift
+        band = pathops.Path(); b = band.getPen()
+        b.moveTo((-100, y-1)); b.lineTo((1100, y-1)); b.lineTo((1100, y+1)); b.lineTo((-100, y+1)); b.closePath()
+        cut = pathops.op(wi_outline, band, pathops.PathOp.INTERSECTION).bounds
+        assert abs(cut[0] - x0) <= 1 and abs(cut[2] - x1) <= 1, (index, cut, (x0, x1))
+    assert font['hmtx'][cmap[0x1B128]] == (1000, drawn.xMin) and font['vmtx'][cmap[0x1B128]] == (1000, 880-drawn.yMax)
     # The hentaigana's median stem matches the hiragana's, and the archaic kana
     # the katakana's, within two units.
     stems = {label: stem(font, cps) for label, cps in (
