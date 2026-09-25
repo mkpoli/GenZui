@@ -1,11 +1,11 @@
 {
   "version": "0.117",
   "font_sha256": "5a82926802477b79538ecc0f9fb68f31fb4a4ac2c15aa85e166c377e4d08f78c",
-  "sans_version": "0.102",
-  "sans_font_sha256": "495375051a929727345c96c98add2b492505ff2a17db6d3bed291c98a93c0de9",
+  "sans_version": "0.103",
+  "sans_font_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
   "local_links_checked": 106,
   "public_gallery_forms": 21,
-  "release_files_checked": 168,
+  "release_files_checked": 174,
   "inventory_collections": {
     "han-numeral": 80,
     "tally-mark": 5,

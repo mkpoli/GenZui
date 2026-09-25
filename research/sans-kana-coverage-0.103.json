@@ -1,0 +1,122 @@
+{
+  "font_version": "0.103",
+  "unicode_version": "18.0.0",
+  "font_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
+  "scope": "Encoded character coverage; does not establish every historical glyph variant or combining sequence.",
+  "sources": [
+    {
+      "path": "data/unicode/UnicodeData.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt",
+      "sha256": "0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950",
+      "size": 2243593
+    },
+    {
+      "path": "data/unicode/DerivedAge.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/DerivedAge.txt",
+      "sha256": "58b04334e3a31f9612694bbc3f6bff4a302b7d424565bca9c47e30aa74f8dbac",
+      "size": 142568
+    },
+    {
+      "path": "data/unicode/Blocks.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/Blocks.txt",
+      "sha256": "a58f8d322f3c5e254f9f97b1cbf76a454a7e02de6ac35619a5e4f27aaabfd553",
+      "size": 11906
+    },
+    {
+      "path": "data/unicode/VerticalOrientation.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/VerticalOrientation.txt",
+      "sha256": "0803e09669d7aa7137de678e55b848bd418c6632694fa1b05f0b40941103c748",
+      "size": 192064
+    },
+    {
+      "path": "data/unicode/Scripts.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/Scripts.txt",
+      "sha256": "0071fd81b6aeae25f6e8bce8efec3066a6476a91b49bdb2f52dc76e817862a6a",
+      "size": 196089
+    },
+    {
+      "path": "data/unicode/ScriptExtensions.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/ScriptExtensions.txt",
+      "sha256": "5c9d34a922f687726f2a8bcf57d49f905987e51f1b21b58c95a00fbe255cec23",
+      "size": 21145
+    },
+    {
+      "path": "data/unicode/DerivedNumericType.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/extracted/DerivedNumericType.txt",
+      "sha256": "3dade4d96bd00d71b10022bf70b370090f3ca947f977ad4dc2854e06c4d074f6",
+      "size": 22001
+    }
+  ],
+  "coverage": {
+    "Hiragana": {
+      "total": 93,
+      "covered": 93,
+      "missing": []
+    },
+    "Katakana": {
+      "total": 96,
+      "covered": 96,
+      "missing": []
+    },
+    "Katakana Phonetic Extensions": {
+      "total": 16,
+      "covered": 16,
+      "missing": []
+    },
+    "Kana Extended-B": {
+      "total": 13,
+      "covered": 13,
+      "missing": []
+    },
+    "Kana Supplement": {
+      "total": 256,
+      "covered": 256,
+      "missing": []
+    },
+    "Kana Extended-A": {
+      "total": 41,
+      "covered": 41,
+      "missing": []
+    },
+    "Small Kana Extension": {
+      "total": 10,
+      "covered": 10,
+      "missing": []
+    },
+    "Script Hiragana or Katakana": {
+      "total": 709,
+      "covered": 709,
+      "missing": []
+    },
+    "Script plus Script_Extensions": {
+      "total": 763,
+      "covered": 763,
+      "missing": []
+    },
+    "CJK-encoded kana ligatures": {
+      "total": 4,
+      "covered": 4,
+      "missing": []
+    },
+    "Minnan combining marks": {
+      "total": 2,
+      "covered": 2,
+      "missing": []
+    },
+    "CJK numeral twenty (U+5344)": {
+      "total": 1,
+      "covered": 1,
+      "missing": []
+    },
+    "Ideographic tally marks": {
+      "total": 5,
+      "covered": 5,
+      "missing": []
+    },
+    "Ideographic description characters": {
+      "total": 17,
+      "covered": 17,
+      "missing": []
+    }
+  }
+}
