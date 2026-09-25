@@ -8,12 +8,15 @@ state??={experiment:EXPERIMENT,p:{...START}};
 for(const k in START)state.p[k]??=START[k];
 function persist(){try{localStorage.setItem(storageKey,JSON.stringify(state));$('saved').textContent='Saved in this browser'}catch{$('saved').textContent='Browser storage unavailable — copy the result before closing'}}
 const kanaOf=p=>KANAS[`${p.kana_sx.toFixed(2)},${p.kana_bold}`];
-// The mark's outline, shaped and placed point for point as okinawan_merge.shaped and .sized do:
+// The mark's outline, widened, shaped and placed point for point as okinawan_merge does:
 // turn about the pivot, bow and slant, lay a lying stroke down, then size about the foot, stretch, and move.
 function markPath(p){
- const {segs,pivot}=MARKS[`${p.neck_w.toFixed(2)},${p.head_w.toFixed(2)}`];
- const a=p.mark_angle*Math.PI/180,c=Math.cos(a),s=Math.sin(a),[px,py]=pivot;
- let pts=segs.map(seg=>{const q=[];for(let i=0;i<8;i+=2){const x=seg[i]-px,y=seg[i+1]-py;q.push([px+c*x-s*y,py+s*x+c*y])}return q});
+ // widen about the centre line: neck_w at the ramp's low end, head_w from its high end up
+ const {segs,lo,hi,c0,c1}=STROKE,px=c0,py=lo;
+ const a=p.mark_angle*Math.PI/180,c=Math.cos(a),s=Math.sin(a);
+ let pts=segs.map(seg=>{const q=[];for(let i=0;i<8;i+=2){let x=seg[i],y=seg[i+1];
+  const u=Math.min(1,Math.max(0,(y-lo)/(hi-lo))),cx=c0+(c1-c0)*u,k=p.neck_w+(p.head_w-p.neck_w)*u;x=cx+(x-cx)*k;
+  x-=px;y-=py;q.push([px+c*x-s*y,py+s*x+c*y])}return q});
  const ys=pts.flat().map(q=>q[1]),y0=Math.min(...ys),y1=Math.max(...ys);
  pts=pts.map(seg=>seg.map(([x,y])=>{const u=(y-y0)/(y1-y0);return [x+p.mark_bend*4*u*(1-u)+p.mark_slant*u,y]}));
  // the head (top third) and tail (bottom third) turn on their own, fading in from the middle
@@ -42,18 +45,21 @@ function render(){
 const ACTS={up:(p,s)=>p.mark_dy+=s,down:(p,s)=>p.mark_dy-=s,left:(p,s)=>p.mark_x-=s,right:(p,s)=>p.mark_x+=s,
  bigger:(p,s)=>p.mark_scale=+(p.mark_scale+s/500).toFixed(3),smaller:(p,s)=>p.mark_scale=+(p.mark_scale-s/500).toFixed(3),
  longer:(p,s)=>p.mark_len=+(p.mark_len+s/500).toFixed(3),shorter:(p,s)=>p.mark_len=+(p.mark_len-s/500).toFixed(3),
- thinner:p=>{widen(p,'neck_w',-1);widen(p,'head_w',-1)},thicker:p=>{widen(p,'neck_w',1);widen(p,'head_w',1)},
- head_thinner:p=>widen(p,'head_w',-1),head_thicker:p=>widen(p,'head_w',1),neck_thinner:p=>widen(p,'neck_w',-1),neck_thicker:p=>widen(p,'neck_w',1),
- kana_lighter:p=>{p.kana_bold=BOLDS[Math.max(0,BOLDS.indexOf(p.kana_bold)-1)]},kana_heavier:p=>{p.kana_bold=BOLDS[Math.min(BOLDS.length-1,BOLDS.indexOf(p.kana_bold)+1)]},
+ thinner:(p,s,f)=>{widen(p,'neck_w',-1,f);widen(p,'head_w',-1,f)},thicker:(p,s,f)=>{widen(p,'neck_w',1,f);widen(p,'head_w',1,f)},
+ head_thinner:(p,s,f)=>widen(p,'head_w',-1,f),head_thicker:(p,s,f)=>widen(p,'head_w',1,f),neck_thinner:(p,s,f)=>widen(p,'neck_w',-1,f),neck_thicker:(p,s,f)=>widen(p,'neck_w',1,f),
+ kana_lighter:p=>step(p,'kana_bold',BOLDS,-1),kana_heavier:p=>step(p,'kana_bold',BOLDS,1),
  ccw:(p,s)=>p.mark_angle=+(p.mark_angle+s/5).toFixed(1),cw:(p,s)=>p.mark_angle=+(p.mark_angle-s/5).toFixed(1),
  head_ccw:(p,s)=>p.head_angle+=s/2,head_cw:(p,s)=>p.head_angle-=s/2,tail_ccw:(p,s)=>p.tail_angle+=s/2,tail_cw:(p,s)=>p.tail_angle-=s/2,
  bend_left:(p,s)=>p.mark_bend-=s,bend_right:(p,s)=>p.mark_bend+=s,slant_left:(p,s)=>p.mark_slant-=s,slant_right:(p,s)=>p.mark_slant+=s,
  kana_narrower:p=>step(p,'kana_sx',NARROWS,-1),kana_wider:p=>step(p,'kana_sx',NARROWS,1),
  reset:p=>Object.assign(p,START)};
-function step(p,key,grid,dir){const i=grid.findIndex(v=>Math.abs(v-p[key])<1e-6);p[key]=grid[Math.max(0,Math.min(grid.length-1,i+dir))]}
+// kana steps move along the drawn grid, past any width and weight that could not be drawn
+function step(p,key,grid,dir){let i=grid.findIndex(v=>Math.abs(v-p[key])<1e-6);const was=p[key];
+ do{i+=dir;if(i<0||i>=grid.length){p[key]=was;return}p[key]=grid[i]}while(!kanaOf(p))}
 // widths and weights come in the steps drawn for this page
-function widen(p,key,dir){const i=WIDTHS.findIndex(w=>Math.abs(w-p[key])<1e-6);p[key]=WIDTHS[Math.max(0,Math.min(WIDTHS.length-1,i+dir))]}
-function act(name,fine){ACTS[name](state.p,fine?2:10);render()}
+// widths change by 5% a press (1% with Shift), from a fifth to three times Noto's
+function widen(p,key,dir,fine){p[key]=+Math.min(3,Math.max(.2,p[key]+dir*(fine?.01:.05))).toFixed(2)}
+function act(name,fine){ACTS[name](state.p,fine?2:10,fine);render()}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.ctrlKey||e.metaKey||e.altKey)return;
  const name={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right','+':'bigger','=':'bigger','-':'smaller',']':'longer','[':'shorter',',':'thinner','.':'thicker',';':'kana_lighter',"'":'kana_heavier','<':'kana_narrower','>':'kana_wider',q:'ccw',e:'cw',Q:'ccw',E:'cw',z:'bend_left',c:'bend_right',Z:'bend_left',C:'bend_right',a:'slant_left',d:'slant_right',A:'slant_left',D:'slant_right',w:'head_ccw',r:'head_cw',W:'head_ccw',R:'head_cw',x:'tail_ccw',v:'tail_cw',X:'tail_ccw',V:'tail_cw'}[e.key];
  if(name){e.preventDefault();act(name,e.shiftKey)}});

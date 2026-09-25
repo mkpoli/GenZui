@@ -45,10 +45,7 @@ def _moved(segs, dx=0, dy=0):
 def _widened(segs, cut, neck, head, head_y=HEAD_Y):
     """The mark with its width scaled about its centre line: `neck` at the cut,
     `head` from head_y up, varying linearly in between."""
-    def centre(y):
-        xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, y))
-        return (xs[0] + xs[1]) / 2
-    c0, c1 = centre(cut), centre(head_y)
+    c0, c1 = centre_at(segs, cut), centre_at(segs, head_y)
     def move(q):
         u = min(1, max(0, (q[1] - cut) / (head_y - cut)))
         cx, k = c0 + (c1 - c0) * u, neck + (head - neck) * u
@@ -194,15 +191,23 @@ def _widen_strokes(rings, d):
 LIE = np.array([[0, 1], [-1, 0]])      # a lying stroke turned upright: (x, y) -> (y, -x)
 
 
+def upright_mark(font, contours, p):
+    """The mark's Noto stroke, stood upright if it lies."""
+    mark = O.rings(contours(font, ord(p['mark_char']), [p['mark_index']]))[0]
+    return O.transform(mark, LIE, (0, 0)) if p['mark_lie'] else mark
+
+
+def centre_at(segs, y):
+    """The middle of a stroke where a level line crosses it."""
+    xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, y))
+    return (xs[0] + xs[1]) / 2
+
+
 def beside_pieces(font, contours, kana, p):
     """The mark at its widths, upright (a lying stroke is turned to stand, so
     its width runs across and its head is at the top), with the point it turns
     about; and the kana, sized and weighted, where it stays."""
-    ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
-    mark = ring(p['mark_char'], p['mark_index'])
-    if p['mark_lie']:
-        mark = O.transform(mark, LIE, (0, 0))
-    mark = _widened(mark, p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
+    mark = _widened(upright_mark(font, contours, p), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
     xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
     pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
     body = O.rings(contours(font, ord(kana)))

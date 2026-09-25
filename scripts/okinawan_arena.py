@@ -327,15 +327,14 @@ def svg_path(rings):
         f'C{a[0]:.1f} {a[1]:.1f} {b[0]:.1f} {b[1]:.1f} {c[0]:.1f} {c[1]:.1f}' for _, a, b, c in r) + 'Z' for r in rings)
 
 
-WIDTHS = [round(0.7 + 0.05 * i, 2) for i in range(13)]   # mark widths the tuner offers
-BOLDS = list(range(0, 21, 2))                              # kana weights the tuner offers
-NARROWS = [round(0.8 + 0.02 * i, 2) for i in range(11)]    # kana widths the tuner offers
+BOLDS = list(range(0, 31, 2))                              # kana weights the tuner offers
+NARROWS = [round(0.6 + 0.02 * i, 2) for i in range(31)]    # kana widths (or sizes) the tuner offers
 
 
 def tune(slug, round_no, base):
-    """A page for placing the mark by hand beside a kana that stays put. Width
-    and weight change the outlines themselves, so each offered step is drawn
-    here and the page switches between them."""
+    """A page for placing the mark by hand beside a kana that stays put. The
+    page shapes the mark itself; the kana's width and weight change its outline
+    through boolean operations, so each offered step is drawn here."""
     letter = LETTERS[slug]
     kana = letter['build'].keywords['kana']
     p = {**letter['defaults'], **base}
@@ -344,23 +343,26 @@ def tune(slug, round_no, base):
     if p.get('mark_x') is None:
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap']))
     snap = lambda v, grid: min(grid, key=lambda g: abs(g - v))
-    p['neck_w'], p['head_w'], p['kana_bold'] = snap(p['neck_w'], WIDTHS), snap(p['head_w'], WIDTHS), snap(p['kana_bold'], BOLDS)
-    p['kana_sx'] = snap(p['kana_sx'], NARROWS)
-    marks, kanas = {}, {}
-    for neck in WIDTHS:
-        for head in WIDTHS:
-            m, pivot, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'neck_w': neck, 'head_w': head, 'kana_bold': 0})
-            # raw control points: the page shapes and places them as okinawan_merge does
-            marks[f'{neck:.2f},{head:.2f}'] = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in m], pivot=list(pivot))
+    p['kana_bold'], p['kana_sx'] = snap(p['kana_bold'], BOLDS), snap(p['kana_sx'], NARROWS)
+    # the raw upright stroke and its centres at the ends of the width ramp: the
+    # page widens, turns, bows, slants and places it as okinawan_merge does
+    raw = okinawan_merge.upright_mark(font, contours, p)
+    stroke = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in raw],
+                  lo=p['ramp_lo'], hi=p['ramp_hi'],
+                  c0=okinawan_merge.centre_at(raw, p['ramp_lo']), c1=okinawan_merge.centre_at(raw, p['ramp_hi']))
+    kanas = {}
     for sx in NARROWS:
         for bold in BOLDS:
-            kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
+            try:
+                kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
+            except ValueError as error:   # a weight Skia cannot resolve at this width: the page skips it
+                print(f'no kana at width {sx}, weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
                                'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', MARKS=marks, KANAS=kanas, KANA=kana, WIDTHS=WIDTHS, BOLDS=BOLDS, NARROWS=NARROWS,
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', STROKE=stroke, KANAS=kanas, KANA=kana, BOLDS=BOLDS, NARROWS=NARROWS,
                                                  START=start, LINES=lines))
 
 
