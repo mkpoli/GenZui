@@ -1,0 +1,23 @@
+【✍️ GenZui Serif & GenZui Sans Bold 💫】
+
+GenZui Serif 源萃明朝 and GenZui Sans 源萃ゴシック now come in Bold 🚀 Every character, from the 286 hentaigana to the Unicode 18.0 kana additions, works in both Regular and Bold.
+
+・Outlines from Noto come from each Noto font's own Bold
+・Every form GenZui drew is redrawn for Bold
+・The Sans hentaigana are matched to the stroke weight of Noto Sans JP Bold
+
+---
+
+🔽 Type testers (switch between Regular and Bold) 🔽
+
+Serif
+https://genzui.mkpo.li/serif?weight=bold
+
+Sans
+https://genzui.mkpo.li/sans?weight=bold
+
+---
+
+⬇️ Downloads ⬇️
+
+https://genzui.mkpo.li/

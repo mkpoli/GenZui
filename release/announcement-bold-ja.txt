@@ -1,0 +1,24 @@
+【✍️源萃明朝・源萃ゴシック Bold💫】
+
+源萃明朝と源萃ゴシックに太字（Bold）が加わりました🚀
+変体仮名286字、合略仮名、Unicode 18.0の追加仮名まで、すべての字をRegularとBoldの2ウェイトで使えます
+
+・Noto由来の字形は各Noto書体のBoldから
+・源萃で作った字形はBold用に作り直し
+・ゴシックの変体仮名は線の太さをNoto Sans JP Boldに合わせて調整
+
+---
+
+🔽 試し組みはこちら（Regular／Boldを切り替えられます）🔽
+
+明朝
+https://genzui.mkpo.li/serif?weight=bold
+
+ゴシック
+https://genzui.mkpo.li/sans?weight=bold
+
+---
+
+⬇️ダウンロード⬇️
+
+https://genzui.mkpo.li/

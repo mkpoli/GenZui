@@ -55,6 +55,15 @@ SQUARE PAATU and a tally mark, all in Bold. 17,070 characters; 286 hentaigana.
 Based on Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana
 Gothic. genzui.mkpo.li/sans.”
 
+## Bold announcement
+
+`scripts/bold_card.py` renders the card announcing Bold for both families to
+`build/social/`, and `announcement-bold-ja.txt` / `announcement-bold-en.txt`
+carry the post. The card's text alternative is:
+“GenZui, Regular and Bold. 源萃明朝 GenZui Serif and 源萃ゴシック GenZui Sans, each
+set in Regular above Bold with the sample “あ𛀂 い𛀆 う𛀋 𛄣𛄤𪜈”: kana beside
+hentaigana, then the ligatures KOTO, TOKI and TOMO. genzui.mkpo.li.”
+
 ## Site build
 
 `bun install --frozen-lockfile`, then `bun run release:build`. The build requires
