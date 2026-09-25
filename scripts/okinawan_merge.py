@@ -157,24 +157,32 @@ def _widen_strokes(rings, d):
     return O.rings(pen)
 
 
-def glottal_beside(font, contours, kana, **params):
-    """The glottal mark standing beside a Noto kana."""
-    p = {**BESIDE_DEFAULTS, **params}
+def beside_pieces(font, contours, kana, p):
+    """The unplaced mark (widened and turned, with the point it is sized
+    about) and the kana, narrowed and weighted, where it stays."""
     ring = lambda ch, i: O.rings(contours(font, ord(ch), [i]))[0]
     mark = _widened(ring('は', 1), YA['mark_cut'], p['neck_w'], p['head_w'])
     mark = _turned(mark, YA['mark_cut'], p['mark_angle'])
     foot = min(q[1] for seg in mark for q in seg)
     fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
-    mark = O.transform(mark, np.eye(2) * p['mark_scale'], (fx, foot) - np.array([fx, foot]) * p['mark_scale'])
-    mark = O.transform(mark, np.array([[1, 0], [0, p['mark_len']]]),
-                       (0, foot * (1 - p['mark_len']) + p['mark_dy']))
     body = O.rings(contours(font, ord(kana)))
     right = max(q[0] for r in body for seg in r for q in seg)
     mid = 360
     body = [O.transform(r, np.diag([p['kana_sx'], p['kana_sy']]),
                         (right * (1 - p['kana_sx']), mid * (1 - p['kana_sy']))) for r in body]
-    body = _widen_strokes(body, p['kana_bold'])
-    # slide the mark sideways until its nearest point is `gap` from the kana
+    return mark, (fx, foot), _widen_strokes(body, p['kana_bold'])
+
+
+def sized(mark, origin, p):
+    """The mark at its size and length, both about its foot, raised by mark_dy."""
+    fx, foot = origin
+    mark = O.transform(mark, np.eye(2) * p['mark_scale'], np.array([fx, foot]) * (1 - p['mark_scale']))
+    return O.transform(mark, np.array([[1, 0], [0, p['mark_len']]]),
+                       (0, foot * (1 - p['mark_len']) + p['mark_dy']))
+
+
+def gap_shift(mark, body, gap):
+    """How far to slide the mark sideways so its nearest point is `gap` from the kana."""
     ts = np.linspace(0, 1, 12)
     pts = lambda rs: np.array([O.point(seg, t) for r in rs for seg in r for t in ts])
     ms, ks = pts([mark]), pts(body)
@@ -182,11 +190,19 @@ def glottal_beside(font, contours, kana, **params):
     lo, hi = -400.0, 200.0          # well clear of the kana .. inside it
     for _ in range(30):
         dx = (lo + hi) / 2
-        lo, hi = (dx, hi) if near(dx) >= p['gap'] else (lo, dx)
-    mark = _moved(mark, lo)
+        lo, hi = (dx, hi) if near(dx) >= gap else (lo, dx)
+    return lo
+
+
+def glottal_beside(font, contours, kana, **params):
+    """The glottal mark standing beside a Noto kana. The mark is placed by
+    `mark_x` when given, otherwise by its gap to the kana."""
+    p = {**BESIDE_DEFAULTS, **params}
+    mark, origin, body = beside_pieces(font, contours, kana, p)
+    mark = sized(mark, origin, p)
+    mark = _moved(mark, p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap']))
     # centre the letter in the em
     xs = [q[0] for r in [mark, *body] for seg in r for q in seg]
     dx = 500 - (min(xs) + max(xs)) / 2
     # two parts, each a whole shape, so the kana's counters stay open
     return [O.draw([_moved(mark, dx)]), O.draw([_moved(r, dx) for r in body])]
-
