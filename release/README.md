@@ -60,9 +60,12 @@ Gothic. genzui.mkpo.li/sans.”
 `scripts/bold_card.py` renders the card announcing Bold for both families to
 `build/social/`, and `announcement-bold-ja.txt` / `announcement-bold-en.txt`
 carry the post. The card's text alternative is:
-“GenZui, Regular and Bold. 源萃明朝 GenZui Serif and 源萃ゴシック GenZui Sans, each
-set in Regular above Bold with the sample “あ𛀂 い𛀆 う𛀋 𛄣𛄤𪜈”: kana beside
-hentaigana, then the ligatures KOTO, TOKI and TOMO. genzui.mkpo.li.”
+“GenZui, Regular and Bold, on a dark green grid. 源萃明朝 GenZui Serif, on a light
+card, shows archaic WU, KOTO, TOKI, TOTE, YORI, the alternate NE and WI, TOMO
+and NARI in Regular above Bold. 源萃ゴシック GenZui Sans, on a dark card, shows the
+refitted KOTO, alternate NE and small archaic YE, SQUARE PAATU, two tally marks,
+and three ideographic description characters in Regular above Bold.
+genzui.mkpo.li.”
 
 ## Site build
 
