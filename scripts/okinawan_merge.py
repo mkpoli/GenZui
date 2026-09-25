@@ -54,8 +54,7 @@ def _widened(segs, cut, neck, head, head_y=HEAD_Y):
 
 def _turned(segs, cut, degrees):
     """The mark turned about the middle of its cut."""
-    xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, cut))
-    pivot = np.array([(xs[0] + xs[1]) / 2, cut])
+    pivot = np.array([centre_at(segs, cut), cut])
     a = np.radians(degrees)
     m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
     return O.transform(segs, m, pivot - m @ pivot)
@@ -250,9 +249,12 @@ def upright_mark(font, contours, p):
 
 
 def centre_at(segs, y):
-    """The middle of a stroke where a level line crosses it."""
+    """The middle of a stroke where a level line crosses it. A hook or tip can
+    cross the same line (Bold こ's upper stroke does); the stroke's body is the
+    widest of the paired crossings."""
     xs = sorted(O.point(segs[i], t)[0] for i, t in O.crossings(segs, 1, y))
-    return (xs[0] + xs[1]) / 2
+    left, right = max(zip(xs[::2], xs[1::2]), key=lambda pair: pair[1] - pair[0])
+    return (left + right) / 2
 
 
 def wa_body(font, contours):
@@ -317,8 +319,7 @@ def beside_pieces(font, contours, kana, p):
     its width runs across and its head is at the top), with the point it turns
     about; and the kana, sized and weighted, where it stays."""
     mark = _widened(upright_mark(font, contours, p), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
-    xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
-    pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
+    pivot = (centre_at(mark, p['ramp_lo']), p['ramp_lo'])
     body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     origin = kana_origin(body, p['kana_anchor'])
     # weight first, in the kana's own units, then the scaling: the sweep and
