@@ -277,8 +277,11 @@ def wa_body(font, contours):
     small loop and the rest of its bottom, and わ supplies the end of the loop.
     Both edges are redrawn across the join so the two run into each other."""
     import pathops
+    # the region ゐ gives up, with its upper-left corner clipped so Bold's
+    # heavier diagonal, which runs past that corner, keeps its edge
     box = pathops.Path(); pen = box.getPen()
-    pen.moveTo((410, -100)); pen.lineTo((740, -100)); pen.lineTo((740, 245)); pen.lineTo((410, 245)); pen.closePath()
+    pen.moveTo((410, -100)); pen.lineTo((740, -100)); pen.lineTo((740, 245)); pen.lineTo((445, 245))
+    pen.lineTo((410, 190)); pen.closePath()
     def path(rings):
         out = pathops.Path(); O.draw(rings).replay(out.getPen())
         out.simplify(fix_winding=True, keep_starting_points=False)
