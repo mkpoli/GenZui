@@ -11,8 +11,10 @@ from fontTools.pens.perimeterPen import PerimeterPen
 from fontTools.ttLib import TTFont
 from statistics import median
 
-from sans import FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
-from sans_forms import REFITS
+from sans import DRAWN, FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
+from sans_forms import REFITS, WI_LOWER_RISE, WI_UPPER_DROP
+from serif import contours
+import pathops
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from check_coverage import check_coverage
@@ -126,7 +128,7 @@ def check(weight=400):
         name = cmap[cp]
         g = font['glyf'][name]
         assert g.numberOfContours != 0, hex(cp)
-        source = ((donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
+        source = (None if cp in DRAWN else (donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
                   else genseki if cp in gen_cmap else None)
         if source and cp in refits:
             old = gen_cmap[cp]
@@ -169,7 +171,32 @@ def check(weight=400):
                     assert actual == shape(engine, text, direction, script=script), (hex(cp), script)
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
-    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 17, 'genseki_refit': 3}, retained
+    # Alternate WI spans the height of WI, its bars keep WI's width, and its
+    # metrics follow the other historical kana.
+    wi, drawn = font['glyf'][cmap[ord('ヰ')]], font['glyf'][cmap[0x1B128]]
+    assert abs(drawn.yMax - wi.yMax) <= 12 and abs(drawn.yMin - wi.yMin) <= 12, (drawn.yMin, drawn.yMax)
+    wi_outline = pathops.Path()
+    font.getGlyphSet()[cmap[0x1B128]].draw(wi_outline.getPen())
+    for index, shift in ((2, WI_LOWER_RISE), (3, -WI_UPPER_DROP)):
+        pen = pathops.Path()
+        contours(font, ord('ヰ'), [index]).replay(pen.getPen())
+        x0, y0, x1, y1 = pen.bounds
+        y = (y0 + y1) / 2 + shift
+        band = pathops.Path(); b = band.getPen()
+        b.moveTo((-100, y-1)); b.lineTo((1100, y-1)); b.lineTo((1100, y+1)); b.lineTo((-100, y+1)); b.closePath()
+        cut = pathops.op(wi_outline, band, pathops.PathOp.INTERSECTION).bounds
+        assert abs(cut[0] - x0) <= 1 and abs(cut[2] - x1) <= 1, (index, cut, (x0, x1))
+    # The left descent has the weight of the right stem.
+    for y in (450, 650):
+        widths = []
+        for x0, x1 in ((-200, 500), (500, 1200)):
+            band = pathops.Path(); b = band.getPen()
+            b.moveTo((x0, y-.5)); b.lineTo((x1, y-.5)); b.lineTo((x1, y+.5)); b.lineTo((x0, y+.5)); b.closePath()
+            cut = pathops.op(wi_outline, band, pathops.PathOp.INTERSECTION).bounds
+            widths.append(cut[2] - cut[0])
+        assert abs(widths[0] - widths[1]) <= 4, (y, widths)
+    assert font['hmtx'][cmap[0x1B128]] == (1000, drawn.xMin) and font['vmtx'][cmap[0x1B128]] == (1000, 880-drawn.yMax)
     # The hentaigana's median stem matches the hiragana's, and the archaic kana
     # the katakana's, within two units.
     stems = {label: stem(font, cps) for label, cps in (

@@ -1,4 +1,4 @@
-"""Outline refits for GenZui Sans."""
+"""Outline refits and drawings for GenZui Sans."""
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
@@ -75,6 +75,55 @@ SANS_SYMBOLS = {
 # their median weight gain over Regular is 1.53, the median gain of Noto Sans
 # JP's kana; the full Serif masters gain 1.66.
 BOLD_TONE_BLEND = 0.76
+
+
+# Alternate WI, built like GenZui Serif's from the base font's own strokes:
+# WI's bars and right stem, with NA's falling stroke as the left descent.
+# NA's stroke is heavier than WI's stems, so it is thinned about its own
+# centreline to the right stem's width. The descent then moves left and its
+# foot comes back inward; the right stem keeps WI's position and the bars move
+# closer, as in Serif. Both weights measure and move their own strokes.
+WI_DESCENT_SHIFT, WI_FOOT_RETURN, WI_STEM_SHIFT = -160, 67, 0
+WI_UPPER_DROP, WI_LOWER_RISE = 22, 30
+
+
+def span(outline, y):
+    """The horizontal extent of an outline at height y."""
+    shape, band = pathops.Path(), pathops.Path()
+    outline.replay(shape.getPen())
+    pen = band.getPen()
+    pen.moveTo((-200, y-.5)); pen.lineTo((1200, y-.5)); pen.lineTo((1200, y+.5)); pen.lineTo((-200, y+.5)); pen.closePath()
+    x0, _, x1, _ = pathops.op(shape, band, pathops.PathOp.INTERSECTION).bounds
+    return x0, x1
+
+
+def alternate_wi(font):
+    from serif import contours, glyph, transform
+    from serif_forms import reshape
+
+    stroke, stem = contours(font, ord('ナ'), [0]), contours(font, ord('ヰ'), [0])
+    ratio = (lambda a, b: (b[1]-b[0])/(a[1]-a[0]))(span(stroke, 450), span(stem, 400))
+    shape = pathops.Path()
+    stroke.replay(shape.getPen())
+    bottom, top = shape.bounds[1] + 12, shape.bounds[3] - 30
+    centres = {}
+
+    def centre(y):
+        y = round(max(bottom, min(top, y)))
+        if y not in centres:
+            x0, x1 = span(stroke, y)
+            centres[y] = (x0+x1)/2
+        return centres[y]
+
+    def descent(x, y):
+        x = centre(y) + (x-centre(y))*ratio
+        t = max(0, min(1, (350-y)/380))
+        return x + WI_DESCENT_SHIFT + WI_FOOT_RETURN*t*t, y
+
+    return glyph([reshape(stroke, descent),
+                  transform(stem, (1, 0, 0, 1, WI_STEM_SHIFT, 0)),
+                  transform(contours(font, ord('ヰ'), [3]), (1, 0, 0, 1, 0, -WI_UPPER_DROP)),
+                  transform(contours(font, ord('ヰ'), [2]), (1, 0, 0, 1, 0, WI_LOWER_RISE))])
 
 
 def refit(glyph_set, name, bounds, spec):
