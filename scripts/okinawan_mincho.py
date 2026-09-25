@@ -4,8 +4,8 @@ Each letter is assembled from whole strokes of the Noto Serif kana it
 extends, so the brush entries, the thick-thin contrast and the terminals are
 Noto's. A stroke is cut only where the cut end is buried in another stroke.
 Topology and placement follow the letters embedded in Funatsu's 2016 chart.
-Glottal YA is the exception: its added stroke is merged into や's outline
-(okinawan_merge).
+Glottal YA and YU are the exceptions, drawn in okinawan_merge: YA's added
+stroke is merged into や's outline, and YU sets the same stroke beside ゆ.
 
 Coordinates are font units on a 1000-unit em with the baseline at 0; the
 kana body runs from about -60 to 800.
@@ -227,7 +227,8 @@ def glottal_ya(k):
 
 @drawing(0xF45E)  # glottal YU
 def glottal_yu(k):
-    return [glottal_mark(k), after_mark(k, 'ゆ')]
+    """YA's mark standing beside a narrowed ゆ."""
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゆ', **okinawan_merge.YU)
 
 
 @drawing(0xF45F)  # glottal YO

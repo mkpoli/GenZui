@@ -120,6 +120,12 @@ BESIDE_DEFAULTS = dict(
 )
 
 
+# The form GenZui ships, chosen in the arena (research/okinawan-arena/glottal-yu):
+# two culls, then one factor at a time around the form the second cull kept.
+YU = dict(BESIDE_DEFAULTS, mark_len=0.838, mark_scale=0.864, gap=38, mark_dy=148, mark_angle=4.875,
+          neck_w=1.0, head_w=0.9, kana_sx=0.812, kana_sy=0.981, kana_bold=8)
+
+
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
     horizontal segment, which restores what narrowing took from upright strokes
