@@ -1,0 +1,18 @@
+<main><header><h1>__GLYPH__ — GenZui arena</h1><span id="saved"></span></header>
+<p class="intro">Place the added stroke yourself. よ never moves; only the stroke does. Use the arrow keys or the buttons. Hold Shift for small steps.</p>
+<section id="tools"></section>
+<div class="tune">
+ <figure class="stage"><svg id="big" viewBox="0 0 1000 1000" aria-label="The letter at full size"><rect class="em" x="0" y="0" width="1000" height="1000"/><line class="base" x1="0" x2="1000" y1="880" y2="880"/><g transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><g id="mark-g"><path id="mark" class="ink mark"/></g></g></svg><figcaption>Em box; the line is the baseline.</figcaption></figure>
+ <div class="controls">
+  <h2>Move</h2>
+  <div class="pad"><span></span><button data-act="up">↑ up</button><span></span><button data-act="left">← left</button><span class="hint">10 units<br>Shift: 2</span><button data-act="right">right →</button><span></span><button data-act="down">↓ down</button><span></span></div>
+  <h2>Shape</h2>
+  <div class="row"><button data-act="smaller">− smaller</button><button data-act="bigger">bigger +</button><span class="hint">keys - and +</span></div>
+  <div class="row"><button data-act="shorter">shorter</button><button data-act="longer">longer</button><span class="hint">keys [ and ]</span></div>
+  <div class="row"><button data-act="reset">Reset</button></div>
+  <dl id="values"></dl>
+ </div>
+</div>
+<section class="lines"><h2>In text</h2><div id="lines"></div></section>
+<p class="footer">__FOOTER__</p></main>
+<div class="cull-actions"><span id="status"></span><input id="notes" type="text" placeholder="Anything else? (optional)"><button id="copy" class="primary" type="button">Copy result</button><p id="copy-status" aria-live="polite"></p></div>

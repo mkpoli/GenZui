@@ -304,6 +304,28 @@ def axes(slug, round_no, base, group='axes'):
     return page(slug, round_no, 'axes', fonts, dict(AXES=config))
 
 
+def svg_path(rings):
+    return ' '.join(f'M{r[0][0][0]:.1f} {r[0][0][1]:.1f} ' + ' '.join(
+        f'C{a[0]:.1f} {a[1]:.1f} {b[0]:.1f} {b[1]:.1f} {c[0]:.1f} {c[1]:.1f}' for _, a, b, c in r) + 'Z' for r in rings)
+
+
+def tune(slug, round_no, base):
+    """A page for placing the mark by hand beside a kana that stays put."""
+    letter = LETTERS[slug]
+    kana = letter['build'].keywords['kana']
+    p = {**letter['defaults'], **base}
+    mark, origin, body = okinawan_merge.beside_pieces(TTFont(BASE), contours, kana, p)
+    if p.get('mark_x') is None:
+        p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(mark, origin, p), body, p['gap']))
+    start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len')}
+    g = chr(letter['code'])
+    lines = [letter['big'], *(t for _, t in letter['passages'])]
+    (OUT/slug).mkdir(parents=True, exist_ok=True)
+    (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
+    return page(slug, round_no, 'tune', {}, dict(MARK_D=svg_path([mark]), KANA_D=svg_path(body), ORIGIN=list(origin),
+                                                 START=start, LINES=lines))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('slug', choices=sorted(LETTERS))
@@ -312,10 +334,14 @@ if __name__ == '__main__':
     parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
     parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round, '
                         'or around a shipped form named in okinawan_merge (YA, YU)')
+    parser.add_argument('--tune', metavar='ROUND:TOKEN', help='place the mark by hand, starting from a form of an earlier round')
     parser.add_argument('--group', default='axes', help='which set of factors to vary (axes, thickness)')
     parser.add_argument('--set', nargs='*', default=[], metavar='NAME=VALUE', help='change the base form before varying it')
     args = parser.parse_args()
-    if args.axes:
+    if args.tune:
+        source, token = args.tune.split(':')
+        tune(args.slug, args.round, json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token])
+    elif args.axes:
         if ':' in args.axes:
             source, token = args.axes.split(':')
             base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
