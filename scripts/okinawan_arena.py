@@ -358,7 +358,7 @@ def tune(slug, round_no, base):
     stroke = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in raw],
                   lo=p['ramp_lo'], hi=p['ramp_hi'],
                   c0=okinawan_merge.centre_at(raw, p['ramp_lo']), c1=okinawan_merge.centre_at(raw, p['ramp_hi']))
-    kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0}
+    kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0, 'kana_dx': 0, 'kana_dy': 0}
     body = okinawan_merge.BODIES[kana](font, contours) if kana in okinawan_merge.BODIES else O.rings(contours(font, ord(kana)))
     origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
     kanas = {}
@@ -368,7 +368,7 @@ def tune(slug, round_no, base):
         except ValueError as error:   # a weight Skia cannot resolve: the page skips it
             print(f'no kana at weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'kana_sx', 'kana_sy', 'kana_bold')}
+                               'neck_w', 'head_w', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')

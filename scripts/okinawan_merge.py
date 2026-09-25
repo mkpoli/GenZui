@@ -125,6 +125,8 @@ BESIDE_DEFAULTS = dict(
     kana_sx=0.88,      # horizontal scale of the kana, about its right edge
     kana_sy=0.97,      # vertical scale of the kana, about the middle of the body
     kana_bold=0,       # units of width added sideways to the kana's strokes, before it is scaled
+    kana_dx=0,         # the kana moved after scaling; the letter is still centred as a whole
+    kana_dy=0,
 )
 
 
@@ -315,7 +317,8 @@ def beside_pieces(font, contours, kana, p):
     # the scaling commute, so the page can scale a drawn weight by itself
     body = _widen_strokes(body, p['kana_bold'])
     sx, sy = p['kana_sx'], p['kana_sy']
-    body = [O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx), origin[1] * (1 - sy))) for r in body]
+    body = [O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx) + p['kana_dx'], origin[1] * (1 - sy) + p['kana_dy']))
+            for r in body]
     return mark, pivot, body
 
 
