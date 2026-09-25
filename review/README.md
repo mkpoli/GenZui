@@ -17,12 +17,14 @@ Access policy lists.
   changes. API calls are under `/kata/api/`; everything else is a static asset.
 - **Access.** The Worker checks the Cloudflare Access token on every API call
   and records the reviewer by the email in it. Without `ACCESS_TEAM` and
-  `ACCESS_AUD` it answers 503.
+  `ACCESS_AUD` it answers 503, unless `DEV_ACTOR` is set for local
+  development; once Access is configured, `DEV_ACTOR` is ignored.
 - **D1** holds the current state (`forms`, `labels`, `kana_counts`) and an
   append-only log (`batches`, `events`). Every change states the revision the
   reviewer saw; a change made on stale data is refused with 409. A batch sent
-  twice is stored once. Undo writes the inverse changes as a new batch and
-  reverses only the reviewer's own latest action.
+  twice is stored once. Undo writes the inverse changes as a new batch; it
+  steps back through the reviewer's own actions, and stops at one whose forms
+  someone has changed since.
 - **Assets** (`build/kata-review/`): the page, one sprite sheet and index per
   kana, reduced plate images and the plate register.
 
@@ -64,7 +66,8 @@ Then open `http://127.0.0.1:4191/kata/`.
 3. Seed the database once:
    `bunx wrangler d1 migrations apply katakana-review --remote`, then
    `bunx wrangler d1 execute katakana-review --remote --file ../build/kata-review-seed.sql`.
-   The seed replaces all rows; do not run it again after reviewing has started.
+   The seed replaces all rows. It stops before deleting anything if the
+   database already holds a decision made through the page.
 4. From a clean checkout of `main`: build the assets, then `bun run deploy`.
 
 `GET /kata/api/export` returns the whole state and log as JSON; the page's
