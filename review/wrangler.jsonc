@@ -1,0 +1,24 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "katakana-review",
+  "main": "src/index.ts",
+  "account_id": "5e6d5236e83c2395b253db1ec8e28a3e",
+  "compatibility_date": "2026-09-24",
+  "workers_dev": false,
+  "preview_urls": false,
+  // Runs in front of the glyph-atlas Worker, which owns atlas.mkpo.li as a
+  // custom domain. Cloudflare Access protects the same path.
+  "routes": [{ "pattern": "atlas.mkpo.li/kata*", "zone_name": "mkpo.li" }],
+  "assets": {
+    "directory": "../build/kata-review",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    "run_worker_first": ["/kata/api/*"]
+  },
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 },
+  "vars": { "ACCESS_TEAM": "", "ACCESS_AUD": "" },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "katakana-review", "database_id": "13df8493-22f1-4931-bced-515d1eec272a", "migrations_dir": "migrations" }
+  ]
+}

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang=ja>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noindex,nofollow">
+<title>片仮名字形の分類</title>
+<link rel=preconnect href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel=stylesheet>
+<style>
+:root{--bg:#f6f3ec;--paper:#fffdf8;--ink:#23201b;--mut:#7a7266;--line:#e3ddd0;--acc:#9b2d20;--acc2:#1f6f8b;--tile:#fff;--bar:#d9d2c3;--warn:#b7791f}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#181715;--paper:#211f1c;--ink:#ece6da;--mut:#9d9587;--line:#35322c;--acc:#e0806d;--acc2:#6bb8d4;--tile:#f4f1ea;--bar:#3d3a33;--warn:#e0b050}}
+:root[data-theme=dark]{--bg:#181715;--paper:#211f1c;--ink:#ece6da;--mut:#9d9587;--line:#35322c;--acc:#e0806d;--acc2:#6bb8d4;--tile:#f4f1ea;--bar:#3d3a33;--warn:#e0b050}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Noto Sans JP",system-ui,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{padding:28px 0 14px}
+h1{font:600 28px/1.3 "Noto Serif JP",serif;margin:0;letter-spacing:.04em}
+.lead{color:var(--mut);margin:6px 0 0;font-size:13px}
+kbd{font:11px ui-monospace,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;background:var(--paper)}
+.picker{position:sticky;top:0;z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0}
+.grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;direction:rtl;max-width:430px}
+.grid button,.grid span{direction:ltr;aspect-ratio:1;border-radius:5px;font:400 17px/1 "Noto Serif JP",serif}
+.grid button{border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;position:relative;padding:0}
+.grid button:hover{border-color:var(--mut)}
+.grid button[aria-selected=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+.grid button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.grid .due{position:absolute;top:-4px;right:-4px;min-width:15px;height:15px;border-radius:8px;background:var(--warn);color:#fff;font:600 9px/15px system-ui;padding:0 3px}
+main{padding:20px 0 140px}
+.head{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+.big{font:400 80px/1 "Noto Serif JP",serif}
+.stats{display:flex;gap:24px;flex-wrap:wrap}
+.stats div{font-size:12px;color:var(--mut)}.stats b{display:block;font:600 22px/1.2 "Noto Serif JP",serif;color:var(--ink)}
+h2{font:600 16px/1.4 "Noto Serif JP",serif;margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:baseline}
+h2 small{font:400 12px "Noto Sans JP",sans-serif;color:var(--mut)}
+.fam{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 12px}
+.fam.empty{opacity:.6}
+.fam header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.fam h3{margin:0;font:600 19px/1.3 "Noto Serif JP",serif;display:flex;align-items:baseline;gap:8px}
+.fam h3 code{font:400 11px ui-monospace,monospace;color:var(--mut)}
+.fam h3 .rename{font:12px system-ui;border:0;background:none;color:var(--mut);cursor:pointer;padding:0}
+.fam h3 .rename:hover{color:var(--acc2)}
+.fam .pick{font:12px system-ui;border:1px solid var(--line);background:none;color:var(--mut);border-radius:4px;cursor:pointer}
+.meta{font-size:12px;color:var(--mut)}
+.time{position:relative;height:5px;background:var(--bar);border-radius:3px;margin:8px 0 2px}
+.time i{position:absolute;top:0;bottom:0;background:var(--acc);border-radius:3px;min-width:5px}
+.forms{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;user-select:none}
+.tile{position:relative;border:2px solid transparent;border-radius:6px;padding:0;background:none;cursor:pointer;line-height:0}
+.tile i{display:block;height:60px;background-color:var(--tile);background-repeat:no-repeat;border-radius:4px;outline:2px solid var(--tile)}
+.tile[aria-pressed=true]{border-color:var(--acc2);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc2) 30%,transparent)}
+.tile[aria-pressed=true]::after{content:"✓";position:absolute;top:-6px;left:-6px;width:16px;height:16px;border-radius:8px;background:var(--acc2);color:#fff;font:700 10px/16px system-ui;text-align:center}
+.tile .flag{position:absolute;bottom:-4px;right:-4px;font:600 9px/1 system-ui;padding:2px 3px;border-radius:3px;background:var(--warn);color:#fff}
+.tile .who{position:absolute;bottom:-4px;left:-4px;width:9px;height:9px;border-radius:5px;background:var(--acc2);border:1px solid var(--paper)}
+.excluded{opacity:.75}
+.actions{position:fixed;left:0;right:0;bottom:0;z-index:4;background:var(--paper);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgb(0 0 0 / .08);transform:translateY(110%);transition:transform .15s}
+.actions.on{transform:none}
+.actions .wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 16px}
+.actions b{font:600 15px "Noto Serif JP",serif;margin-right:4px}
+.actions select,.actions button{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:5px 10px;cursor:pointer}
+.actions select{max-width:260px}
+.actions .primary{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.actions .primary kbd{background:transparent;color:inherit;border-color:rgb(255 255 255 / .5)}
+.actions .sep{flex:1}
+.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:8px;padding:8px 14px;font-size:13px;display:none;gap:12px;align-items:center;z-index:5}
+.toast.on{display:flex}.toast button{font:inherit;background:none;border:0;color:var(--acc2);cursor:pointer;text-decoration:underline}
+dialog.plate{border:0;padding:0;background:var(--paper);color:var(--ink);border-radius:10px;max-width:min(96vw,1200px);max-height:94vh;box-shadow:0 10px 40px rgb(0 0 0 / .35)}
+dialog.plate::backdrop{background:rgb(0 0 0 / .55)}
+dialog.plate header{position:sticky;top:0;z-index:1;display:flex;gap:12px;align-items:baseline;justify-content:space-between;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--line)}
+dialog.plate header b{font:600 15px "Noto Serif JP",serif}
+dialog.plate header button{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:3px 10px;cursor:pointer}
+.plateview{position:relative;display:inline-block;line-height:0;margin:10px}
+.plateview img{max-width:100%;height:auto;display:block}
+.plateview .cell{position:absolute;outline:2px dashed var(--acc2);outline-offset:1px}
+.plateview .box{position:absolute;outline:3px solid var(--acc);outline-offset:2px;box-shadow:0 0 0 9999px rgb(0 0 0 / .18)}
+footer{color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding:16px 0 40px}
+.linkish{font:inherit;background:none;border:0;padding:0;color:var(--acc2);text-decoration:underline;cursor:pointer}
+@media(max-width:600px){.big{font-size:56px}.grid button{font-size:15px}h1{font-size:22px}}
+</style>
+<header class="top wrap">
+  <h1>片仮名字形の分類</h1>
+  <p class=lead>平安時代の訓点本に見える片仮名を字形ごとにまとめたもの。画像にカーソルを置くと出典と最後に変更した人が出ます。変更はほかの参加者と共有されます。
+  画像をクリックして選び（<kbd>Shift</kbd>で範囲選択、ダブルクリックで原本の図版を表示）、下の操作欄で移動・分類します。<kbd>Ctrl</kbd>+<kbd>Z</kbd>で直前の操作を取り消し、<kbd>Esc</kbd>で選択解除。</p>
+</header>
+<div class=picker><div class=wrap><div class=grid id=grid role=tablist aria-label="仮名"></div></div></div>
+<main class=wrap id=panel></main>
+<div class=actions id=actions><div class=wrap>
+  <b id=count></b>
+  <select id=target aria-label="移動先"></select>
+  <button class=primary id=move>移動 <kbd>M</kbd></button>
+  <button data-family="?">未分類へ <kbd>U</kbd></button>
+  <button data-family="x">字形でない <kbd>X</kbd></button>
+  <button data-flag="bad-crop">切り出し不良 <kbd>B</kbd></button>
+  <button data-flag="faint">薄い <kbd>F</kbd></button>
+  <button data-flag="">印を外す</button>
+  <button id=source title="選んだ例を原本の図版の上で見る">原本 <kbd>V</kbd></button>
+  <span class=sep></span>
+  <button id=clear>選択解除 <kbd>Esc</kbd></button>
+</div></div>
+<dialog class=plate id=plate><header><b id=plateTitle></b><button id=plateClose>閉じる <kbd>Esc</kbd></button></header>
+<div class=plateview id=plateView><img id=plateImg alt=""><i class=cell id=plateCell></i><i class=box id=plateBox></i></div></dialog>
+<div class=toast id=toast><span id=toastText></span><button id=undo>元に戻す</button></div>
+<footer class=wrap><p id=foot></p><p>ログイン中：<b id=me></b>・<button id=export class=linkish>全データを書き出す（JSON）</button></p></footer>
+<script>
+const GRID = [
+  ['a','ka','sa','ta','na','ha','ma','ya','ra','wa'],
+  ['i','ki','si','ti','ni','hi','mi',null,'ri','wi'],
+  ['u','ku','su','tu','nu','hu','mu','yu','ru',null],
+  ['e','ke','se','te','ne','he','me','ye','re','we'],
+  ['o','ko','so','to','no','ho','mo','yo','ro','wo'],
+];
+const KANA = {a:'ア',i:'イ',u:'ウ',e:'エ',o:'オ',ka:'カ',ki:'キ',ku:'ク',ke:'ケ',ko:'コ',sa:'サ',si:'シ',su:'ス',se:'セ',so:'ソ',
+  ta:'タ',ti:'チ',tu:'ツ',te:'テ',to:'ト',na:'ナ',ni:'ニ',nu:'ヌ',ne:'ネ',no:'ノ',ha:'ハ',hi:'ヒ',hu:'フ',he:'ヘ',ho:'ホ',
+  ma:'マ',mi:'ミ',mu:'ム',me:'メ',mo:'モ',ya:'ヤ',yu:'ユ',ye:'𛀀',yo:'ヨ',ra:'ラ',ri:'リ',ru:'ル',re:'レ',ro:'ロ',
+  wa:'ワ',wi:'ヰ',we:'ヱ',wo:'ヲ'};
+const KINDS = [['katakana','片仮名の字形'],['cursive','草体'],['kanji','字母の楷書'],['unsorted','未分類'],['excluded','字形でないもの']];
+const FLAG = {'bad-crop':'不良','faint':'薄'};
+const AXIS = [800, 1350];
+const H = 60, MAX_CHANGES = 100;
+const API = '/kata/api';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = y => Math.max(0, Math.min(100, (y - AXIS[0]) / (AXIS[1] - AXIS[0]) * 100));
+
+let summary = {}, me = '', plates = {}, current = null, view = null, sprite = null;
+let selected = new Set(), anchor = null, order = [];
+
+class Conflict extends Error {}
+async function api(path, body) {
+  const r = await fetch(API + path, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : {});
+  const j = await r.json().catch(() => ({error: `HTTP ${r.status}`}));
+  if (r.status === 409) throw new Conflict(j.error);
+  if (!r.ok) throw new Error(j.error || r.status);
+  return j;
+}
+
+const kindOf = id => id === '?' ? 'unsorted' : id === 'x' ? 'excluded' : id.startsWith('K:') ? 'kanji' : id.startsWith('H:') ? 'cursive' : 'katakana';
+function nameOf(id, labels) {
+  if (labels[id]) return labels[id].name;
+  if (id.startsWith('K:')) return `${id.slice(2)}（字母の楷書）`;
+  if (id.startsWith('H:')) return `${id.slice(2)}（草体）`;
+  return {'?': '未分類', x: '字形でないもの'}[id] ?? id;
+}
+
+// Group the kana's forms into families, oldest manuscript first.
+function build(raw) {
+  const labels = Object.fromEntries(raw.labels.map(l => [l.id, l]));
+  const byId = new Map(raw.forms.map(f => [f.id, f]));
+  const groups = new Map();
+  for (const id of Object.keys(labels)) groups.set(id, []);
+  for (const f of raw.forms) (groups.get(f.family) ?? groups.set(f.family, []).get(f.family)).push(f);
+  const year = f => plates[f.id.slice(0, 5)]?.year ?? 9999;
+  const families = [...groups].map(([id, forms]) => {
+    forms.sort((a, b) => year(a) - year(b) || (a.id < b.id ? -1 : 1));
+    const ys = forms.map(year).filter(y => y !== 9999);
+    return {id, name: nameOf(id, labels), kind: kindOf(id), forms, label: labels[id] ?? null,
+      from: ys.length ? Math.min(...ys) : null, to: ys.length ? Math.max(...ys) : null,
+      plates: new Set(forms.map(f => f.id.slice(0, 5))).size};
+  });
+  const rank = Object.fromEntries(KINDS.map(([k], i) => [k, i]));
+  families.sort((a, b) => rank[a.kind] - rank[b.kind] || b.forms.length - a.forms.length || (a.id < b.id ? -1 : 1));
+  return {kana: raw.kana, families, byId, labels};
+}
+
+function drawGrid() {
+  const g = $('grid'); g.textContent = ''; order = [];
+  for (const row of GRID) for (const k of row) {
+    if (!k || !summary[k]) { g.append(document.createElement('span')); continue; }
+    const b = document.createElement('button');
+    b.role = 'tab'; b.dataset.key = k; b.textContent = KANA[k];
+    b.title = `${k}・${summary[k].forms}例` + (summary[k].unsorted ? `・未分類${summary[k].unsorted}` : '');
+    if (summary[k].unsorted) b.insertAdjacentHTML('beforeend', `<span class=due>${summary[k].unsorted}</span>`);
+    b.setAttribute('aria-selected', k === current);
+    b.onclick = () => { location.hash = k; };
+    g.append(b); order.push(k);
+  }
+}
+
+function tile(f) {
+  const [x, y, w, h] = sprite.forms[f.id];
+  const s = H / h, [sw, sh] = sprite.size;
+  const who = f.by ? `\n最終変更：${f.by}（${f.at.slice(0, 10)}）` : '';
+  return `<button class=tile data-id="${esc(f.id)}" aria-pressed=${selected.has(f.id)} title="${esc((plates[f.id.slice(0, 5)]?.cite ?? f.id) + who)}">`
+    + `<i style="width:${Math.round(w * s)}px;background-image:url(sprites/${current}.webp);background-size:${sw * s}px ${sh * s}px;background-position:${-x * s}px ${-y * s}px"></i>`
+    + (f.flag ? `<span class=flag>${FLAG[f.flag]}</span>` : '') + (f.by && f.by !== me ? '<span class=who></span>' : '') + '</button>';
+}
+
+function family(f) {
+  const bar = f.from ? `<div class=time><i style="left:${pct(f.from)}%;width:${pct(f.to) - pct(f.from)}%"></i></div>` : '';
+  const span = f.from ? (f.from === f.to ? `・${f.from}年` : `・${f.from}〜${f.to}年`) : '';
+  const rename = f.kind === 'katakana' ? `<button class=rename data-rename="${esc(f.id)}" title="名前を変える">✎</button>` : '';
+  return `<section class="fam ${f.kind}${f.forms.length ? '' : ' empty'}"><header><h3>${esc(f.name)}${rename}<code>${esc(f.id)}</code></h3>`
+    + `<span class=meta>${f.forms.length}例・${f.plates}文献${span}`
+    + (f.forms.length ? ` <button class=pick data-all="${esc(f.id)}">全選択</button>` : '') + `</span></header>${bar}`
+    + `<div class=forms>${f.forms.map(tile).join('')}</div></section>`;
+}
+
+function draw() {
+  const d = view, kata = d.families.filter(f => f.kind === 'katakana' && f.forms.length);
+  const total = d.families.reduce((n, f) => n + f.forms.length, 0);
+  const unsorted = d.families.filter(f => f.kind === 'unsorted').reduce((n, f) => n + f.forms.length, 0);
+  let html = `<div class=head><div class=big>${KANA[d.kana]}</div><div class=stats>`
+    + `<div><b>${kata.length}</b>片仮名の字形</div><div><b>${total}</b>用例</div><div><b>${unsorted}</b>未分類</div></div></div>`
+    + `<p class=meta>帯は用例の年代（${AXIS[0]}〜${AXIS[1]}年の範囲で表示）。青い点は他の人が最後に変更した例。</p>`;
+  for (const [k, name] of KINDS) {
+    const fs = d.families.filter(f => f.kind === k);
+    if (!fs.length) continue;
+    html += `<h2>${name}<small>${fs.filter(f => f.forms.length).length}類・${fs.reduce((n, f) => n + f.forms.length, 0)}例</small></h2>` + fs.map(family).join('');
+  }
+  const y = scrollY;
+  $('panel').innerHTML = html;
+  scrollTo(0, y);
+  $('target').innerHTML = d.families.filter(f => !['unsorted', 'excluded'].includes(f.kind))
+    .map(f => `<option value="${esc(f.id)}">${esc(f.name)}（${f.forms.length}）</option>`).join('')
+    + '<option value="__new">＋ 新しい字形…</option>';
+  drawActions();
+}
+
+function drawActions() {
+  for (const id of selected) if (!view.byId.has(id)) selected.delete(id);
+  $('actions').classList.toggle('on', selected.size > 0);
+  $('count').textContent = `${selected.size}件を選択中`;
+  for (const t of document.querySelectorAll('.tile')) t.setAttribute('aria-pressed', selected.has(t.dataset.id));
+}
+
+async function load(k, keepScroll) {
+  if (k !== current) { selected.clear(); anchor = null; }
+  const [raw, sheet] = await Promise.all([api(`/kana/${k}`), k === current && sprite ? sprite : fetch(`sprites/${k}.json`).then(r => r.json())]);
+  current = k; sprite = sheet; view = build(raw);
+  draw();
+  if (!keepScroll) scrollTo(0, 0);
+  drawGrid();
+  document.title = `${KANA[k]}｜片仮名字形の分類`;
+}
+
+async function refresh() {
+  const s = await api('/summary');
+  summary = s.kana;
+  await load(current, true);
+}
+
+let toastTimer;
+function toast(text, undoable = true) {
+  $('toastText').textContent = text; $('undo').style.display = undoable ? '' : 'none';
+  $('toast').classList.add('on'); clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('toast').classList.remove('on'), 6000);
+}
+
+// Send changes in batches of MAX_CHANGES; each batch is saved (and undone) on its own.
+async function commit(changes, text) {
+  if (!changes.length) return;
+  try {
+    for (let i = 0; i < changes.length; i += MAX_CHANGES)
+      await api('/batch', {batch: crypto.randomUUID(), changes: changes.slice(i, i + MAX_CHANGES)});
+    selected.clear(); anchor = null;
+    await refresh();
+    toast(changes.length > MAX_CHANGES ? `${text}（${Math.ceil(changes.length / MAX_CHANGES)}回に分けて保存）` : text);
+  } catch (e) {
+    await refresh();
+    toast(e instanceof Conflict ? e.message : `保存できませんでした：${e.message}`, false);
+  }
+}
+
+const seen = id => { const f = view.byId.get(id); return {revision: f.revision, family: f.family, flag: f.flag}; };
+
+function moveTo(fid, text) {
+  const ids = [...selected].filter(id => view.byId.get(id).family !== fid);
+  return commit(ids.map(id => ({field: 'family', target: id, seen: seen(id), new: fid})), `${ids.length}件を「${text}」へ移しました`);
+}
+
+async function moveSelected() {
+  let fid = $('target').value, name;
+  if (fid === '__new') {
+    name = prompt('新しい字形の名前（例：丁形）')?.trim();
+    if (!name) return;
+    fid = `${current}.n${Math.random().toString(36).slice(2, 6)}`;
+    try { await api('/batch', {batch: crypto.randomUUID(), changes: [{field: 'label', target: fid, seen: {revision: null, name: null}, new: name}]}); }
+    catch (e) { toast(e.message, false); return; }
+  } else name = view.families.find(f => f.id === fid).name;
+  await moveTo(fid, name);
+}
+
+function flagSelected(flag) {
+  const ids = [...selected].filter(id => (view.byId.get(id).flag ?? '') !== (flag ?? ''));
+  return commit(ids.map(id => ({field: 'flag', target: id, seen: seen(id), new: flag || null})),
+    flag ? `${ids.length}件に「${{'bad-crop': '切り出し不良', faint: '薄い'}[flag]}」の印を付けました` : `${ids.length}件の印を外しました`);
+}
+
+$('panel').addEventListener('click', async e => {
+  const t = e.target.closest('.tile'), all = e.target.closest('[data-all]'), ren = e.target.closest('[data-rename]');
+  if (t) {
+    const tiles = [...document.querySelectorAll('.tile')], id = t.dataset.id;
+    if (e.shiftKey && anchor) {
+      const a = tiles.findIndex(x => x.dataset.id === anchor), b = tiles.indexOf(t);
+      for (const x of tiles.slice(Math.min(a, b), Math.max(a, b) + 1)) selected.add(x.dataset.id);
+    } else {
+      selected.has(id) ? selected.delete(id) : selected.add(id);
+      anchor = id;
+    }
+    drawActions();
+  } else if (all) {
+    const f = view.families.find(x => x.id === all.dataset.all), every = f.forms.every(x => selected.has(x.id));
+    for (const x of f.forms) every ? selected.delete(x.id) : selected.add(x.id);
+    drawActions();
+  } else if (ren) {
+    const f = view.families.find(x => x.id === ren.dataset.rename);
+    const name = prompt('字形の名前', f.name)?.trim();
+    if (!name || name === f.name) return;
+    try {
+      await api('/batch', {batch: crypto.randomUUID(), changes: [{field: 'label', target: f.id,
+        seen: {revision: f.label?.revision ?? null, name: f.label?.name ?? null}, new: name}]});
+      await refresh(); toast(`名前を「${name}」にしました`);
+    } catch (e) { await refresh(); toast(e.message, false); }
+  }
+});
+$('move').onclick = moveSelected;
+for (const b of document.querySelectorAll('[data-family]')) b.onclick = () => moveTo(b.dataset.family, b.dataset.family === '?' ? '未分類' : '字形でないもの');
+for (const b of document.querySelectorAll('[data-flag]')) b.onclick = () => flagSelected(b.dataset.flag);
+$('clear').onclick = () => { selected.clear(); drawActions(); };
+$('undo').onclick = async () => {
+  try {
+    const r = await api('/undo', {batch: `undo-${crypto.randomUUID()}`});
+    await refresh(); toast(r.undone ? `${r.undone}件の変更を取り消しました` : '取り消せる操作がありません', false);
+  } catch (e) { await refresh(); toast(e.message, false); }
+};
+$('export').onclick = async () => {
+  const data = await api('/export');
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([JSON.stringify(data)], {type: 'application/json'})),
+    download: `katakana-review-${data.exported.slice(0, 10)}.json`});
+  a.click(); URL.revokeObjectURL(a.href);
+};
+
+// Show a form where it stands on its plate.
+function showSource(id) {
+  const w = sprite.where[id];
+  if (!w) return;
+  const [x0, y0, x1, y1, c0, c1, c2, c3] = w, page = id.slice(0, 5);
+  const img = $('plateImg');
+  const place = () => {
+    const k = img.clientWidth / img.naturalWidth;
+    Object.assign($('plateBox').style, {left: `${x0 * k}px`, top: `${y0 * k}px`, width: `${(x1 - x0) * k}px`, height: `${(y1 - y0) * k}px`});
+    Object.assign($('plateCell').style, {left: `${c0 * k}px`, top: `${c1 * k}px`, width: `${(c2 - c0) * k}px`, height: `${(c3 - c1) * k}px`});
+    $('plateBox').scrollIntoView({block: 'center', inline: 'center'});
+  };
+  img.onload = place;
+  img.src = `plates/${page}.webp`;
+  $('plateTitle').textContent = `${KANA[current]}・${plates[page]?.cite ?? page}`;
+  $('plate').showModal();
+  if (img.complete && img.naturalWidth) place();
+}
+$('plateClose').onclick = () => $('plate').close();
+$('plate').addEventListener('click', e => { if (e.target === $('plate')) $('plate').close(); });
+addEventListener('resize', () => { if ($('plate').open) $('plateImg').onload(); });
+$('panel').addEventListener('dblclick', e => {
+  const t = e.target.closest('.tile');
+  if (t) { selected.add(t.dataset.id); drawActions(); showSource(t.dataset.id); }
+});
+$('source').onclick = () => showSource(anchor && selected.has(anchor) ? anchor : [...selected].at(-1));
+
+addEventListener('keydown', e => {
+  if (e.target.matches('input,select,textarea') || $('plate').open) return;
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); $('undo').click(); return; }
+  if (e.key === 'Escape') { selected.clear(); drawActions(); return; }
+  if (e.target.closest('#grid') && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+    e.preventDefault();
+    const i = order.indexOf(current), k = order[(i + (e.key === 'ArrowLeft' ? 1 : -1) + order.length) % order.length];
+    location.hash = k; setTimeout(() => $('grid').querySelector(`[data-key="${k}"]`)?.focus());
+    return;
+  }
+  if (!selected.size || e.ctrlKey || e.metaKey || e.altKey) return;
+  const key = e.key.toLowerCase();
+  if (key === 'm') moveSelected();
+  else if (key === 'u') moveTo('?', '未分類');
+  else if (key === 'x') moveTo('x', '字形でないもの');
+  else if (key === 'b') flagSelected('bad-crop');
+  else if (key === 'f') flagSelected('faint');
+  else if (key === 'v') $('source').click();
+});
+
+addEventListener('hashchange', () => { const k = location.hash.slice(1); load(summary[k] ? k : order[0]); });
+
+(async () => {
+  try {
+    const [s, p] = await Promise.all([api('/summary'), fetch('plates.json').then(r => r.json())]);
+    summary = s.kana; me = s.me; plates = p.plates;
+    $('me').textContent = me;
+    $('foot').textContent = `出典：${p.source}。第二部「假名字體表」の各図版から切り出した。字形の分類は検討中。`;
+    drawGrid();
+    const k = location.hash.slice(1);
+    await load(summary[k] ? k : order[0]);
+  } catch (e) {
+    $('panel').innerHTML = `<p>読み込めませんでした：${esc(e.message)}</p>`;
+  }
+})();
+</script>
+</html>
