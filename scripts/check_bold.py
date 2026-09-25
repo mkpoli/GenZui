@@ -96,7 +96,7 @@ def main():
     # Masters share their commands and points, so the pair stays interpolable.
     pairs = list(masters())
     shapes = [[[(c, len(v)) for c, v in parse(d)] for d in pair] for pair in pairs]
-    assert len(pairs) >= 41 and all(r == b for r, b in shapes)
+    assert len(pairs) >= 40 and all(r == b for r, b in shapes)
     assert all(shape_of(r) == shape_of(b) for r, b in point_masters())
     # A Bold master that crosses itself where Regular does not folds into a
     # twist or a speck. Open paths are completed by native strokes.

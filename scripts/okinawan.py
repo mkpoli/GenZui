@@ -9,6 +9,7 @@ from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
 from serif_forms import path
+import okinawan_merge
 from sources import ROOT
 
 DATA = json.loads((ROOT/'data/okinawan/mappings.json').read_text())
@@ -152,37 +153,28 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
             transform(p, (.72, 0, 0, 1, 280, 0)) for p in i_tail]],
         0xF45C: [*fu((.69, 0, 0, .94, 0, 45)),
                   transform(e_tail, (.76, 0, 0, 1.05, 240, 0))],
-        0xF45D: [part('や', matrix=(.88, 0, 0, .91, 65, 20)),
-                  part('い', [0], (.26, 0, 0, .48, 82, 276))],
-        0xF45E: [part('ゆ', matrix=(.84, 0, 0, .94, 116, 0)),
-                  part('い', [0], (.25, 0, 0, .85, 30, 35))],
-        0xF45F: [part('よ'), part('い', [0], (.28, 0, 0, .51, 152, 351))],
-        0xF460: [part('う', [1], (.76, 0, 0, .65, 63, 294)),
-                  part('わ', [0], (.94, 0, 0, .96, -34, -5)),
-                  drawn(
-                      'M279 597 Q367 617 470 625 Q538 641 542 602 '
-                      'Q541 580 521 543 Q469 432 397 278 Q331 127 249 27 '
-                      'Q210 -20 165 14 Q107 75 173 178 Q256 302 457 372 '
-                      'L447 337 Q287 268 216 163 Q165 78 197 63 '
-                      'Q225 42 275 134 Q385 331 460 559 Q363 537 327 547 '
-                      'Q297 561 279 597 Z',
-                      'M263 604.5 Q373 650 466 649.6 Q543.7 674.6 567 602.7 '
-                      'Q564 568 543 532 Q483.3 425.7 416.7 269 '
-                      'Q338.6 123 264.6 14 Q216 -48 150.5 -2 '
-                      'Q84.7 80 159 187 Q237 321.5 466 381.4 L464 322 '
-                      'Q289 252.4 229.6 154.3 Q188.7 68.3 208 81.6 '
-                      'Q203 58.3 261.5 141.4 Q378.5 369 423 525.5 '
-                      'Q400 520.4 319 525.3 Q277 534.3 263 604.5 Z')],
-        0xF461: [part('ゐ', matrix=(.94, 0, 0, .79, 22, -4)),
-                  part('う', [1], (.73, 0, 0, .65, 77, 289))],
-        0xF462: [part('ゑ', matrix=(.94, 0, 0, .79, 22, -4)),
-                  part('う', [1], (.73, 0, 0, .65, 77, 289))],
-        0xF463: [part('ん'), part('い', [1], (.29, 0, 0, .37, 452, 389))],
         0xF465: [part('を', matrix=(.94, 0, 0, .77, -16, 182)), u_return],
-        0xF467: [part('す', matrix=(.8, 0, 0, 1, 0, 0)),
-                  part('い', [1], (.65, 0, 0, .78, 249, -100))],
         0xF469: [part('つ', matrix=(.92, 0, 0, .91, 0, 160)), tsi_hook, part('い', [1], (.43, 0, 0, .48, 370, -42))],
     }
+    # The glottal letters and SI are Noto's own kana with a Noto stroke merged
+    # into the outline (YA) or set beside it; see okinawan_merge. Bold reads
+    # the same strokes from the wght 700 instance; the width given back to a
+    # narrowed kana grows with Noto's own kana stems (77.8 to 125.3 units on
+    # は's left stroke at wght 400 and 700).
+    def beside(kana, params):
+        if bold:
+            params = dict(params, kana_bold=params['kana_bold'] * 125.3 / 77.8)
+        return okinawan_merge.glottal_beside(font, contours, kana, **params)
+    recipes.update({
+        0xF45D: [okinawan_merge.glottal_ya(font, contours, **okinawan_merge.YA)],
+        0xF45E: beside('ゆ', okinawan_merge.YU),
+        0xF45F: beside('よ', okinawan_merge.YO),
+        0xF460: beside('ゐわ', okinawan_merge.WA),
+        0xF461: beside('ゐ', okinawan_merge.WI),
+        0xF462: beside('ゑ', okinawan_merge.WE),
+        0xF463: beside('ん', okinawan_merge.N),
+        0xF467: beside('す', okinawan_merge.SI),
+    })
     for cp, entry in PUA.items():
         if entry['system'] == 'prefecture':
             # Half-em advance, raised into the upper half of a full kana cell.
