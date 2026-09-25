@@ -4,9 +4,10 @@ Each letter is assembled from whole strokes of the Noto Serif kana it
 extends, so the brush entries, the thick-thin contrast and the terminals are
 Noto's. A stroke is cut only where the cut end is buried in another stroke.
 Topology and placement follow the letters embedded in Funatsu's 2016 chart.
-The glottal letters YA, YU, YO and N are drawn in okinawan_merge instead:
-YA's added stroke is merged into や's outline; YU and YO set the same stroke
-beside ゆ and above よ's loop, and N sets い's falling stroke beside ん.
+The glottal letters are drawn in okinawan_merge instead: YA's added stroke
+is merged into や's outline; YU and YO set the same stroke beside ゆ and
+above よ's loop, N sets い's falling stroke beside ん, and WA, WI and WE set
+こ's upper stroke as a dot over their body.
 
 Coordinates are font units on a 1000-unit em with the baseline at 0; the
 kana body runs from about -60 to 800.
@@ -223,35 +224,19 @@ def glottal_yo(k):
     return okinawan_merge.glottal_beside(k.font, k.contours, 'よ', **okinawan_merge.YO)
 
 
-def dot(k):
-    """こ's upper stroke, the short mark set above the glottal W letters."""
-    return k.box(k.part('こ', 1), 330, 720, 640)
-
-
-def dotted(k, body):
-    """A body set a little smaller under the dot, keeping its proportions."""
-    return [dot(k)] + [k.move(p, sx=.88, origin=(470, -40)) for p in body]
-
-
-@drawing(0xF460)  # glottal WA: ゐ's zig and rising loop, closing with わ's loop
-def glottal_wa(k):
-    # The chart's WA is WI without the small inner loop. Lowered by 42, わ's
-    # loop runs on top of ゐ's along the bottom arc from x = 720 to 800 with
-    # the same width, so they are joined at x = 740: ゐ loses its small loop
-    # and the rest of its bottom, and わ supplies the end of the loop.
-    top = k.drop(k.part('ゐ'), (410, -100), (740, -100), (740, 245), (410, 245))
-    bottom = k.keep(k.move(k.part('わ', 0), dy=-42), (410, -100), (740, -100), (740, 245), (410, 245))
-    return dotted(k, [top, bottom])
-
-
-@drawing(0xF461)  # glottal WI
+@drawing(0xF461)  # glottal WI: こ's upper stroke as a dot over ゐ
 def glottal_wi(k):
-    return dotted(k, [k.part('ゐ')])
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゐ', **okinawan_merge.WI)
 
 
-@drawing(0xF462)  # glottal WE
+@drawing(0xF462)  # glottal WE: the same dot over ゑ
 def glottal_we(k):
-    return dotted(k, [k.part('ゑ')])
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゑ', **okinawan_merge.WI)
+
+
+@drawing(0xF460)  # glottal WA: the same dot over WI's body without its inner loop
+def glottal_wa(k):
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゐわ', **okinawan_merge.WI)
 
 
 @drawing(0xF463)  # glottal N: ん with い's falling stroke at the upper right

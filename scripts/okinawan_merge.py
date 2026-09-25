@@ -154,6 +154,11 @@ W_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='こ', mark_index=1, mark_lie=True,
                   kana_anchor='bottom', kana_sx=0.88, kana_bold=0, mark_scale=0.64, mark_len=1.0,
                   mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_x=-24, mark_dy=252)
 
+# WI as placed by hand in the arena (research/okinawan-arena/glottal-wi); WE
+# and WA start from the same dot.
+WI = dict(W_DEFAULTS, mark_x=-44, mark_dy=242, mark_scale=0.66, mark_len=0.84, mark_angle=-8.0, mark_bend=20,
+          neck_w=1.45, head_w=1.45, kana_sx=0.88, kana_bold=8)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a
@@ -203,6 +208,28 @@ def centre_at(segs, y):
     return (xs[0] + xs[1]) / 2
 
 
+def wa_body(font, contours):
+    """Glottal WA's body: in the chart it is WI without the small inner loop.
+    Lowered by 42, わ's loop runs on top of ゐ's along the bottom arc from
+    x = 720 to 800 with the same width, so they join at x = 740: ゐ loses its
+    small loop and the rest of its bottom, and わ supplies the end of the loop."""
+    import pathops
+    box = pathops.Path(); pen = box.getPen()
+    pen.moveTo((410, -100)); pen.lineTo((740, -100)); pen.lineTo((740, 245)); pen.lineTo((410, 245)); pen.closePath()
+    def path(rings):
+        out = pathops.Path(); O.draw(rings).replay(out.getPen())
+        out.simplify(fix_winding=True, keep_starting_points=False)
+        return out
+    top = pathops.op(path(O.rings(contours(font, ord('ゐ')))), box, pathops.PathOp.DIFFERENCE)
+    bottom = pathops.op(path([_moved(O.rings(contours(font, ord('わ'), [0]))[0], dy=-42)]), box, pathops.PathOp.INTERSECTION)
+    pen = O.RecordingPen(); pathops.op(top, bottom, pathops.PathOp.UNION).draw(pen)
+    return O.rings(pen)
+
+
+# bodies that are not one Noto kana, by the name the letters use for them
+BODIES = {'ゐわ': wa_body}
+
+
 def beside_pieces(font, contours, kana, p):
     """The mark at its widths, upright (a lying stroke is turned to stand, so
     its width runs across and its head is at the top), with the point it turns
@@ -210,7 +237,7 @@ def beside_pieces(font, contours, kana, p):
     mark = _widened(upright_mark(font, contours, p), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
     xs = sorted(O.point(mark[i], t)[0] for i, t in O.crossings(mark, 1, p['ramp_lo']))
     pivot = ((xs[0] + xs[1]) / 2, p['ramp_lo'])
-    body = O.rings(contours(font, ord(kana)))
+    body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     xs = [q[0] for r in body for seg in r for q in seg]
     ys = [q[1] for r in body for seg in r for q in seg]
     sy = p['kana_sx'] if p['kana_anchor'] == 'bottom' else p['kana_sy']
