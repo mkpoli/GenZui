@@ -166,7 +166,7 @@ html[data-weight="700"] .kind .w-r{opacity:.4}html[data-weight="700"] .kind .w-b
 .compare:focus-within .seam i{background:var(--glow)}
 
 /* ── menu ───────────────────────────────────────────────── */
-.menu{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.menu{order:1;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .tabs{display:flex;border:1px solid var(--line)}
 .tabs button{letter-spacing:inherit;text-transform:inherit;padding:12px 18px;color:var(--mint);transition:color .25s,background .25s}
 .tabs button+button{border-left:1px solid var(--line)}
@@ -277,6 +277,16 @@ a.dl{text-decoration:none}
   <div class="stack">
     <p class="prompt hud"><span><b>源萃 GenZui</b>&ensp;select a typeface</span><span class="caret" aria-hidden="true"></span><button class="wt hud" id="weight" type="button" role="switch" aria-checked="false" aria-label="Bold" title="Weight (B)"><i aria-hidden="true"></i><span><b aria-hidden="true">源</b>Regular</span><span><b aria-hidden="true">源</b>Bold</span></button></p>
     <h1 class="sr">GenZui: GenZui Serif and GenZui Sans</h1>
+    <!-- The menu comes first for keyboard order and is drawn last. -->
+    <div class="menu">
+      <div class="tabs hud" role="group" aria-label="View">
+        <button type="button" data-view="choose" aria-pressed="true">Choose</button>
+        <button type="button" data-view="compare" aria-pressed="false">Compare</button>
+        <button type="button" data-view="details" aria-pressed="false">Details</button>
+      </div>
+      <p class="status hud" id="status" role="status">← → select · Enter open</p>
+      <a class="dl hud" id="download-both" href="downloads/{{BOTH_ZIP}}" download><span>Download both</span><small>ZIP · <span class="num">{{BOTH_SIZE}}</span> MB</small><span aria-hidden="true">↓</span></a>
+    </div>
 
     <div class="choose" id="choose">
       <article class="card serif" data-family="serif" aria-label="GenZui Serif">
@@ -354,15 +364,6 @@ a.dl{text-decoration:none}
       <p class="fine hud"><a href="downloads/OFL.txt">SIL Open Font License 1.1</a> · <a href="downloads/NOTICE.txt">credits</a> · free for any use · <a href="https://github.com/mkpoli/GenZui">GitHub</a> · <a href="https://mkpo.li/" rel="author">まくぽり</a></p>
     </section>
 
-    <div class="menu">
-      <div class="tabs hud" role="group" aria-label="View">
-        <button type="button" data-view="choose" aria-pressed="true">Choose</button>
-        <button type="button" data-view="compare" aria-pressed="false">Compare</button>
-        <button type="button" data-view="details" aria-pressed="false">Details</button>
-      </div>
-      <p class="status hud" id="status" role="status">← → select · Enter open</p>
-      <a class="dl hud" id="download-both" href="downloads/{{BOTH_ZIP}}" download><span>Download both</span><small>ZIP · <span class="num">{{BOTH_SIZE}}</span> MB</small><span aria-hidden="true">↓</span></a>
-    </div>
 
   </div>
 </main>
@@ -494,7 +495,11 @@ a.dl{text-decoration:none}
     }
   });
 
-  function place(v) { compare.style.setProperty('--split', v + '%'); split.value = Math.round(v); }
+  function place(v) {
+    compare.style.setProperty('--split', v + '%'); split.value = Math.round(v);
+    split.setAttribute('aria-valuetext', `Serif ${split.value}% · Sans ${100 - split.value}%`);
+  }
+  place(50);
   split.addEventListener('input', e => place(e.target.value));
   const drag = e => { const b = compare.getBoundingClientRect(); place(Math.max(0, Math.min(100, Math.round((e.clientX - b.left) / b.width * 100)))); };
   compare.addEventListener('pointerdown', e => { compare.setPointerCapture(e.pointerId); drag(e); split.focus({ preventScroll: true }); });
