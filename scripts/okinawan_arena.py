@@ -92,6 +92,15 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
         passages=[(f'Beside {_kana}', f'{_kana}{_g}{_kana}　{_vowels}'),
                   ('Among kana', f'あいう{_g}えお　かきく'),
                   ('The glottal set', f'{chr(0xF45D)}{chr(0xF45E)}{chr(0xF45F)}　い{_g}は{_g}')],
+        axes=[
+            ('mark_height', 'Height of the mark', 'The mark moves up or down; ゆ stays.', {'mark_dy': 25}),
+            ('mark_size', 'Size of the mark', 'The whole mark grows or shrinks about its foot.', {'mark_scale': 0.05}),
+            ('mark_len', 'Length of the mark', 'The mark is stretched or shortened upward only.', {'mark_len': 0.05}),
+            ('mark_angle', 'Angle of the mark', 'Positive steps lean the mark left.', {'mark_angle': 2.0}),
+            ('gap', 'Gap between the mark and the kana', 'The mark moves toward or away from the kana.', {'gap': 12}),
+            ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.03}),
+            ('kana_h', 'Height of the kana', 'The kana is shorter or taller; the mark stays.', {'kana_sy': 0.02}),
+        ],
     )
 
 
