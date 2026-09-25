@@ -129,27 +129,29 @@ async function commit(env: Env, batch: string, actor: string, changes: Change[],
   return { ok: true, at };
 }
 
-// Reverse this reviewer's latest action. It succeeds only while every row it
-// touched still carries that action's revision.
+// Reverse this reviewer's latest action still in force. Each target must still
+// hold the value that action gave it; the inverse changes are then guarded
+// like any other, so undo can step back through several actions in turn.
 async function undo(env: Env, actor: string, batch: string) {
   const last = await env.DB.prepare(SQL.lastBatch).bind(actor).first<{ id: string }>();
   if (!last) return { ok: true, undone: 0 };
   const { results: events } = await env.DB.prepare(SQL.batchEvents).bind(last.id)
-    .all<{ target: string; field: Change['field']; old: string | null; new: string | null; revision: number }>();
+    .all<{ target: string; field: Change['field']; old: string | null; new: string | null }>();
   const formIds = events.filter(e => e.field !== 'label').map(e => e.target);
   const { results: rows } = await env.DB.prepare(SQL.formsById).bind(JSON.stringify(formIds))
     .all<{ id: string; family: string; flag: string | null; revision: number }>();
   const forms = new Map(rows.map(r => [r.id, r]));
+  const stale = () => new Problem(409, 'この操作のあとに同じ例が変更されているため、取り消せません。');
   const changes: Change[] = [];
   for (const e of events) {
     if (e.field === 'label') {
       const row = await env.DB.prepare(SQL.labelById).bind(e.target).first<{ name: string; revision: number }>();
-      if (!row || row.revision !== e.revision) throw new Problem(409, 'その後に他の変更があったため取り消せません。');
-      changes.push({ field: 'label', target: e.target, seen: { revision: row.revision, name: row.name }, new: e.old });
+      if ((row?.name ?? null) !== e.new) throw stale();
+      changes.push({ field: 'label', target: e.target, seen: { revision: row?.revision ?? null, name: row?.name ?? null }, new: e.old });
     } else {
       const row = forms.get(e.target);
-      if (!row || row.revision !== e.revision) throw new Problem(409, 'その後に他の変更があったため取り消せません。');
-      changes.push({ field: e.field, target: e.target, seen: row, new: e.old });
+      if (!row || (e.field === 'family' ? row.family : row.flag) !== e.new) throw stale();
+      changes.push({ field: e.field, target: e.target, seen: { revision: row.revision, family: row.family, flag: row.flag }, new: e.old });
     }
   }
   const result = await commit(env, batch, actor, changes, last.id);
