@@ -33,7 +33,7 @@ The font is distributed under SIL OFL 1.1; source notices accompany the download
 The site is https://genzui.mkpo.li/: a landing page with both families, the Serif page at /serif and the Sans page at /sans. Related typeface:
 [Kureedo](https://kureedo.mkpo.li/), based on Klee One.
 
-## GenZui Sans 0.102
+## GenZui Sans 0.103
 
 GenZui Sans / 源萃ゴシック is the gothic family, derived from Noto Sans JP,
 Noto Sans Hentaigana, GenSeki Hentaigana Gothic, Noto Sans CJK JP and FRB
@@ -45,8 +45,12 @@ their kana neighbours. Bold takes every source at its Bold weight; the Minnan
 tone letters and the drawn transcription symbols have Bold versions of
 matching weight.
 
-The page is https://genzui.mkpo.li/sans. `releases/sans-v0.102/` holds the
-immutable font assets; the site exposes `/sans-v0.102/genzui-sans.css`, which
+Version 0.103 replaces GenSeki's alternate WI 𛄨, which was narrower and lower
+than the katakana around it, with a GenZui drawing from Noto Sans JP's own WI
+and NA strokes in both weights.
+
+The page is https://genzui.mkpo.li/sans. `releases/sans-v0.103/` holds the
+immutable font assets; the site exposes `/sans-v0.103/genzui-sans.css`, which
 declares both weights, and the current alias `/genzui-sans.css`. The release
 image's text alternative is:
 “源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU
@@ -75,7 +79,7 @@ and `build/sans/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`; deploy with `bun run deploy` after committing the release.
 
-`releases/v0.117/` and `releases/sans-v0.102/` contain the immutable font assets;
+`releases/v0.117/` and `releases/sans-v0.103/` contain the immutable font assets;
 each holds its family's Regular and Bold faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.117/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
