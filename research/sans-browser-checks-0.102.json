@@ -1,10 +1,10 @@
 {
   "status": "passed",
   "family": "GenZui Sans",
-  "ttf_sha256": "a3e78046d6fc756a0b27f43921e4f32379ea2c10769c9db655a9122a21859068",
-  "woff2_sha256": "039c6d063fd850ec52d50f47358b78c1f44758245c9f15c9dad2e6076bbed816",
-  "bold_ttf_sha256": "b51b460234edfa7ffe490fd3e58ba2c5841e539ac77bd63a002be2cc9d96cc8e",
-  "bold_woff2_sha256": "dc876872921d6d4134c4e10e70483931bf410cabd2c4821d68beb137d4ec6dca",
+  "ttf_sha256": "495375051a929727345c96c98add2b492505ff2a17db6d3bed291c98a93c0de9",
+  "woff2_sha256": "a037155380dd298cf3912fa38f69b0ae60a97f704579c0a49ce29e04446a8c62",
+  "bold_ttf_sha256": "1ad8b1aebda9b8dfe9e93bfbbe54cdf3af224740c055cfd101dc8d0ae98c4f8f",
+  "bold_woff2_sha256": "920ec50015a94c239a1b216fa403074280d2e62e5eca86101ba24f8313419385",
   "browsers": [
     {
       "engine": "chromium",
