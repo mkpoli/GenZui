@@ -9,9 +9,11 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%231f634d'/%3E%3Ctext x='32' y='46' text-anchor='middle' font-size='43' fill='white' font-family='sans-serif'%3E源%3C/text%3E%3C/svg%3E">
   <style>
     @font-face {font-family:GenZui;src:url({{SANS_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
+    @font-face {font-family:GenZui;src:url({{SANS_BOLD_FONT}}) format('woff2');font-weight:700;font-style:normal;font-display:swap}
     @font-face {font-family:GenZuiSerif;src:url({{SERIF_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:swap}
     {{CSS}}
     {{FAMILY_SWITCH_CSS}}
+    {{WEIGHT_SWITCH_CSS}}
     .face{font-family:GenZui,sans-serif}
     .serif-face{font-family:GenZuiSerif,serif;font-weight:400;font-synthesis:none}
     .sheet{font-size:44px;line-height:1.85;letter-spacing:.06em;margin:0;overflow-wrap:anywhere;border:1px solid var(--line);background:white;padding:28px 34px}
@@ -35,12 +37,13 @@
     <nav aria-label="Main navigation">
       <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
     </nav>
+    <div class="weight-control header-weight" role="group" aria-label="Weight for every sample on this page"><button type="button" data-weight="400" aria-pressed="true" title="Regular"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Regular</span></button><button type="button" data-weight="700" aria-pressed="false" title="Bold"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Bold</span></button></div>
     <a class="header-download" href="downloads/GenZuiSans-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
   </header>
 
   <main id="top">
     <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-topline"><span>源萃ゴシック · GENZUI SANS</span><span>REGULAR / {{VERSION}}</span></div>
+      <div class="hero-topline"><span>源萃ゴシック · GENZUI SANS</span><span>REGULAR · BOLD / {{VERSION}}</span></div>
       <div class="hero-layout">
         <div class="hero-wordmark">
           <h1 id="hero-title" class="face" lang="ja">源萃</h1>
@@ -48,7 +51,7 @@
           <div class="hero-download">
             <span class="download-label"><span lang="ja">無料ダウンロード</span> / FREE FONT</span>
             <a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download GenZui Sans<small>TTF · {{FONT_SIZE}} MB · Windows / macOS / Linux</small></span><span aria-hidden="true">↓</span></a>
-            <div class="hero-download-meta"><span>Regular {{VERSION}} · SIL OFL 1.1</span><a href="#download">All formats & installation <span aria-hidden="true">↗</span></a></div>
+            <div class="hero-download-meta"><span>Regular & Bold {{VERSION}} · SIL OFL 1.1</span><a href="#download">All formats & installation <span aria-hidden="true">↗</span></a></div>
           </div>
         </div>
         <div class="hero-collection" role="group" aria-label="Historical kana and GenZui drawings">
@@ -70,7 +73,7 @@
         <div><strong>{{CHARACTER_COUNT}}</strong><span>encoded characters</span></div>
         <div><strong>286</strong><span>hentaigana</span></div>
         <div><strong>7</strong><span>Unicode 18 additions</span></div>
-        <div><strong>1</strong><span>weight · Regular</span></div>
+        <div><strong>2</strong><span>weights · Regular, Bold</span></div>
       </div>
     </section>
 
@@ -82,7 +85,7 @@
           <label class="preset-control"><span class="control-label">SAMPLE</span><select id="preset"><option value="mixed">Japanese & historical kana</option><option value="reading">Japanese reading text</option><option value="historical">Hentaigana</option><option value="unicode18">Unicode 18 additions</option><option value="ligatures">Kana ligatures</option><option value="marks">Combining marks</option><option value="minnan">Minnan kana</option><option value="numerals">Han numerals</option><option value="tallies">Ideographic tally marks</option><option value="ideographic-description">Ideographic description characters</option></select></label>
           <label class="range-control"><span class="control-label">SIZE <output id="size-value" for="type-size">48 px</output></span><input id="type-size" type="range" min="20" max="112" value="48" step="1"></label>
           <label class="range-control spacing-control"><span class="control-label">SPACING <output id="spacing-value" for="type-spacing">0 em</output></span><input id="type-spacing" type="range" min="0" max="20" value="0" step="1"></label>
-          <div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
+          <div class="weight-control" role="group" aria-label="Weight"><button type="button" data-weight="400" aria-pressed="true"><span class="swatch" lang="ja" aria-hidden="true">源</span>Regular</button><button type="button" data-weight="700" aria-pressed="false"><span class="swatch" lang="ja" aria-hidden="true">源</span>Bold</button></div><div class="direction-control" role="group" aria-label="Writing direction"><button type="button" data-direction="horizontal" aria-pressed="true" title="Horizontal writing">横</button><button type="button" data-direction="vertical" aria-pressed="false" title="Vertical writing">縦</button></div>
         </div>
         <div class="type-canvas"><textarea id="type-input" class="face" lang="ja" spellcheck="false" aria-label="Editable GenZui Sans specimen">春はあけぼの。
 かなのかたちを読む。
@@ -90,7 +93,7 @@
 この𛄣、その𛄤𛄦</textarea></div>
         <div class="type-footer"><span id="type-status" role="status">Loading the font…</span><button type="button" id="reset-type">Reset sample <span aria-hidden="true">↺</span></button></div>
       </div>
-      <p class="small-note">Regular, weight 400. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
+      <p class="small-note">Regular or Bold applies to every sample on the page, and the link keeps the choice. Mark samples demonstrate positioning. Unsupported characters in your text may use a fallback font.</p>
     </section>
 
     <section class="unicode-section" id="hentaigana" aria-labelledby="hentaigana-title">
@@ -180,12 +183,13 @@
     </section>
 
     <section class="download-section wrap" id="download" aria-labelledby="download-title">
-      <div class="download-intro"><div class="section-label"><span>07 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃ゴシック</h2><p>GenZui Sans Regular · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/GenZuiSans-OFL.txt">SIL Open Font License 1.1</a>.</p>
+      <div class="download-intro"><div class="section-label"><span>07 / DOWNLOAD</span><span lang="ja">ダウンロード</span></div><h2 id="download-title" class="face" lang="ja">源萃ゴシック</h2><p>GenZui Sans Regular and Bold · {{VERSION}}<br>Free for personal and commercial use under the <a href="downloads/GenZuiSans-OFL.txt">SIL Open Font License 1.1</a>.</p>
         <div class="install-notes"><h3>Install the font</h3><p><strong>Windows</strong> — Download the TTF, open it and select <b>Install</b>.</p><p><strong>macOS</strong> — Open the TTF in Font Book and select <b>Install</b>.</p><p><strong>Linux</strong> — Copy the TTF to <code>~/.local/share/fonts/</code> and run <code>fc-cache</code>, or open it in your font manager.</p><p><strong>iOS / Android</strong> — Install through a font-installer app or a configuration profile; the system apps then list it.</p><p>Choose <b>GenZui Sans</b> in your app’s font menu. It installs beside GenZui Serif.</p></div>
         {{WEBFONT_USAGE}}</div>
       <div class="download-options">
         <a class="primary-button" href="downloads/GenZuiSans-Regular.ttf" download><span>Download TTF<small>For desktop apps · {{FONT_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
-        <a class="download-format" href="downloads/GenZuiSans-{{VERSION}}.zip" download><span><strong>Complete package</strong><small>TTF, WOFF2, offline specimen, instructions & credits · ZIP · {{ZIP_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
+        <a class="download-format" href="downloads/GenZuiSans-Bold.ttf" download><span><strong>Bold</strong><small>For desktop apps · TTF · {{BOLD_FONT_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
+        <a class="download-format" href="downloads/GenZuiSans-{{VERSION}}.zip" download><span><strong>Complete package</strong><small>Regular and Bold TTF & WOFF2, offline specimen, instructions & credits · ZIP · {{ZIP_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
         <a class="download-format" href="downloads/GenZuiSans-Regular.woff2" download><span><strong>Webfont</strong><small>For websites · WOFF2 · {{WEBFONT_SIZE}} MB</small></span><span aria-hidden="true">↓</span></a>
         <a class="download-format" href="serif.html#download"><span><strong>GenZui Serif</strong><small>The Mincho family · Regular {{SERIF_VERSION}}</small></span><span aria-hidden="true">↗</span></a>
         <div class="download-links"><a href="downloads/GenZuiSans-OFL.txt">Licence</a><a href="downloads/GenZuiSans-NOTICE.txt">Source credits</a><a href="browser/browser-setup.html">Browser fallback setup</a></div>

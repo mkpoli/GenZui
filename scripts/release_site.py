@@ -189,6 +189,7 @@ def build():
     serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
     bold_css, _ = build_chunks(FONT_OUT/(BOLD_STEM+'.ttf'), 'GenZui', BOLD_STEM, OUT/'assets', site_text, weight=700)
     sans_css, sans_chunks = build_chunks(SANS_OUT/(SANS_STEM+'.ttf'), 'GenZui', SANS_STEM, OUT/'assets', site_text)
+    sans_bold_css, _ = build_chunks(SANS_OUT/(SANS_BOLD_STEM+'.ttf'), 'GenZui', SANS_BOLD_STEM, OUT/'assets', site_text, weight=700)
     preload = lambda files: ''.join(f'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{f}">' for f in files if '-text-' in f)
     # The landing declares a second family name for the Sans face.
     landing_serif_css = serif_css
@@ -226,8 +227,10 @@ def build():
                 f'<p>Load the <a href="sans-v{sans_version}/genzui-sans.css">version {sans_version} stylesheet</a>, then set the font family:</p>'
                 f'<pre><code>&lt;link rel="stylesheet" href="{URL}/sans-v{sans_version}/genzui-sans.css"&gt;\n\n'
                 'body {\n  font-family: "GenZui Sans", sans-serif;\n}</code></pre></details>')
-    sans_page = build_sans_page('SANS_CHUNKS', 'SERIF_CHUNKS', sans_web)
+    sans_page = build_sans_page('SANS_CHUNKS', 'SERIF_CHUNKS', sans_web, 'SANS_BOLD_CHUNKS')
     sans_page = re.sub(r"@font-face \{font-family:GenZui;src:url\(SANS_CHUNKS\)[^}]*\}", lambda m: sans_css, sans_page, count=1)
+    # Bold chunks load only when bold text appears.
+    sans_page = re.sub(r"@font-face \{font-family:GenZui;src:url\(SANS_BOLD_CHUNKS\)[^}]*\}", lambda m: sans_bold_css, sans_page, count=1)
     sans_page = re.sub(r"@font-face \{font-family:GenZuiSerif;src:url\(SERIF_CHUNKS\)[^}]*\}",
                        lambda m: sans_serif_css, sans_page, count=1)
     sans_page = sans_page.replace('</head>', preload(sans_chunks)+'</head>')
