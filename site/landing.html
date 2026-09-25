@@ -606,7 +606,14 @@ a.dl{text-decoration:none}
     return [dx, dy, glow];
   };
 
+  // With no wave, wake, pulse or switch sweep in flight and the parallax at
+  // rest, only the slow drift and scan line move: draw them at 20 fps.
+  let lastFrame = 0;
+  const settled = now => !waves.length && !wakes.length && !pulses.length && now - bg.t0 > 1400 &&
+    Math.abs((pointer.seen ? pointer.x / W * 2 - 1 : 0) - par.x) < .002 && Math.abs((pointer.seen ? pointer.y / H * 2 - 1 : 0) - par.y) < .002;
   const draw = now => {
+    if (!still && now - lastFrame < 50 && settled(now)) { requestAnimationFrame(draw); return; }
+    lastFrame = now;
     ctx.clearRect(0, 0, W, H);
     for (let i = waves.length - 1; i >= 0; i--) if ((now - waves[i].t0) > 2600) waves.splice(i, 1);
     for (let i = wakes.length - 1; i >= 0; i--) if ((now - wakes[i].t0) > 1500) wakes.splice(i, 1);
