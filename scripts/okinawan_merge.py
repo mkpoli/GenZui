@@ -121,6 +121,8 @@ BESIDE_DEFAULTS = dict(
     mark_angle=1.5,    # degrees the mark turns; positive leans it left
     mark_bend=0,       # units the middle of the mark bows sideways; positive to the right
     mark_slant=0,      # units the top of the mark moves sideways over the foot
+    head_angle=0,      # degrees the mark's head turns on its own; positive counterclockwise
+    tail_angle=0,      # the same for its tail
     neck_w=YA['neck_w'],
     head_w=YA['head_w'],
     kana_sx=0.88,      # horizontal scale of the kana, about its right edge
@@ -228,6 +230,25 @@ def shaped(mark, pivot, p):
         # bow: the middle moves sideways, the ends stay; slant: the top moves, the foot stays
         return np.array([q[0] + p['mark_bend'] * 4 * u * (1 - u) + p['mark_slant'] * u, q[1]])
     mark = [tuple(bend(np.asarray(q, float)) for q in seg) for seg in mark]
+    # the head (top third) and tail (bottom third) turn on their own, fading in
+    # from where they meet the middle, so each end can point a new way. Each
+    # turns about the middle of the stroke's control points near that meeting.
+    if p['head_angle'] or p['tail_angle']:
+        pts = np.array([q for seg in mark for q in seg], float)
+        h = (y1 - y0) / 3
+        def centre(y):
+            band = pts[np.abs(pts[:, 1] - y) <= h / 2]
+            return np.array([(band[:, 0].min() + band[:, 0].max()) / 2 if len(band) else pts[:, 0].mean(), y])
+        turns = [(np.radians(p['head_angle']), centre(y1 - h), lambda q: (q[1] - (y1 - h)) / h),
+                 (np.radians(p['tail_angle']), centre(y0 + h), lambda q: ((y0 + h) - q[1]) / h)]
+        def ends(q):
+            for a, c, weight in turns:
+                w = min(1, max(0, weight(q)))
+                if a and w:
+                    d = q - c
+                    q = c + np.array([np.cos(a * w) * d[0] - np.sin(a * w) * d[1], np.sin(a * w) * d[0] + np.cos(a * w) * d[1]])
+            return q
+        mark = [tuple(ends(np.asarray(q, float)) for q in seg) for seg in mark]
     if p['mark_lie']:
         mark = O.transform(mark, LIE.T, (0, 0))
     foot = min(q[1] for seg in mark for q in seg)
