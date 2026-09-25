@@ -117,6 +117,7 @@ BESIDE_DEFAULTS = dict(
     mark_angle=1.5,    # degrees the mark turns; positive leans it left
     mark_bend=0,       # units the middle of the mark bows sideways; positive to the right
     mark_slant=0,      # units the top of the mark moves sideways over the foot
+    mark_bold=0,       # for a small-kana mark: units of width added sideways to its strokes
     head_angle=0,      # degrees the mark's head turns on its own; positive counterclockwise
     tail_angle=0,      # the same for its tail
     neck_w=YA['neck_w'],
@@ -176,6 +177,12 @@ SI_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='ぃ', mark_index=1, ramp_lo=200, 
 
 # SI as placed by hand in the arena (research/okinawan-arena/si).
 SI = dict(SI_DEFAULTS, mark_x=80, mark_dy=-119, mark_scale=0.88, mark_len=1.607, mark_angle=-10.0, mark_bend=10)
+
+# HWA, HWI and HWE: Noto's own small ゎ, ぃ and ぇ set to the right of a
+# narrowed ふ, at the small kana's own height.
+HW_DEFAULTS = dict(BESIDE_DEFAULTS, mark_index=None, kana_anchor='left', mark_scale=0.68, mark_len=1.0,
+                   mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_bold=0, kana_sx=0.66, kana_sy=0.94,
+                   kana_bold=14, gap=25, mark_dy=0)
 
 
 def _widen_strokes(rings, d):
@@ -257,9 +264,11 @@ LIE = np.array([[0, 1], [-1, 0]])      # a lying stroke turned upright: (x, y) -
 
 
 def upright_mark(font, contours, p):
-    """The mark's Noto stroke, stood upright if it lies."""
-    mark = O.rings(contours(font, ord(p['mark_char']), [p['mark_index']]))[0]
-    return O.transform(mark, LIE, (0, 0)) if p['mark_lie'] else mark
+    """The mark's Noto stroke, stood upright if it lies, or with mark_index
+    None every contour of the character (a small kana), as a list of rings."""
+    indices = None if p['mark_index'] is None else [p['mark_index']]
+    rings = O.rings(contours(font, ord(p['mark_char']), indices))
+    return [O.transform(r, LIE, (0, 0)) for r in rings] if p['mark_lie'] else rings
 
 
 def centre_at(segs, y):
@@ -329,8 +338,17 @@ def beside_pieces(font, contours, kana, p):
     """The mark at its widths, upright (a lying stroke is turned to stand, so
     its width runs across and its head is at the top), with the point it turns
     about; and the kana, sized and weighted, where it stays."""
-    mark = _widened(upright_mark(font, contours, p), p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])
-    pivot = (centre_at(mark, p['ramp_lo']), p['ramp_lo'])
+    mark = upright_mark(font, contours, p)
+    if len(mark) == 1:
+        # one stroke: its width ramps from neck_w to head_w along its length
+        mark = [_widened(mark[0], p['ramp_lo'], p['neck_w'], p['head_w'], p['ramp_hi'])]
+        pivot = (centre_at(mark[0], p['ramp_lo']), p['ramp_lo'])
+    else:
+        # a small kana: weighted sideways as a whole, turned about its middle
+        mark = _widen_strokes(mark, p['mark_bold'])
+        xs = [q[0] for r in mark for seg in r for q in seg]
+        ys = [q[1] for r in mark for seg in r for q in seg]
+        pivot = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
     body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     origin = kana_origin(body, p['kana_anchor'])
     # weight first, then the scaling: sweeping by d and then scaling by sx is
@@ -358,19 +376,19 @@ def shaped(mark, pivot, p):
     point."""
     a = np.radians(p['mark_angle'])
     m = np.array([[np.cos(a), -np.sin(a)], [np.sin(a), np.cos(a)]])
-    mark = O.transform(mark, m, np.array(pivot) - m @ np.array(pivot))
-    ys = [q[1] for seg in mark for q in seg]
+    mark = [O.transform(r, m, np.array(pivot) - m @ np.array(pivot)) for r in mark]
+    ys = [q[1] for r in mark for seg in r for q in seg]
     y0, y1 = min(ys), max(ys)
     def bend(q):
         u = (q[1] - y0) / (y1 - y0)
         # bow: the middle moves sideways, the ends stay; slant: the top moves, the foot stays
         return np.array([q[0] + p['mark_bend'] * 4 * u * (1 - u) + p['mark_slant'] * u, q[1]])
-    mark = [tuple(bend(np.asarray(q, float)) for q in seg) for seg in mark]
+    mark = [[tuple(bend(np.asarray(q, float)) for q in seg) for seg in r] for r in mark]
     # the head (top third) and tail (bottom third) turn on their own, fading in
     # from where they meet the middle, so each end can point a new way. Each
     # turns about the middle of the stroke's control points near that meeting.
     if p['head_angle'] or p['tail_angle']:
-        pts = np.array([q for seg in mark for q in seg], float)
+        pts = np.array([q for r in mark for seg in r for q in seg], float)
         h = (y1 - y0) / 3
         def centre(y):
             band = pts[np.abs(pts[:, 1] - y) <= h / 2]
@@ -384,33 +402,37 @@ def shaped(mark, pivot, p):
                     d = q - c
                     q = c + np.array([np.cos(a * w) * d[0] - np.sin(a * w) * d[1], np.sin(a * w) * d[0] + np.cos(a * w) * d[1]])
             return q
-        mark = [tuple(ends(np.asarray(q, float)) for q in seg) for seg in mark]
+        mark = [[tuple(ends(np.asarray(q, float)) for q in seg) for seg in r] for r in mark]
     if p['mark_lie']:
-        mark = O.transform(mark, LIE.T, (0, 0))
-    foot = min(q[1] for seg in mark for q in seg)
-    fx = sum(q[0] for seg in mark for q in seg) / (4 * len(mark))
+        mark = [O.transform(r, LIE.T, (0, 0)) for r in mark]
+    pts = [q for r in mark for seg in r for q in seg]
+    foot = min(q[1] for q in pts)
+    fx = sum(q[0] for q in pts) / len(pts)
     return mark, (fx, foot)
 
 
 def sized(mark, origin, p):
     """The mark at its size and length, both about its foot, raised by mark_dy."""
     fx, foot = origin
-    mark = O.transform(mark, np.eye(2) * p['mark_scale'], np.array([fx, foot]) * (1 - p['mark_scale']))
-    return O.transform(mark, np.array([[1, 0], [0, p['mark_len']]]),
-                       (0, foot * (1 - p['mark_len']) + p['mark_dy']))
+    out = []
+    for r in mark:
+        r = O.transform(r, np.eye(2) * p['mark_scale'], np.array([fx, foot]) * (1 - p['mark_scale']))
+        out.append(O.transform(r, np.array([[1, 0], [0, p['mark_len']]]), (0, foot * (1 - p['mark_len']) + p['mark_dy'])))
+    return out
 
 
-def gap_shift(mark, body, gap):
-    """How far to slide the mark sideways so its nearest point is `gap` from the kana."""
+def gap_shift(mark, body, gap, side='left'):
+    """How far to slide the mark sideways so its nearest point is `gap` from
+    the kana, coming in from the given side."""
     ts = np.linspace(0, 1, 12)
     pts = lambda rs: np.array([O.point(seg, t) for r in rs for seg in r for t in ts])
-    ms, ks = pts([mark]), pts(body)
+    ms, ks = pts(mark), pts(body)
     near = lambda dx: np.min(np.linalg.norm((ms + [dx, 0])[:, None] - ks[None], axis=2))
-    lo, hi = -400.0, 200.0          # well clear of the kana .. inside it
+    clear, inside = (-400.0, 200.0) if side == 'left' else (800.0, -200.0)
     for _ in range(30):
-        dx = (lo + hi) / 2
-        lo, hi = (dx, hi) if near(dx) >= gap else (lo, dx)
-    return lo
+        dx = (clear + inside) / 2
+        clear, inside = (dx, inside) if near(dx) >= gap else (clear, dx)
+    return clear
 
 
 def glottal_beside(font, contours, kana, **params):
@@ -420,9 +442,11 @@ def glottal_beside(font, contours, kana, **params):
     p = {**BESIDE_DEFAULTS, **params}
     mark, pivot, body = beside_pieces(font, contours, kana, p)
     mark = sized(*shaped(mark, pivot, p), p)
-    mark = _moved(mark, p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap']))
+    side = 'right' if p['kana_anchor'] == 'left' else 'left'   # the mark sits away from the kana's anchor
+    shift = p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap'], side)
+    mark = [_moved(r, shift) for r in mark]
     # centre the letter in the em
-    xs = [q[0] for r in [mark, *body] for seg in r for q in seg]
+    xs = [q[0] for r in [*mark, *body] for seg in r for q in seg]
     dx = 500 - (min(xs) + max(xs)) / 2
     # two parts, each a whole shape, so the kana's counters stay open
-    return [O.draw([_moved(mark, dx)]), O.draw([_moved(r, dx) for r in body])]
+    return [O.draw([_moved(r, dx) for r in mark]), O.draw([_moved(r, dx) for r in body])]
