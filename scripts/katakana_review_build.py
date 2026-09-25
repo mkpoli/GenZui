@@ -35,7 +35,6 @@ SHEET_WIDTH = 2048
 # the baseline, such as a working note like '?stack', goes to unsorted.
 FAMILY_ID = re.compile(r'^(?:\?|x|[KH]:.|[a-z]{1,2}\.[a-z0-9-]{1,24}\??)$')
 GAP = 2
-GAP = 2
 
 
 def sql(v):
@@ -103,7 +102,11 @@ def seed(families, history):
     labels = json.loads((ROOT / 'data/historical-katakana/shape-families.json').read_text())
     state = {f: [fam, None, 0] for f, fam in families.items()}   # family, flag, revision
     names = {k: [v, 0] for k, v in labels.items()}               # name, revision
-    lines = ['DELETE FROM events;', 'DELETE FROM batches;', 'DELETE FROM kana_counts;', 'DELETE FROM labels;', 'DELETE FROM forms;']
+    # Refuse to run over a database where anyone has reviewed: the seed replaces every row.
+    lines = ["SELECT CASE WHEN EXISTS (SELECT 1 FROM batches WHERE actor <> 'local review') "
+             "THEN json_extract('the database already holds review work; not reseeding', '$') END;",
+             'DELETE FROM events;', 'DELETE FROM batches;', 'DELETE FROM kana_counts;', 'DELETE FROM labels;', 'DELETE FROM forms;']
+    opened = set()
     for e in history:
         t, field = e['target'], e['field']
         if field == 'label':
@@ -117,7 +120,9 @@ def seed(families, history):
             assert cur[i] == e['old'], f'{t}: history expects {e["old"]!r}, baseline has {cur[i]!r}'
             cur[i], cur[2] = e['new'], cur[2] + 1
             rev = cur[2]
-        lines.append(f"INSERT INTO batches (id, actor, at) VALUES ({sql(e['batch'])}, {sql(e.get('actor', 'local review'))}, {sql(e['at'])});")
+        if e['batch'] not in opened:
+            opened.add(e['batch'])
+            lines.append(f"INSERT INTO batches (id, actor, at) VALUES ({sql(e['batch'])}, {sql(e.get('actor', 'local review'))}, {sql(e['at'])});")
         lines.append(f"INSERT INTO events (batch, target, field, old, new, revision, at) VALUES "
                      f"({sql(e['batch'])}, {sql(t)}, {sql(field)}, {sql(e['old'])}, {sql(e['new'])}, {rev}, {sql(e['at'])});")
     rows = [f"({sql(f)}, {sql(f.split('-')[2])}, {sql(fam)}, {sql(flag)}, {rev})" for f, (fam, flag, rev) in sorted(state.items())]
