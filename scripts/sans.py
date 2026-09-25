@@ -10,6 +10,7 @@ from serif import add, add_feature, contours, glyph, instance, layout, transform
 from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
 from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
+from gugyeol import add_gugyeol, PUA as GUGYEOL_PUA
 from minnan import import_forms, layout as minnan_layout
 from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_SYMBOLS, alternate_wi, refit
 from sans_sources import (BOLD_ARCHAIC, BOLD_ARCHAIC_AXIS, BOLD_TEXT, BOLD_TEXT_AXIS, CACHE, CJK, CJK_BOLD,
@@ -155,6 +156,8 @@ def build(weight=400):
     provenance.update({f'U+{cp:04X}': (f'Noto Sans CJK JP {style}' if cp == 0x5344 else
                        'Noto Sans JP components and GenZui transcription-symbol drawing')
                        for cp in HONKOKU})
+    gugyeol_descriptions = add_gugyeol(font, add, glyph, face['cjk'], f'Noto Sans CJK JP {style}')
+    provenance.update({f'U+{cp:04X}': value for cp, value in gugyeol_descriptions.items()})
 
     # Both faces carry the notices of every source of the family.
     notices = source_notices([font] + [TTFont(sources(w)[key], recalcTimestamp=False)
@@ -203,9 +206,11 @@ def build(weight=400):
                          (ROOT/'sources/manifest.json', 'source-manifest.json'),
                          (ROOT/'sources/sans-manifest.json', 'sans-source-manifest.json')):
         shutil.copyfile(source, OUT/name)
+    shutil.copyfile(ROOT/'data/gugyeol/forms.json', OUT/'gugyeol-forms.json')
     (OUT/('sources-bold.json' if bold else 'sources.json')).write_text(json.dumps({
         'family': FAMILY, 'style': style, 'version': VERSION, 'encoded_characters': len(font.getBestCmap()),
         'refits': {f'U+{cp:04X}': spec for cp, spec in REFITS[weight].items()},
+        'gugyeol_pua_characters': len(GUGYEOL_PUA),
         'source_kinds': provenance,
     }, ensure_ascii=False, indent=2)+'\n')
     (OUT/'NOTICE.txt').write_text(
@@ -223,6 +228,9 @@ def build(weight=400):
         'https://github.com/MihailJP/GenSekiHentaiganaGothic\n'
         'Noto Sans CJK JP Regular and Bold: U+5344 (卄), converted to TrueType curves.\n'
         'https://github.com/notofonts/noto-cjk\n'
+        '181 구결자 (Korean gugyeol) at the Hanyang private-use convention (U+F67E-U+F77C),\n'
+        "each drawn from the face's own glyph of its twin ideograph, or from Noto Sans CJK\n"
+        'JP where the twin is absent from the face; see gugyeol-forms.json.\n'
         'FRB Taiwanese Kana by Fredrick R. Brennan: Minnan tone letters and combining marks.\n'
         'Bold blends them toward GenZui Bold masters drawn on the same points.\n'
         'https://github.com/ctrlcctrlv/FRBTaiwaneseKana\n'

@@ -17,6 +17,7 @@ from check_okinawan import check_okinawan
 from okinawan import PUA as OKINAWAN_PUA
 from check_coverage import check_coverage
 from honkoku import HONKOKU, SOURCE as CJK_SOURCE
+from gugyeol import PUA as GUGYEOL_PUA
 from sources import ROOT
 
 
@@ -67,8 +68,9 @@ def check():
     original = TTFont(io.BytesIO(serialized(instance('NotoSerifHentaigana', 400))))
     source_cmap, jp_cmap = original.getBestCmap(), jp.getBestCmap()
 
-    assert len(cmap) == 17064 + len(OKINAWAN_PUA)
-    assert set(cmap) == set(jp_cmap) | {ord(item['character']) for item in chars} | set(OKINAWAN_PUA)
+    assert len(cmap) == 17064 + len(OKINAWAN_PUA) + len(GUGYEOL_PUA)
+    assert set(cmap) == (set(jp_cmap) | {ord(item['character']) for item in chars}
+                          | set(OKINAWAN_PUA) | set(GUGYEOL_PUA))
     named_kana = {int(fields[0], 16)
                   for line in (ROOT/'data/unicode/UnicodeData.txt').read_text().splitlines()
                   if (fields := line.split(';')) and
@@ -212,6 +214,7 @@ def check():
         'target_characters': len(chars), 'unchanged_historical_outlines': retained,
         'unicode_named_hiragana_katakana_covered': len(named_kana),
         'okinawan': check_okinawan(font, engine, web_engine, shape, boxes),
+        'gugyeol_pua_characters': len(GUGYEOL_PUA),
         'outline_refinements':check_refinements(path, font),
         'iteration':check_iteration(path, font),
         'kana_coverage':check_coverage(path)['coverage'],

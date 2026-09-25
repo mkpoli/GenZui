@@ -1,0 +1,1309 @@
+{
+ "version": 1,
+ "description": "구결자 (Korean gugyeol) at the code points of the Hanyang private-use convention that 한/글 uses. A PUA assignment is a convention between a document and a font, not a Unicode character assignment.",
+ "encoding": {
+  "kind": "Hanyang private-use convention (한양 PUA)",
+  "range": "Private Use Area",
+  "first": "F67E",
+  "last": "F77C",
+  "count": 255
+ },
+ "sources": [
+  {
+   "id": "ha2019",
+   "title": "하정수 (2019), 「국제 표준 문자 코드 登錄을 위한 구결자(口訣字) 기초(基礎) 자료(資料) 구축(構築) 현황(現況)」, 『구결연구』 43, 263–287",
+   "url": "https://kiss.kstudy.com/Detail/Ar?key=3721308",
+   "note": "States that 255 구결자 are assigned informally to the private-use area of word processors such as 한/글 and are not in ISO/IEC 10646."
+  },
+  {
+   "id": "haansoft",
+   "title": "Haansoft Dotum 1.21 (© HanYang I&C 2004), installed by 한컴오피스 뷰어 2024",
+   "url": "https://www.hancom.com/product/office/officeViewer",
+   "note": "Visual reference for the form at each code point; installer HOffice2024-Viewer.exe, SHA-256 067307327acde95b8e764b88d7cdb305f4354b2c78adbe9e79b59c2672cf96ea. Not a source of outlines, and not redistributed."
+  },
+  {
+   "id": "glyph-atlas",
+   "title": "glyph-atlas character layer: data/vocab/gugyeol.tsv",
+   "url": "https://github.com/mkpoli/glyph-atlas/blob/main/data/vocab/gugyeol.tsv",
+   "note": "The same 255 code points, with readings and 字母 filled only from open or cited sources."
+  }
+ ],
+ "twin": "A CJK ideograph whose shape the Haansoft form reproduces, identified by eye against Noto Serif CJK JP (editorial). The build draws such a form from the face's own glyph of the twin. A form with no twin is null and still needs a drawing; it is not in the font until then.",
+ "forms": [
+  {
+   "codepoint": "F67E",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F67F",
+   "twin": "53EF",
+   "twin_char": "可"
+  },
+  {
+   "codepoint": "F680",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F681",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F682",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F683",
+   "twin": "53BB",
+   "twin_char": "去"
+  },
+  {
+   "codepoint": "F684",
+   "twin": "5DE8",
+   "twin_char": "巨"
+  },
+  {
+   "codepoint": "F685",
+   "twin": "4EE4",
+   "twin_char": "令"
+  },
+  {
+   "codepoint": "F686",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F687",
+   "twin": "53E3",
+   "twin_char": "口"
+  },
+  {
+   "codepoint": "F688",
+   "twin": "53E4",
+   "twin_char": "古"
+  },
+  {
+   "codepoint": "F689",
+   "twin": "6606",
+   "twin_char": "昆"
+  },
+  {
+   "codepoint": "F68A",
+   "twin": "6208",
+   "twin_char": "戈"
+  },
+  {
+   "codepoint": "F68B",
+   "twin": "6729",
+   "twin_char": "朩"
+  },
+  {
+   "codepoint": "F68C",
+   "twin": "4EBA",
+   "twin_char": "人"
+  },
+  {
+   "codepoint": "F68D",
+   "twin": "66F0",
+   "twin_char": "曰"
+  },
+  {
+   "codepoint": "F68E",
+   "twin": "679C",
+   "twin_char": "果"
+  },
+  {
+   "codepoint": "F68F",
+   "twin": "5B98",
+   "twin_char": "官"
+  },
+  {
+   "codepoint": "F690",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F691",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F692",
+   "twin": "8C48",
+   "twin_char": "豈"
+  },
+  {
+   "codepoint": "F693",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F694",
+   "twin": "7686",
+   "twin_char": "皆"
+  },
+  {
+   "codepoint": "F695",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F696",
+   "twin": "516B",
+   "twin_char": "八"
+  },
+  {
+   "codepoint": "F697",
+   "twin": "53EA",
+   "twin_char": "只"
+  },
+  {
+   "codepoint": "F698",
+   "twin": "5C39",
+   "twin_char": "尹"
+  },
+  {
+   "codepoint": "F699",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F69A",
+   "twin": "90A3",
+   "twin_char": "那"
+  },
+  {
+   "codepoint": "F69B",
+   "twin": "4E43",
+   "twin_char": "乃"
+  },
+  {
+   "codepoint": "F69C",
+   "twin": "96E3",
+   "twin_char": "難"
+  },
+  {
+   "codepoint": "F69D",
+   "twin": "6C5D",
+   "twin_char": "汝"
+  },
+  {
+   "codepoint": "F69E",
+   "twin": "5973",
+   "twin_char": "女"
+  },
+  {
+   "codepoint": "F69F",
+   "twin": "53C8",
+   "twin_char": "又"
+  },
+  {
+   "codepoint": "F6A0",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6A1",
+   "twin": "5974",
+   "twin_char": "奴"
+  },
+  {
+   "codepoint": "F6A2",
+   "twin": "8AD6",
+   "twin_char": "論"
+  },
+  {
+   "codepoint": "F6A3",
+   "twin": "4E86",
+   "twin_char": "了"
+  },
+  {
+   "codepoint": "F6A4",
+   "twin": "535C",
+   "twin_char": "卜"
+  },
+  {
+   "codepoint": "F6A5",
+   "twin": "5315",
+   "twin_char": "匕"
+  },
+  {
+   "codepoint": "F6A6",
+   "twin": "5C3C",
+   "twin_char": "尼"
+  },
+  {
+   "codepoint": "F6A7",
+   "twin": "884C",
+   "twin_char": "行"
+  },
+  {
+   "codepoint": "F6A8",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6A9",
+   "twin": "98DE",
+   "twin_char": "飞"
+  },
+  {
+   "codepoint": "F6AA",
+   "twin": "98DB",
+   "twin_char": "飛"
+  },
+  {
+   "codepoint": "F6AB",
+   "twin": "65A4",
+   "twin_char": "斤"
+  },
+  {
+   "codepoint": "F6AC",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6AD",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6AE",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6AF",
+   "twin": "96B1",
+   "twin_char": "隱"
+  },
+  {
+   "codepoint": "F6B0",
+   "twin": "4E28",
+   "twin_char": "丨"
+  },
+  {
+   "codepoint": "F6B1",
+   "twin": "5915",
+   "twin_char": "夕"
+  },
+  {
+   "codepoint": "F6B2",
+   "twin": "591A",
+   "twin_char": "多"
+  },
+  {
+   "codepoint": "F6B3",
+   "twin": "5982",
+   "twin_char": "如"
+  },
+  {
+   "codepoint": "F6B4",
+   "twin": "652F",
+   "twin_char": "支"
+  },
+  {
+   "codepoint": "F6B5",
+   "twin": "5927",
+   "twin_char": "大"
+  },
+  {
+   "codepoint": "F6B6",
+   "twin": "529B",
+   "twin_char": "力"
+  },
+  {
+   "codepoint": "F6B7",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6B8",
+   "twin": "53FB",
+   "twin_char": "叻"
+  },
+  {
+   "codepoint": "F6B9",
+   "twin": "52A0",
+   "twin_char": "加"
+  },
+  {
+   "codepoint": "F6BA",
+   "twin": "6C10",
+   "twin_char": "氐"
+  },
+  {
+   "codepoint": "F6BB",
+   "twin": "5E95",
+   "twin_char": "底"
+  },
+  {
+   "codepoint": "F6BC",
+   "twin": "4E01",
+   "twin_char": "丁"
+  },
+  {
+   "codepoint": "F6BD",
+   "twin": "5B81",
+   "twin_char": "宁"
+  },
+  {
+   "codepoint": "F6BE",
+   "twin": "7530",
+   "twin_char": "田"
+  },
+  {
+   "codepoint": "F6BF",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6C0",
+   "twin": "5200",
+   "twin_char": "刀"
+  },
+  {
+   "codepoint": "F6C1",
+   "twin": "90FD",
+   "twin_char": "都"
+  },
+  {
+   "codepoint": "F6C2",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6C3",
+   "twin": "6597",
+   "twin_char": "斗"
+  },
+  {
+   "codepoint": "F6C4",
+   "twin": "8C46",
+   "twin_char": "豆"
+  },
+  {
+   "codepoint": "F6C5",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6C6",
+   "twin": "5730",
+   "twin_char": "地"
+  },
+  {
+   "codepoint": "F6C7",
+   "twin": "77E2",
+   "twin_char": "矢"
+  },
+  {
+   "codepoint": "F6C8",
+   "twin": "77E5",
+   "twin_char": "知"
+  },
+  {
+   "codepoint": "F6C9",
+   "twin": "9673",
+   "twin_char": "陳"
+  },
+  {
+   "codepoint": "F6CA",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6CB",
+   "twin": "7B49",
+   "twin_char": "等"
+  },
+  {
+   "codepoint": "F6CC",
+   "twin": "6708",
+   "twin_char": "月"
+  },
+  {
+   "codepoint": "F6CD",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6CE",
+   "twin": "5165",
+   "twin_char": "入"
+  },
+  {
+   "codepoint": "F6CF",
+   "twin": "51AC",
+   "twin_char": "冬"
+  },
+  {
+   "codepoint": "F6D0",
+   "twin": "53B6",
+   "twin_char": "厶"
+  },
+  {
+   "codepoint": "F6D1",
+   "twin": "77E3",
+   "twin_char": "矣"
+  },
+  {
+   "codepoint": "F6D2",
+   "twin": "5F0B",
+   "twin_char": "弋"
+  },
+  {
+   "codepoint": "F6D3",
+   "twin": "4EE3",
+   "twin_char": "代"
+  },
+  {
+   "codepoint": "F6D4",
+   "twin": "4E36",
+   "twin_char": "丶"
+  },
+  {
+   "codepoint": "F6D5",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6D6",
+   "twin": "7F52",
+   "twin_char": "罒"
+  },
+  {
+   "codepoint": "F6D7",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6D8",
+   "twin": "7F85",
+   "twin_char": "羅"
+  },
+  {
+   "codepoint": "F6D9",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6DA",
+   "twin": "9A62",
+   "twin_char": "驢"
+  },
+  {
+   "codepoint": "F6DB",
+   "twin": "8981",
+   "twin_char": "要"
+  },
+  {
+   "codepoint": "F6DC",
+   "twin": "5415",
+   "twin_char": "吕"
+  },
+  {
+   "codepoint": "F6DD",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6DE",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6DF",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E0",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E1",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E2",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E3",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E4",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E5",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6E6",
+   "twin": "79BE",
+   "twin_char": "禾"
+  },
+  {
+   "codepoint": "F6E7",
+   "twin": "5229",
+   "twin_char": "利"
+  },
+  {
+   "codepoint": "F6E8",
+   "twin": "91CC",
+   "twin_char": "里"
+  },
+  {
+   "codepoint": "F6E9",
+   "twin": "5404",
+   "twin_char": "各"
+  },
+  {
+   "codepoint": "F6EA",
+   "twin": "5C38",
+   "twin_char": "尸"
+  },
+  {
+   "codepoint": "F6EB",
+   "twin": "4E5A",
+   "twin_char": "乚"
+  },
+  {
+   "codepoint": "F6EC",
+   "twin": "4E59",
+   "twin_char": "乙"
+  },
+  {
+   "codepoint": "F6ED",
+   "twin": "5E7F",
+   "twin_char": "广"
+  },
+  {
+   "codepoint": "F6EE",
+   "twin": "5E83",
+   "twin_char": "広"
+  },
+  {
+   "codepoint": "F6EF",
+   "twin": "9EBB",
+   "twin_char": "麻"
+  },
+  {
+   "codepoint": "F6F0",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6F1",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6F2",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6F3",
+   "twin": "4E07",
+   "twin_char": "万"
+  },
+  {
+   "codepoint": "F6F4",
+   "twin": "842C",
+   "twin_char": "萬"
+  },
+  {
+   "codepoint": "F6F5",
+   "twin": "672B",
+   "twin_char": "末"
+  },
+  {
+   "codepoint": "F6F6",
+   "twin": "8CE3",
+   "twin_char": "賣"
+  },
+  {
+   "codepoint": "F6F7",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6F8",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6F9",
+   "twin": "65C0",
+   "twin_char": "旀"
+  },
+  {
+   "codepoint": "F6FA",
+   "twin": "5F25",
+   "twin_char": "弥"
+  },
+  {
+   "codepoint": "F6FB",
+   "twin": "5F4C",
+   "twin_char": "彌"
+  },
+  {
+   "codepoint": "F6FC",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F6FD",
+   "twin": "9762",
+   "twin_char": "面"
+  },
+  {
+   "codepoint": "F6FE",
+   "twin": "6BDB",
+   "twin_char": "毛"
+  },
+  {
+   "codepoint": "F6FF",
+   "twin": "52FF",
+   "twin_char": "勿"
+  },
+  {
+   "codepoint": "F700",
+   "twin": "672A",
+   "twin_char": "未"
+  },
+  {
+   "codepoint": "F701",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F702",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F703",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F704",
+   "twin": "97F3",
+   "twin_char": "音"
+  },
+  {
+   "codepoint": "F705",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F706",
+   "twin": "706B",
+   "twin_char": "火"
+  },
+  {
+   "codepoint": "F707",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F708",
+   "twin": "5DF4",
+   "twin_char": "巴"
+  },
+  {
+   "codepoint": "F709",
+   "twin": "9091",
+   "twin_char": "邑"
+  },
+  {
+   "codepoint": "F70A",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F70B",
+   "twin": "6C99",
+   "twin_char": "沙"
+  },
+  {
+   "codepoint": "F70C",
+   "twin": "4E09",
+   "twin_char": "三"
+  },
+  {
+   "codepoint": "F70D",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F70E",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F70F",
+   "twin": "820D",
+   "twin_char": "舍"
+  },
+  {
+   "codepoint": "F710",
+   "twin": "7ACB",
+   "twin_char": "立"
+  },
+  {
+   "codepoint": "F711",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F712",
+   "twin": "4E00",
+   "twin_char": "一"
+  },
+  {
+   "codepoint": "F713",
+   "twin": "897F",
+   "twin_char": "西"
+  },
+  {
+   "codepoint": "F714",
+   "twin": "6237",
+   "twin_char": "户"
+  },
+  {
+   "codepoint": "F715",
+   "twin": "6240",
+   "twin_char": "所"
+  },
+  {
+   "codepoint": "F716",
+   "twin": "5C0F",
+   "twin_char": "小"
+  },
+  {
+   "codepoint": "F717",
+   "twin": "5BF8",
+   "twin_char": "寸"
+  },
+  {
+   "codepoint": "F718",
+   "twin": "65F6",
+   "twin_char": "时"
+  },
+  {
+   "codepoint": "F719",
+   "twin": "6642",
+   "twin_char": "時"
+  },
+  {
+   "codepoint": "F71A",
+   "twin": "4E8C",
+   "twin_char": "二"
+  },
+  {
+   "codepoint": "F71B",
+   "twin": "793A",
+   "twin_char": "示"
+  },
+  {
+   "codepoint": "F71C",
+   "twin": "6C0F",
+   "twin_char": "氏"
+  },
+  {
+   "codepoint": "F71D",
+   "twin": "7533",
+   "twin_char": "申"
+  },
+  {
+   "codepoint": "F71E",
+   "twin": "58EB",
+   "twin_char": "士"
+  },
+  {
+   "codepoint": "F71F",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F720",
+   "twin": "767D",
+   "twin_char": "白"
+  },
+  {
+   "codepoint": "F721",
+   "twin": "751F",
+   "twin_char": "生"
+  },
+  {
+   "codepoint": "F722",
+   "twin": "4E03",
+   "twin_char": "七"
+  },
+  {
+   "codepoint": "F723",
+   "twin": "53F1",
+   "twin_char": "叱"
+  },
+  {
+   "codepoint": "F724",
+   "twin": "65E7",
+   "twin_char": "旧"
+  },
+  {
+   "codepoint": "F725",
+   "twin": "5152",
+   "twin_char": "兒"
+  },
+  {
+   "codepoint": "F726",
+   "twin": "898B",
+   "twin_char": "見"
+  },
+  {
+   "codepoint": "F727",
+   "twin": "7259",
+   "twin_char": "牙"
+  },
+  {
+   "codepoint": "F728",
+   "twin": "963F",
+   "twin_char": "阿"
+  },
+  {
+   "codepoint": "F729",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F72A",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F72B",
+   "twin": "826F",
+   "twin_char": "良"
+  },
+  {
+   "codepoint": "F72C",
+   "twin": "5382",
+   "twin_char": "厂"
+  },
+  {
+   "codepoint": "F72D",
+   "twin": "5393",
+   "twin_char": "厓"
+  },
+  {
+   "codepoint": "F72E",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F72F",
+   "twin": "4E5F",
+   "twin_char": "也"
+  },
+  {
+   "codepoint": "F730",
+   "twin": "65B9",
+   "twin_char": "方"
+  },
+  {
+   "codepoint": "F731",
+   "twin": "624D",
+   "twin_char": "才"
+  },
+  {
+   "codepoint": "F732",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F733",
+   "twin": "65BC",
+   "twin_char": "於"
+  },
+  {
+   "codepoint": "F734",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F735",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F736",
+   "twin": "8A00",
+   "twin_char": "言"
+  },
+  {
+   "codepoint": "F737",
+   "twin": "8616",
+   "twin_char": "蘖"
+  },
+  {
+   "codepoint": "F738",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F739",
+   "twin": "4F59",
+   "twin_char": "余"
+  },
+  {
+   "codepoint": "F73A",
+   "twin": "4E0E",
+   "twin_char": "与"
+  },
+  {
+   "codepoint": "F73B",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F73C",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F73D",
+   "twin": "4EA6",
+   "twin_char": "亦"
+  },
+  {
+   "codepoint": "F73E",
+   "twin": "4EBA",
+   "twin_char": "人"
+  },
+  {
+   "codepoint": "F73F",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F740",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F741",
+   "twin": "4E94",
+   "twin_char": "五"
+  },
+  {
+   "codepoint": "F742",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F743",
+   "twin": "5348",
+   "twin_char": "午"
+  },
+  {
+   "codepoint": "F744",
+   "twin": "7389",
+   "twin_char": "玉"
+  },
+  {
+   "codepoint": "F745",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F746",
+   "twin": "6EAB",
+   "twin_char": "溫"
+  },
+  {
+   "codepoint": "F747",
+   "twin": "81E5",
+   "twin_char": "臥"
+  },
+  {
+   "codepoint": "F748",
+   "twin": "4E8E",
+   "twin_char": "于"
+  },
+  {
+   "codepoint": "F749",
+   "twin": "725B",
+   "twin_char": "牛"
+  },
+  {
+   "codepoint": "F74A",
+   "twin": "4F4D",
+   "twin_char": "位"
+  },
+  {
+   "codepoint": "F74B",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F74C",
+   "twin": "6BB7",
+   "twin_char": "殷"
+  },
+  {
+   "codepoint": "F74D",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F74E",
+   "twin": "8863",
+   "twin_char": "衣"
+  },
+  {
+   "codepoint": "F74F",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F750",
+   "twin": "5202",
+   "twin_char": "刂"
+  },
+  {
+   "codepoint": "F751",
+   "twin": "662F",
+   "twin_char": "是"
+  },
+  {
+   "codepoint": "F752",
+   "twin": "4F0A",
+   "twin_char": "伊"
+  },
+  {
+   "codepoint": "F753",
+   "twin": "5DF1",
+   "twin_char": "己"
+  },
+  {
+   "codepoint": "F754",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F755",
+   "twin": "5370",
+   "twin_char": "印"
+  },
+  {
+   "codepoint": "F756",
+   "twin": "5F15",
+   "twin_char": "引"
+  },
+  {
+   "codepoint": "F757",
+   "twin": "6210",
+   "twin_char": "成"
+  },
+  {
+   "codepoint": "F758",
+   "twin": "61C9",
+   "twin_char": "應"
+  },
+  {
+   "codepoint": "F759",
+   "twin": "5203",
+   "twin_char": "刃"
+  },
+  {
+   "codepoint": "F75A",
+   "twin": "5FCD",
+   "twin_char": "忍"
+  },
+  {
+   "codepoint": "F75B",
+   "twin": "4E0A",
+   "twin_char": "上"
+  },
+  {
+   "codepoint": "F75C",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F75D",
+   "twin": "8005",
+   "twin_char": "者"
+  },
+  {
+   "codepoint": "F75E",
+   "twin": "5171",
+   "twin_char": "共"
+  },
+  {
+   "codepoint": "F75F",
+   "twin": "5176",
+   "twin_char": "其"
+  },
+  {
+   "codepoint": "F760",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F761",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F762",
+   "twin": "6589",
+   "twin_char": "斉"
+  },
+  {
+   "codepoint": "F763",
+   "twin": "9F4A",
+   "twin_char": "齊"
+  },
+  {
+   "codepoint": "F764",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F765",
+   "twin": "4E4B",
+   "twin_char": "之"
+  },
+  {
+   "codepoint": "F766",
+   "twin": "9020",
+   "twin_char": "造"
+  },
+  {
+   "codepoint": "F767",
+   "twin": "4ED6",
+   "twin_char": "他"
+  },
+  {
+   "codepoint": "F768",
+   "twin": "6253",
+   "twin_char": "打"
+  },
+  {
+   "codepoint": "F769",
+   "twin": "571F",
+   "twin_char": "土"
+  },
+  {
+   "codepoint": "F76A",
+   "twin": "5410",
+   "twin_char": "吐"
+  },
+  {
+   "codepoint": "F76B",
+   "twin": "4E0B",
+   "twin_char": "下"
+  },
+  {
+   "codepoint": "F76C",
+   "twin": "4F55",
+   "twin_char": "何"
+  },
+  {
+   "codepoint": "F76D",
+   "twin": "4E3F",
+   "twin_char": "丿"
+  },
+  {
+   "codepoint": "F76E",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F76F",
+   "twin": "4E4E",
+   "twin_char": "乎"
+  },
+  {
+   "codepoint": "F770",
+   "twin": "597D",
+   "twin_char": "好"
+  },
+  {
+   "codepoint": "F771",
+   "twin": "5FFD",
+   "twin_char": "忽"
+  },
+  {
+   "codepoint": "F772",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F773",
+   "twin": "516E",
+   "twin_char": "兮"
+  },
+  {
+   "codepoint": "F774",
+   "twin": "5C4E",
+   "twin_char": "屎"
+  },
+  {
+   "codepoint": "F775",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F776",
+   "twin": "70BA",
+   "twin_char": "為"
+  },
+  {
+   "codepoint": "F777",
+   "twin": "7232",
+   "twin_char": "爲"
+  },
+  {
+   "codepoint": "F778",
+   "twin": null,
+   "twin_char": null
+  },
+  {
+   "codepoint": "F779",
+   "twin": "5341",
+   "twin_char": "十"
+  },
+  {
+   "codepoint": "F77A",
+   "twin": "4E2D",
+   "twin_char": "中"
+  },
+  {
+   "codepoint": "F77B",
+   "twin": "5B50",
+   "twin_char": "子"
+  },
+  {
+   "codepoint": "F77C",
+   "twin": "7532",
+   "twin_char": "甲"
+  }
+ ]
+}

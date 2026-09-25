@@ -6,6 +6,7 @@ from PIL import ImageChops
 from check_refinements import mask
 from honkoku import HONKOKU, TALLIES
 from okinawan import PUA as OKINAWAN_PUA
+from gugyeol import PUA as GUGYEOL_PUA
 from serif_forms import REVISION_0115, REVISION_0117
 from sources import ROOT
 
@@ -15,11 +16,11 @@ def check_iteration(path, font):
     assert hashlib.sha256(baseline.read_bytes()).hexdigest() == '66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c'
     before = TTFont(baseline)
     cmap, old_cmap = font.getBestCmap(), before.getBestCmap()
-    assert set(cmap)-set(old_cmap) == set(HONKOKU) | set(OKINAWAN_PUA)
+    assert set(cmap)-set(old_cmap) == set(HONKOKU) | set(OKINAWAN_PUA) | set(GUGYEOL_PUA)
     assert all(cmap[cp] == name for cp, name in old_cmap.items())
     old_order = before.getGlyphOrder()
     assert font.getGlyphOrder()[:len(old_order)] == old_order
-    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+7
+    assert len(font.getGlyphOrder()) == len(old_order)+len(HONKOKU)+len(OKINAWAN_PUA)+len(GUGYEOL_PUA)+7
     # 0.115 recentres TOMO, TOTE and TOKI and reduces YORI; 0.117 raises TOMO's
     # lower return. Nothing else moves.
     revised = {cmap[cp] for cp in (*REVISION_0115, *REVISION_0117)}
@@ -101,7 +102,7 @@ def check_iteration(path, font):
     before.close()
     return {'baseline':'0.112', 'changed_outlines':[f'U+{cp:04X}' for cp in dict.fromkeys((*REVISION_0115, *REVISION_0117))],
             'unchanged_glyphs':len(old_order),
-            'added_codepoints':[f'U+{cp:X}' for cp in sorted(set(HONKOKU) | set(OKINAWAN_PUA))],
+            'added_codepoints':[f'U+{cp:X}' for cp in sorted(set(HONKOKU) | set(OKINAWAN_PUA) | set(GUGYEOL_PUA))],
             'other_previous_outlines_and_metrics_unchanged':True,
             'previous_layout_rules_and_ivs_unchanged':True,
             'fullwidth_advances_and_vertical_origins_verified':True,

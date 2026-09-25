@@ -61,7 +61,7 @@ browser-checks.json identifies the browser engines tested with these files.
     files = [STEM+'.ttf', STEM+'.woff2', BOLD_STEM+'.ttf', BOLD_STEM+'.woff2', 'genzui-sans.css', 'README.txt', 'NOTICE.txt',
              'OFL.txt', 'NotoSansHentaigana-OFL.txt', 'GenSeki-OFL.txt', 'GenSeki-README.md',
              'NotoSansCJK-OFL.txt', 'FRB-OFL.txt', 'FRB-README.md', 'Unicode-LICENSE.txt',
-             'source-manifest.json', 'sans-source-manifest.json', 'sources.json', 'sources-bold.json',
+             'source-manifest.json', 'sans-source-manifest.json', 'gugyeol-forms.json', 'sources.json', 'sources-bold.json',
              'checks.json', 'checks-bold.json', 'kana-coverage.json', 'browser-checks.json', 'index.html',
              'preview.png', 'hentaigana-contact-sheet.png']
     destination = ROOT/'dist'/PACKAGE
