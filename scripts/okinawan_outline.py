@@ -19,10 +19,15 @@ def rings(pen):
             c1, c2, p = (np.array(a, float) for a in args)
             cur.append((last, c1, c2, p)); last = p
         elif op == 'qCurveTo':
-            pts = [np.array(a, float) for a in args]
             if args[-1] is None:
-                pts = pts[:-1]
-            offs, end = pts[:-1], pts[-1]
+                # a closed contour of off-curve points only, with no moveTo:
+                # it starts and ends at the midpoint of its last and first points
+                offs = [np.array(a, float) for a in args[:-1]]
+                cur, start = [], (offs[-1] + offs[0]) / 2
+                last, end = start, start
+            else:
+                pts = [np.array(a, float) for a in args]
+                offs, end = pts[:-1], pts[-1]
             for i, q in enumerate(offs):
                 nxt = end if i == len(offs) - 1 else (q + offs[i + 1]) / 2
                 cur.append((last, last + 2 * (q - last) / 3, nxt + 2 * (q - nxt) / 3, nxt)); last = nxt
