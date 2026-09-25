@@ -17,7 +17,7 @@ from serif import BOLD_STEM, OUT as FONT_OUT, PACKAGE, STEM, VERSION
 from social_card import build_card
 from sans_card import build_card as build_sans_card
 from font_chunks import build as build_chunks
-from sans_site import OUT as SANS_OUT, STEM as SANS_STEM, build_page as build_sans_page, checked as sans_checked
+from sans_site import BOLD_STEM as SANS_BOLD_STEM, OUT as SANS_OUT, STEM as SANS_STEM, build_page as build_sans_page, checked as sans_checked
 from sources import ROOT
 
 OUT = ROOT/'build/release'
@@ -143,18 +143,20 @@ def build():
     sans_version, sans_checks, sans_archive = sans_checked()
     sans_versioned = ROOT/'releases'/('sans-v'+sans_version)
     sans_versioned.mkdir(parents=True, exist_ok=True)
-    for source in [SANS_OUT/(SANS_STEM+'.ttf'), SANS_OUT/(SANS_STEM+'.woff2'), sans_archive]:
+    sans_records = {SANS_STEM: sans_checks, SANS_BOLD_STEM: json.loads((SANS_OUT/'checks-bold.json').read_text())}
+    for source in [SANS_OUT/(stem+'.'+ext) for stem in sans_records for ext in ('ttf', 'woff2')] + [sans_archive]:
         data = source.read_bytes()
         if source.suffix != '.zip':
-            assert hashlib.sha256(data).hexdigest() == sans_checks[source.suffix[1:]+'_sha256']
+            assert hashlib.sha256(data).hexdigest() == sans_records[source.stem][source.suffix[1:]+'_sha256']
         target = sans_versioned/source.name
         if target.exists():
             assert target.read_bytes() == data, 'Bump the Sans version before replacing a published asset.'
         else:
             target.write_bytes(data)
-    sans_css = ("@font-face {\n  font-family: 'GenZui Sans';\n"
-                f"  src: url('./{SANS_STEM}.woff2') format('woff2');\n"
-                "  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n")
+    sans_css = ''.join("@font-face {\n  font-family: 'GenZui Sans';\n"
+                       f"  src: url('./{stem}.woff2') format('woff2');\n"
+                       f"  font-weight: {weight};\n  font-style: normal;\n  font-display: swap;\n}}\n"
+                       for stem, weight in ((SANS_STEM, 400), (SANS_BOLD_STEM, 700)))
     sans_css_path = sans_versioned/'genzui-sans.css'
     if sans_css_path.exists():
         assert sans_css_path.read_text() == sans_css, 'Versioned CSS is immutable.'
@@ -248,11 +250,14 @@ def build():
     # download links resolve to the immutable copy in each version folder.
     # Earlier combined packages keep their links through their version folders.
     earlier = sorted(f'/downloads/{archive.name} /{archive.parent.name}/{archive.name} 301\n'
-                     for archive in (ROOT/'releases').glob('v*/GenZuiSerif-[0-9]*.zip')
-                     if archive.name != PACKAGE)
+                     for pattern, current in (('v*/GenZuiSerif-[0-9]*.zip', PACKAGE),
+                                              ('sans-v*/GenZuiSans-[0-9]*.zip', sans_archive.name))
+                     for archive in (ROOT/'releases').glob(pattern)
+                     if archive.name != current)
     (OUT/'_redirects').write_text('/index.html / 301\n'
         f'/downloads/{STEM}-{VERSION}.zip /downloads/{PACKAGE} 301\n'
-        f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n' + ''.join(earlier))
+        f'/downloads/{STEM}-:version.zip /v:version/{STEM}-:version.zip 301\n'
+        f'/downloads/{SANS_STEM}-:version.zip /sans-v:version/{SANS_STEM}-:version.zip 301\n' + ''.join(earlier))
     for name in ['announcement-ja', 'announcement-en', 'announcement-sans-ja', 'announcement-sans-en']:
         shutil.copyfile(ROOT/'release'/(name+'.txt'), OUT/(name+'.txt'))
     for name in ['index.html','serif.html','sans.html','gallery.html','minnan.html']:

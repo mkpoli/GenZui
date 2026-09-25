@@ -10,6 +10,7 @@ import json
 from fontTools.otlLib.builder import (buildAnchor, buildCoverage,
     buildMarkBasePosSubtable, buildSinglePosSubtable, buildValue)
 from fontTools.pens.cu2quPen import Cu2QuPen
+from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.svgLib.path import parse_path
@@ -28,12 +29,37 @@ def source_font():
 BOLD = json.loads((ROOT/'data/minnan/bold.json').read_text())['forms']
 
 
+def closed(commands):
+    """Drop a final line back to a contour's start, which closePath implies."""
+    result, start = [], None
+    for op, points in commands:
+        if op == 'moveTo':
+            start = points[0]
+        if op == 'closePath' and result and result[-1] == ('lineTo', (start,)):
+            result.pop()
+        result.append((op, points))
+    return result
+
+
 def source_outline(source, cp, bold=False, matrix=(1, 0, 0, 1, 0, 0)):
-    """The FRB outline, or its Bold master drawn on the same points."""
+    """The FRB outline, its Bold master drawn on the same points, or a blend.
+
+    `bold` is False, True, or a fraction between the FRB outline (0) and the
+    Bold master (1), for a face whose Bold kana gain less weight.
+    """
     pen = TTGlyphPen(None)
     target = TransformPen(Cu2QuPen(pen, max_err=0.3, reverse_direction=True), matrix)
-    if bold:
+    if bold is True:
         parse_path(BOLD[f'U+{cp:04X}'], target)
+    elif bold:
+        regular, heavy = RecordingPen(), RecordingPen()
+        source.getGlyphSet()[source.getBestCmap()[cp]].draw(regular)
+        parse_path(BOLD[f'U+{cp:04X}'], heavy)
+        commands = [closed(regular.value), closed(heavy.value)]
+        assert [op for op, _ in commands[0]] == [op for op, _ in commands[1]], hex(cp)
+        for (op, points), (_, bold_points) in zip(*commands):
+            getattr(target, op)(*[(x+bold*(bx-x), y+bold*(by-y))
+                                  for (x, y), (bx, by) in zip(points, bold_points)])
     else:
         source.getGlyphSet()[source.getBestCmap()[cp]].draw(target)
     return pen.glyph()
@@ -91,7 +117,7 @@ def contextual_substitution(font, bases, substitutions, count=1):
     return sub
 
 
-def layout(font, add, add_feature, bold=False):
+def layout(font, add, add_feature, bold=False, edge_anchors=False):
     cmap = font.getBestCmap()
     kana_cps = {cp for cp in cmap if 0x30A1 <= cp <= 0x30FA or 0x31F0 <= cp <= 0x31FF}
     kana_cps |= {cp for cp in cmap if cp in (0x1B000, 0x1B155) or 0x1B120 <= cp <= 0x1B128 and cp != 0x1B123 or 0x1B164 <= cp <= 0x1B168}
@@ -122,9 +148,13 @@ def layout(font, add, add_feature, bold=False):
         lookup.SubTable.append(sub)
     lookup.SubTableCount = len(lookup.SubTable)
     add_feature(font, 'GSUB', 'ccmp', lookup)
-    marks = {cmap[0x0305]: (0, buildAnchor(505, 721)),
-             short: (0, buildAnchor(504, 721)),
-             cmap[0x0323]: (1, buildAnchor(500, 380))}
+    # The overline hangs from its lower edge and the dot 46 units below its top,
+    # the Regular FRB positions. With edge_anchors, a heavier outline keeps the
+    # same clearance from the kana.
+    over, dot = (font['glyf'][cmap[0x0305]].yMin, font['glyf'][cmap[0x0323]].yMax-46) if edge_anchors else (721, 380)
+    marks = {cmap[0x0305]: (0, buildAnchor(505, over)),
+             short: (0, buildAnchor(504, over)),
+             cmap[0x0323]: (1, buildAnchor(500, dot))}
     anchors = {}
     for name in bases:
         g = font['glyf'][name]

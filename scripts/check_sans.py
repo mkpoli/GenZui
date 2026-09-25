@@ -11,9 +11,8 @@ from fontTools.pens.perimeterPen import PerimeterPen
 from fontTools.ttLib import TTFont
 from statistics import median
 
-from sans import FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance
+from sans import FAMILY, FAMILY_JA, OUT, REGULAR_WEIGHT, STEM, VERSION, instance, sources
 from sans_forms import REFITS
-from sans_sources import DONOR, GENSEKI, TEXT
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from check_coverage import check_coverage
@@ -63,14 +62,16 @@ def boxes(font, shaped):
     return result
 
 
-def check():
-    path = OUT/(STEM+'.ttf')
+def check(weight=400):
+    face = sources(weight)
+    stem_name, style, bold, refits = face['stem'], face['style'], weight == 700, REFITS[weight]
+    path = OUT/(stem_name+'.ttf')
     data = path.read_bytes()
     font, engine = TTFont(path), shaper(data)
-    web = TTFont(OUT/(STEM+'.woff2'))
+    web = TTFont(OUT/(stem_name+'.woff2'))
     web.flavor = None
     web_engine = shaper(serialized(web))
-    base_data = serialized(instance('NotoSansJP', 400))
+    base_data = serialized(instance('NotoSansJP', weight))
     base, base_engine = TTFont(io.BytesIO(base_data)), shaper(base_data)
     cmap, base_cmap = font.getBestCmap(), base.getBestCmap()
     targets = {ord(item['character']) for item in repertoire()}
@@ -114,11 +115,12 @@ def check():
                 assert actual == shape(web_engine, text, direction, features)
                 base_cases += 1
 
-    donor, text_instance = TTFont(DONOR), TTFont(TEXT)
-    genseki = TTFont(GENSEKI/'GenSekiHentaiganaGothic.ttf')
+    donor, text_instance = TTFont(face['archaic']), TTFont(face['text'])
+    genseki = TTFont(face['genseki'])
     donor_cmap, gen_cmap = donor.getBestCmap(), genseki.getBestCmap()
-    assert donor['OS/2'].usWeightClass == 500 and text_instance['OS/2'].usWeightClass == 400
-    retained = {'noto_regular': 0, 'noto_text': 0, 'genseki': 0, 'genseki_refit': 0}
+    if not bold:
+        assert donor['OS/2'].usWeightClass == 500 and text_instance['OS/2'].usWeightClass == 400
+    retained = {'noto_archaic': 0, 'noto_text': 0, 'genseki': 0, 'genseki_refit': 0}
     mark_cases = 0
     for cp in sorted(targets - set(base_cmap)):
         name = cmap[cp]
@@ -126,9 +128,9 @@ def check():
         assert g.numberOfContours != 0, hex(cp)
         source = ((donor if cp in REGULAR_WEIGHT else text_instance) if cp in donor_cmap
                   else genseki if cp in gen_cmap else None)
-        if source and cp in REFITS:
+        if source and cp in refits:
             old = gen_cmap[cp]
-            spec, s = REFITS[cp], REFITS[cp]['scale']
+            spec, s = refits[cp], refits[cp]['scale']
             o = genseki['glyf'][old]
             expected = ((o.xMax-o.xMin)*s, (o.yMax-o.yMin)*s)
             # Erosion trims each side by the stated amount; the body grows by the scale.
@@ -141,7 +143,7 @@ def check():
             old = source.getBestCmap()[cp]
             assert g.getCoordinates(font['glyf']) == source['glyf'][old].getCoordinates(source['glyf']), hex(cp)
             assert font['hmtx'][name] == source['hmtx'][old], hex(cp)
-            retained['noto_regular' if source is donor else 'noto_text' if source is text_instance else 'genseki'] += 1
+            retained['noto_archaic' if source is donor else 'noto_text' if source is text_instance else 'genseki'] += 1
         if cp in (*MINNAN_TONES, *MINNAN_MARKS):
             continue
         for direction in ('ltr', 'ttb'):
@@ -167,17 +169,23 @@ def check():
                     assert actual == shape(engine, text, direction, script=script), (hex(cp), script)
                 assert actual == shape(web_engine, text, direction)
                 mark_cases += 1
-    assert retained == {'noto_regular': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
-    # The hentaigana's median stem matches the hiragana's within two units.
+    assert retained == {'noto_archaic': 4, 'noto_text': 286, 'genseki': 18, 'genseki_refit': 3}, retained
+    # The hentaigana's median stem matches the hiragana's, and the archaic kana
+    # the katakana's, within two units.
     stems = {label: stem(font, cps) for label, cps in (
         ('hiragana', [ord(c) for c in 'いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす']),
-        ('hentaigana', range(0x1B002, 0x1B11F)))}
+        ('hentaigana', range(0x1B002, 0x1B11F)),
+        ('katakana', [ord(c) for c in 'イロハニホヘトチリヌルヲワカヨタレソツネナラムウヰノオクヤマケフコエテアサキユメミシヱヒモセス']),
+        ('archaic', sorted(REGULAR_WEIGHT)))}
     assert abs(stems['hiragana'] - stems['hentaigana']) <= 2, stems
-    # KOTO, TOKI, TOTE and TOMO share a body height; the small archaic YE sits with small kana.
+    assert abs(stems['katakana'] - stems['archaic']) <= 2, stems
+    # KOTO's body falls within the heights of TOKI, TOTE and TOMO; alternate NE
+    # reaches the katakana cap height; the small archaic YE sits with small kana.
     heights = {cp: font['glyf'][cmap[cp]].yMax - font['glyf'][cmap[cp]].yMin
                for cp in (0x1B123, 0x1B124, 0x1B125, 0x2A708)}
-    assert max(heights.values()) - min(heights.values()) <= 40, heights
-    assert font['glyf'][cmap[0x1B127]].yMax >= 725
+    peers = [heights[cp] for cp in (0x1B124, 0x1B125, 0x2A708)]
+    assert min(peers) <= heights[0x1B123] <= max(peers), heights
+    assert font['glyf'][cmap[0x1B127]].yMax >= font['glyf'][cmap[ord('ア')]].yMax - 1
     assert -60 <= font['glyf'][cmap[0x1B168]].yMin <= -20
     assert 'ss01' not in {r.FeatureTag for r in font['GSUB'].table.FeatureList.FeatureRecord}
     for direction in ('ltr', 'ttb'):
@@ -212,31 +220,35 @@ def check():
     for nid in (1, 16):
         assert font['name'].getName(nid, 3, 1, 0x409).toUnicode() == FAMILY
         assert font['name'].getName(nid, 3, 1, 0x411).toUnicode() == FAMILY_JA
-    assert font['name'].getDebugName(6) == STEM
+    for nid in (2, 17):
+        assert font['name'].getName(nid, 3, 1, 0x409).toUnicode() == style
+    assert font['name'].getDebugName(6) == stem_name
     assert font['name'].getDebugName(5) == 'Version '+VERSION
-    assert font['OS/2'].usWeightClass == 400 and 'fvar' not in font and 'STAT' not in font
+    assert font['OS/2'].usWeightClass == weight and 'fvar' not in font and 'STAT' not in font
+    assert bool(font['OS/2'].fsSelection & 32) == bool(font['head'].macStyle & 1) == bold
     for source in (base, donor, genseki):
         for record in source['name'].names:
             if record.nameID == 0:
                 assert record.toUnicode() in (OUT/'OFL.txt').read_text()
                 assert record.toUnicode() in font['name'].getDebugName(0)
-    text = (OUT/'index.html').read_text(encoding='utf-8')
-    embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', text)
-    assert len(embedded) == 1 and base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
-    assert '/home/' not in text and 'GenZui Serif' not in text
-    coverage = check_coverage(path, OUT/'kana-coverage.json')
+    if not bold:
+        text = (OUT/'index.html').read_text(encoding='utf-8')
+        embedded = re.findall(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', text)
+        assert len(embedded) == 1 and base64.b64decode(embedded[0]) == (OUT/(STEM+'.woff2')).read_bytes()
+        assert '/home/' not in text and 'GenZui Serif' not in text
+    coverage = check_coverage(path, OUT/('kana-coverage-bold.json' if bold else 'kana-coverage.json'))
     report = {
-        'status': 'passed', 'family': FAMILY, 'family_ja': FAMILY_JA, 'version': VERSION,
+        'status': 'passed', 'family': FAMILY, 'family_ja': FAMILY_JA, 'style': style, 'version': VERSION,
         'ttf_sha256': hashlib.sha256(data).hexdigest(),
-        'woff2_sha256': hashlib.sha256((OUT/(STEM+'.woff2')).read_bytes()).hexdigest(),
+        'woff2_sha256': hashlib.sha256((OUT/(stem_name+'.woff2')).read_bytes()).hexdigest(),
         'encoded_characters': len(cmap), 'unchanged_jp_characters': len(base_cmap),
         'unchanged_jp_glyphs_and_metrics': len(base.getGlyphOrder()),
         'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
-        'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in REFITS.items()},
+        'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in refits.items()},
         'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'kana_coverage': coverage['coverage'],
         'woff2_matches_ttf': True,
     }
-    (OUT/'checks.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+    (OUT/('checks-bold.json' if bold else 'checks.json')).write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
     print(json.dumps({k: v for k, v in report.items() if k != 'kana_coverage'}, ensure_ascii=False, indent=2))
     return report
 

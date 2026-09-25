@@ -13,7 +13,7 @@ from fontTools.pens.recordingPen import RecordingPen
 from release_site import OUT, URL
 from serif import BOLD_STEM, PACKAGE, VERSION, STEM
 from okinawan import PUA as OKINAWAN_PUA, DATA as OKINAWAN_DATA
-from sans_site import STEM as SANS_STEM, checked as sans_checked
+from sans_site import BOLD_STEM as SANS_BOLD_STEM, OUT as SANS_OUT, STEM as SANS_STEM, checked as sans_checked
 from sources import ROOT
 
 
@@ -199,9 +199,16 @@ def check():
         for folder in ('downloads','sans-v'+sans_version):
             actual=hashlib.sha256((OUT/folder/(SANS_STEM+'.'+suffix)).read_bytes()).hexdigest()
             assert actual==sans_checks[suffix+'_sha256']
-    with ZipFile(OUT/'downloads'/f'{SANS_STEM}-{sans_version}.zip') as z:
+    sans_bold=json.loads((SANS_OUT/'checks-bold.json').read_text())
+    for suffix in ('ttf','woff2'):
+        assert hashlib.sha256((OUT/('sans-v'+sans_version)/(SANS_BOLD_STEM+'.'+suffix)).read_bytes()).hexdigest()==sans_bold[suffix+'_sha256']
+    sans_css=(OUT/('sans-v'+sans_version)/'genzui-sans.css').read_text()
+    assert f"url('./{SANS_STEM}.woff2')" in sans_css and f"url('./{SANS_BOLD_STEM}.woff2')" in sans_css and 'font-weight: 700' in sans_css
+    assert f'/downloads/{SANS_STEM}-:version.zip /sans-v:version/{SANS_STEM}-:version.zip 301' in (OUT/'_redirects').read_text()
+    with ZipFile(OUT/'downloads'/f'GenZuiSans-{sans_version}.zip') as z:
         assert z.testzip() is None
         assert hashlib.sha256(z.read(SANS_STEM+'.ttf')).hexdigest()==sans_checks['ttf_sha256']
+        assert hashlib.sha256(z.read(SANS_BOLD_STEM+'.ttf')).hexdigest()==sans_bold['ttf_sha256']
         assert {'OFL.txt','NOTICE.txt','GenSeki-OFL.txt','NotoSansHentaigana-OFL.txt','FRB-OFL.txt','Unicode-LICENSE.txt'}<=set(z.namelist())
         assert json.loads(z.read('kana-coverage.json'))['coverage']['Script plus Script_Extensions']=={'total':763,'covered':763,'missing':[]}
         assert json.loads((OUT/'downloads/GenZuiSans-kana-coverage.json').read_text())==json.loads(z.read('kana-coverage.json'))

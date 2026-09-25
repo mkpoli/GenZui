@@ -7,14 +7,45 @@ from fontTools.pens.transformPen import TransformPen
 # Donor outlines whose body sits outside the range of their kana peers. Each
 # entry scales about the glyph's centre, then erodes the enlarged strokes back
 # to the donor's stem width so the letter grows without getting heavier.
+# GenSeki's Bold drawings have the same proportions and get the same fits.
 REFITS = {
-    0x1B123: {'scale': 1.13, 'erode': 7, 'shift': (0, 0),
-              'reason': 'KOTO body raised from 723 to 802 units, the range of TOKI, TOTE and TOMO'},
-    0x1B127: {'scale': 1.06, 'erode': 2, 'shift': (0, 0),
-              'reason': 'Alternate NE raised from 728 to 768 units, matching the katakana cap height'},
-    0x1B168: {'scale': 1.0, 'erode': 0, 'shift': (0, -30),
-              'reason': 'Small archaic YE lowered 30 units onto the small-kana baseline'},
+    400: {
+        0x1B123: {'scale': 1.13, 'erode': 7, 'shift': (0, 0),
+                  'reason': 'KOTO body raised from 723 to 802 units, the range of TOKI, TOTE and TOMO'},
+        0x1B127: {'scale': 1.06, 'erode': 2, 'shift': (0, 0),
+                  'reason': 'Alternate NE raised from 728 to 768 units, matching the katakana cap height'},
+        0x1B168: {'scale': 1.0, 'erode': 0, 'shift': (0, -30),
+                  'reason': 'Small archaic YE lowered 30 units onto the small-kana baseline'},
+    },
+    700: {
+        0x1B123: {'scale': 1.12, 'erode': 7, 'shift': (0, 0),
+                  'reason': 'KOTO body raised from 733 to 806 units, the range of TOKI, TOTE and TOMO'},
+        0x1B127: {'scale': 1.125, 'erode': 7, 'shift': (0, 0),
+                  'reason': 'Alternate NE raised from 735 to 813 units, matching the Bold katakana cap height'},
+        0x1B168: {'scale': 1.0, 'erode': 0, 'shift': (0, -30),
+                  'reason': 'Small archaic YE lowered 30 units onto the small-kana baseline'},
+    },
 }
+
+# Bold masters of the drawn transcription symbols, on the same commands as the
+# Regular drawings in honkoku.py. Noto Sans JP Bold's dashed frame has 37-unit
+# strokes (31 in Regular): the minus takes the frame's stroke, and the
+# half-turn arrow keeps its outer edge while its ring and barbs gain 6-7 units
+# inward.
+SANS_BOLD_SYMBOLS = {
+    0x2FFF: ('M470 710 C642 710 770 589 770 430 '
+             'C770 268 620 126 372 126 '
+             'L470 39 L441 8 L279 146 L441 284 L470 253 L370 164 '
+             'C585 164 727 283 727 430 C727 566 621 667 470 667 Z'),
+    0x31EF: 'M230 362 H770 V399 H230 Z',
+}
+
+
+# Minnan tone letters in Bold: a blend between the FRB outlines and the GenZui
+# Bold masters drawn for Noto Serif JP Bold (data/minnan/bold.json). At 0.76
+# their median weight gain over Regular is 1.53, the median gain of Noto Sans
+# JP's kana; the full Serif masters gain 1.66.
+BOLD_TONE_BLEND = 0.76
 
 
 def refit(glyph_set, name, bounds, spec):

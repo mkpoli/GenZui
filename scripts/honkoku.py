@@ -24,9 +24,20 @@ DESCRIPTIONS = {
 }
 
 
+HALF_TURN = ('M470 710 C642 710 770 589 770 430 '
+             'C770 268 620 126 361 126 '
+             'L465 34 L441 8 L279 146 L441 284 L465 258 L353 158 '
+             'C585 158 734 280 734 430 C734 570 625 674 470 674 Z')
+MINUS = 'M230 365 H770 V395 H230 Z'
+
+
 def add_honkoku(font, add, make_glyph, contours, transform, source=SOURCE,
-                tally_order=(0, 1, 3, 4, 2)):
-    """Append the new characters, keeping all existing glyph IDs and mappings."""
+                tally_order=(0, 1, 3, 4, 2), symbols=None):
+    """Append the new characters, keeping all existing glyph IDs and mappings.
+
+    `symbols` replaces the drawn half-turn arrow and minus, keyed by code point,
+    for a face whose frame strokes are heavier."""
+    symbols = {0x2FFF: HALF_TURN, 0x31EF: MINUS, **(symbols or {})}
     def part(cp, indices=None):
         return contours(font, cp, indices)
 
@@ -41,12 +52,8 @@ def add_honkoku(font, add, make_glyph, contours, transform, source=SOURCE,
         0x2FFC: [transform(part(0x2FF7), (-1, 0, 0, 1, 1000, 0))],
         0x2FFD: [transform(part(0x2FFA), (-1, 0, 0, 1, 1000, 0))],
         0x2FFE: [frame, transform(part(0x2194), (.72, 0, 0, .72, 140, 106.4))],
-        0x2FFF: [frame, path(
-            'M470 710 C642 710 770 589 770 430 '
-            'C770 268 620 126 361 126 '
-            'L465 34 L441 8 L279 146 L441 284 L465 258 L353 158 '
-            'C585 158 734 280 734 430 C734 570 625 674 470 674 Z')],
-        0x31EF: [frame, path('M230 365 H770 V395 H230 Z')],
+        0x2FFF: [frame, path(symbols[0x2FFF])],
+        0x31EF: [frame, path(symbols[0x31EF])],
     }
     order = tally_order  # 正: upper bar, upright, middle bar, left stem, foot.
     recipes.update({cp: [part(0x6B63, order[:i])]

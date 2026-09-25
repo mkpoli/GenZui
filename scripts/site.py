@@ -142,7 +142,7 @@ def build():
         if old.name != both.name:
             old.unlink()
     shutil.copyfile(both, downloads/both.name)
-    for old in downloads.glob('GenZuiSans-Regular-*.zip'):
+    for old in [*downloads.glob('GenZuiSans-[0-9]*.zip'), *downloads.glob('GenZuiSans-Regular-*.zip')]:
         if old.name != sans_package.name:
             old.unlink()
     shutil.copyfile(sans_package, downloads/sans_package.name)
