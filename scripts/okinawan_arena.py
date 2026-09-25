@@ -110,6 +110,16 @@ for _slug, _code, _label, _kana, _vowels in (('glottal-yu', 0xF45E, 'Glottal YU'
             ('gap', 'Gap between the mark and the kana', 'The mark moves toward or away from the kana.', {'gap': 9}),
             ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.025}),
         ],
+        # YO starts from YU: the mark keeps YU's shape, so only its place and
+        # the kana beside it change
+        start=[
+            ('mark_height', 'Height of the mark', 'The mark moves up or down; the kana stays.', {'mark_dy': 20}),
+            ('mark_size', 'Size of the mark', 'The whole mark grows or shrinks about its foot.', {'mark_scale': 0.04}),
+            ('gap', 'Gap between the mark and the kana', 'The mark moves toward or away from the kana.', {'gap': 10}),
+            ('kana_w', 'Width of the kana', 'The kana is narrower or wider; the mark stays.', {'kana_sx': 0.03}),
+            ('kana_h', 'Height of the kana', 'The kana is shorter or taller; the mark stays.', {'kana_sy': 0.02}),
+            ('kana_bold', 'Weight of the kana', 'Width given back to the kana’s strokes, sideways only; -3 is none.', {'kana_bold': 2}),
+        ],
         # weight of the narrowed kana and of the mark beside it
         weight=[
             ('kana_bold', 'Weight of the kana', 'Width given back to the kana’s strokes, sideways only; -3 is none.', {'kana_bold': 4}),
@@ -295,13 +305,17 @@ if __name__ == '__main__':
     parser.add_argument('round', type=int)
     parser.add_argument('--kept', help='the previous round’s copied cull result (JSON file)')
     parser.add_argument('--compare', help='this round’s copied cull result: build the pairwise page')
-    parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round')
+    parser.add_argument('--axes', metavar='ROUND:TOKEN', help='one factor at a time around a form from an earlier round, '
+                        'or around a shipped form named in okinawan_merge (YA, YU)')
     parser.add_argument('--group', default='axes', help='which set of factors to vary (axes, thickness)')
     parser.add_argument('--set', nargs='*', default=[], metavar='NAME=VALUE', help='change the base form before varying it')
     args = parser.parse_args()
     if args.axes:
-        source, token = args.axes.split(':')
-        base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        if ':' in args.axes:
+            source, token = args.axes.split(':')
+            base = json.loads((OUT/args.slug/f'round{source}-forms.json').read_text())[token]
+        else:
+            base = getattr(okinawan_merge, args.axes)
         base = {**LETTERS[args.slug]['defaults'], **base}
         for item in args.set:
             name, value = item.split('=')
