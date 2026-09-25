@@ -31,6 +31,10 @@ WORK = ROOT / 'build/katakana-work/tenzu'
 OUT = ROOT / 'build/kata-review'
 SEED = ROOT / 'build/kata-review-seed.sql'
 SHEET_WIDTH = 2048
+# The ids the Worker accepts (review/src/index.ts, FAMILY_ID). Anything else in
+# the baseline, such as a working note like '?stack', goes to unsorted.
+FAMILY_ID = re.compile(r'^(?:\?|x|[KH]:.|[a-z]{1,2}\.[a-z0-9-]{1,24}\??)$')
+GAP = 2
 GAP = 2
 
 
@@ -136,7 +140,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--history', type=Path, help='earlier review events to carry into the seed')
     args = ap.parse_args()
-    families = {k.removesuffix('.png'): v for k, v in json.loads((WORK / 'categories.json').read_text()).items()}
+    families = {k.removesuffix('.png'): v if FAMILY_ID.match(v) else '?'
+                for k, v in json.loads((WORK / 'categories.json').read_text()).items()}
     history = json.loads(args.history.read_text()) if args.history else []
     if OUT.exists():
         shutil.rmtree(OUT)
