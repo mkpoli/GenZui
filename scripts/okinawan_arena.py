@@ -376,11 +376,13 @@ def tune(slug, round_no, base):
         stroke = dict(multi=True, by_bold={})
         for bold in mark_bolds:
             try:
-                m, pv, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'mark_bold': bold, 'kana_bold': 0})
+                m, pv, _ = okinawan_merge.beside_pieces(font, contours, kana, {**p, 'mark_bold': bold, 'kana_bold': 0, 'ring_offsets': {}})
             except ValueError as error:
                 print(f'no mark at weight {bold}: {error}')
                 continue
-            stroke['by_bold'][str(bold)] = dict(rings=[flat(r) for r in m], pivot=list(pv))
+            # which Noto contour each ring came from, so the page can move a stroke
+            groups = [i for i, r in enumerate(raw) for _ in okinawan_merge._widen_strokes([r], bold)]
+            stroke['by_bold'][str(bold)] = dict(rings=[flat(r) for r in m], groups=groups, pivot=list(pv))
     kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0, 'kana_dx': 0, 'kana_dy': 0}
     body = okinawan_merge.BODIES[kana](font, contours) if kana in okinawan_merge.BODIES else O.rings(contours(font, ord(kana)))
     origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
@@ -391,7 +393,7 @@ def tune(slug, round_no, base):
         except ValueError as error:   # a weight Skia cannot resolve: the page skips it
             print(f'no kana at weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'mark_bold', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
+                               'neck_w', 'head_w', 'mark_bold', 'ring_offsets', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')

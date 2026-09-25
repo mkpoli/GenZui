@@ -2,6 +2,7 @@
  <header class="bar">
   <h1>__GLYPH__</h1>
   <div class="seg" role="group" aria-label="Arrow keys move"><span>Arrows move</span><button type="button" id="t-stroke" data-target="stroke">Stroke</button><button type="button" id="t-kana" data-target="kana">Kana</button></div>
+  <span id="selected" class="selected"></span>
   <label class="toggle"><input id="tint" type="checkbox"> Tint stroke</label>
   <label class="toggle"><input id="dark" type="checkbox"> Dark</label>
   <input id="notes" type="text" placeholder="Notes (optional)">
@@ -11,13 +12,13 @@
  <figure class="stage"><svg id="big" viewBox="-300 -300 1600 1600" aria-label="The letter at full size">
   <rect id="em" class="em" x="0" y="0" width="1000" height="1000"/><line id="mid" class="guide" x1="500" x2="500" y1="0" y2="1000"/>
   <line class="guide base" x1="-300" x2="1300" y1="880" y2="880"/>
-  <g id="letter" transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink"/><path id="mark" class="ink mark"/></g></svg>
+  <g id="letter" transform="matrix(1 0 0 -1 0 880)"><path id="kana" class="ink" data-part="kana"/><g id="mark"></g></g></svg>
   <figcaption>Frame: the em the letter is centred in · dashed: baseline</figcaption></figure>
  <section class="panel" id="stroke-panel"><h2>Stroke</h2><div class="rows" id="stroke-rows"></div></section>
  <section class="panel side">
   <h2>Kana</h2><div class="rows" id="kana-rows"></div>
   <h2>In text</h2><div id="lines"></div>
   <section id="tools"></section>
-  <p class="help">Arrows move the selected part (T switches) · Shift: fine · double-click a name to reset it · <button type="button" id="reset" class="link">Reset all</button></p>
+  <p class="help">Click a part on the stage to select it, drag to move it · Shift-click one stroke of a small kana, Esc for the whole · arrows move the selection · T switches · Shift: fine · double-click a name to reset it · <button type="button" id="reset" class="link">Reset all</button></p>
  </section>
 </div>
