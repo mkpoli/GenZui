@@ -338,8 +338,9 @@ def beside_pieces(font, contours, kana, p):
     pivot = (centre_at(mark, p['ramp_lo']), p['ramp_lo'])
     body = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     origin = kana_origin(body, p['kana_anchor'])
-    # weight first, in the kana's own units, then the scaling: the sweep and
-    # the scaling commute, so the weight is set in the kana's own units
+    # weight first, then the scaling: sweeping by d and then scaling by sx is
+    # sweeping by d * sx after scaling, so the weight is set in the kana's own
+    # units
     body = _widen_strokes(body, p['kana_bold'])
     sx, sy = p['kana_sx'], p['kana_sy']
     body = [O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx) + p['kana_dx'], origin[1] * (1 - sy) + p['kana_dy']))
@@ -418,7 +419,8 @@ def gap_shift(mark, body, gap):
 
 def glottal_beside(font, contours, kana, **params):
     """The glottal mark standing beside a Noto kana. The mark is placed by
-    `mark_x` when given, otherwise by its gap to the kana."""
+    `mark_x` when given (BESIDE_DEFAULTS has none, so YU is placed by its gap
+    to ゆ), otherwise by its gap to the kana."""
     p = {**BESIDE_DEFAULTS, **params}
     mark, pivot, body = beside_pieces(font, contours, kana, p)
     mark = sized(*shaped(mark, pivot, p), p)
