@@ -1,0 +1,4712 @@
+{
+ "source": {
+  "title": "平安時代訓點本論考 ヲコト點圖假名字體表",
+  "creator": "築島裕 著",
+  "publisher": "汲古書院",
+  "date": "1986",
+  "extent": "761p",
+  "ncid": "BN00675782",
+  "url": "https://ci.nii.ac.jp/ncid/BN00675782",
+  "rights": "In copyright. Only these bibliographic facts are recorded here; scans and crops are kept outside the repository.",
+  "note": "第二部 假名字體表: one plate per manuscript, with a gojūon grid in which each cell sets the attested written forms of one kana side by side. Part 2 (點圖集所載) plates are grouped by ヲコト點 family, part 3 (點圖集不載) by point group; \"group\" and \"number\" are the plate label as printed, e.g. (2)14. \"code\" is the parenthesised code printed after the plate label; it is often, though not always, the year of annotation. \"annotated\" is the 年代加點 field, falling back to 年代書寫 where the plate gives no annotation date. \"page\" names the scan page (a = vol. 1–2, b = vol. 3–4) and \"book_page\" the printed page. Titles, holders and dates are editorial readings of the plate headers.",
+  "groups": {
+   "1": "喜多院點",
+   "2": "東大寺點",
+   "3": "西墓點",
+   "4": "中院僧正點",
+   "5": "圓堂點",
+   "6": "寶幢院點",
+   "7": "乙點圖",
+   "8": "仁都波迦點",
+   "9": "順曉和尚點",
+   "10": "禪林寺點",
+   "11": "叡山點",
+   "12": "香隆寺點",
+   "13": "天仁波流點",
+   "14": "天爾波留點(別流)",
+   "15": "池上阿闍梨點",
+   "16": "遍照寺點",
+   "17": "淨光房點",
+   "18": "廣隆寺點",
+   "24": "古紀傳點",
+   "25": "經傳",
+   "26": "紀傳",
+   "27": "假名點本",
+   "A": "特殊點甲類",
+   "B": "特殊點乙類",
+   "C": "第二群點",
+   "D": "第一群點",
+   "E": "第三群點",
+   "F": "第四群點",
+   "G": "第五群點",
+   "H": "第六群點",
+   "I": "第七群點"
+  }
+ },
+ "plates": [
+  {
+   "page": "a-036",
+   "book_page": 123,
+   "group": "1",
+   "number": 1,
+   "code": "830a",
+   "title": "妙法蓮華經",
+   "holder": "立本寺",
+   "annotated": "寛治二年(1088)"
+  },
+  {
+   "page": "a-037",
+   "book_page": 124,
+   "group": "1",
+   "number": 2,
+   "code": "950a",
+   "title": "梵網經",
+   "holder": "五島美術館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-038",
+   "book_page": 125,
+   "group": "1",
+   "number": 3,
+   "code": "990",
+   "title": "成唯識論述記",
+   "holder": "日光天海藏",
+   "annotated": "永祚二年(990)"
+  },
+  {
+   "page": "a-039",
+   "book_page": 126,
+   "group": "1",
+   "number": 4,
+   "code": "1000a",
+   "title": "妙法蓮華經釋文",
+   "holder": "醍醐寺",
+   "annotated": "平安時代中後期頃"
+  },
+  {
+   "page": "a-040",
+   "book_page": 127,
+   "group": "1",
+   "number": 5,
+   "code": "1023",
+   "title": "成唯識論",
+   "holder": "興福寺",
+   "annotated": "治安三年(1023)"
+  },
+  {
+   "page": "a-041",
+   "book_page": 128,
+   "group": "1",
+   "number": 6,
+   "code": "1023",
+   "title": "蘇悉地羯羅經",
+   "holder": "高野山學園",
+   "annotated": "治安三年(1023)"
+  },
+  {
+   "page": "a-042",
+   "book_page": 129,
+   "group": "1",
+   "number": 7,
+   "code": "1045",
+   "title": "不空羂索神咒心經",
+   "holder": "西大寺",
+   "annotated": "寛德二年(1045)"
+  },
+  {
+   "page": "a-043",
+   "book_page": 130,
+   "group": "1",
+   "number": 8,
+   "code": "1050a",
+   "title": "不空羂索神咒心經",
+   "holder": "陽明文庫",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-044",
+   "book_page": 131,
+   "group": "1",
+   "number": 9,
+   "code": "1057",
+   "title": "辨顯密二教論",
+   "holder": "大東急記念文庫",
+   "annotated": "天喜五年(1057)"
+  },
+  {
+   "page": "a-045",
+   "book_page": 132,
+   "group": "1",
+   "number": 10,
+   "code": "1060",
+   "title": "地藏十輪經",
+   "holder": "知恩院",
+   "annotated": "康平三年(1060)"
+  },
+  {
+   "page": "a-046",
+   "book_page": 133,
+   "group": "1",
+   "number": 11,
+   "code": "1061",
+   "title": "成唯識論述記",
+   "holder": "知恩院",
+   "annotated": "康平四年(1061)"
+  },
+  {
+   "page": "a-047",
+   "book_page": 134,
+   "group": "1",
+   "number": 12,
+   "code": "1071",
+   "title": "大慈恩寺三藏法師傳",
+   "holder": "興福寺",
+   "annotated": "延久三年(1071)頃"
+  },
+  {
+   "page": "a-048",
+   "book_page": 135,
+   "group": "1",
+   "number": 13,
+   "code": "1078",
+   "title": "大毗盧遮那成佛經",
+   "holder": "西大寺",
+   "annotated": "承曆二年(1078)"
+  },
+  {
+   "page": "a-049",
+   "book_page": 136,
+   "group": "1",
+   "number": 14,
+   "code": "1087",
+   "title": "妙法蓮華經",
+   "holder": "立本寺",
+   "annotated": "寛治元年(1087)"
+  },
+  {
+   "page": "a-050",
+   "book_page": 137,
+   "group": "1",
+   "number": 15,
+   "code": "1096",
+   "title": "不空羂索神咒心經",
+   "holder": "東寺",
+   "annotated": "永長元年(1096)白朱・康和二年(1100)朱"
+  },
+  {
+   "page": "a-051",
+   "book_page": 138,
+   "group": "1",
+   "number": 16,
+   "code": "1097",
+   "title": "金光明最勝王經",
+   "holder": "西大寺",
+   "annotated": "永長二年(1097)"
+  },
+  {
+   "page": "a-052",
+   "book_page": 139,
+   "group": "1",
+   "number": 17,
+   "code": "1099",
+   "title": "觀普賢菩薩行法經",
+   "holder": "立本寺",
+   "annotated": "承德三年(1099)"
+  },
+  {
+   "page": "a-053",
+   "book_page": 140,
+   "group": "1",
+   "number": 18,
+   "code": "1099",
+   "title": "大慈恩寺三藏法師傳",
+   "holder": "興福寺",
+   "annotated": "承德三年(1099)"
+  },
+  {
+   "page": "a-054",
+   "book_page": 141,
+   "group": "1",
+   "number": 19,
+   "code": "1100",
+   "title": "高僧傳",
+   "holder": "興福寺",
+   "annotated": "康和二年(1100)"
+  },
+  {
+   "page": "a-055",
+   "book_page": 142,
+   "group": "1",
+   "number": 20,
+   "code": "1100a",
+   "title": "大般若經三十二相八十種好",
+   "holder": "東寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-056",
+   "book_page": 143,
+   "group": "1",
+   "number": 21,
+   "code": "1105",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "長治二年(1105)"
+  },
+  {
+   "page": "a-057",
+   "book_page": 144,
+   "group": "1",
+   "number": 22,
+   "code": "1105",
+   "title": "冥報記",
+   "holder": "前田育德會",
+   "annotated": "長治二年(1105)頃"
+  },
+  {
+   "page": "a-058",
+   "book_page": 145,
+   "group": "1",
+   "number": 23,
+   "code": "1122",
+   "title": "妙法蓮華經玄贊",
+   "holder": "興福寺",
+   "annotated": "保安三年(1122)"
+  },
+  {
+   "page": "a-059",
+   "book_page": 146,
+   "group": "1",
+   "number": 24,
+   "code": "1122",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "東寺",
+   "annotated": "保安三年(1122)"
+  },
+  {
+   "page": "a-060",
+   "book_page": 147,
+   "group": "1",
+   "number": 25,
+   "code": "1123",
+   "title": "辨正論",
+   "holder": "大東急記念文庫(卷第二)・架藏(卷第三)",
+   "annotated": "保安四年(1123)"
+  },
+  {
+   "page": "a-061",
+   "book_page": 148,
+   "group": "1",
+   "number": 26,
+   "code": "1123",
+   "title": "破邪論",
+   "holder": "五島美術館",
+   "annotated": "保安四年(1123)"
+  },
+  {
+   "page": "a-062",
+   "book_page": 149,
+   "group": "1",
+   "number": 27,
+   "code": "1126",
+   "title": "大慈恩寺三藏法師傳",
+   "holder": "法隆寺(卷第一・七・九)・國立國會圖書館(卷第三)",
+   "annotated": "大治元年(1126)"
+  },
+  {
+   "page": "a-063",
+   "book_page": 150,
+   "group": "1",
+   "number": 28,
+   "code": "1133",
+   "title": "成唯識論述記",
+   "holder": "天理圖書館",
+   "annotated": "長承二年(1133)"
+  },
+  {
+   "page": "a-064",
+   "book_page": 151,
+   "group": "1",
+   "number": 29,
+   "code": "1134",
+   "title": "大日經義釋演密鈔",
+   "holder": "大東急記念文庫",
+   "annotated": "長承三年(1134)"
+  },
+  {
+   "page": "a-065",
+   "book_page": 152,
+   "group": "1",
+   "number": 30,
+   "code": "1137",
+   "title": "守護國界主陀羅尼經",
+   "holder": "高山寺",
+   "annotated": "保延三年(1137)朱・承安三年(1173)墨"
+  },
+  {
+   "page": "a-066",
+   "book_page": 153,
+   "group": "1",
+   "number": 31,
+   "code": "1154",
+   "title": "因明入正理論疏",
+   "holder": "大東急記念文庫",
+   "annotated": "仁平四年(1154)"
+  },
+  {
+   "page": "a-067",
+   "book_page": 154,
+   "group": "1",
+   "number": 32,
+   "code": "1157",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "眞福寺寶生院",
+   "annotated": "保元二年(1157)"
+  },
+  {
+   "page": "a-068",
+   "book_page": 155,
+   "group": "1",
+   "number": 33,
+   "code": "1160?",
+   "title": "般若理趣釋",
+   "holder": "東大寺圖書館",
+   "annotated": "永曆元年(1160)頃"
+  },
+  {
+   "page": "a-069",
+   "book_page": 156,
+   "group": "1",
+   "number": 34,
+   "code": "1170",
+   "title": "金剛頂大教王經",
+   "holder": "國立國語研究所",
+   "annotated": "嘉應二年(1170)"
+  },
+  {
+   "page": "a-070",
+   "book_page": 157,
+   "group": "1",
+   "number": 35,
+   "code": "1178",
+   "title": "法華攝釋",
+   "holder": "東大寺圖書館",
+   "annotated": "治承元・二年(1177・1178)"
+  },
+  {
+   "page": "a-071",
+   "book_page": 158,
+   "group": "1",
+   "number": 36,
+   "code": "1179",
+   "title": "瑜伽蓮華部念誦法",
+   "holder": "高山寺",
+   "annotated": "治承三年(1179)"
+  },
+  {
+   "page": "a-072",
+   "book_page": 159,
+   "group": "2",
+   "number": 1,
+   "code": "877",
+   "title": "大智度論",
+   "holder": "石山寺",
+   "annotated": "元慶元年(877)"
+  },
+  {
+   "page": "a-073",
+   "book_page": 160,
+   "group": "2",
+   "number": 2,
+   "code": "950a",
+   "title": "十二天儀軌",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-074",
+   "book_page": 161,
+   "group": "2",
+   "number": 3,
+   "code": "950b",
+   "title": "中論",
+   "holder": "未詳",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-075",
+   "book_page": 162,
+   "group": "2",
+   "number": 4,
+   "code": "991",
+   "title": "普供養法",
+   "holder": "石山寺",
+   "annotated": "正曆二年(991)頃"
+  },
+  {
+   "page": "a-076",
+   "book_page": 163,
+   "group": "2",
+   "number": 5,
+   "code": "1020",
+   "title": "成唯識論",
+   "holder": "石山寺",
+   "annotated": "寛仁四年(1020)"
+  },
+  {
+   "page": "a-077",
+   "book_page": 164,
+   "group": "2",
+   "number": 6,
+   "code": "1020",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "石山寺",
+   "annotated": "寛仁四年(1020)"
+  },
+  {
+   "page": "a-078",
+   "book_page": 165,
+   "group": "2",
+   "number": 7,
+   "code": "1030a",
+   "title": "大般涅槃經",
+   "holder": "東大寺圖書館",
+   "annotated": "平安時代後期?"
+  },
+  {
+   "page": "a-079",
+   "book_page": 166,
+   "group": "2",
+   "number": 8,
+   "code": "1040",
+   "title": "大毗盧遮那成佛經",
+   "holder": "石山寺",
+   "annotated": "長曆四年(1040)"
+  },
+  {
+   "page": "a-080",
+   "book_page": 167,
+   "group": "2",
+   "number": 9,
+   "code": "1048",
+   "title": "金剛界念誦私記",
+   "holder": "石山寺",
+   "annotated": "永承三年(1048)頃"
+  },
+  {
+   "page": "a-081",
+   "book_page": 168,
+   "group": "2",
+   "number": 10,
+   "code": "1050a",
+   "title": "金光明最勝王經",
+   "holder": "春日和男氏",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-082",
+   "book_page": 169,
+   "group": "2",
+   "number": 11,
+   "code": "1050b",
+   "title": "金光明最勝王經",
+   "holder": "春日和男氏",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-083",
+   "book_page": 170,
+   "group": "2",
+   "number": 12,
+   "code": "1070",
+   "title": "瞿醯壇跢羅經",
+   "holder": "石山寺",
+   "annotated": "延久二年(1070)"
+  },
+  {
+   "page": "a-084",
+   "book_page": 171,
+   "group": "2",
+   "number": 13,
+   "code": "1074",
+   "title": "甘露軍荼利明王儀軌",
+   "holder": "高山寺",
+   "annotated": "延久六年(1074)頃"
+  },
+  {
+   "page": "a-085",
+   "book_page": 172,
+   "group": "2",
+   "number": 14,
+   "code": "1077",
+   "title": "法華經遊意",
+   "holder": "高山寺",
+   "annotated": "承保四年(1077)頃"
+  },
+  {
+   "page": "a-086",
+   "book_page": 173,
+   "group": "2",
+   "number": 15,
+   "code": "1079",
+   "title": "蘇磨呼童子請問經",
+   "holder": "仁和寺",
+   "annotated": "承曆三年(1079)"
+  },
+  {
+   "page": "a-087",
+   "book_page": 174,
+   "group": "2",
+   "number": 16,
+   "code": "1079",
+   "title": "金剛童子儀軌經",
+   "holder": "高野山持明院",
+   "annotated": "承曆三年(1079)頃"
+  },
+  {
+   "page": "a-088",
+   "book_page": 175,
+   "group": "2",
+   "number": 17,
+   "code": "1082",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "高山寺",
+   "annotated": "永保二年(1082)朱・長治元年(1104)墨"
+  },
+  {
+   "page": "a-089",
+   "book_page": 176,
+   "group": "2",
+   "number": 18,
+   "code": "1083",
+   "title": "大乘理趣六波羅蜜經序",
+   "holder": "東京大學史料編纂所",
+   "annotated": "永保三年(1083)"
+  },
+  {
+   "page": "a-090",
+   "book_page": 177,
+   "group": "2",
+   "number": 19,
+   "code": "1093",
+   "title": "金剛夜叉儀軌",
+   "holder": "醍醐寺",
+   "annotated": "寛治七年(1093)"
+  },
+  {
+   "page": "a-091",
+   "book_page": 178,
+   "group": "2",
+   "number": 20,
+   "code": "1102",
+   "title": "大般若波羅蜜多經",
+   "holder": "安田八幡宮",
+   "annotated": "康和四年(1102)"
+  },
+  {
+   "page": "a-092",
+   "book_page": 179,
+   "group": "2",
+   "number": 21,
+   "code": "1103",
+   "title": "大毗盧遮那經義釋",
+   "holder": "石山寺",
+   "annotated": "康和五年(1103)"
+  },
+  {
+   "page": "a-093",
+   "book_page": 180,
+   "group": "2",
+   "number": 22,
+   "code": "1113",
+   "title": "因明論疏四相違略註釋",
+   "holder": "東大寺圖書館",
+   "annotated": "天永四年(1113)"
+  },
+  {
+   "page": "a-094",
+   "book_page": 181,
+   "group": "2",
+   "number": 23,
+   "code": "1119",
+   "title": "悉曇字記",
+   "holder": "高山寺",
+   "annotated": "元永二年(1119)"
+  },
+  {
+   "page": "a-095",
+   "book_page": 182,
+   "group": "2",
+   "number": 24,
+   "code": "1123",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "東寺",
+   "annotated": "保安四年(1123)"
+  },
+  {
+   "page": "a-096",
+   "book_page": 183,
+   "group": "2",
+   "number": 25,
+   "code": "1137",
+   "title": "金剛界念誦次第私記・胎藏念誦次第",
+   "holder": "高山寺",
+   "annotated": "保延三・四年(1137・1138)"
+  },
+  {
+   "page": "a-097",
+   "book_page": 184,
+   "group": "2",
+   "number": 26,
+   "code": "1141",
+   "title": "無垢淨光大陀羅尼經",
+   "holder": "石山寺",
+   "annotated": "永治元年(1141)"
+  },
+  {
+   "page": "a-098",
+   "book_page": 185,
+   "group": "2",
+   "number": 27,
+   "code": "1151",
+   "title": "法花開題",
+   "holder": "石山寺",
+   "annotated": "仁平元年(1151)頃"
+  },
+  {
+   "page": "a-099",
+   "book_page": 186,
+   "group": "2",
+   "number": 28,
+   "code": "1156",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "石山寺",
+   "annotated": "保元元年(1156)朱・仁安三年(1168)墨"
+  },
+  {
+   "page": "a-100",
+   "book_page": 187,
+   "group": "2",
+   "number": 29,
+   "code": "1157",
+   "title": "法華經義疏",
+   "holder": "高山寺",
+   "annotated": "保元二年(1157)頃"
+  },
+  {
+   "page": "a-101",
+   "book_page": 188,
+   "group": "2",
+   "number": 30,
+   "code": "1159",
+   "title": "蘇磨呼童子請問經",
+   "holder": "石山寺",
+   "annotated": "平治元年(1159)朱・治承四年(1180)墨"
+  },
+  {
+   "page": "a-102",
+   "book_page": 189,
+   "group": "2",
+   "number": 31,
+   "code": "1163",
+   "title": "大唐西域記",
+   "holder": "石山寺",
+   "annotated": "長寛元年(1163)"
+  },
+  {
+   "page": "a-103",
+   "book_page": 190,
+   "group": "2",
+   "number": 32,
+   "code": "1164",
+   "title": "佛說陀羅尼集經",
+   "holder": "石山寺・東京大學國語研究室・五島美術館",
+   "annotated": "長寛二年(1164)"
+  },
+  {
+   "page": "a-104",
+   "book_page": 191,
+   "group": "2",
+   "number": 33,
+   "code": "1165",
+   "title": "施諸餓鬼飲食及水法",
+   "holder": "高山寺",
+   "annotated": "長寛三年(1165)頃"
+  },
+  {
+   "page": "a-105",
+   "book_page": 192,
+   "group": "2",
+   "number": 34,
+   "code": "1184",
+   "title": "肝要抄",
+   "holder": "高山寺",
+   "annotated": "元曆元年(1184)頃朱・文治四年(1188)墨"
+  },
+  {
+   "page": "a-106",
+   "book_page": 193,
+   "group": "2",
+   "number": 35,
+   "code": "1214",
+   "title": "大唐西域記",
+   "holder": "醍醐寺",
+   "annotated": "建保二年(1214)"
+  },
+  {
+   "page": "a-107",
+   "book_page": 194,
+   "group": "3",
+   "number": 1,
+   "code": "909",
+   "title": "蘇悉地羯羅經",
+   "holder": "京都大學",
+   "annotated": "延喜九年(909)"
+  },
+  {
+   "page": "a-108",
+   "book_page": 195,
+   "group": "3",
+   "number": 2,
+   "code": "950a",
+   "title": "金剛頂瑜伽護摩儀軌",
+   "holder": "高野山三寶院",
+   "annotated": "天曆(947–957)頃"
+  },
+  {
+   "page": "a-109",
+   "book_page": 196,
+   "group": "3",
+   "number": 3,
+   "code": "987",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "大東急記念文庫",
+   "annotated": "永延元年(987)"
+  },
+  {
+   "page": "a-110",
+   "book_page": 197,
+   "group": "3",
+   "number": 4,
+   "code": "991",
+   "title": "頓證菩提卽身成佛眞實三部一合行法",
+   "holder": "高山寺",
+   "annotated": "正曆二年(991)頃"
+  },
+  {
+   "page": "a-111",
+   "book_page": 198,
+   "group": "3",
+   "number": 5,
+   "code": "1004",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "大東急記念文庫",
+   "annotated": "長保六年(1004)"
+  },
+  {
+   "page": "a-112",
+   "book_page": 199,
+   "group": "3",
+   "number": 6,
+   "code": "1008",
+   "title": "金剛頂大教王經",
+   "holder": "高山寺",
+   "annotated": "寛弘五年(1008)"
+  },
+  {
+   "page": "a-113",
+   "book_page": 200,
+   "group": "3",
+   "number": 7,
+   "code": "1018",
+   "title": "阿闍梨大曼荼羅灌頂儀軌",
+   "holder": "東寺",
+   "annotated": "寛弘五年(1008)朱・寛仁二年(1018)墨"
+  },
+  {
+   "page": "a-114",
+   "book_page": 201,
+   "group": "3",
+   "number": 8,
+   "code": "1024",
+   "title": "大般涅槃經",
+   "holder": "石山寺",
+   "annotated": "治安四年(1024)"
+  },
+  {
+   "page": "a-115",
+   "book_page": 202,
+   "group": "3",
+   "number": 9,
+   "code": "1024",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "治安四年(1024)・長元七年(1034)"
+  },
+  {
+   "page": "a-116",
+   "book_page": 203,
+   "group": "3",
+   "number": 10,
+   "code": "1030a",
+   "title": "無量壽如來儀軌",
+   "holder": "醍醐寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-117",
+   "book_page": 204,
+   "group": "3",
+   "number": 11,
+   "code": "1040",
+   "title": "建立曼荼羅護摩儀軌",
+   "holder": "高野山持明院",
+   "annotated": "長曆四年(1040)"
+  },
+  {
+   "page": "a-118",
+   "book_page": 205,
+   "group": "3",
+   "number": 12,
+   "code": "1050a",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-119",
+   "book_page": 206,
+   "group": "3",
+   "number": 13,
+   "code": "1051",
+   "title": "不動尊念誦儀軌",
+   "holder": "高山寺",
+   "annotated": "永承六年(1051)墨・天喜二年(1054)朱"
+  },
+  {
+   "page": "a-120",
+   "book_page": 207,
+   "group": "3",
+   "number": 14,
+   "code": "1051",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "高山寺",
+   "annotated": "永承六年(1051)"
+  },
+  {
+   "page": "a-121",
+   "book_page": 208,
+   "group": "3",
+   "number": 15,
+   "code": "1059",
+   "title": "大日經廣大成就儀軌",
+   "holder": "東寺",
+   "annotated": "康平二年(1059)・延久二年(1070)"
+  },
+  {
+   "page": "a-122",
+   "book_page": 209,
+   "group": "3",
+   "number": 16,
+   "code": "1064",
+   "title": "佛頂尊勝心破地獄法",
+   "holder": "東寺",
+   "annotated": "康平七年(1064)"
+  },
+  {
+   "page": "a-123",
+   "book_page": 210,
+   "group": "3",
+   "number": 17,
+   "code": "1077",
+   "title": "五大尊式經",
+   "holder": "曼殊院",
+   "annotated": "承保四年(1077)頃"
+  },
+  {
+   "page": "a-124",
+   "book_page": 211,
+   "group": "3",
+   "number": 18,
+   "code": "1092",
+   "title": "大聖明吉祥菩薩說除災教令法輪",
+   "holder": "高山寺",
+   "annotated": "寛治六年(1092)頃"
+  },
+  {
+   "page": "a-125",
+   "book_page": 212,
+   "group": "3",
+   "number": 19,
+   "code": "1095",
+   "title": "阿吒薄俱元帥大將上佛陀羅尼經修行儀軌",
+   "holder": "石山寺",
+   "annotated": "嘉保二年(1095)"
+  },
+  {
+   "page": "a-126",
+   "book_page": 213,
+   "group": "3",
+   "number": 20,
+   "code": "1097",
+   "title": "金剛界次第",
+   "holder": "石山寺",
+   "annotated": "永長二年(1097)"
+  },
+  {
+   "page": "a-127",
+   "book_page": 214,
+   "group": "3",
+   "number": 21,
+   "code": "1098",
+   "title": "成就妙法蓮華經王瑜伽觀智儀軌",
+   "holder": "高山寺",
+   "annotated": "承德二年(1098)"
+  },
+  {
+   "page": "a-128",
+   "book_page": 215,
+   "group": "3",
+   "number": 22,
+   "code": "1099",
+   "title": "六字神咒王經",
+   "holder": "廣島大學",
+   "annotated": "承德三年(1099)"
+  },
+  {
+   "page": "a-129",
+   "book_page": 216,
+   "group": "3",
+   "number": 23,
+   "code": "1100",
+   "title": "甘露軍荼利菩薩供養念誦成就儀軌",
+   "holder": "高野山西南院",
+   "annotated": "康和二年(1100)朱・康和三年(1101)橙・墨"
+  },
+  {
+   "page": "a-130",
+   "book_page": 217,
+   "group": "3",
+   "number": 24,
+   "code": "1112",
+   "title": "金剛頂瑜伽蓮華部心念誦儀軌",
+   "holder": "石山寺",
+   "annotated": "天永三年(1112)"
+  },
+  {
+   "page": "a-131",
+   "book_page": 218,
+   "group": "3",
+   "number": 25,
+   "code": "1114",
+   "title": "焰曼德迦儀軌",
+   "holder": "東寺",
+   "annotated": "永久二年(1114)"
+  },
+  {
+   "page": "a-132",
+   "book_page": 219,
+   "group": "3",
+   "number": 26,
+   "code": "1117",
+   "title": "五大尊式儀軌",
+   "holder": "石山寺",
+   "annotated": "永久五年(1117)頃"
+  },
+  {
+   "page": "a-133",
+   "book_page": 220,
+   "group": "3",
+   "number": 27,
+   "code": "1121",
+   "title": "梵字形音義",
+   "holder": "天理圖書館",
+   "annotated": "保安二年(1121)"
+  },
+  {
+   "page": "a-134",
+   "book_page": 221,
+   "group": "3",
+   "number": 28,
+   "code": "1128",
+   "title": "大毗盧遮那成佛經",
+   "holder": "醍醐寺",
+   "annotated": "大治三年(1128)"
+  },
+  {
+   "page": "a-135",
+   "book_page": 222,
+   "group": "3",
+   "number": 29,
+   "code": "1130",
+   "title": "法華經傳記",
+   "holder": "東大寺圖書館",
+   "annotated": "大治五年(1130)頃"
+  },
+  {
+   "page": "a-136",
+   "book_page": 223,
+   "group": "3",
+   "number": 30,
+   "code": "1137",
+   "title": "蘇磨呼童子請問經",
+   "holder": "高山寺",
+   "annotated": "保延三年(1137)"
+  },
+  {
+   "page": "a-137",
+   "book_page": 224,
+   "group": "3",
+   "number": 31,
+   "code": "1153",
+   "title": "蘇悉地羯羅經",
+   "holder": "高野山西南院",
+   "annotated": "仁平三年(1153)"
+  },
+  {
+   "page": "a-138",
+   "book_page": 225,
+   "group": "3",
+   "number": 32,
+   "code": "1161",
+   "title": "八字文殊儀軌",
+   "holder": "廣島大學",
+   "annotated": "永曆二年(1161)"
+  },
+  {
+   "page": "a-139",
+   "book_page": 226,
+   "group": "3",
+   "number": 33,
+   "code": "1166",
+   "title": "毗盧遮那成佛經義釋",
+   "holder": "高山寺",
+   "annotated": "永萬二年(1166)頃"
+  },
+  {
+   "page": "a-140",
+   "book_page": 227,
+   "group": "4",
+   "number": 1,
+   "code": "968",
+   "title": "成唯識論",
+   "holder": "桂泰藏氏(卷第五)・大東急記念文庫(卷第三)",
+   "annotated": "安和元年(968)"
+  },
+  {
+   "page": "a-141",
+   "book_page": 228,
+   "group": "4",
+   "number": 2,
+   "code": "990",
+   "title": "仁王護國般若波羅蜜經",
+   "holder": "南法華寺",
+   "annotated": "永祚二年(990)"
+  },
+  {
+   "page": "a-142",
+   "book_page": 229,
+   "group": "4",
+   "number": 3,
+   "code": "1058",
+   "title": "大毗盧遮那成佛經",
+   "holder": "高野山龍光院",
+   "annotated": "天喜六年(1058)"
+  },
+  {
+   "page": "a-143",
+   "book_page": 230,
+   "group": "4",
+   "number": 4,
+   "code": "1058a",
+   "title": "妙法蓮華經",
+   "holder": "高野山龍光院",
+   "annotated": "天喜六年(1058)頃"
+  },
+  {
+   "page": "a-144",
+   "book_page": 231,
+   "group": "4",
+   "number": 5,
+   "code": "1059",
+   "title": "大毗盧遮那經供養次第法疏",
+   "holder": "高野山龍光院",
+   "annotated": "康平二年(1059)"
+  },
+  {
+   "page": "a-145",
+   "book_page": 232,
+   "group": "4",
+   "number": 6,
+   "code": "1088",
+   "title": "金剛頂大教王經",
+   "holder": "高山寺",
+   "annotated": "寛治二年(1088)"
+  },
+  {
+   "page": "a-146",
+   "book_page": 233,
+   "group": "4",
+   "number": 7,
+   "code": "1093",
+   "title": "一字頂輪王瑜伽念誦儀軌",
+   "holder": "高山寺",
+   "annotated": "寛治七年(1093)頃"
+  },
+  {
+   "page": "a-147",
+   "book_page": 234,
+   "group": "4",
+   "number": 8,
+   "code": "1096",
+   "title": "本命供略作法",
+   "holder": "高山寺",
+   "annotated": "嘉保三年(1096)頃"
+  },
+  {
+   "page": "a-148",
+   "book_page": 235,
+   "group": "4",
+   "number": 9,
+   "code": "1100a",
+   "title": "惠果和尚之碑文",
+   "holder": "高山寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-149",
+   "book_page": 236,
+   "group": "4",
+   "number": 10,
+   "code": "1100b",
+   "title": "祕密漫荼羅教付法傳",
+   "holder": "高山寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-150",
+   "book_page": 237,
+   "group": "4",
+   "number": 11,
+   "code": "1100c",
+   "title": "大毗盧遮那胎藏菩薩眞言藏成就瑜伽",
+   "holder": "高野山西南院",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-151",
+   "book_page": 238,
+   "group": "4",
+   "number": 12,
+   "code": "1103",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "高山寺",
+   "annotated": "康和五年(1103)朱・天永四年(1113)墨"
+  },
+  {
+   "page": "a-152",
+   "book_page": 239,
+   "group": "4",
+   "number": 13,
+   "code": "1111",
+   "title": "金剛界次第",
+   "holder": "高山寺",
+   "annotated": "天永二年(1111)"
+  },
+  {
+   "page": "a-153",
+   "book_page": 240,
+   "group": "4",
+   "number": 14,
+   "code": "1111",
+   "title": "誐羅娑俱舍念誦略次第",
+   "holder": "東京大學國語研究室",
+   "annotated": "天永二年(1111)"
+  },
+  {
+   "page": "a-154",
+   "book_page": 241,
+   "group": "4",
+   "number": 15,
+   "code": "1122",
+   "title": "辨顯密二教論",
+   "holder": "東寺",
+   "annotated": "保安三年(1122)"
+  },
+  {
+   "page": "a-155",
+   "book_page": 242,
+   "group": "4",
+   "number": 16,
+   "code": "1125",
+   "title": "悉曇具",
+   "holder": "松田福一郎氏",
+   "annotated": "天治二年(1125)頃"
+  },
+  {
+   "page": "a-156",
+   "book_page": 243,
+   "group": "4",
+   "number": 17,
+   "code": "1126",
+   "title": "誐羅娑俱舍念誦略次第",
+   "holder": "東京大學國語研究室",
+   "annotated": "大治元年(1126)頃"
+  },
+  {
+   "page": "a-157",
+   "book_page": 244,
+   "group": "4",
+   "number": 18,
+   "code": "1138",
+   "title": "釋摩訶衍論",
+   "holder": "高山寺",
+   "annotated": "保延四年(1138)頃"
+  },
+  {
+   "page": "a-158",
+   "book_page": 245,
+   "group": "5",
+   "number": 1,
+   "code": "989",
+   "title": "縛日羅駄都私記",
+   "holder": "清水寺",
+   "annotated": "永延三年(989)頃"
+  },
+  {
+   "page": "a-159",
+   "book_page": 246,
+   "group": "5",
+   "number": 2,
+   "code": "1033",
+   "title": "金剛頂瑜伽經",
+   "holder": "高野山學園",
+   "annotated": "長元六年(1033)"
+  },
+  {
+   "page": "a-160",
+   "book_page": 247,
+   "group": "5",
+   "number": 3,
+   "code": "1053",
+   "title": "焰漫德迦念誦法",
+   "holder": "仁和寺",
+   "annotated": "天喜元年(1053)"
+  },
+  {
+   "page": "a-161",
+   "book_page": 248,
+   "group": "5",
+   "number": 4,
+   "code": "1063",
+   "title": "金剛頂瑜伽經",
+   "holder": "高山寺",
+   "annotated": "康平六年(1063)"
+  },
+  {
+   "page": "a-162",
+   "book_page": 249,
+   "group": "5",
+   "number": 5,
+   "code": "1069",
+   "title": "八字文殊儀軌",
+   "holder": "石山寺",
+   "annotated": "備考參照(書寫 治曆四年1068)"
+  },
+  {
+   "page": "a-163",
+   "book_page": 250,
+   "group": "5",
+   "number": 6,
+   "code": "1074",
+   "title": "蘇悉地羯羅經",
+   "holder": "高野山學園",
+   "annotated": "承保元年(1074)"
+  },
+  {
+   "page": "a-164",
+   "book_page": 251,
+   "group": "5",
+   "number": 7,
+   "code": "1089",
+   "title": "聖無動尊念誦儀軌",
+   "holder": "仁和寺",
+   "annotated": "寛治三年(1089)"
+  },
+  {
+   "page": "a-165",
+   "book_page": 252,
+   "group": "5",
+   "number": 8,
+   "code": "1093",
+   "title": "大毗盧遮那成佛經",
+   "holder": "仁和寺",
+   "annotated": "寛治七年(1093)"
+  },
+  {
+   "page": "a-166",
+   "book_page": 253,
+   "group": "5",
+   "number": 9,
+   "code": "1093",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "仁和寺",
+   "annotated": "寛治七年(1093)・嘉保二年(1095)"
+  },
+  {
+   "page": "a-167",
+   "book_page": 254,
+   "group": "5",
+   "number": 10,
+   "code": "1094",
+   "title": "馬頭儀軌",
+   "holder": "高山寺",
+   "annotated": "寛治八年(1094)"
+  },
+  {
+   "page": "a-168",
+   "book_page": 255,
+   "group": "5",
+   "number": 11,
+   "code": "1103",
+   "title": "金剛頂瑜伽護摩儀軌",
+   "holder": "仁和寺",
+   "annotated": "康和五年(1103)"
+  },
+  {
+   "page": "a-169",
+   "book_page": 256,
+   "group": "5",
+   "number": 12,
+   "code": "1108",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "高山寺",
+   "annotated": "嘉承三年(1108)朱・天仁二年(1109)墨"
+  },
+  {
+   "page": "a-170",
+   "book_page": 257,
+   "group": "5",
+   "number": 13,
+   "code": "1108",
+   "title": "大毗盧遮那成佛經",
+   "holder": "國立國會圖書館",
+   "annotated": "嘉承三年(1108)"
+  },
+  {
+   "page": "a-171",
+   "book_page": 258,
+   "group": "5",
+   "number": 14,
+   "code": "1111",
+   "title": "祕密漫荼羅十住心論",
+   "holder": "高山寺",
+   "annotated": "天永二年(1111)"
+  },
+  {
+   "page": "a-172",
+   "book_page": 259,
+   "group": "5",
+   "number": 15,
+   "code": "1113",
+   "title": "金剛般若經集驗記",
+   "holder": "日光天海藏",
+   "annotated": "天永四年(1113)"
+  },
+  {
+   "page": "a-173",
+   "book_page": 260,
+   "group": "5",
+   "number": 16,
+   "code": "1114",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "永久二年(1114)"
+  },
+  {
+   "page": "a-174",
+   "book_page": 261,
+   "group": "5",
+   "number": 17,
+   "code": "1116",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東寺",
+   "annotated": "永久四年(1116)頃"
+  },
+  {
+   "page": "a-175",
+   "book_page": 262,
+   "group": "5",
+   "number": 18,
+   "code": "1118",
+   "title": "蘇磨呼童子請問經",
+   "holder": "五島美術館",
+   "annotated": "元永元年(1118)"
+  },
+  {
+   "page": "a-176",
+   "book_page": 263,
+   "group": "5",
+   "number": 19,
+   "code": "1130",
+   "title": "大毗盧遮那經供養次第法疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "大治五年(1130)"
+  },
+  {
+   "page": "a-177",
+   "book_page": 264,
+   "group": "5",
+   "number": 20,
+   "code": "1138",
+   "title": "文鏡祕府論",
+   "holder": "宮內廳書陵部",
+   "annotated": "保延四年(1138)"
+  },
+  {
+   "page": "a-178",
+   "book_page": 265,
+   "group": "5",
+   "number": 21,
+   "code": "1144",
+   "title": "金剛頂大教王經",
+   "holder": "仁和寺",
+   "annotated": "天養元年(1144)"
+  },
+  {
+   "page": "a-179",
+   "book_page": 266,
+   "group": "5",
+   "number": 22,
+   "code": "1148",
+   "title": "大毗盧遮那成佛經",
+   "holder": "架藏",
+   "annotated": "久安四年(1148)"
+  },
+  {
+   "page": "a-180",
+   "book_page": 267,
+   "group": "5",
+   "number": 23,
+   "code": "1148",
+   "title": "大毗盧遮那成佛經",
+   "holder": "仁和寺",
+   "annotated": "久安四年(1148)"
+  },
+  {
+   "page": "a-181",
+   "book_page": 268,
+   "group": "5",
+   "number": 24,
+   "code": "1165",
+   "title": "文鏡祕府論",
+   "holder": "高山寺",
+   "annotated": "長寛三年(1165)頃"
+  },
+  {
+   "page": "a-182",
+   "book_page": 269,
+   "group": "5",
+   "number": 25,
+   "code": "1170",
+   "title": "釋論通玄鈔",
+   "holder": "東寺",
+   "annotated": "嘉應二年(1170)"
+  },
+  {
+   "page": "a-183",
+   "book_page": 270,
+   "group": "6",
+   "number": 1,
+   "code": "1016",
+   "title": "菩薩戒經",
+   "holder": "石山寺",
+   "annotated": "長和五年(1016)"
+  },
+  {
+   "page": "a-184",
+   "book_page": 271,
+   "group": "6",
+   "number": 2,
+   "code": "1016a",
+   "title": "南海寄歸內法傳",
+   "holder": "天理圖書館・京都國立博物館・白鶴美術館",
+   "annotated": "長和五年(1016)頃"
+  },
+  {
+   "page": "a-185",
+   "book_page": 272,
+   "group": "6",
+   "number": 3,
+   "code": "1033",
+   "title": "大毗盧遮那成佛經",
+   "holder": "高野山親王院",
+   "annotated": "長元六年(1033)"
+  },
+  {
+   "page": "a-186",
+   "book_page": 273,
+   "group": "6",
+   "number": 4,
+   "code": "1035",
+   "title": "護摩蜜記",
+   "holder": "西大寺",
+   "annotated": "長元八年(1035)頃"
+  },
+  {
+   "page": "a-187",
+   "book_page": 274,
+   "group": "6",
+   "number": 5,
+   "code": "1037",
+   "title": "不動念誦次第",
+   "holder": "石山寺",
+   "annotated": "長曆元年(1037)"
+  },
+  {
+   "page": "a-188",
+   "book_page": 275,
+   "group": "6",
+   "number": 6,
+   "code": "1042",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "東寺",
+   "annotated": "長久三年(1042)"
+  },
+  {
+   "page": "a-189",
+   "book_page": 276,
+   "group": "6",
+   "number": 7,
+   "code": "1045",
+   "title": "金剛頂瑜伽千手千眼觀自在菩薩修行儀軌",
+   "holder": "石山寺",
+   "annotated": "寛德二年(1045)"
+  },
+  {
+   "page": "a-190",
+   "book_page": 277,
+   "group": "6",
+   "number": 8,
+   "code": "1046",
+   "title": "步擲金剛修行儀軌",
+   "holder": "東寺",
+   "annotated": "寛德三年(1046)"
+  },
+  {
+   "page": "a-191",
+   "book_page": 278,
+   "group": "6",
+   "number": 9,
+   "code": "1047",
+   "title": "建立曼荼羅護摩儀軌",
+   "holder": "東寺",
+   "annotated": "永承二年(1047)・寛治五年(1091)"
+  },
+  {
+   "page": "a-192",
+   "book_page": 279,
+   "group": "6",
+   "number": 10,
+   "code": "1048",
+   "title": "彌勒儀軌",
+   "holder": "高野山三寶院",
+   "annotated": "永承三年(1048)"
+  },
+  {
+   "page": "a-193",
+   "book_page": 280,
+   "group": "6",
+   "number": 11,
+   "code": "1052",
+   "title": "大日經成就儀軌",
+   "holder": "石山寺",
+   "annotated": "永承七年(1052)朱・平安時代後期白"
+  },
+  {
+   "page": "a-194",
+   "book_page": 281,
+   "group": "6",
+   "number": 12,
+   "code": "1055",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "東寺",
+   "annotated": "天喜三年(1055)"
+  },
+  {
+   "page": "a-195",
+   "book_page": 282,
+   "group": "6",
+   "number": 13,
+   "code": "1059",
+   "title": "孔雀明王畫像壇場儀軌",
+   "holder": "石山寺",
+   "annotated": "康平二年(1059)頃"
+  },
+  {
+   "page": "a-196",
+   "book_page": 283,
+   "group": "6",
+   "number": 14,
+   "code": "1067",
+   "title": "五大尊式經",
+   "holder": "東寺",
+   "annotated": "治曆三年(1067)"
+  },
+  {
+   "page": "a-197",
+   "book_page": 284,
+   "group": "6",
+   "number": 15,
+   "code": "1072",
+   "title": "佛說陀羅尼集經",
+   "holder": "東寺",
+   "annotated": "延久四年(1072)・承德三年(1099)"
+  },
+  {
+   "page": "a-198",
+   "book_page": 285,
+   "group": "6",
+   "number": 16,
+   "code": "1073",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東寺",
+   "annotated": "延久五年(1073)"
+  },
+  {
+   "page": "a-199",
+   "book_page": 286,
+   "group": "6",
+   "number": 17,
+   "code": "1074",
+   "title": "大日經義釋",
+   "holder": "大東急記念文庫",
+   "annotated": "延久六年(1074)朱・承保二年(1075)墨"
+  },
+  {
+   "page": "a-200",
+   "book_page": 287,
+   "group": "6",
+   "number": 18,
+   "code": "1082",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "東寺",
+   "annotated": "永保二年(1082)"
+  },
+  {
+   "page": "a-201",
+   "book_page": 288,
+   "group": "6",
+   "number": 19,
+   "code": "1094",
+   "title": "聖閻曼德迦威怒法",
+   "holder": "高山寺",
+   "annotated": "寛治八年(1094)頃"
+  },
+  {
+   "page": "a-202",
+   "book_page": 289,
+   "group": "6",
+   "number": 20,
+   "code": "1098",
+   "title": "大毗盧遮那經義釋",
+   "holder": "東寺",
+   "annotated": "承德二年(1098)"
+  },
+  {
+   "page": "a-203",
+   "book_page": 290,
+   "group": "6",
+   "number": 21,
+   "code": "1102",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "東京國立博物館・東京大學史料編纂所",
+   "annotated": "康和四年(1102)頃"
+  },
+  {
+   "page": "a-204",
+   "book_page": 291,
+   "group": "6",
+   "number": 22,
+   "code": "1103",
+   "title": "佛種集",
+   "holder": "來迎院如來藏",
+   "annotated": "康和五年(1103)"
+  },
+  {
+   "page": "a-205",
+   "book_page": 292,
+   "group": "6",
+   "number": 23,
+   "code": "1104",
+   "title": "蘇悉地羯羅經",
+   "holder": "東北大學",
+   "annotated": "長治元年(1104)"
+  },
+  {
+   "page": "a-206",
+   "book_page": 293,
+   "group": "6",
+   "number": 24,
+   "code": "1114",
+   "title": "蘇悉地羯羅經供養法",
+   "holder": "大東急記念文庫",
+   "annotated": "永久二年(1114)"
+  },
+  {
+   "page": "a-207",
+   "book_page": 294,
+   "group": "6",
+   "number": 25,
+   "code": "1128",
+   "title": "大毗盧遮那經義釋",
+   "holder": "叡山文庫",
+   "annotated": "備考參照(書寫 天治二年1125・大治三年1128)"
+  },
+  {
+   "page": "a-208",
+   "book_page": 295,
+   "group": "6",
+   "number": 26,
+   "code": "1138",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "架藏・北海道大學",
+   "annotated": "保延四年(1138)"
+  },
+  {
+   "page": "a-209",
+   "book_page": 296,
+   "group": "6",
+   "number": 27,
+   "code": "1151",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "日光天海藏",
+   "annotated": "仁平元・三年(1151・1153)"
+  },
+  {
+   "page": "a-210",
+   "book_page": 297,
+   "group": "7",
+   "number": 1,
+   "code": "897",
+   "title": "蘇悉地羯羅經略疏",
+   "holder": "京都大學",
+   "annotated": "寛平八年(896)移點カ・天曆五年(951)"
+  },
+  {
+   "page": "a-211",
+   "book_page": 298,
+   "group": "7",
+   "number": 2,
+   "code": "898a",
+   "title": "周易抄",
+   "holder": "東山御文庫",
+   "annotated": "寛平九年(897)頃"
+  },
+  {
+   "page": "a-212",
+   "book_page": 299,
+   "group": "7",
+   "number": 3,
+   "code": "900a",
+   "title": "胎藏祕密略大軌",
+   "holder": "高野山學園",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "a-213",
+   "book_page": 300,
+   "group": "7",
+   "number": 4,
+   "code": "900b",
+   "title": "胎藏祕密略大軌・胎藏略述・三親王灌頂時儀式",
+   "holder": "東寺",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "a-214",
+   "book_page": 301,
+   "group": "7",
+   "number": 5,
+   "code": "900c",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-215",
+   "book_page": 302,
+   "group": "7",
+   "number": 6,
+   "code": "937",
+   "title": "息災護摩私記",
+   "holder": "石山寺",
+   "annotated": "承平七年(937)頃"
+  },
+  {
+   "page": "a-216",
+   "book_page": 303,
+   "group": "7",
+   "number": 7,
+   "code": "949",
+   "title": "金剛頂瑜伽修習毗盧遮那三摩地法",
+   "holder": "筑波大學",
+   "annotated": "天曆三年(949)"
+  },
+  {
+   "page": "a-217",
+   "book_page": 304,
+   "group": "7",
+   "number": 8,
+   "code": "950a",
+   "title": "沙彌十戒威儀經",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-218",
+   "book_page": 305,
+   "group": "7",
+   "number": 9,
+   "code": "988",
+   "title": "胎藏祕密略大軌",
+   "holder": "石山寺",
+   "annotated": "永延二年(988)"
+  },
+  {
+   "page": "a-219",
+   "book_page": 306,
+   "group": "7",
+   "number": 10,
+   "code": "1000a",
+   "title": "息災護摩次第",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-220",
+   "book_page": 307,
+   "group": "7",
+   "number": 11,
+   "code": "1000b",
+   "title": "大方便佛報恩經",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-221",
+   "book_page": 308,
+   "group": "7",
+   "number": 12,
+   "code": "1040a",
+   "title": "大毗盧遮那成佛經",
+   "holder": "五島美術館",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-222",
+   "book_page": 309,
+   "group": "7",
+   "number": 13,
+   "code": "1045",
+   "title": "大毗盧遮那佛眼修行儀軌",
+   "holder": "未詳",
+   "annotated": "寛德二年(1045)"
+  },
+  {
+   "page": "a-223",
+   "book_page": 310,
+   "group": "8",
+   "number": 1,
+   "code": "900a",
+   "title": "大般涅槃經",
+   "holder": "石山寺",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "a-224",
+   "book_page": 311,
+   "group": "8",
+   "number": 2,
+   "code": "948",
+   "title": "大毗盧遮那經隨行儀軌",
+   "holder": "高野山寶壽院",
+   "annotated": "天曆二年(948)"
+  },
+  {
+   "page": "a-225",
+   "book_page": 312,
+   "group": "8",
+   "number": 3,
+   "code": "1000",
+   "title": "大毗盧遮那成佛經",
+   "holder": "西大寺",
+   "annotated": "長保二年(1000)"
+  },
+  {
+   "page": "a-226",
+   "book_page": 313,
+   "group": "8",
+   "number": 4,
+   "code": "1025",
+   "title": "聖無動尊大威怒王念誦儀軌",
+   "holder": "東寺",
+   "annotated": "萬壽二年(1025)"
+  },
+  {
+   "page": "a-227",
+   "book_page": 314,
+   "group": "8",
+   "number": 5,
+   "code": "1048",
+   "title": "金剛頂義訣",
+   "holder": "東寺",
+   "annotated": "永承三年(1048)"
+  },
+  {
+   "page": "a-228",
+   "book_page": 315,
+   "group": "8",
+   "number": 6,
+   "code": "1064",
+   "title": "無量壽如來修觀行供養儀軌",
+   "holder": "大東急記念文庫",
+   "annotated": "康平七年(1064)"
+  },
+  {
+   "page": "a-229",
+   "book_page": 316,
+   "group": "8",
+   "number": 7,
+   "code": "1112",
+   "title": "蘇磨呼童子請問經",
+   "holder": "東寺",
+   "annotated": "天永三年(1112)"
+  },
+  {
+   "page": "a-230",
+   "book_page": 317,
+   "group": "8",
+   "number": 8,
+   "code": "1176",
+   "title": "十六尊幷廿天印相",
+   "holder": "石山寺",
+   "annotated": "安元二年(1176)頃"
+  },
+  {
+   "page": "a-231",
+   "book_page": 318,
+   "group": "9",
+   "number": 1,
+   "code": "925",
+   "title": "蘇悉地羯羅供養法",
+   "holder": "石山寺",
+   "annotated": "延長三年(925)"
+  },
+  {
+   "page": "a-232",
+   "book_page": 319,
+   "group": "9",
+   "number": 2,
+   "code": "930",
+   "title": "辨中邊論",
+   "holder": "石山寺",
+   "annotated": "延長八年(930)"
+  },
+  {
+   "page": "a-233",
+   "book_page": 320,
+   "group": "9",
+   "number": 3,
+   "code": "943",
+   "title": "略述金剛頂瑜伽分別聖位修證法門",
+   "holder": "石山寺",
+   "annotated": "天慶六年(943)頃"
+  },
+  {
+   "page": "a-234",
+   "book_page": 321,
+   "group": "9",
+   "number": 4,
+   "code": "948",
+   "title": "仁王護國般若波羅蜜多經疏",
+   "holder": "石山寺",
+   "annotated": "天曆二年(948)頃"
+  },
+  {
+   "page": "a-235",
+   "book_page": 322,
+   "group": "9",
+   "number": 5,
+   "code": "950a",
+   "title": "妙法蓮華經玄贊",
+   "holder": "石山寺(卷第三)・中田祝夫氏(卷第六)",
+   "annotated": "天曆(947–957)頃"
+  },
+  {
+   "page": "a-236",
+   "book_page": 323,
+   "group": "9",
+   "number": 6,
+   "code": "950b",
+   "title": "叡山大師傳",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-237",
+   "book_page": 324,
+   "group": "9",
+   "number": 7,
+   "code": "951",
+   "title": "蘇悉地羯羅經略疏",
+   "holder": "石山寺",
+   "annotated": "天曆(947–957)頃"
+  },
+  {
+   "page": "a-238",
+   "book_page": 325,
+   "group": "9",
+   "number": 8,
+   "code": "1000a",
+   "title": "大智度論",
+   "holder": "石山寺",
+   "annotated": "長保頃"
+  },
+  {
+   "page": "a-239",
+   "book_page": 326,
+   "group": "9",
+   "number": 9,
+   "code": "1057",
+   "title": "北斗七星護摩祕要儀軌",
+   "holder": "石山寺",
+   "annotated": "天喜五年(1057)"
+  },
+  {
+   "page": "a-240",
+   "book_page": 327,
+   "group": "9",
+   "number": 10,
+   "code": "1162",
+   "title": "北斗護摩儀軌",
+   "holder": "石山寺",
+   "annotated": "應保二年(1162)頃"
+  },
+  {
+   "page": "a-241",
+   "book_page": 328,
+   "group": "10",
+   "number": 1,
+   "code": "950a",
+   "title": "法華義疏",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-242",
+   "book_page": 329,
+   "group": "10",
+   "number": 2,
+   "code": "1000a",
+   "title": "大毗盧遮那成佛經",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-243",
+   "book_page": 330,
+   "group": "10",
+   "number": 3,
+   "code": "1000b",
+   "title": "金剛頂瑜伽護摩儀軌",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-244",
+   "book_page": 331,
+   "group": "11",
+   "number": 1,
+   "code": "950",
+   "title": "大聖妙吉祥菩薩說除災教令法輪",
+   "holder": "石山寺",
+   "annotated": "天曆四年(950)"
+  },
+  {
+   "page": "a-245",
+   "book_page": 332,
+   "group": "11",
+   "number": 2,
+   "code": "989",
+   "title": "大日經廣大成就儀軌",
+   "holder": "東寺",
+   "annotated": "永延三年(989)"
+  },
+  {
+   "page": "a-246",
+   "book_page": 333,
+   "group": "11",
+   "number": 3,
+   "code": "1000a",
+   "title": "三十七尊出生義",
+   "holder": "東寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-247",
+   "book_page": 334,
+   "group": "11",
+   "number": 4,
+   "code": "1000b",
+   "title": "金剛頂瑜伽三藐三菩提心論",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-248",
+   "book_page": 335,
+   "group": "11",
+   "number": 5,
+   "code": "1010",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "曼殊院",
+   "annotated": "寛弘七年(1010)"
+  },
+  {
+   "page": "a-249",
+   "book_page": 336,
+   "group": "11",
+   "number": 6,
+   "code": "1050a",
+   "title": "十二天法",
+   "holder": "高山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-250",
+   "book_page": 337,
+   "group": "12",
+   "number": 1,
+   "code": "1000a",
+   "title": "大聖歡喜天法",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-251",
+   "book_page": 338,
+   "group": "12",
+   "number": 2,
+   "code": "1050a",
+   "title": "大毗盧遮那成佛經疏",
+   "holder": "叡山文庫",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-252",
+   "book_page": 339,
+   "group": "13",
+   "number": 1,
+   "code": "1000a",
+   "title": "菩提場莊嚴陀羅尼經",
+   "holder": "遠藤嘉基氏",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-253",
+   "book_page": 340,
+   "group": "14",
+   "number": 1,
+   "code": "1000a",
+   "title": "守護國界主陀羅尼經",
+   "holder": "東寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-254",
+   "book_page": 341,
+   "group": "14",
+   "number": 2,
+   "code": "1050a",
+   "title": "聖焰曼德迦",
+   "holder": "醍醐寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-255",
+   "book_page": 342,
+   "group": "14",
+   "number": 3,
+   "code": "1050b",
+   "title": "佛說太子須陀拏經",
+   "holder": "石山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-256",
+   "book_page": 343,
+   "group": "14",
+   "number": 4,
+   "code": "1055",
+   "title": "眞言法華釋",
+   "holder": "高山寺",
+   "annotated": "天喜三年(1055)頃"
+  },
+  {
+   "page": "a-257",
+   "book_page": 344,
+   "group": "14",
+   "number": 5,
+   "code": "1100a",
+   "title": "蘇磨呼童子請問經",
+   "holder": "東寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-258",
+   "book_page": 345,
+   "group": "14",
+   "number": 6,
+   "code": "1100b",
+   "title": "大般若波羅蜜多經",
+   "holder": "石山寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-259",
+   "book_page": 346,
+   "group": "14",
+   "number": 7,
+   "code": "1109",
+   "title": "護摩略私記",
+   "holder": "高野山西南院",
+   "annotated": "天仁二年(1109)"
+  },
+  {
+   "page": "a-260",
+   "book_page": 347,
+   "group": "14",
+   "number": 8,
+   "code": "1152",
+   "title": "大毗盧遮那經旨歸",
+   "holder": "東寺",
+   "annotated": "仁平二年(1152)頃"
+  },
+  {
+   "page": "a-261",
+   "book_page": 348,
+   "group": "15",
+   "number": 1,
+   "code": "1020a",
+   "title": "金剛藥叉儀軌",
+   "holder": "石山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-262",
+   "book_page": 349,
+   "group": "15",
+   "number": 2,
+   "code": "1082",
+   "title": "大聖觀自在菩薩心眞言瑜伽觀行儀軌",
+   "holder": "醍醐寺",
+   "annotated": "永保二年(1082)"
+  },
+  {
+   "page": "a-263",
+   "book_page": 350,
+   "group": "15",
+   "number": 3,
+   "code": "1130a",
+   "title": "金剛頂要略念誦儀軌",
+   "holder": "曼殊院",
+   "annotated": "院政期"
+  },
+  {
+   "page": "a-264",
+   "book_page": 351,
+   "group": "15",
+   "number": 4,
+   "code": "1130b",
+   "title": "大毗盧遮那廣大成就儀軌",
+   "holder": "高山寺",
+   "annotated": "院政期"
+  },
+  {
+   "page": "a-265",
+   "book_page": 352,
+   "group": "15",
+   "number": 5,
+   "code": "1031",
+   "title": "題未詳(藥師念誦次第紙背)",
+   "holder": "石山寺",
+   "annotated": "長元四年(1031)頃"
+  },
+  {
+   "page": "a-266",
+   "book_page": 353,
+   "group": "15",
+   "number": 6,
+   "code": "1070",
+   "title": "法華經二十八品略釋",
+   "holder": "東大寺圖書館",
+   "annotated": "延久二年(1070)"
+  },
+  {
+   "page": "a-267",
+   "book_page": 354,
+   "group": "15",
+   "number": 7,
+   "code": "1120",
+   "title": "弘贊法華傳",
+   "holder": "東大寺圖書館",
+   "annotated": "保安元年(1120)頃"
+  },
+  {
+   "page": "a-268",
+   "book_page": 355,
+   "group": "15",
+   "number": 8,
+   "code": "1158",
+   "title": "新修往生傳",
+   "holder": "東大寺圖書館",
+   "annotated": "保元三年(1158)"
+  },
+  {
+   "page": "a-269",
+   "book_page": 356,
+   "group": "15",
+   "number": 9,
+   "code": "1163",
+   "title": "高僧傳",
+   "holder": "石山寺",
+   "annotated": "長寛元年(1163)"
+  },
+  {
+   "page": "a-270",
+   "book_page": 357,
+   "group": "16",
+   "number": 1,
+   "code": "1076",
+   "title": "梵字悉曇字母釋義",
+   "holder": "馬淵和夫氏",
+   "annotated": "承保三年(1076)"
+  },
+  {
+   "page": "a-271",
+   "book_page": 358,
+   "group": "17",
+   "number": 1,
+   "code": "1088",
+   "title": "釋迦儀軌",
+   "holder": "九州大學",
+   "annotated": "寛治二年(1088)"
+  },
+  {
+   "page": "a-272",
+   "book_page": 359,
+   "group": "17",
+   "number": 2,
+   "code": "1089",
+   "title": "仁王念誦儀軌",
+   "holder": "東寺",
+   "annotated": "寛治三年(1089)"
+  },
+  {
+   "page": "a-273",
+   "book_page": 360,
+   "group": "17",
+   "number": 3,
+   "code": "1111",
+   "title": "降伏護摩私記",
+   "holder": "東寺",
+   "annotated": "天永二年(1111)頃"
+  },
+  {
+   "page": "a-274",
+   "book_page": 361,
+   "group": "17",
+   "number": 4,
+   "code": "1113",
+   "title": "大日經成就瑜伽",
+   "holder": "東寺",
+   "annotated": "天永四年(1113)"
+  },
+  {
+   "page": "a-275",
+   "book_page": 362,
+   "group": "17",
+   "number": 5,
+   "code": "1113",
+   "title": "蘇磨呼童子請問經",
+   "holder": "東寺",
+   "annotated": "永久元年(1113)"
+  },
+  {
+   "page": "a-276",
+   "book_page": 363,
+   "group": "17",
+   "number": 6,
+   "code": "1117",
+   "title": "大毗盧遮那成佛經",
+   "holder": "架藏",
+   "annotated": "永久五年(1117)"
+  },
+  {
+   "page": "a-277",
+   "book_page": 364,
+   "group": "17",
+   "number": 7,
+   "code": "1128",
+   "title": "金剛頂瑜伽護摩儀軌",
+   "holder": "高山寺",
+   "annotated": "大治三年(1128)"
+  },
+  {
+   "page": "a-278",
+   "book_page": 365,
+   "group": "17",
+   "number": 8,
+   "code": "1178",
+   "title": "普遍光明大隨求陀羅尼經",
+   "holder": "石山寺",
+   "annotated": "治承二年(1178)"
+  },
+  {
+   "page": "a-279",
+   "book_page": 366,
+   "group": "17",
+   "number": 9,
+   "code": "1196",
+   "title": "大集大虛空藏菩薩所問經",
+   "holder": "高山寺",
+   "annotated": "建久七年(1196)"
+  },
+  {
+   "page": "a-280",
+   "book_page": 367,
+   "group": "17",
+   "number": 10,
+   "code": "1198",
+   "title": "花嚴宗種性義抄",
+   "holder": "高山寺",
+   "annotated": "建久九年(1198)"
+  },
+  {
+   "page": "a-281",
+   "book_page": 368,
+   "group": "18",
+   "number": 1,
+   "code": "1106",
+   "title": "大集虛空藏菩薩所問經",
+   "holder": "高山寺",
+   "annotated": "嘉承元年(1106)"
+  },
+  {
+   "page": "a-282",
+   "book_page": 369,
+   "group": "24",
+   "number": 1,
+   "code": "948",
+   "title": "漢書楊雄傳",
+   "holder": "上野淳一氏",
+   "annotated": "天曆二年(948)"
+  },
+  {
+   "page": "a-283",
+   "book_page": 370,
+   "group": "24",
+   "number": 2,
+   "code": "950a",
+   "title": "漢書周勃傳",
+   "holder": "大明王院",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-284",
+   "book_page": 371,
+   "group": "24",
+   "number": 3,
+   "code": "1073",
+   "title": "史記(呂后本紀・孝文本紀・孝景本紀)",
+   "holder": "防府毛利報公會・東北大學・大東急記念文庫",
+   "annotated": "延久五年(1073)"
+  },
+  {
+   "page": "a-285",
+   "book_page": 372,
+   "group": "24",
+   "number": 4,
+   "code": "1099",
+   "title": "文選",
+   "holder": "東山御文庫",
+   "annotated": "康和元年(1099)頃"
+  },
+  {
+   "page": "a-286",
+   "book_page": 373,
+   "group": "24",
+   "number": 5,
+   "code": "1100a",
+   "title": "文選",
+   "holder": "宮內廳書陵部",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-287",
+   "book_page": 374,
+   "group": "24",
+   "number": 6,
+   "code": "1113",
+   "title": "文集",
+   "holder": "京都國立博物館",
+   "annotated": "天永四年(1113)"
+  },
+  {
+   "page": "a-288",
+   "book_page": 375,
+   "group": "24",
+   "number": 7,
+   "code": "1127",
+   "title": "史記孝景本紀",
+   "holder": "山岸德平氏",
+   "annotated": "大治二年(1127)頃"
+  },
+  {
+   "page": "a-289",
+   "book_page": 376,
+   "group": "24",
+   "number": 8,
+   "code": "1136",
+   "title": "文選",
+   "holder": "東山御文庫",
+   "annotated": "保延二年(1136)"
+  },
+  {
+   "page": "a-290",
+   "book_page": 377,
+   "group": "24",
+   "number": 9,
+   "code": "1142",
+   "title": "日本書紀",
+   "holder": "宮內廳書陵部",
+   "annotated": "永治二年(1142)"
+  },
+  {
+   "page": "a-291",
+   "book_page": 378,
+   "group": "24",
+   "number": 10,
+   "code": "1145",
+   "title": "醫心方",
+   "holder": "文化廳",
+   "annotated": "天養二年(1145)"
+  },
+  {
+   "page": "a-292",
+   "book_page": 379,
+   "group": "24",
+   "number": 11,
+   "code": "1145",
+   "title": "史記秦本紀",
+   "holder": "東洋文庫",
+   "annotated": "天養二年(1145)"
+  },
+  {
+   "page": "a-293",
+   "book_page": 380,
+   "group": "24",
+   "number": 12,
+   "code": "1150a",
+   "title": "日本書紀",
+   "holder": "前田育德會",
+   "annotated": "院政期"
+  },
+  {
+   "page": "a-294",
+   "book_page": 381,
+   "group": "24",
+   "number": 13,
+   "code": "1150b",
+   "title": "日本書紀",
+   "holder": "北野天滿宮",
+   "annotated": "院政期"
+  },
+  {
+   "page": "a-295",
+   "book_page": 382,
+   "group": "24",
+   "number": 14,
+   "code": "1172",
+   "title": "文選",
+   "holder": "東山御文庫",
+   "annotated": "承安二年(1172)"
+  },
+  {
+   "page": "a-296",
+   "book_page": 383,
+   "group": "25",
+   "number": 1,
+   "code": "1139",
+   "title": "春秋經傳集解",
+   "holder": "東洋文庫",
+   "annotated": "保延五年(1139)"
+  },
+  {
+   "page": "a-297",
+   "book_page": 384,
+   "group": "26",
+   "number": 1,
+   "code": "1336",
+   "title": "文選",
+   "holder": "東山御文庫",
+   "annotated": "正慶五年(1336)"
+  },
+  {
+   "page": "a-298",
+   "book_page": 385,
+   "group": "27",
+   "number": 1,
+   "code": "800a",
+   "title": "央掘魔羅經",
+   "holder": "聖語藏",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "a-299",
+   "book_page": 386,
+   "group": "27",
+   "number": 2,
+   "code": "800b",
+   "title": "沙門勝道歷山瑩玄珠碑",
+   "holder": "神護寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "a-300",
+   "book_page": 387,
+   "group": "27",
+   "number": 3,
+   "code": "800c",
+   "title": "梵網經",
+   "holder": "醍醐寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "a-301",
+   "book_page": 388,
+   "group": "27",
+   "number": 4,
+   "code": "830a",
+   "title": "金光明最勝王經",
+   "holder": "西大寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "a-302",
+   "book_page": 389,
+   "group": "27",
+   "number": 5,
+   "code": "850a",
+   "title": "佛說不增不減經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "a-303",
+   "book_page": 390,
+   "group": "27",
+   "number": 6,
+   "code": "889",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "石山寺",
+   "annotated": "寛平元年(889)"
+  },
+  {
+   "page": "a-304",
+   "book_page": 391,
+   "group": "27",
+   "number": 7,
+   "code": "900a",
+   "title": "悉曇章",
+   "holder": "東寺",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "a-305",
+   "book_page": 392,
+   "group": "27",
+   "number": 8,
+   "code": "928",
+   "title": "法華義疏",
+   "holder": "東大寺圖書館",
+   "annotated": "延長六年(928)頃"
+  },
+  {
+   "page": "a-306",
+   "book_page": 393,
+   "group": "27",
+   "number": 9,
+   "code": "928",
+   "title": "三性義私記",
+   "holder": "東大寺圖書館",
+   "annotated": "延長六年(928)"
+  },
+  {
+   "page": "a-307",
+   "book_page": 394,
+   "group": "27",
+   "number": 10,
+   "code": "930a",
+   "title": "大悉曇章",
+   "holder": "東寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-308",
+   "book_page": 395,
+   "group": "27",
+   "number": 11,
+   "code": "950a",
+   "title": "蒙求",
+   "holder": "文化廳",
+   "annotated": "天曆(947–957)頃"
+  },
+  {
+   "page": "a-309",
+   "book_page": 396,
+   "group": "27",
+   "number": 12,
+   "code": "966",
+   "title": "七曜九軌眞言",
+   "holder": "石山寺",
+   "annotated": "康保三年(966)"
+  },
+  {
+   "page": "a-310",
+   "book_page": 397,
+   "group": "27",
+   "number": 13,
+   "code": "967",
+   "title": "熾盛光讚",
+   "holder": "來迎院如來藏",
+   "annotated": "康保四年(967)"
+  },
+  {
+   "page": "a-311",
+   "book_page": 398,
+   "group": "27",
+   "number": 14,
+   "code": "968",
+   "title": "咒王經壇場畫法式",
+   "holder": "石山寺",
+   "annotated": "康保五年(968)"
+  },
+  {
+   "page": "a-312",
+   "book_page": 399,
+   "group": "27",
+   "number": 15,
+   "code": "970a",
+   "title": "延喜式祝詞",
+   "holder": "東京國立博物館",
+   "annotated": "天祿(970–973)頃"
+  },
+  {
+   "page": "a-313",
+   "book_page": 400,
+   "group": "27",
+   "number": 16,
+   "code": "1000a",
+   "title": "法華論義草",
+   "holder": "東大寺圖書館",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "a-314",
+   "book_page": 401,
+   "group": "27",
+   "number": 17,
+   "code": "1016a",
+   "title": "南海寄歸內法傳",
+   "holder": "天理圖書館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "a-315",
+   "book_page": 402,
+   "group": "27",
+   "number": 18,
+   "code": "1030a",
+   "title": "大般若波羅蜜多經",
+   "holder": "慈光寺・國立國會圖書館・東京國立博物館・五島美術館・大東急記念文庫・天理圖書館他",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-316",
+   "book_page": 403,
+   "group": "27",
+   "number": 18,
+   "code": "1030a",
+   "title": "大般若波羅蜜多經(復元)",
+   "holder": "(復元)",
+   "annotated": "(復元)",
+   "reconstruction": true
+  },
+  {
+   "page": "a-317",
+   "book_page": 404,
+   "group": "27",
+   "number": 19,
+   "code": "1070a",
+   "title": "將門記",
+   "holder": "酒井宇吉氏",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "a-318",
+   "book_page": 405,
+   "group": "27",
+   "number": 20,
+   "code": "1099",
+   "title": "將門記",
+   "holder": "眞福寺寶生院",
+   "annotated": "承德三年(1099)"
+  },
+  {
+   "page": "a-319",
+   "book_page": 406,
+   "group": "27",
+   "number": 21,
+   "code": "1100a",
+   "title": "三教指歸",
+   "holder": "高山寺",
+   "annotated": "院政初期"
+  },
+  {
+   "page": "a-320",
+   "book_page": 407,
+   "group": "27",
+   "number": 22,
+   "code": "1116",
+   "title": "大慈恩寺三藏法師傳",
+   "holder": "興福寺",
+   "annotated": "永久四年(1116)"
+  },
+  {
+   "page": "a-321",
+   "book_page": 408,
+   "group": "27",
+   "number": 23,
+   "code": "1124",
+   "title": "戒律傳來記",
+   "holder": "唐招提寺",
+   "annotated": "保安五年(1124)"
+  },
+  {
+   "page": "a-322",
+   "book_page": 409,
+   "group": "27",
+   "number": 24,
+   "code": "1134",
+   "title": "蒙求",
+   "holder": "文化廳",
+   "annotated": "長承三年(1134)"
+  },
+  {
+   "page": "a-323",
+   "book_page": 410,
+   "group": "27",
+   "number": 25,
+   "code": "1135",
+   "title": "極樂遊意",
+   "holder": "東大寺圖書館",
+   "annotated": "長承四年(1135)"
+  },
+  {
+   "page": "a-324",
+   "book_page": 411,
+   "group": "27",
+   "number": 26,
+   "code": "1167",
+   "title": "大唐西域記",
+   "holder": "興聖寺",
+   "annotated": "仁安二年(1167)頃"
+  },
+  {
+   "page": "a-325",
+   "book_page": 412,
+   "group": "27",
+   "number": 27,
+   "code": "1186",
+   "title": "和泉往來",
+   "holder": "高野山西南院",
+   "annotated": "文治二年(1186)"
+  },
+  {
+   "page": "b-001",
+   "book_page": 414,
+   "group": "A",
+   "number": 1,
+   "code": "800a",
+   "title": "妙法蓮華經",
+   "holder": "新藥師寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-003",
+   "book_page": 416,
+   "group": "A",
+   "number": 2,
+   "code": "800b",
+   "title": "羅摩伽經",
+   "holder": "聖語藏",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-005",
+   "book_page": 418,
+   "group": "A",
+   "number": 3,
+   "code": "800c",
+   "title": "願經四分律",
+   "holder": "聖語藏・斯道文庫・小川廣巳氏・故富岡謙藏氏",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-007",
+   "book_page": 420,
+   "group": "A",
+   "number": 4,
+   "code": "810a",
+   "title": "金剛波若經集驗記",
+   "holder": "石山寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-009",
+   "book_page": 422,
+   "group": "A",
+   "number": 5,
+   "code": "830a",
+   "title": "東大寺諷誦文稿",
+   "holder": "佐藤達次郎氏舊藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-011",
+   "book_page": 424,
+   "group": "A",
+   "number": 6,
+   "code": "830b",
+   "title": "大毗盧遮那成佛經",
+   "holder": "高野山學園",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-013",
+   "book_page": 426,
+   "group": "A",
+   "number": 7,
+   "code": "830c",
+   "title": "大般涅槃經集解",
+   "holder": "白鶴美術館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-015",
+   "book_page": 428,
+   "group": "A",
+   "number": 8,
+   "code": "850a",
+   "title": "寶樓閣經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-017",
+   "book_page": 430,
+   "group": "A",
+   "number": 9,
+   "code": "850b",
+   "title": "大方廣佛華嚴經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-019",
+   "book_page": 432,
+   "group": "A",
+   "number": 10,
+   "code": "850c",
+   "title": "妙法蓮華經(夾注本)",
+   "holder": "天理圖書館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-021",
+   "book_page": 434,
+   "group": "A",
+   "number": 11,
+   "code": "850d",
+   "title": "大智度論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-023",
+   "book_page": 436,
+   "group": "A",
+   "number": 12,
+   "code": "850e",
+   "title": "瑜伽師地論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-025",
+   "book_page": 438,
+   "group": "A",
+   "number": 13,
+   "code": "850f",
+   "title": "妙法蓮華經(夾注本)",
+   "holder": "大東急記念文庫",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-027",
+   "book_page": 440,
+   "group": "A",
+   "number": 14,
+   "code": "850g",
+   "title": "大方廣佛華嚴經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-029",
+   "book_page": 442,
+   "group": "A",
+   "number": 15,
+   "code": "850h",
+   "title": "大般涅槃經集解",
+   "holder": "白鶴美術館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-031",
+   "book_page": 444,
+   "group": "A",
+   "number": 16,
+   "code": "851",
+   "title": "金剛般若經讚述",
+   "holder": "聖語藏",
+   "annotated": "嘉祥四年(851)"
+  },
+  {
+   "page": "b-033",
+   "book_page": 446,
+   "group": "A",
+   "number": 17,
+   "code": "870a",
+   "title": "華嚴經探玄記",
+   "holder": "聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-035",
+   "book_page": 448,
+   "group": "A",
+   "number": 18,
+   "code": "870b",
+   "title": "瑜伽師地論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-037",
+   "book_page": 450,
+   "group": "A",
+   "number": 19,
+   "code": "890",
+   "title": "彌勒經疏",
+   "holder": "園城寺",
+   "annotated": "寛平二年(890)"
+  },
+  {
+   "page": "b-039",
+   "book_page": 452,
+   "group": "A",
+   "number": 20,
+   "code": "950a",
+   "title": "十八契印法幷儀軌次第",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-041",
+   "book_page": 454,
+   "group": "A",
+   "number": 21,
+   "code": "1000a",
+   "title": "菩提心論",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-043",
+   "book_page": 456,
+   "group": "A",
+   "number": 22,
+   "code": "1064",
+   "title": "蘇悉地羯羅供養法",
+   "holder": "大東急記念文庫(卷第一)・高山寺(卷第二)",
+   "annotated": "康平七年(1064)"
+  },
+  {
+   "page": "b-045",
+   "book_page": 458,
+   "group": "B",
+   "number": 1,
+   "code": "800a",
+   "title": "大方廣佛華嚴經",
+   "holder": "聖語藏・斯道文庫(卷第十四)",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-047",
+   "book_page": 460,
+   "group": "B",
+   "number": 2,
+   "code": "800b",
+   "title": "四分律",
+   "holder": "石山寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-049",
+   "book_page": 462,
+   "group": "B",
+   "number": 3,
+   "code": "830a",
+   "title": "大方廣佛華嚴經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-051",
+   "book_page": 464,
+   "group": "B",
+   "number": 4,
+   "code": "850a",
+   "title": "十二門論",
+   "holder": "京都國立博物館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-053",
+   "book_page": 466,
+   "group": "B",
+   "number": 5,
+   "code": "850b",
+   "title": "因明論疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-055",
+   "book_page": 468,
+   "group": "B",
+   "number": 6,
+   "code": "870a",
+   "title": "彌勒經疏",
+   "holder": "酒井宇吉氏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-057",
+   "book_page": 470,
+   "group": "B",
+   "number": 7,
+   "code": "928a",
+   "title": "成唯識論述記",
+   "holder": "知恩院",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-059",
+   "book_page": 472,
+   "group": "B",
+   "number": 8,
+   "code": "950a",
+   "title": "大毗盧遮那成佛經",
+   "holder": "國立國會圖書館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-061",
+   "book_page": 474,
+   "group": "B",
+   "number": 9,
+   "code": "1002",
+   "title": "法華義疏",
+   "holder": "石山寺",
+   "annotated": "長保四年(1002)"
+  },
+  {
+   "page": "b-063",
+   "book_page": 476,
+   "group": "B",
+   "number": 10,
+   "code": "1041",
+   "title": "大毗盧遮那成佛成就法",
+   "holder": "石山寺",
+   "annotated": "長久二年(1041)"
+  },
+  {
+   "page": "b-065",
+   "book_page": 478,
+   "group": "B",
+   "number": 11,
+   "code": "1196",
+   "title": "大寶廣博樓閣經",
+   "holder": "高山寺",
+   "annotated": "建久七年(1196)"
+  },
+  {
+   "page": "b-067",
+   "book_page": 480,
+   "group": "C",
+   "number": 1,
+   "code": "800a",
+   "title": "阿毗達磨雜集論",
+   "holder": "聖語藏",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-069",
+   "book_page": 482,
+   "group": "C",
+   "number": 2,
+   "code": "830a",
+   "title": "金光明最勝王經",
+   "holder": "西大寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-071",
+   "book_page": 484,
+   "group": "C",
+   "number": 3,
+   "code": "850a",
+   "title": "觀彌勒上生兜率天經贊",
+   "holder": "箕面學園",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-073",
+   "book_page": 486,
+   "group": "C",
+   "number": 4,
+   "code": "850b",
+   "title": "大乘顯識經",
+   "holder": "知恩院",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-075",
+   "book_page": 488,
+   "group": "C",
+   "number": 5,
+   "code": "850c",
+   "title": "大般涅槃經",
+   "holder": "西福寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-077",
+   "book_page": 490,
+   "group": "C",
+   "number": 6,
+   "code": "850d",
+   "title": "瑜伽師地論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-079",
+   "book_page": 492,
+   "group": "C",
+   "number": 7,
+   "code": "850e",
+   "title": "阿毗達磨俱舍論",
+   "holder": "石山寺(卷第四)・未詳(卷第十九)",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-081",
+   "book_page": 494,
+   "group": "C",
+   "number": 8,
+   "code": "850f",
+   "title": "大毗盧遮那成佛經",
+   "holder": "高野山學園",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-083",
+   "book_page": 496,
+   "group": "C",
+   "number": 9,
+   "code": "928",
+   "title": "成唯識論述記",
+   "holder": "知恩院",
+   "annotated": "延長六年(928)"
+  },
+  {
+   "page": "b-085",
+   "book_page": 498,
+   "group": "C",
+   "number": 10,
+   "code": "954",
+   "title": "辯中邊論",
+   "holder": "聖語藏",
+   "annotated": "天曆八年(954)"
+  },
+  {
+   "page": "b-087",
+   "book_page": 500,
+   "group": "C",
+   "number": 11,
+   "code": "1000a",
+   "title": "三昧耶戒",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-089",
+   "book_page": 502,
+   "group": "C",
+   "number": 12,
+   "code": "1012",
+   "title": "不動尊儀軌",
+   "holder": "東寺",
+   "annotated": "寛弘九年(1012)頃"
+  },
+  {
+   "page": "b-091",
+   "book_page": 504,
+   "group": "C",
+   "number": 13,
+   "code": "1012a",
+   "title": "甘露軍荼利明王念誦法",
+   "holder": "東寺",
+   "annotated": "寛弘九年(1012)頃"
+  },
+  {
+   "page": "b-093",
+   "book_page": 506,
+   "group": "C",
+   "number": 14,
+   "code": "1022",
+   "title": "大毗盧遮那成佛經",
+   "holder": "國立國會圖書館",
+   "annotated": "治安二年(1022)"
+  },
+  {
+   "page": "b-095",
+   "book_page": 508,
+   "group": "D",
+   "number": 1,
+   "code": "810a",
+   "title": "辨中邊論",
+   "holder": "石山寺",
+   "annotated": "平安時代極初期"
+  },
+  {
+   "page": "b-097",
+   "book_page": 510,
+   "group": "D",
+   "number": 2,
+   "code": "828",
+   "title": "成實論",
+   "holder": "聖語藏・東大寺圖書館",
+   "annotated": "天長五年(828)"
+  },
+  {
+   "page": "b-099",
+   "book_page": 512,
+   "group": "D",
+   "number": 3,
+   "code": "828a",
+   "title": "金光明最勝王經註釋(飯室切)",
+   "holder": "根津美術館・五島美術館・MOA美術館他",
+   "annotated": "天長五年(828)頃"
+  },
+  {
+   "page": "b-101",
+   "book_page": 514,
+   "group": "D",
+   "number": 4,
+   "code": "828b",
+   "title": "妙法蓮華經方便品",
+   "holder": "箕面學園",
+   "annotated": "天長五年(828)頃"
+  },
+  {
+   "page": "b-103",
+   "book_page": 516,
+   "group": "D",
+   "number": 5,
+   "code": "828c",
+   "title": "維摩經義疏",
+   "holder": "法隆寺",
+   "annotated": "天長五年(828)頃"
+  },
+  {
+   "page": "b-105",
+   "book_page": 518,
+   "group": "D",
+   "number": 6,
+   "code": "834",
+   "title": "大乘掌珍論",
+   "holder": "根津美術館",
+   "annotated": "承和元年(834)・嘉祥二年(849)"
+  },
+  {
+   "page": "b-107",
+   "book_page": 520,
+   "group": "D",
+   "number": 7,
+   "code": "841",
+   "title": "大乘廣百論釋論",
+   "holder": "大東急記念文庫",
+   "annotated": "承和八年(841)"
+  },
+  {
+   "page": "b-109",
+   "book_page": 522,
+   "group": "D",
+   "number": 8,
+   "code": "850a",
+   "title": "大唐西域記",
+   "holder": "興聖寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-111",
+   "book_page": 524,
+   "group": "D",
+   "number": 9,
+   "code": "850b",
+   "title": "大般涅槃經集解",
+   "holder": "白鶴美術館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-113",
+   "book_page": 526,
+   "group": "D",
+   "number": 10,
+   "code": "850c",
+   "title": "大智度論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-115",
+   "book_page": 528,
+   "group": "D",
+   "number": 11,
+   "code": "850d",
+   "title": "中觀論",
+   "holder": "聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-117",
+   "book_page": 530,
+   "group": "D",
+   "number": 12,
+   "code": "858",
+   "title": "大智度論",
+   "holder": "石山寺他",
+   "annotated": "天安二年(858)"
+  },
+  {
+   "page": "b-119",
+   "book_page": 532,
+   "group": "D",
+   "number": 13,
+   "code": "870a",
+   "title": "大智度論",
+   "holder": "聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-121",
+   "book_page": 534,
+   "group": "D",
+   "number": 14,
+   "code": "879",
+   "title": "大方廣佛華嚴經",
+   "holder": "天理圖書館・大東急記念文庫・龍門文庫他",
+   "annotated": "元慶三年(879)"
+  },
+  {
+   "page": "b-123",
+   "book_page": 536,
+   "group": "D",
+   "number": 15,
+   "code": "885",
+   "title": "金剛般若經讚述",
+   "holder": "東大寺圖書館",
+   "annotated": "仁和元年(885)"
+  },
+  {
+   "page": "b-125",
+   "book_page": 538,
+   "group": "D",
+   "number": 16,
+   "code": "886",
+   "title": "金剛頂瑜伽經",
+   "holder": "石山寺",
+   "annotated": "仁和二年(886)"
+  },
+  {
+   "page": "b-127",
+   "book_page": 540,
+   "group": "D",
+   "number": 17,
+   "code": "890a",
+   "title": "金光明經文句",
+   "holder": "園城寺",
+   "annotated": "寛平(889–898)頃"
+  },
+  {
+   "page": "b-129",
+   "book_page": 542,
+   "group": "D",
+   "number": 18,
+   "code": "900a",
+   "title": "百法顯幽抄",
+   "holder": "東大寺圖書館",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "b-131",
+   "book_page": 544,
+   "group": "D",
+   "number": 19,
+   "code": "900b",
+   "title": "法華經集驗記",
+   "holder": "東京大學圖書館",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "b-133",
+   "book_page": 546,
+   "group": "D",
+   "number": 20,
+   "code": "950a",
+   "title": "胎藏界儀軌",
+   "holder": "大東急記念文庫",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-135",
+   "book_page": 548,
+   "group": "D",
+   "number": 21,
+   "code": "950b",
+   "title": "金剛界大法念誦次第",
+   "holder": "醍醐寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-137",
+   "book_page": 550,
+   "group": "D",
+   "number": 22,
+   "code": "979",
+   "title": "胎藏界私記",
+   "holder": "曼殊院",
+   "annotated": "天元二年(979)頃"
+  },
+  {
+   "page": "b-139",
+   "book_page": 552,
+   "group": "D",
+   "number": 23,
+   "code": "1000a",
+   "title": "方便心論",
+   "holder": "東大寺圖書館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-141",
+   "book_page": 554,
+   "group": "D",
+   "number": 24,
+   "code": "1016a",
+   "title": "南海寄歸內法傳",
+   "holder": "天理圖書館",
+   "annotated": "長和五年(1016)頃"
+  },
+  {
+   "page": "b-143",
+   "book_page": 556,
+   "group": "D",
+   "number": 25,
+   "code": "1024a",
+   "title": "大般涅槃經",
+   "holder": "石山寺",
+   "annotated": "治安四年(1024)頃"
+  },
+  {
+   "page": "b-145",
+   "book_page": 558,
+   "group": "D",
+   "number": 26,
+   "code": "1026",
+   "title": "五字文殊私記",
+   "holder": "來迎院如來藏",
+   "annotated": "萬壽三年(1026)"
+  },
+  {
+   "page": "b-147",
+   "book_page": 560,
+   "group": "D",
+   "number": 27,
+   "code": "1046",
+   "title": "金剛頂經觀自在王如來修行法",
+   "holder": "曼殊院",
+   "annotated": "永承元年(1046)"
+  },
+  {
+   "page": "b-149",
+   "book_page": 562,
+   "group": "D",
+   "number": 28,
+   "code": "1050a",
+   "title": "金剛界儀軌",
+   "holder": "高山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-151",
+   "book_page": 564,
+   "group": "D",
+   "number": 29,
+   "code": "1050b",
+   "title": "大日經廣大成就儀軌",
+   "holder": "高山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-153",
+   "book_page": 566,
+   "group": "D",
+   "number": 30,
+   "code": "1057",
+   "title": "不動明王儀軌",
+   "holder": "高山寺",
+   "annotated": "天喜五年(1057)頃"
+  },
+  {
+   "page": "b-155",
+   "book_page": 568,
+   "group": "D",
+   "number": 31,
+   "code": "1064",
+   "title": "大毗盧遮那成佛經",
+   "holder": "慶應義塾圖書館",
+   "annotated": "康平七年(1064)"
+  },
+  {
+   "page": "b-157",
+   "book_page": 570,
+   "group": "D",
+   "number": 32,
+   "code": "1089",
+   "title": "大輪金剛惣持陀羅尼經",
+   "holder": "東寺",
+   "annotated": "寛治三年(1089)"
+  },
+  {
+   "page": "b-159",
+   "book_page": 572,
+   "group": "E",
+   "number": 1,
+   "code": "830a",
+   "title": "金剛波若經集驗記",
+   "holder": "石山寺・天理圖書館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-161",
+   "book_page": 574,
+   "group": "E",
+   "number": 2,
+   "code": "830b",
+   "title": "華嚴經探玄記",
+   "holder": "聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-163",
+   "book_page": 576,
+   "group": "E",
+   "number": 3,
+   "code": "830c",
+   "title": "瑜伽師地論",
+   "holder": "石山寺他",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-165",
+   "book_page": 578,
+   "group": "E",
+   "number": 4,
+   "code": "830d",
+   "title": "妙法蓮華經玄贊",
+   "holder": "知恩院",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-167",
+   "book_page": 580,
+   "group": "E",
+   "number": 5,
+   "code": "850a",
+   "title": "大唐三藏玄奘法師表啓",
+   "holder": "知恩院",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-169",
+   "book_page": 582,
+   "group": "E",
+   "number": 6,
+   "code": "850b",
+   "title": "七喩三平等十无上義",
+   "holder": "東大寺圖書館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-171",
+   "book_page": 584,
+   "group": "E",
+   "number": 7,
+   "code": "850c",
+   "title": "淨名玄論",
+   "holder": "京都國立博物館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-173",
+   "book_page": 586,
+   "group": "E",
+   "number": 8,
+   "code": "850d",
+   "title": "妙法蓮華經(化城喩品)",
+   "holder": "京都國立博物館",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-175",
+   "book_page": 588,
+   "group": "E",
+   "number": 9,
+   "code": "850e",
+   "title": "金剛般若經讚述",
+   "holder": "酒井宇吉氏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-177",
+   "book_page": 590,
+   "group": "E",
+   "number": 10,
+   "code": "858",
+   "title": "百論",
+   "holder": "大東急記念文庫",
+   "annotated": "天安二年(858)"
+  },
+  {
+   "page": "b-179",
+   "book_page": 592,
+   "group": "E",
+   "number": 11,
+   "code": "883",
+   "title": "大乘大集地藏十輪經",
+   "holder": "東大寺圖書館・聖語藏",
+   "annotated": "元慶七年(883)"
+  },
+  {
+   "page": "b-181",
+   "book_page": 594,
+   "group": "E",
+   "number": 12,
+   "code": "890a",
+   "title": "金光明經文句",
+   "holder": "知恩院",
+   "annotated": "寛平(889–898)頃"
+  },
+  {
+   "page": "b-183",
+   "book_page": 596,
+   "group": "E",
+   "number": 13,
+   "code": "935",
+   "title": "實相般若波羅蜜經",
+   "holder": "五島美術館",
+   "annotated": "承平五年(935)"
+  },
+  {
+   "page": "b-185",
+   "book_page": 598,
+   "group": "E",
+   "number": 14,
+   "code": "950a",
+   "title": "大毗盧遮那成佛經",
+   "holder": "國立國會圖書館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-187",
+   "book_page": 600,
+   "group": "E",
+   "number": 15,
+   "code": "950b",
+   "title": "神供法",
+   "holder": "醍醐寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-189",
+   "book_page": 602,
+   "group": "E",
+   "number": 16,
+   "code": "950c",
+   "title": "彌勒上生經疏",
+   "holder": "五島美術館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-191",
+   "book_page": 604,
+   "group": "E",
+   "number": 17,
+   "code": "950d",
+   "title": "建立曼荼羅護摩儀軌",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-193",
+   "book_page": 606,
+   "group": "E",
+   "number": 18,
+   "code": "950e",
+   "title": "大乘本生心地觀經",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-195",
+   "book_page": 608,
+   "group": "E",
+   "number": 19,
+   "code": "955",
+   "title": "大乘掌珍論",
+   "holder": "小川廣巳氏",
+   "annotated": "天曆九年(955)"
+  },
+  {
+   "page": "b-197",
+   "book_page": 610,
+   "group": "E",
+   "number": 20,
+   "code": "1000a",
+   "title": "成唯識廿論述記",
+   "holder": "知恩院",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-199",
+   "book_page": 612,
+   "group": "E",
+   "number": 21,
+   "code": "1000b",
+   "title": "佛說正恭敬經",
+   "holder": "西福寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-201",
+   "book_page": 614,
+   "group": "E",
+   "number": 22,
+   "code": "1050a",
+   "title": "妙法蓮華經",
+   "holder": "高野山龍光院",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-203",
+   "book_page": 616,
+   "group": "E",
+   "number": 23,
+   "code": "1050b",
+   "title": "破壇法",
+   "holder": "高山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-205",
+   "book_page": 618,
+   "group": "F",
+   "number": 1,
+   "code": "830a",
+   "title": "觀彌勒上生兜率天經贊",
+   "holder": "箕面學園",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-207",
+   "book_page": 620,
+   "group": "F",
+   "number": 2,
+   "code": "850a",
+   "title": "佛說淨業障經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-209",
+   "book_page": 622,
+   "group": "F",
+   "number": 3,
+   "code": "850b",
+   "title": "金光明最勝王經註釋(奈良本)",
+   "holder": "東大寺圖書館・聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-211",
+   "book_page": 624,
+   "group": "F",
+   "number": 4,
+   "code": "850c",
+   "title": "四分律行事鈔",
+   "holder": "松田福一郎氏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-213",
+   "book_page": 626,
+   "group": "F",
+   "number": 5,
+   "code": "850d",
+   "title": "因明論疏",
+   "holder": "東京大學國語研究室",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-215",
+   "book_page": 628,
+   "group": "F",
+   "number": 6,
+   "code": "850e",
+   "title": "大智度論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-217",
+   "book_page": 630,
+   "group": "F",
+   "number": 7,
+   "code": "850f",
+   "title": "大方廣佛華嚴經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-219",
+   "book_page": 632,
+   "group": "F",
+   "number": 8,
+   "code": "850g",
+   "title": "說无垢稱經",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-221",
+   "book_page": 634,
+   "group": "F",
+   "number": 9,
+   "code": "870a",
+   "title": "瑜伽師地論",
+   "holder": "石山寺",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-223",
+   "book_page": 636,
+   "group": "F",
+   "number": 10,
+   "code": "870b",
+   "title": "華嚴經探玄記",
+   "holder": "聖語藏",
+   "annotated": "平安時代初期"
+  },
+  {
+   "page": "b-225",
+   "book_page": 638,
+   "group": "F",
+   "number": 11,
+   "code": "900a",
+   "title": "大般涅槃經",
+   "holder": "石山寺",
+   "annotated": "延喜(901–923)頃"
+  },
+  {
+   "page": "b-227",
+   "book_page": 640,
+   "group": "F",
+   "number": 12,
+   "code": "950a",
+   "title": "入楞伽經",
+   "holder": "知恩院",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-229",
+   "book_page": 642,
+   "group": "F",
+   "number": 13,
+   "code": "950b",
+   "title": "維摩詰經",
+   "holder": "五島美術館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-231",
+   "book_page": 644,
+   "group": "F",
+   "number": 14,
+   "code": "950c",
+   "title": "大日經蓮花胎藏儀軌",
+   "holder": "東寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-233",
+   "book_page": 646,
+   "group": "F",
+   "number": 15,
+   "code": "950d",
+   "title": "大唐西域記",
+   "holder": "興聖寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-235",
+   "book_page": 648,
+   "group": "F",
+   "number": 16,
+   "code": "950e",
+   "title": "金光明最勝王經",
+   "holder": "五島美術館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-237",
+   "book_page": 650,
+   "group": "F",
+   "number": 17,
+   "code": "950f",
+   "title": "諸經要集",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-239",
+   "book_page": 652,
+   "group": "F",
+   "number": 18,
+   "code": "950g",
+   "title": "白傘蓋念誦法要",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-241",
+   "book_page": 654,
+   "group": "F",
+   "number": 19,
+   "code": "950h",
+   "title": "金剛般若經會釋",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-243",
+   "book_page": 656,
+   "group": "F",
+   "number": 20,
+   "code": "1000a",
+   "title": "細字金光明最勝王經",
+   "holder": "高野山龍光院",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-245",
+   "book_page": 658,
+   "group": "F",
+   "number": 21,
+   "code": "1000b",
+   "title": "四未曾有經",
+   "holder": "聖語藏",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-247",
+   "book_page": 660,
+   "group": "F",
+   "number": 22,
+   "code": "1000c",
+   "title": "胎記",
+   "holder": "醍醐寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-249",
+   "book_page": 662,
+   "group": "F",
+   "number": 23,
+   "code": "1030",
+   "title": "藥師念誦次第(題未詳聖教紙背)",
+   "holder": "石山寺",
+   "annotated": "長元三年(1030)頃"
+  },
+  {
+   "page": "b-251",
+   "book_page": 664,
+   "group": "F",
+   "number": 24,
+   "code": "1050a",
+   "title": "大日經成就儀軌",
+   "holder": "東寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-253",
+   "book_page": 666,
+   "group": "F",
+   "number": 25,
+   "code": "1050b",
+   "title": "虛空藏求聞持經",
+   "holder": "石山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-255",
+   "book_page": 668,
+   "group": "F",
+   "number": 26,
+   "code": "1138",
+   "title": "大日經持誦不同",
+   "holder": "高山寺",
+   "annotated": "保延四年(1138)"
+  },
+  {
+   "page": "b-257",
+   "book_page": 670,
+   "group": "G",
+   "number": 1,
+   "code": "900a",
+   "title": "古文尚書(其一)",
+   "holder": "東山御文庫・東洋文庫・神田喜一郎氏",
+   "annotated": "延喜(901–923)頃",
+   "part": "其一"
+  },
+  {
+   "page": "b-258",
+   "book_page": 671,
+   "group": "G",
+   "number": 1,
+   "code": "900a",
+   "title": "古文尚書(其二)",
+   "holder": "東山御文庫・東洋文庫・神田喜一郎氏",
+   "annotated": "延喜(901–923)頃",
+   "part": "其二"
+  },
+  {
+   "page": "b-259",
+   "book_page": 672,
+   "group": "G",
+   "number": 1,
+   "code": "900a",
+   "title": "古文尚書(其三)",
+   "holder": "東山御文庫・東洋文庫・神田喜一郎氏",
+   "annotated": "延喜(901–923)頃",
+   "part": "其三"
+  },
+  {
+   "page": "b-261",
+   "book_page": 674,
+   "group": "G",
+   "number": 2,
+   "code": "930a",
+   "title": "日本書紀(推古紀・皇極紀)",
+   "holder": "文化廳",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-263",
+   "book_page": 676,
+   "group": "G",
+   "number": 3,
+   "code": "948",
+   "title": "漢書楊雄傳",
+   "holder": "上野淳一氏",
+   "annotated": "天曆二年(948)"
+  },
+  {
+   "page": "b-265",
+   "book_page": 678,
+   "group": "G",
+   "number": 4,
+   "code": "950a",
+   "title": "毛詩",
+   "holder": "東洋文庫",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-267",
+   "book_page": 680,
+   "group": "G",
+   "number": 5,
+   "code": "950b",
+   "title": "漢書高帝紀下",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-269",
+   "book_page": 682,
+   "group": "G",
+   "number": 6,
+   "code": "950c",
+   "title": "地藏十輪經",
+   "holder": "知恩院",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-271",
+   "book_page": 684,
+   "group": "G",
+   "number": 7,
+   "code": "950d",
+   "title": "淨名玄論",
+   "holder": "京都國立博物館",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-273",
+   "book_page": 686,
+   "group": "G",
+   "number": 8,
+   "code": "950e",
+   "title": "仁王經咒願文",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-275",
+   "book_page": 688,
+   "group": "G",
+   "number": 9,
+   "code": "950f",
+   "title": "彌勒下生經",
+   "holder": "西福寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-277",
+   "book_page": 690,
+   "group": "G",
+   "number": 10,
+   "code": "950g",
+   "title": "世說新書",
+   "holder": "神田喜一郎氏",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-279",
+   "book_page": 692,
+   "group": "G",
+   "number": 11,
+   "code": "950h",
+   "title": "悉曇藏",
+   "holder": "東寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-281",
+   "book_page": 694,
+   "group": "G",
+   "number": 12,
+   "code": "950i",
+   "title": "金剛頂蓮華部心念誦儀軌",
+   "holder": "東寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-283",
+   "book_page": 696,
+   "group": "G",
+   "number": 13,
+   "code": "962",
+   "title": "求聞持法",
+   "holder": "石山寺",
+   "annotated": "應和二年(962)頃"
+  },
+  {
+   "page": "b-285",
+   "book_page": 698,
+   "group": "G",
+   "number": 14,
+   "code": "962a",
+   "title": "求聞持法",
+   "holder": "石山寺",
+   "annotated": "應和二年(962)頃"
+  },
+  {
+   "page": "b-287",
+   "book_page": 700,
+   "group": "G",
+   "number": 15,
+   "code": "1000a",
+   "title": "佛頂尊勝陀羅尼經",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-289",
+   "book_page": 702,
+   "group": "G",
+   "number": 16,
+   "code": "1000b",
+   "title": "法華文句",
+   "holder": "東大寺圖書館",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-291",
+   "book_page": 704,
+   "group": "G",
+   "number": 17,
+   "code": "1000c",
+   "title": "摩訶止觀",
+   "holder": "酒井宇吉氏",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-293",
+   "book_page": 706,
+   "group": "G",
+   "number": 18,
+   "code": "1000d",
+   "title": "聖閻曼德迦大神驗念誦法",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-295",
+   "book_page": 708,
+   "group": "G",
+   "number": 19,
+   "code": "1008",
+   "title": "蘇悉地羯羅經",
+   "holder": "高野山學園",
+   "annotated": "寛弘五年(1008)"
+  },
+  {
+   "page": "b-297",
+   "book_page": 710,
+   "group": "G",
+   "number": 20,
+   "code": "1020a",
+   "title": "成唯識論",
+   "holder": "石山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-299",
+   "book_page": 712,
+   "group": "G",
+   "number": 21,
+   "code": "1035",
+   "title": "金剛頂大教王經",
+   "holder": "高山寺",
+   "annotated": "長元八年(1035)"
+  },
+  {
+   "page": "b-301",
+   "book_page": 714,
+   "group": "G",
+   "number": 22,
+   "code": "1040",
+   "title": "大毗盧遮那成佛經",
+   "holder": "五島美術館",
+   "annotated": "長曆四年(1040)"
+  },
+  {
+   "page": "b-303",
+   "book_page": 716,
+   "group": "G",
+   "number": 23,
+   "code": "1040",
+   "title": "金剛界念誦次第私記",
+   "holder": "石山寺",
+   "annotated": "長曆四年(1040)"
+  },
+  {
+   "page": "b-305",
+   "book_page": 718,
+   "group": "G",
+   "number": 24,
+   "code": "1040a",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "東寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-307",
+   "book_page": 720,
+   "group": "G",
+   "number": 25,
+   "code": "1050a",
+   "title": "惠果和上之碑文",
+   "holder": "東京大學國語研究室",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-309",
+   "book_page": 722,
+   "group": "G",
+   "number": 26,
+   "code": "1050b",
+   "title": "佛說觀佛三昧海經",
+   "holder": "石山寺",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-311",
+   "book_page": 724,
+   "group": "G",
+   "number": 27,
+   "code": "1050c",
+   "title": "法華玄義",
+   "holder": "日光天海藏",
+   "annotated": "平安時代後期"
+  },
+  {
+   "page": "b-313",
+   "book_page": 726,
+   "group": "G",
+   "number": 28,
+   "code": "1056",
+   "title": "蘇悉地羯羅供養法",
+   "holder": "高山寺",
+   "annotated": "天喜四年(1056)"
+  },
+  {
+   "page": "b-315",
+   "book_page": 728,
+   "group": "G",
+   "number": 29,
+   "code": "1079",
+   "title": "聖焰漫德迦威怒王立成大神驗念誦法",
+   "holder": "高野山西南院",
+   "annotated": "承曆三年(1079)"
+  },
+  {
+   "page": "b-317",
+   "book_page": 730,
+   "group": "G",
+   "number": 30,
+   "code": "1083",
+   "title": "觀自在大悲成就瑜伽蓮華部念誦法門",
+   "holder": "東寺",
+   "annotated": "永保三年(1083)頃"
+  },
+  {
+   "page": "b-318",
+   "book_page": 731,
+   "group": "G",
+   "number": 31,
+   "code": "1135",
+   "title": "持世陀羅尼別行功能法",
+   "holder": "東寺",
+   "annotated": "長承四年(1135)"
+  },
+  {
+   "page": "b-319",
+   "book_page": 732,
+   "group": "G",
+   "number": 32,
+   "code": "1153",
+   "title": "不空羂索神咒王經",
+   "holder": "醍醐寺",
+   "annotated": "仁平三年(1153)"
+  },
+  {
+   "page": "b-321",
+   "book_page": 734,
+   "group": "G",
+   "number": 33,
+   "code": "1093",
+   "title": "三種悉地陀羅尼法",
+   "holder": "醍醐寺",
+   "annotated": "寛治七年(1093)頃"
+  },
+  {
+   "page": "b-323",
+   "book_page": 736,
+   "group": "G",
+   "number": 34,
+   "code": "1100",
+   "title": "求聞持私記",
+   "holder": "高山寺",
+   "annotated": "康和二年(1100)頃"
+  },
+  {
+   "page": "b-325",
+   "book_page": 738,
+   "group": "G",
+   "number": 35,
+   "code": "1100a",
+   "title": "金剛頂瑜伽略述卅七尊心要",
+   "holder": "東寺",
+   "annotated": "康和(1099–1104)頃"
+  },
+  {
+   "page": "b-327",
+   "book_page": 740,
+   "group": "G",
+   "number": 36,
+   "code": "1115",
+   "title": "施諸餓鬼飲食及水法",
+   "holder": "東寺",
+   "annotated": "永久三年(1115)頃"
+  },
+  {
+   "page": "b-329",
+   "book_page": 742,
+   "group": "G",
+   "number": 37,
+   "code": "1150a",
+   "title": "北斗七星護摩祕要儀軌",
+   "holder": "高野山西南院",
+   "annotated": "院政期"
+  },
+  {
+   "page": "b-331",
+   "book_page": 744,
+   "group": "G",
+   "number": 38,
+   "code": "1150b",
+   "title": "大乘本生心地觀經",
+   "holder": "宮內廳書陵部",
+   "annotated": "院政期"
+  },
+  {
+   "page": "b-333",
+   "book_page": 746,
+   "group": "G",
+   "number": 39,
+   "code": "1167",
+   "title": "黃帝內經太素",
+   "holder": "仁和寺",
+   "annotated": "仁安二年(1167)"
+  },
+  {
+   "page": "b-335",
+   "book_page": 748,
+   "group": "H",
+   "number": 1,
+   "code": "950a",
+   "title": "金剛頂瑜伽中略出念誦經",
+   "holder": "石山寺",
+   "annotated": "平安時代中期"
+  },
+  {
+   "page": "b-337",
+   "book_page": 750,
+   "group": "H",
+   "number": 2,
+   "code": "986",
+   "title": "天台法華宗義集",
+   "holder": "石山寺",
+   "annotated": "寛和二年(986)頃"
+  },
+  {
+   "page": "b-339",
+   "book_page": 752,
+   "group": "H",
+   "number": 3,
+   "code": "1000a",
+   "title": "大毗盧遮那成佛經",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-341",
+   "book_page": 754,
+   "group": "H",
+   "number": 4,
+   "code": "1000b",
+   "title": "金剛頂瑜伽降三世成就極深密門",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-343",
+   "book_page": 756,
+   "group": "H",
+   "number": 5,
+   "code": "1000c",
+   "title": "虛空藏菩薩求聞持法",
+   "holder": "石山寺",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-345",
+   "book_page": 758,
+   "group": "H",
+   "number": 6,
+   "code": "1000d",
+   "title": "蘇悉地羯羅經",
+   "holder": "高野山學園",
+   "annotated": "長保(999–1004)頃"
+  },
+  {
+   "page": "b-347",
+   "book_page": 760,
+   "group": "I",
+   "number": 1,
+   "code": "1050a",
+   "title": "大般涅槃經",
+   "holder": "西福寺",
+   "annotated": "平安時代後期"
+  }
+ ]
+}
