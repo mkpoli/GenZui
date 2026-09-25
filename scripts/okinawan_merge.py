@@ -138,9 +138,21 @@ def _widen_strokes(rings, d):
     base = pathops.Path()
     O.draw(rings).replay(base.getPen())
     base.simplify(fix_winding=True, keep_starting_points=False)
-    shape = pathops.Path()
-    for dx in np.linspace(-d / 2, d / 2, 9):
-        shape = pathops.op(shape, base.transform(1, 0, 0, 1, dx, 0), pathops.PathOp.UNION, fix_winding=True)
+    # each resolved copy winds 0 or 1 everywhere, so one nonzero pass unites them
+    # copies about 2 units apart: closer ones leave near-coincident edges that
+    # Skia cannot resolve, and the scallops between them stay far below a unit.
+    # A rare layout still defeats it; a copy count one higher then does not.
+    for extra in range(4):
+        shape = pathops.Path()
+        for dx in np.linspace(-d / 2, d / 2, int(np.ceil(d / 2)) + 1 + extra):
+            base.transform(1, 0, 0, 1, dx, 0).draw(shape.getPen())
+        try:
+            shape.simplify(fix_winding=True, keep_starting_points=False)
+            break
+        except pathops.PathOpsError:
+            continue
+    else:
+        raise ValueError(f'cannot widen the strokes by {d}')
     pen = O.RecordingPen(); shape.draw(pen)
     return O.rings(pen)
 
