@@ -159,6 +159,10 @@ W_DEFAULTS = dict(BESIDE_DEFAULTS, mark_char='こ', mark_index=1, mark_lie=True,
 WI = dict(W_DEFAULTS, mark_x=-44, mark_dy=242, mark_scale=0.66, mark_len=0.84, mark_angle=-8.0, mark_bend=20,
           neck_w=1.45, head_w=1.45, kana_sx=0.88, kana_sy=0.88, kana_bold=9.091)
 
+# WE as placed by hand (research/okinawan-arena/glottal-we): WI's dot, lower,
+# over a shorter ゑ.
+WE = dict(WI, mark_x=-34, mark_dy=172, kana_sy=0.8)
+
 
 def _widen_strokes(rings, d):
     """Each stroke made wider by d, sideways only: the outline swept along a

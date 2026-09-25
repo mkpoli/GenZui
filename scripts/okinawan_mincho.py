@@ -229,9 +229,9 @@ def glottal_wi(k):
     return okinawan_merge.glottal_beside(k.font, k.contours, 'ゐ', **okinawan_merge.WI)
 
 
-@drawing(0xF462)  # glottal WE: the same dot over ゑ
+@drawing(0xF462)  # glottal WE: the same dot, lower, over a shorter ゑ
 def glottal_we(k):
-    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゑ', **okinawan_merge.WI)
+    return okinawan_merge.glottal_beside(k.font, k.contours, 'ゑ', **okinawan_merge.WE)
 
 
 @drawing(0xF460)  # glottal WA: the same dot over WI's body without its inner loop
