@@ -100,11 +100,27 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 
 .hero{align-self:center;min-width:0}
 .big{display:block;font-size:clamp(110px,15vw,210px);line-height:1.05;letter-spacing:-.05em;margin-left:-.04em;transition:transform .7s var(--ease),color .4s;transform-origin:left 70%;font-synthesis:none}
-.big>span{font-weight:400}.big>b{font-weight:700}
-.big>*{position:relative;display:inline-block}
-.big>*::after{content:attr(data-w);position:absolute;left:.06em;top:.02em;font:600 10px/1 var(--hud);letter-spacing:.24em;color:var(--mint);transition:color .4s}
-.card.on .big>*::after{color:var(--green)}
-.kind b{font-weight:800}
+/* Weight: one switch sets both cards' mark, name and kana roll. */
+.big,.name,.roll{font-weight:var(--w,400);font-synthesis:none}
+html[data-weight="700"]{--w:700}
+.kind .w{transition:opacity .4s}.kind .w-b{opacity:.4}
+html[data-weight="700"] .kind .w-r{opacity:.4}html[data-weight="700"] .kind .w-b{opacity:1}
+.weighing :is(.big,.name,.roll){animation:weigh .52s cubic-bezier(.2,.9,.3,1)}
+@keyframes weigh{0%{filter:none}38%{filter:blur(2.5px) brightness(1.7) drop-shadow(0 0 14px var(--glow));transform:scaleX(1.035) skewX(-4deg)}
+  62%{filter:blur(.5px) drop-shadow(0 0 8px var(--glow))}100%{filter:none;transform:none}}
+.wt{position:relative;display:inline-grid;grid-template-columns:1fr 1fr;align-items:center;padding:0;border:1px solid var(--line);
+  color:var(--mint);letter-spacing:.24em;text-transform:uppercase;cursor:pointer;background:none;overflow:hidden}
+.wt>span{position:relative;z-index:1;padding:12px 16px;display:flex;gap:8px;align-items:center;justify-content:center;transition:color .35s}
+.wt>span b{font:400 17px/1 var(--serif);letter-spacing:0;text-transform:none;font-synthesis:none}
+.wt>span+span b{font-weight:700}
+.wt>i{position:absolute;inset:3px auto 3px 3px;width:calc(50% - 3px);background:var(--white);box-shadow:0 0 0 1px var(--white),0 0 22px rgba(63,174,132,.55);
+  transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+.wt[aria-checked=true]>i{transform:translateX(calc(100% - 3px))}
+.wt[aria-checked=false]>span:first-of-type,.wt[aria-checked=true]>span+span{color:var(--field)}
+.wt:hover{border-color:var(--mint)}
+.wt::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(244,247,241,.5) 50%,transparent 70%);transform:translateX(-120%)}
+.wt.flash::after{transition:transform .6s cubic-bezier(.2,.8,.2,1);transform:translateX(120%)}
+.wt kbd{font:inherit;opacity:.55;margin-left:2px}
 .card.on .big{transform:scale(1.04);color:var(--green)}
 .serif .big,.serif .name,.serif .roll{font-family:var(--serif)}
 .sans .big,.sans .name,.sans .roll{font-family:var(--sans)}
@@ -247,8 +263,8 @@ a.dl{text-decoration:none}
   .choose,.details{grid-template-columns:1fr}
   .links{grid-template-columns:1fr}
   .card{min-height:0}
-  .big{font-size:clamp(88px,26vw,140px);margin-top:18px}
-  .tabs{width:100%}.tabs button{flex:1}
+  .big{font-size:clamp(88px,26vw,140px)}
+  .tabs,.wt{width:100%}.tabs button{flex:1}
   .status{flex-basis:100%;order:3}
   .dl{width:100%;justify-content:center}
   .enter{display:none}
@@ -271,9 +287,9 @@ a.dl{text-decoration:none}
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">01</span><span>Mincho · Noto Serif JP</span></div>
         <div class="hero">
-          <span class="big" aria-hidden="true"><span data-w="REGULAR">源</span><b data-w="BOLD">源</b></span>
+          <span class="big" aria-hidden="true">源萃</span>
           <span class="name" lang="ja">源萃明朝</span>
-          <div class="kind hud">GenZui Serif · {{VERSION}} · Regular / <b>Bold</b></div>
+          <div class="kind hud">GenZui Serif · {{VERSION}} · <span class="w w-r">Regular</span> / <span class="w w-b">Bold</span></div>
           <div class="roll" aria-hidden="true" lang="ja"><span>𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　</span></div>
         </div>
         <div class="bottom">
@@ -290,9 +306,9 @@ a.dl{text-decoration:none}
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="top hud"><span class="slot num">02</span><span>Gothic · Noto Sans JP</span></div>
         <div class="hero">
-          <span class="big" aria-hidden="true"><span data-w="REGULAR">源</span><b data-w="BOLD">源</b></span>
+          <span class="big" aria-hidden="true">源萃</span>
           <span class="name" lang="ja">源萃ゴシック</span>
-          <div class="kind hud">GenZui Sans · {{SANS_VERSION}} · Regular / <b>Bold</b></div>
+          <div class="kind hud">GenZui Sans · {{SANS_VERSION}} · <span class="w w-r">Regular</span> / <span class="w w-b">Bold</span></div>
           <div class="roll" aria-hidden="true" lang="ja"><span>𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　𛀂𛀆𛀋𛀁𛀕𛀙𛁛𛂦𛃭𛄣𛄤𛄥𛄦𛄧𛄨𛅨𪜈𬻿𬼀𬼂　</span></div>
         </div>
         <div class="bottom">
@@ -348,6 +364,7 @@ a.dl{text-decoration:none}
         <button type="button" data-view="compare" aria-pressed="false">Compare</button>
         <button type="button" data-view="details" aria-pressed="false">Details</button>
       </div>
+      <button class="wt hud" id="weight" type="button" role="switch" aria-checked="false" aria-label="Bold" title="Weight (B)"><i aria-hidden="true"></i><span><b aria-hidden="true">源</b>Regular</span><span><b aria-hidden="true">源</b>Bold</span></button>
       <p class="status hud" id="status" role="status">← → select · Enter open</p>
       <a class="dl hud" id="download-both" href="downloads/{{BOTH_ZIP}}" download><span>Download both</span><small>ZIP · <span class="num">{{BOTH_SIZE}}</span> MB</small><span aria-hidden="true">↓</span></a>
     </div>
@@ -451,6 +468,25 @@ a.dl{text-decoration:none}
   };
   $$('.tabs [data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
 
+  // Weight switch: both cards change together; B toggles it from anywhere.
+  const weight = $('#weight');
+  function setWeight(bold) {
+    document.documentElement.dataset.weight = bold ? '700' : '400';
+    weight.setAttribute('aria-checked', String(bold));
+    if (still) return;
+    document.documentElement.classList.remove('weighing'); weight.classList.remove('flash');
+    void weight.offsetWidth;
+    document.documentElement.classList.add('weighing'); weight.classList.add('flash');
+    setTimeout(() => { document.documentElement.classList.remove('weighing'); weight.classList.remove('flash'); }, 650);
+    const r = weight.getBoundingClientRect();
+    document.dispatchEvent(new CustomEvent('weight', { detail: { x: r.left + r.width / 2, y: r.top + r.height / 2 } }));
+  }
+  weight.addEventListener('click', () => setWeight(weight.getAttribute('aria-checked') !== 'true'));
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'b' || e.key === 'B') && !e.metaKey && !e.ctrlKey && !e.altKey && !e.target.closest('input,textarea,[contenteditable]'))
+      setWeight(weight.getAttribute('aria-checked') !== 'true');
+  });
+
   document.addEventListener('keydown', e => {
     if (screen.dataset.view !== 'choose' || e.target.closest('input,textarea,[contenteditable],.tabs,.dl')) return;
     const i = Math.max(0, cards.findIndex(c => c.classList.contains('sel')));
@@ -516,6 +552,11 @@ a.dl{text-decoration:none}
   // Switching cards: a band of light crosses the grid toward the new choice,
   // and the drifting kana change to that family's face.
   const bg = { family: 'serif', from: 'serif', t0: -1e9, dir: 1, x0: 0 };
+  // The weight switch sends a wave out from itself.
+  document.addEventListener('weight', e => {
+    waves.push({ x: e.detail.x, y: e.detail.y, t0: performance.now() });
+    if (waves.length > 4) waves.shift();
+  });
   document.addEventListener('family', e => {
     const { family, dir, rect } = e.detail;
     bg.from = bg.family; bg.family = family; bg.t0 = performance.now(); bg.dir = dir;
