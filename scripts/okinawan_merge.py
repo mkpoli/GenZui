@@ -172,21 +172,50 @@ def _widen_strokes(rings, d):
     base = pathops.Path()
     O.draw(rings).replay(base.getPen())
     base.simplify(fix_winding=True, keep_starting_points=False)
-    # each resolved copy winds 0 or 1 everywhere, so one nonzero pass unites them
-    # copies about 2 units apart: closer ones leave near-coincident edges that
-    # Skia cannot resolve, and the scallops between them stay far below a unit.
-    # Some layouts still defeat it at one count and not at a neighbouring one,
-    # so nearby counts are tried, denser first.
-    n = int(np.ceil(d / 2)) + 1
-    for count in [*range(n, n + 6), *range(n - 1, 1, -1)]:
-        shape = pathops.Path()
-        for dx in np.linspace(-d / 2, d / 2, count):
-            base.transform(1, 0, 0, 1, dx, 0).draw(shape.getPen())
+    # Skia can fail, or worse, return a wrong outline without complaint, so
+    # every result is checked: it must cover the kana, and grow it by no more
+    # than the sweep can (d times the outline's height, both sides counted).
+    def area(path):
+        from fontTools.pens.areaPen import AreaPen
+        pen = AreaPen(); path.draw(pen)
+        return abs(pen.value)
+    ys = [q[1] for r in rings for seg in r for q in seg]
+    limit = area(base) + d * 2 * sum(abs(seg[3][1] - seg[0][1]) for r in rings for seg in r) / 2 + 1
+    def sound(shape):
         try:
-            shape.simplify(fix_winding=True, keep_starting_points=False)
-            break
+            missing = area(pathops.op(base, shape, pathops.PathOp.DIFFERENCE))
         except pathops.PathOpsError:
+            return False
+        return missing < 1 and area(base) <= area(shape) <= limit
+    # Copies about 2 units apart (closer ones leave near-coincident edges Skia
+    # cannot resolve); a count that fails is followed by its neighbours, and
+    # each count is tried as one nonzero pass and as a chain of unions.
+    def one_pass(count, jitter=0):
+        shape = pathops.Path()
+        for dx in np.linspace(-d / 2, d / 2, count) + jitter:
+            base.transform(1, 0, 0, 1, dx, 0).draw(shape.getPen())
+        shape.simplify(fix_winding=True, keep_starting_points=False)
+        return shape
+    def chained(count, jitter=0):
+        shape = pathops.Path()
+        for dx in np.linspace(-d / 2, d / 2, count) + jitter:
+            shape = pathops.op(shape, base.transform(1, 0, 0, 1, dx, 0), pathops.PathOp.UNION, fix_winding=True)
+        return shape
+    # a last resort shifts every copy by a fraction of a unit, off the
+    # coincidences that defeat Skia
+    n = int(np.ceil(d / 2)) + 1
+    for count, jitter in [*((c, 0) for c in [*range(n, n + 6), *range(n - 1, 1, -1)]),
+                          *((c, j) for j in (0.13, 0.29, 0.47) for c in range(n, n + 3))]:
+        for method in (one_pass, chained):
+            try:
+                shape = method(count, jitter)
+            except pathops.PathOpsError:
+                continue
+            if sound(shape):
+                break
+        else:
             continue
+        break
     else:
         raise ValueError(f'cannot widen the strokes by {d}')
     pen = O.RecordingPen(); shape.draw(pen)
