@@ -29,6 +29,7 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
 import okinawan_merge
+import okinawan_outline as O
 from serif import contours
 from sources import ROOT
 
@@ -328,14 +329,13 @@ def svg_path(rings):
         f'C{a[0]:.1f} {a[1]:.1f} {b[0]:.1f} {b[1]:.1f} {c[0]:.1f} {c[1]:.1f}' for _, a, b, c in r) + 'Z' for r in rings)
 
 
-BOLDS = list(range(0, 31, 2))                              # kana weights the tuner offers
-NARROWS = [round(0.6 + 0.02 * i, 2) for i in range(31)]    # kana widths (or sizes) the tuner offers
+BOLDS = list(range(0, 41, 2))     # kana weights the tuner offers, in the kana's own units
 
 
 def tune(slug, round_no, base):
     """A page for placing the mark by hand beside a kana that stays put. The
-    page shapes the mark itself; the kana's width and weight change its outline
-    through boolean operations, so each offered step is drawn here."""
+    page shapes the mark and scales the kana itself; the kana's weight changes
+    its outline through boolean operations, so each offered weight is drawn here."""
     letter = LETTERS[slug]
     kana = letter['build'].keywords['kana']
     p = {**letter['defaults'], **base}
@@ -343,27 +343,28 @@ def tune(slug, round_no, base):
     mark, pivot, body = okinawan_merge.beside_pieces(font, contours, kana, p)
     if p.get('mark_x') is None:
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap']))
-    snap = lambda v, grid: min(grid, key=lambda g: abs(g - v))
-    p['kana_bold'], p['kana_sx'] = snap(p['kana_bold'], BOLDS), snap(p['kana_sx'], NARROWS)
+    bolds = sorted({*BOLDS, p['kana_bold']})   # the starting weight is drawn too, even off the grid
     # the raw upright stroke and its centres at the ends of the width ramp: the
     # page widens, turns, bows, slants and places it as okinawan_merge does
     raw = okinawan_merge.upright_mark(font, contours, p)
     stroke = dict(segs=[[round(float(v), 2) for q in seg for v in q] for seg in raw],
                   lo=p['ramp_lo'], hi=p['ramp_hi'],
                   c0=okinawan_merge.centre_at(raw, p['ramp_lo']), c1=okinawan_merge.centre_at(raw, p['ramp_hi']))
+    kana_font = {**p, 'kana_sx': 1.0, 'kana_sy': 1.0}
+    body = okinawan_merge.BODIES[kana](font, contours) if kana in okinawan_merge.BODIES else O.rings(contours(font, ord(kana)))
+    origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
     kanas = {}
-    for sx in NARROWS:
-        for bold in BOLDS:
-            try:
-                kanas[f'{sx:.2f},{bold}'] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**p, 'kana_sx': sx, 'kana_bold': bold})[2])
-            except ValueError as error:   # a weight Skia cannot resolve at this width: the page skips it
-                print(f'no kana at width {sx}, weight {bold}: {error}')
+    for bold in bolds:
+        try:
+            kanas[str(bold)] = svg_path(okinawan_merge.beside_pieces(font, contours, kana, {**kana_font, 'kana_bold': bold})[2])
+        except ValueError as error:   # a weight Skia cannot resolve: the page skips it
+            print(f'no kana at weight {bold}: {error}')
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'kana_sx', 'kana_bold')}
+                               'neck_w', 'head_w', 'kana_sx', 'kana_sy', 'kana_bold')}
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1) + '\n')
-    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), EVEN=p['kana_anchor'] == 'bottom', STROKE=stroke, KANAS=kanas, KANA=kana if len(kana) == 1 else 'Body', BOLDS=BOLDS, NARROWS=NARROWS,
+    return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANAS=kanas, KANA_ORIGIN=list(origin), KANA=kana if len(kana) == 1 else 'Body', BOLDS=bolds,
                                                  START=start, LINES=lines))
 
 
