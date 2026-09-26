@@ -119,6 +119,8 @@ BESIDE_DEFAULTS = dict(
     mark_slant=0,      # units the top of the mark moves sideways over the foot
     mark_bold=0,       # for a small-kana mark: units of width added sideways to its strokes
     parts=None,        # per-contour transforms and weights (see beside_pieces); None keeps the whole-kana path
+    join=None,         # two parts cut and joined into one ring (see join_parts)
+    join_at=0, join_depth=0, join_fa=1.0, join_fb=1.0,
     head_angle=0,      # degrees the mark's head turns on its own; positive counterclockwise
     tail_angle=0,      # the same for its tail
     neck_w=YA['neck_w'],
@@ -184,6 +186,13 @@ SI = dict(SI_DEFAULTS, mark_x=80, mark_dy=-119, mark_scale=0.88, mark_len=1.607,
 HW_DEFAULTS = dict(BESIDE_DEFAULTS, mark_index=None, kana_anchor='left', mark_scale=0.68, mark_len=1.0,
                    mark_angle=0.0, neck_w=1.0, head_w=1.0, mark_bold=0, kana_sx=0.66, kana_sy=0.94,
                    kana_bold=14, gap=25, mark_dy=0, parts={})
+
+# HWI: ふ whose rising slant runs into い's left stroke. ふ's second contour
+# (left dot, slant and right hook) is cut after the slant and joined to い's
+# left stroke below its head; い's right stroke stands beside it.
+HWI_DEFAULTS = dict(HW_DEFAULTS, mark_char='い', mark_scale=0.72, gap=30,
+                    join=dict(a='k1', a_axis=0, a_keep='low', b='m0', b_axis=1, b_keep='low'),
+                    join_at=380, join_depth=70)
 
 
 def _widen_strokes(rings, d):
@@ -376,9 +385,10 @@ def beside_pieces(font, contours, kana, p):
         if parts is None:
             mark = plain
         else:
-            mark = [part_affine(r, part_centre(c), parts.get(f'm{i}', {}))
+            mark = [(f'm{i}', part_affine(r, part_centre(c), parts.get(f'm{i}', {})))
                     for i, c in enumerate(mark)
                     for r in _widen_strokes([c], p['mark_bold'] + parts.get(f'm{i}', {}).get('bold', 0))]
+            keys, mark = [k for k, _ in mark], [r for _, r in mark]
     raw = BODIES[kana](font, contours) if kana in BODIES else O.rings(contours(font, ord(kana)))
     origin = kana_origin(raw, p['kana_anchor'])
     # weight first, then the scaling: sweeping by d and then scaling by sx is
@@ -393,7 +403,59 @@ def beside_pieces(font, contours, kana, p):
     sx, sy = p['kana_sx'], p['kana_sy']
     groups = [[O.transform(r, np.diag([sx, sy]), (origin[0] * (1 - sx) + p['kana_dx'], origin[1] * (1 - sy) + p['kana_dy']))
                for r in g] for g in groups]
+    if parts is not None:
+        return mark, pivot, groups, (keys if len(upright_mark(font, contours, p)) > 1 else ['m0'] * len(mark))
     return mark, pivot, groups
+
+
+def cut_keep(ring, axis, at, keep):
+    """The piece of a ring on one side of the line coordinate[axis] == at: of
+    the crossings paired along the line, the pair nearest the ring's own
+    middle, keeping the arc that reaches furthest to `keep` ('low' or 'high')."""
+    cs = sorted(O.crossings(ring, axis, at), key=lambda c: O.point(ring[c[0]], c[1])[1 - axis])
+    mid = np.mean([q[1 - axis] for seg in ring for q in seg])
+    a, b = min(zip(cs[::2], cs[1::2]),
+               key=lambda pr: abs((O.point(ring[pr[0][0]], pr[0][1])[1 - axis] + O.point(ring[pr[1][0]], pr[1][1])[1 - axis]) / 2 - mid))
+    reach = (lambda s: -min(q[axis] for seg in s for q in seg)) if keep == 'low' else (lambda s: max(q[axis] for seg in s for q in seg))
+    return max((O.arc(ring, a, b), O.arc(ring, b, a)), key=reach)
+
+
+def joined(A, B, full_a=1.0, full_b=1.0):
+    """One ring from two open arcs: A's end runs into the nearer end of B, and
+    B's other end back into A's start, each through a fair curve that meets
+    the edges with their own direction and curvature."""
+    P1 = A[-1][3]
+    if np.linalg.norm(B[-1][3] - P1) < np.linalg.norm(B[0][0] - P1):
+        B = _reverse(B)
+    P0, Q0, Q1 = A[0][0], B[0][0], B[-1][3]
+    j1 = O.fair_grid(P1, O.tangent(A[-1], 1), O.curvature(A[-1], 1), Q0, O.tangent(B[0], 0), O.curvature(B[0], 0), full_a)
+    j2 = O.fair_grid(Q1, O.tangent(B[-1], 1), O.curvature(B[-1], 1), P0, O.tangent(A[0], 0), O.curvature(A[0], 0), full_b)
+    return A + [j1] + B + [j2]
+
+
+def _ring_area(ring):
+    from fontTools.pens.areaPen import AreaPen
+    pen = AreaPen(); O.draw([ring]).replay(pen)
+    return abs(pen.value)
+
+
+def join_parts(rings, keys, spec, p):
+    """Cut two parts and join them into one ring (see JOIN in the letter's
+    parameters): part a is cut join_at from its own low edge along a_axis,
+    part b join_depth below its own high edge along b_axis. Each part's
+    largest ring takes part; its other rings stay as they are."""
+    def main(key):
+        own = [i for i, k in enumerate(keys) if k == key]
+        return max(own, key=lambda i: _ring_area(rings[i]))
+    ia, ib = main(spec['a']), main(spec['b'])
+    ra, rb = rings[ia], rings[ib]
+    lo_a = min(q[spec['a_axis']] for seg in ra for q in seg)
+    hi_b = max(q[spec['b_axis']] for seg in rb for q in seg)
+    A = cut_keep(ra, spec['a_axis'], lo_a + p['join_at'], spec['a_keep'])
+    B = cut_keep(rb, spec['b_axis'], hi_b - p['join_depth'], spec['b_keep'])
+    ring = joined(A, B, p['join_fa'], p['join_fb'])
+    rest = [(k, r) for i, (k, r) in enumerate(zip(keys, rings)) if i not in (ia, ib)]
+    return [r for _, r in rest] + [ring], [k for k, _ in rest] + ['join']
 
 
 def kana_origin(body, anchor):
@@ -475,14 +537,23 @@ def glottal_beside(font, contours, kana, **params):
     `mark_x` when given (BESIDE_DEFAULTS has none, so YU is placed by its gap
     to ゆ), otherwise by its gap to the kana."""
     p = {**BESIDE_DEFAULTS, **params}
-    mark, pivot, groups = beside_pieces(font, contours, kana, p)
+    mark, pivot, groups, *mark_keys = beside_pieces(font, contours, kana, p)
     body = [r for g in groups for r in g]
     mark = sized(*shaped(mark, pivot, p), p)
     side = 'right' if p['kana_anchor'] == 'left' else 'left'   # the mark sits away from the kana's anchor
     shift = p['mark_x'] if p.get('mark_x') is not None else gap_shift(mark, body, p['gap'], side)
     mark = [_moved(r, shift) for r in mark]
+    pens = [mark, *groups]
+    if p.get('join'):
+        # two parts cut and joined into one ring, after both groups are placed
+        rings = mark + body
+        keys = mark_keys[0] + [f'k{i}' for i, g in enumerate(groups) for _ in g]
+        rings, keys = join_parts(rings, keys, p['join'], p)
+        pens = [[r for r, k in zip(rings, keys) if k[0] == 'm'],
+                *([r for r, k in zip(rings, keys) if k == f'k{i}'] for i in range(len(groups))),
+                [r for r, k in zip(rings, keys) if k == 'join']]
     # centre the letter in the em
-    xs = [q[0] for r in [*mark, *body] for seg in r for q in seg]
+    xs = [q[0] for g in pens for r in g for seg in r for q in seg]
     dx = 500 - (min(xs) + max(xs)) / 2
     # each group a whole shape, so the kana's counters stay open
-    return [O.draw([_moved(r, dx) for r in mark]), *(O.draw([_moved(r, dx) for r in g]) for g in groups)]
+    return [O.draw([_moved(r, dx) for r in g]) for g in pens if g]
