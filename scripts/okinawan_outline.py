@@ -137,3 +137,31 @@ def fair(p0, t0, k0, p1, t1, k1, fullness=1.0):
 
     best = minimize(cost, [span * .4, span * .4], bounds=[(span * .05, span * 1.2)] * 2, method='L-BFGS-B')
     return seg(best.x * fullness)
+
+
+def fair_grid(p0, t0, k0, p1, t1, k1, fullness=1.0):
+    """The same fair cubic as `fair`, found by a fixed grid search so that the
+    placement page, which repeats it step for step, lands on the same curve:
+    a 13 x 13 grid of handle lengths over 0.05 to 1.2 spans, then four rounds
+    of a 5 x 5 grid around the best, each a third as wide."""
+    span = float(np.linalg.norm(p1 - p0))
+    ts = [i / 40 for i in range(41)]
+
+    def cost(h0, h1):
+        s = (p0, p0 + t0 * h0, p1 - t1 * h1, p1)
+        k = [curvature(s, t) for t in ts]
+        pts = [point(s, t) for t in ts]
+        total = (((k[0] - k0) * span) ** 2 + ((k[-1] - k1) * span) ** 2) * 4
+        for i in range(40):
+            ds = float(np.hypot(*(pts[i + 1] - pts[i]))) + 1e-9
+            total += ((k[i + 1] - k[i]) / ds) ** 2 * ds * span ** 3
+        return total
+
+    lo, hi = .05 * span, 1.2 * span
+    step = (hi - lo) / 12
+    best = min(((lo + i * step, lo + j * step) for i in range(13) for j in range(13)), key=lambda h: cost(*h))
+    for _ in range(4):
+        step /= 3
+        best = min(((min(hi, max(lo, best[0] + i * step)), min(hi, max(lo, best[1] + j * step)))
+                    for i in range(-2, 3) for j in range(-2, 3)), key=lambda h: cost(*h))
+    return (p0, p0 + t0 * best[0] * fullness, p1 - t1 * best[1] * fullness, p1)
