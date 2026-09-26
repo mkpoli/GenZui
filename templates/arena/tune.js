@@ -62,6 +62,51 @@ function markRings(p){ // [{key, rings}]
  each(([x,y])=>{x=fx+(x-fx)*p.mark_scale;y=foot+(y-foot)*p.mark_scale;return [x+p.mark_x,foot+(y-foot)*p.mark_len+p.mark_dy]});
  return items;
 }
+// ---- cutting and joining, mirrored from okinawan_outline and okinawan_merge.join_parts ----
+const V={add:(a,b)=>[a[0]+b[0],a[1]+b[1]],sub:(a,b)=>[a[0]-b[0],a[1]-b[1]],mul:(a,k)=>[a[0]*k,a[1]*k]};
+function bz(seg,t){const [p0,c1,c2,p3]=seg,mt=1-t;return [0,1].map(i=>mt**3*p0[i]+3*mt**2*t*c1[i]+3*mt*t**2*c2[i]+t**3*p3[i])}
+function d1(seg,t){const [p0,c1,c2,p3]=seg,mt=1-t;return [0,1].map(i=>3*mt**2*(c1[i]-p0[i])+6*mt*t*(c2[i]-c1[i])+3*t**2*(p3[i]-c2[i]))}
+function tangentAt(seg,t){const d=d1(seg,t),n=Math.hypot(d[0],d[1])+1e-12;return [d[0]/n,d[1]/n]}
+function curvatureAt(seg,t){const [p0,c1,c2,p3]=seg,mt=1-t,a=d1(seg,t);
+ const b=[0,1].map(i=>6*mt*(c2[i]-2*c1[i]+p0[i])+6*t*(p3[i]-2*c2[i]+c1[i]));return (a[0]*b[1]-a[1]*b[0])/(Math.hypot(a[0],a[1])**3+1e-12)}
+function splitSeg(seg,t){const [p0,c1,c2,p3]=seg,L=(u,v)=>V.add(u,V.mul(V.sub(v,u),t));const a=L(p0,c1),b=L(c1,c2),c=L(c2,p3),d=L(a,b),e=L(b,c),f=L(d,e);return [[p0,a,d,f],[f,e,c,p3]]}
+function crossingsOf(ring,axis,value){const out=[];
+ ring.forEach((seg,i)=>{const ts=[...Array(201).keys()].map(k=>k/200),v=ts.map(t=>bz(seg,t)[axis]-value);
+  for(let j=0;j<200;j++){if(Math.sign(v[j])===Math.sign(v[j+1]))continue;let lo=ts[j],hi=ts[j+1];
+   for(let k=0;k<40;k++){const mid=(lo+hi)/2;if(Math.sign(bz(seg,mid)[axis]-value)===Math.sign(v[j]))lo=mid;else hi=mid}
+   const t=(lo+hi)/2,q=bz(seg,t);if(!out.some(([jj,u])=>{const r=bz(ring[jj],u);return Math.hypot(r[0]-q[0],r[1]-q[1])<1}))out.push([i,t])}});return out}
+function arcOf(ring,a,b){const [ia,ta]=a,[ib,tb]=b,n=ring.length,first=splitSeg(ring[ia],ta)[1];
+ if(ia===ib&&tb>ta)return [splitSeg(first,(tb-ta)/(1-ta))[0]];const segs=[first];let i=(ia+1)%n;
+ while(i!==ib){segs.push(ring[i]);i=(i+1)%n}segs.push(splitSeg(ring[ib],tb)[0]);return segs}
+function cutKeep(ring,axis,at,keep){const other=1-axis,cs=crossingsOf(ring,axis,at).sort((u,v)=>bz(ring[u[0]],u[1])[other]-bz(ring[v[0]],v[1])[other]);
+ const all=ring.flat(),mid=all.reduce((t,q)=>t+q[other],0)/all.length,pairs=[];
+ for(let i=0;i+1<cs.length;i+=2)pairs.push([cs[i],cs[i+1]]);if(!pairs.length)return null;
+ const [a,b]=pairs.reduce((best,pr)=>{const m=pr=>Math.abs((bz(ring[pr[0][0]],pr[0][1])[other]+bz(ring[pr[1][0]],pr[1][1])[other])/2-mid);return m(pr)<m(best)?pr:best});
+ const reach=s=>keep==='low'?-Math.min(...s.flat().map(q=>q[axis])):Math.max(...s.flat().map(q=>q[axis]));
+ const x=arcOf(ring,a,b),y=arcOf(ring,b,a);return reach(y)>reach(x)?y:x}
+function fairGrid(p0,t0,k0,p1,t1,k1,full){const span=Math.hypot(p1[0]-p0[0],p1[1]-p0[1]),ts=[...Array(41).keys()].map(i=>i/40);
+ const cost=(h0,h1)=>{const s=[p0,V.add(p0,V.mul(t0,h0)),V.sub(p1,V.mul(t1,h1)),p1],k=ts.map(t=>curvatureAt(s,t)),pts=ts.map(t=>bz(s,t));
+  let total=(((k[0]-k0)*span)**2+((k[40]-k1)*span)**2)*4;for(let i=0;i<40;i++){const ds=Math.hypot(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1])+1e-9;total+=((k[i+1]-k[i])/ds)**2*ds*span**3}return total};
+ const lo=.05*span,hi=1.2*span;let step=(hi-lo)/12,best=null,bc=Infinity;
+ for(let i=0;i<13;i++)for(let j=0;j<13;j++){const h=[lo+i*step,lo+j*step],c=cost(...h);if(c<bc){bc=c;best=h}}
+ for(let r=0;r<4;r++){step/=3;const base=best;bc=Infinity;for(let i=-2;i<3;i++)for(let j=-2;j<3;j++){const h=[Math.min(hi,Math.max(lo,base[0]+i*step)),Math.min(hi,Math.max(lo,base[1]+j*step))],c=cost(...h);if(c<bc){bc=c;best=h}}}
+ return [p0,V.add(p0,V.mul(t0,best[0]*full)),V.sub(p1,V.mul(t1,best[1]*full)),p1]}
+const reverseArc=B=>B.slice().reverse().map(s=>[s[3],s[2],s[1],s[0]]);
+function joinedArcs(A,B,fa,fb){const P1=A[A.length-1][3],d=(u,v)=>Math.hypot(u[0]-v[0],u[1]-v[1]);
+ if(d(B[B.length-1][3],P1)<d(B[0][0],P1))B=reverseArc(B);const P0=A[0][0],Q0=B[0][0],Q1=B[B.length-1][3],a1=A[A.length-1],b0=B[0],b1=B[B.length-1],a0=A[0];
+ return [...A,fairGrid(P1,tangentAt(a1,1),curvatureAt(a1,1),Q0,tangentAt(b0,0),curvatureAt(b0,0),fa),...B,fairGrid(Q1,tangentAt(b1,1),curvatureAt(b1,1),P0,tangentAt(a0,0),curvatureAt(a0,0),fb)]}
+function ringArea(r){let a=0;for(const s of r)for(let i=0;i<8;i++){const t0=i/8,t1=(i+1)/8,p=bz(s,t0),q=bz(s,t1);a+=p[0]*q[1]-q[0]*p[1]}return Math.abs(a)/2}
+// join_parts: part a cut join_at from its own low edge, part b join_depth below its own high edge
+function applyJoin(items,p){if(!JOIN)return {items,guides:[]};
+ const rings=items.flatMap(it=>it.rings.map(r=>({key:it.key,r})));
+ const main=key=>rings.filter(x=>x.key===key).reduce((b,x)=>!b||ringArea(x.r)>ringArea(b.r)?x:b,null);
+ const A=main(JOIN.a),B=main(JOIN.b);if(!A||!B)return {items,guides:[]};
+ const loA=Math.min(...A.r.flat().map(q=>q[JOIN.a_axis])),hiB=Math.max(...B.r.flat().map(q=>q[JOIN.b_axis]));
+ const atA=loA+p.join_at,atB=hiB-p.join_depth,guides=[[JOIN.a_axis,atA],[JOIN.b_axis,atB]];
+ const ca=cutKeep(A.r,JOIN.a_axis,atA,JOIN.a_keep),cb=cutKeep(B.r,JOIN.b_axis,atB,JOIN.b_keep);if(!ca||!cb)return {items,guides};
+ const ring=joinedArcs(ca,cb,p.join_fa,p.join_fb);
+ const rest=items.map(it=>({...it,rings:it.rings.filter(r=>r!==A.r&&r!==B.r)}));
+ return {items:[...rest,{key:'join',rings:[ring]}],guides}}
 const f1=v=>v.toFixed(1);
 const pathOf=rings=>rings.map(r=>'M'+f1(r[0][0][0])+' '+f1(r[0][0][1])+r.map(([,b,c2,d])=>`C${f1(b[0])} ${f1(b[1])} ${f1(c2[0])} ${f1(c2[1])} ${f1(d[0])} ${f1(d[1])}`).join('')+'Z').join('');
 
@@ -81,7 +126,9 @@ const CONTROLS={stroke:[
  ['kana_dx','Left / right',-300,300,1,r1],['kana_dy','Down / up',-300,300,1,r1],
  ['size','Size',.4,1.4,.005,r3,kanaSize],['kana_sx','Width',.4,1.4,.005,r3],['kana_sy','Height',.4,1.4,.005,r3],
  ['kana_bold','Weight',0,BOLDS.length-1,1,null,grid('kana_bold')],
-],part:[
+],join:JOIN?[['join_at','Cut in '+JOIN.a_label,0,900,1,r1],['join_depth','Cut in '+JOIN.b_label,0,600,1,r1],
+  ['join_fa','First curve',.2,2.5,.01,r2],['join_fb','Second curve',.2,2.5,.01,r2]]:[],
+part:[
  ['dx','Left / right',-300,300,1,r1],['dy','Down / up',-300,300,1,r1],['sx','Width',.3,2,.005,r3],['sy','Height',.3,2,.005,r3],
  ['rot','Rotate',-90,90,.5,v=>v.toFixed(1)],['bold','Weight',-20,30,2,r1],
 ]};
@@ -92,9 +139,9 @@ const partAcc=key=>({get:()=>{const t=partOf(state.sel[0]);return t[key]??PART_D
   for(const k of state.sel){const t={...PART_DEFAULT,...parts[k]};t[key]=+(t[key]+d).toFixed(4);parts[k]=t}p.parts=parts}});
 const acc=(group,c)=>group==='part'?partAcc(c[0]):c[6]||{get:p=>p[c[0]],set:(p,v)=>{p[c[0]]=+(+v).toFixed(4)}};
 function build(){
- for(const group of ['stroke','kana','part'])$(group+'-rows').innerHTML=CONTROLS[group].map(c=>c.length===1?`<span class="sub">${c[0]}</span>`:
+ for(const group of ['stroke','kana','join','part'])$(group+'-rows').innerHTML=CONTROLS[group].map(c=>c.length===1?`<span class="sub">${c[0]}</span>`:
   `<label for="r-${group}-${c[0]}" data-reset="${group}:${c[0]}" title="Double-click to reset">${c[1]}</label><button type="button" class="step" data-step="${group}:${c[0]}" data-dir="-1" aria-label="${c[1]}: less">−</button><input id="r-${group}-${c[0]}" type="range" min="${c[2]}" max="${c[3]}" step="${c[4]}"><button type="button" class="step" data-step="${group}:${c[0]}" data-dir="1" aria-label="${c[1]}: more">+</button><input id="n-${group}-${c[0]}" type="number" step="${c[4]}" aria-label="${c[1]}">`).join('');
- for(const group of ['stroke','kana','part'])for(const c of CONTROLS[group]){if(c.length===1)continue;
+ for(const group of ['stroke','kana','join','part'])for(const c of CONTROLS[group]){if(c.length===1)continue;
   const a=acc(group,c),upd=v=>{if(group==='part'&&!state.sel.length)return;checkpoint();a.set(state.p,+v);render()};
   $(`r-${group}-${c[0]}`).oninput=e=>upd(e.target.value);
   $(`n-${group}-${c[0]}`).onchange=e=>upd(c[6]?.show?BOLDS.indexOf(snap(+e.target.value)):e.target.value);
@@ -106,13 +153,17 @@ function build(){
    if(group==='part'){for(const k of state.sel){const t={...PART_DEFAULT,...state.p.parts[k]};t[c[0]]=PART_DEFAULT[c[0]];state.p.parts={...state.p.parts,[k]:t}}}
    else a.set(state.p,a.get(START));render()}}
 }
-function glyph(){return `<svg viewBox="0 0 1000 1000" aria-hidden="true"><g class="centre"><g transform="matrix(1 0 0 -1 0 880)"><path d="${[...kanaRings(state.p),...markRings(state.p)].map(it=>pathOf(it.rings)).join('')}"/></g></g></svg>`}
-const selected=key=>state.sel.length?state.sel.includes(key):(key[0]==='m'?state.group==='mark':state.group==='kana');
+// the whole letter: kana parts, the added parts, and the joined ring if the letter has one
+function letterItems(p){const {items,guides}=applyJoin([...kanaRings(p),...markRings(p)],p);return {items,guides}}
+let current={items:[],guides:[]};
+function glyph(){return `<svg viewBox="0 0 1000 1000" aria-hidden="true"><g class="centre"><g transform="matrix(1 0 0 -1 0 880)"><path d="${current.items.map(it=>pathOf(it.rings)).join('')}"/></g></g></svg>`}
+const selected=key=>key==='join'?JOIN&&(selected(JOIN.a)||selected(JOIN.b)):state.sel.length?state.sel.includes(key):(key[0]==='m'?state.group==='mark':state.group==='kana');
 function render(){
  const p=state.p;
- $('letter').innerHTML=[...kanaRings(p).map(it=>({...it,cls:'kana'})),...markRings(p).map(it=>({...it,cls:'mark'}))]
-  .map(it=>`<path class="ink ${it.cls}${selected(it.key)?' sel':''}" data-key="${it.key}" d="${pathOf(it.rings)}"/>`).join('');
- for(const group of ['stroke','kana','part'])for(const c of CONTROLS[group]){if(c.length===1)continue;
+ current=letterItems(p);
+ $('letter').innerHTML=current.items.filter(it=>it.rings.length).map(it=>`<path class="ink ${it.key==='join'?'join':it.key[0]==='k'?'kana':'mark'}${selected(it.key)?' sel':''}" data-key="${it.key}" d="${pathOf(it.rings)}"/>`).join('');
+ $('guides').innerHTML=current.guides.map(([axis,at])=>axis===0?`<line class="cut" x1="${at}" x2="${at}" y1="-300" y2="1300"/>`:`<line class="cut" x1="-300" x2="1300" y1="${at}" y2="${at}"/>`).join('');
+ for(const group of ['stroke','kana','join','part'])for(const c of CONTROLS[group]){if(c.length===1)continue;
   const a=acc(group,c),v=group==='part'&&!state.sel.length?(PART_DEFAULT[c[0]]):a.get(p),r=$(`r-${group}-${c[0]}`),n=$(`n-${group}-${c[0]}`);
   if(document.activeElement!==r)r.value=v;if(document.activeElement!==n)n.value=c[6]?.show?c[6].show(p):c[5](v)}
  $('part-panel').classList.toggle('idle',!state.sel.length);
@@ -125,14 +176,14 @@ function render(){
  document.body.classList.toggle('tint',state.tint);$('tint').checked=state.tint;
  persist();
 }
-const name=key=>(key[0]==='k'?KANA:STROKE.multi?'small kana':'stroke')+' '+(+key.slice(1)+1);
+const name=key=>(key[0]==='k'?KANA:STROKE.multi?MARK_NAME:'stroke')+' '+(+key.slice(1)+1);
 // ---- moving the selection: parts, or else the selected group ----
 function move(dx,dy){checkpoint();const p=state.p;
  if(state.sel.length){const parts={...p.parts};for(const k of state.sel){const t={...PART_DEFAULT,...parts[k]};t.dx=+(t.dx+dx).toFixed(2);t.dy=+(t.dy+dy).toFixed(2);parts[k]=t}p.parts=parts}
  else if(state.group==='kana'){p.kana_dx=+(p.kana_dx+dx).toFixed(2);p.kana_dy=+(p.kana_dy+dy).toFixed(2)}
  else{p.mark_x=+(p.mark_x+dx).toFixed(2);p.mark_dy=+(p.mark_dy+dy).toFixed(2)}}
 const nudge=(key,d)=>{checkpoint();state.p[key]=+(state.p[key]+d).toFixed(4)};
-const allKeys=()=>[...document.querySelectorAll('#letter [data-key]')].map(e=>e.dataset.key).filter((k,i,a)=>a.indexOf(k)===i&&(STROKE.multi||k[0]==='k'));
+const allKeys=()=>[...KANA_PARTS.map((_,i)=>'k'+i),...(STROKE.multi?STROKE.parts.map((_,i)=>'m'+i):[])];
 const knownKey=k=>/^k\d+$/.test(k)&&+k.slice(1)<KANA_PARTS.length||STROKE.multi&&/^m\d+$/.test(k)&&+k.slice(1)<STROKE.parts.length;
 let clipboard=null;
 const SHORTCUTS={   // with Ctrl or Cmd
@@ -164,6 +215,7 @@ for(const t of ['mark','kana'])$('t-'+t).onclick=()=>{state.sel=[];state.group=t
  big.addEventListener('pointerdown',e=>{const el=e.target.closest('[data-key]');
   if(!el){state.sel=[];render();return}
   const key=el.dataset.key;
+  if(key==='join'){state.sel=e.shiftKey||e.ctrlKey||e.metaKey?[...new Set([...state.sel,JOIN.a,JOIN.b])]:[JOIN.a,JOIN.b];endBurst();drag={x:e.clientX,y:e.clientY,k:big.getScreenCTM().a};big.setPointerCapture(e.pointerId);e.preventDefault();render();return}
   if(e.shiftKey||e.ctrlKey||e.metaKey)state.sel=state.sel.includes(key)?state.sel.filter(k=>k!==key):[...state.sel,key];
   else if(!state.sel.includes(key))state.sel=STROKE.multi||key[0]==='k'?[key]:[];
   if(!state.sel.length)state.group=key[0]==='k'?'kana':'mark';
@@ -181,6 +233,7 @@ $('reset-parts').onclick=()=>{if(!state.sel.length)return;checkpoint();endBurst(
 $('select-all').onclick=()=>{state.sel=allKeys();render()};
 $('copy').onclick=async()=>{const text=JSON.stringify({arena:EXPERIMENT,protocol:'tune-v1',params:state.p,notes:$('notes').value});
  try{await navigator.clipboard.writeText(text);$('copy-status').textContent='Copied — paste it into the conversation'}catch{prompt('Copy this result:',text)}};
-if(STROKE.multi){document.querySelector('#stroke-panel h2').textContent='Small kana';$('t-mark').textContent='Small kana'}
+if(STROKE.multi){document.querySelector('#stroke-panel h2').textContent=MARK_NAME;$('t-mark').textContent=MARK_NAME}
+$('join-panel').hidden=!JOIN;
 $('t-kana').textContent=KANA;
 build();applyDark();render();history();

@@ -13,6 +13,7 @@ with that variant in place of the letter; every font is embedded, so the page
 opens from disk. Output stays in the ignored build directory.
 """
 import argparse
+import unicodedata
 import functools
 import base64
 import hashlib
@@ -164,7 +165,8 @@ for _slug, _code, _label, _small in (('hwa', 0xF45A, 'HWA', 'ゎ'), ('hwi', 0xF4
     _g = chr(_code)
     LETTERS[_slug] = dict(
         code=_code, label=_label, build=functools.partial(okinawan_merge.glottal_beside, kana='ふ'),
-        defaults=dict(okinawan_merge.HW_DEFAULTS, mark_char=_small), ranges={}, chart=_slug,
+        defaults=(okinawan_merge.HWI_DEFAULTS if _slug == 'hwi' else dict(okinawan_merge.HW_DEFAULTS, mark_char=_small)),
+        ranges={}, chart=_slug,
         big=f'ふ{_g}ふ', vertical=f'{_g}ー、ふ{_g}。',
         passages=[('Beside ふ', f'ふ{_g}ふ　はひふへほ'), ('Among kana', f'あいう{_g}えお　かきく'),
                   ('Okinawan', '\uF45A\uF45B\uF45C　\uF454\uF456\uF458')],
@@ -362,7 +364,7 @@ def tune(slug, round_no, base):
     p['parts'] = dict(p.get('parts') or {})
     font = TTFont(BASE)
     if p.get('mark_x') is None:
-        mark, pivot, groups = okinawan_merge.beside_pieces(font, contours, kana, p)
+        mark, pivot, groups = okinawan_merge.beside_pieces(font, contours, kana, p)[:3]
         side = 'right' if p['kana_anchor'] == 'left' else 'left'
         body = [r for g in groups for r in g]
         p['mark_x'] = round(okinawan_merge.gap_shift(okinawan_merge.sized(*okinawan_merge.shaped(mark, pivot, p), p), body, p['gap'], side))
@@ -397,12 +399,16 @@ def tune(slug, round_no, base):
     kana_parts = [weighted(c) for c in body]
     origin = okinawan_merge.kana_origin(body, p['kana_anchor'])
     start = {k: p[k] for k in ('mark_x', 'mark_dy', 'mark_scale', 'mark_len', 'mark_angle', 'mark_bend', 'mark_slant', 'head_angle', 'tail_angle',
-                               'neck_w', 'head_w', 'mark_bold', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy', 'parts')}
+                               'neck_w', 'head_w', 'mark_bold', 'kana_sx', 'kana_sy', 'kana_bold', 'kana_dx', 'kana_dy', 'parts',
+                               'join_at', 'join_depth', 'join_fa', 'join_fb')}
+    label = lambda key: (kana if len(kana) == 1 else 'body') if key[0] == 'k' else p['mark_char']
+    join = p.get('join') and dict(p['join'], a_label=label(p['join']['a']), b_label=label(p['join']['b']))
     lines = [letter['big'], *(t for _, t in letter['passages'])]
     (OUT/slug).mkdir(parents=True, exist_ok=True)
     (OUT/slug/f'round{round_no}-tune.json').write_text(json.dumps(dict(base=p, start=start), indent=1, ensure_ascii=False) + '\n')
     return page(slug, round_no, 'tune', {}, dict(LIE=bool(p['mark_lie']), STROKE=stroke, KANA_PARTS=kana_parts, KANA_ORIGIN=list(origin),
-                                                 KANA=kana if len(kana) == 1 else 'Body', BOLDS=BOLDS, START=start, LINES=lines))
+                                                 KANA=kana if len(kana) == 1 else 'Body', BOLDS=BOLDS, START=start, LINES=lines,
+                                                 JOIN=join or None, MARK_NAME=('small ' if 'SMALL' in unicodedata.name(p['mark_char']) else '') + p['mark_char']))
 
 
 if __name__ == '__main__':

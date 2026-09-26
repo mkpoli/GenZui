@@ -49,3 +49,5 @@ body.dark .side .reference-fonts img{filter:invert(.88) sepia(.1)}
 .seg button:disabled{opacity:.4;cursor:default}
 .part-actions{font-size:11px;color:var(--soft);margin:8px 0 0}
 #part-panel.idle #reset-parts{opacity:.4;pointer-events:none}
+.cut{stroke:var(--accent);stroke-width:3;stroke-dasharray:6 10;opacity:.7}
+body.tint #big .join{fill:var(--tint)}

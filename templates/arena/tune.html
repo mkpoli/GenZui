@@ -12,13 +12,14 @@
  <figure class="stage"><svg id="big" viewBox="-300 -300 1600 1600" aria-label="The letter at full size">
   <rect id="em" class="em" x="0" y="0" width="1000" height="1000"/><line id="mid" class="guide" x1="500" x2="500" y1="0" y2="1000"/>
   <line class="guide base" x1="-300" x2="1300" y1="880" y2="880"/>
-  <g id="letter" transform="matrix(1 0 0 -1 0 880)"></g></svg>
+  <g id="letter" transform="matrix(1 0 0 -1 0 880)"></g><g id="guides" transform="matrix(1 0 0 -1 0 880)"></g></svg>
   <figcaption>Click a part to select it · Shift or Ctrl-click to add · double-click for its whole group · drag or arrows to move · frame: the em the letter is centred in</figcaption></figure>
  <div class="column">
   <section class="panel" id="stroke-panel"><h2>Stroke</h2><div class="rows" id="stroke-rows"></div></section>
   <section class="panel"><h2>Kana</h2><div class="rows" id="kana-rows"></div></section>
  </div>
  <div class="column side">
+  <section class="panel" id="join-panel"><h2>Join</h2><div class="rows" id="join-rows"></div></section>
   <section class="panel" id="part-panel"><h2 id="part-title">Parts</h2><div class="rows" id="part-rows"></div>
    <p class="part-actions"><button type="button" id="select-all" class="link">Select all parts</button> · <button type="button" id="reset-parts" class="link">Reset selected parts</button></p></section>
   <section class="panel"><h2>In text</h2><div id="lines"></div>
