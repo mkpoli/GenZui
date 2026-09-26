@@ -46,3 +46,6 @@ body.dark .side .reference-fonts img{filter:invert(.88) sepia(.1)}
 /* the selection is outlined, so its weight can still be judged */
 #big .sel{stroke:var(--accent);stroke-width:5;stroke-dasharray:16 12;paint-order:fill}
 #big [data-key]{cursor:grab}
+.seg button:disabled{opacity:.4;cursor:default}
+.part-actions{font-size:11px;color:var(--soft);margin:8px 0 0}
+#part-panel.idle #reset-parts{opacity:.4;pointer-events:none}

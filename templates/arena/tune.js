@@ -9,6 +9,14 @@ state??={experiment:EXPERIMENT,p:structuredClone(START),group:'mark',sel:[],tint
 for(const k in START)state.p[k]??=structuredClone(START[k]);
 state.sel??=[];state.group??='mark';
 function persist(){try{localStorage.setItem(storageKey,JSON.stringify(state))}catch{}}
+// ---- undo and redo: a burst of changes (a drag, a slider move, held keys) is one step ----
+const undo=[],redo=[];let burst=null;
+function checkpoint(){if(!burst){undo.push(structuredClone(state.p));if(undo.length>300)undo.shift();redo.length=0}
+ clearTimeout(burst);burst=setTimeout(()=>{burst=null;history()},450);history()}
+function endBurst(){clearTimeout(burst);burst=null}
+function stepHistory(from,to){endBurst();if(!from.length)return;to.push(structuredClone(state.p));state.p=from.pop();
+ state.sel=state.sel.filter(k=>knownKey(k));render()}
+function history(){$('undo').disabled=!undo.length&&!burst;$('redo').disabled=!redo.length}
 
 // ---- geometry, mirrored from okinawan_merge ----
 const pts4=seg=>[[seg[0],seg[1]],[seg[2],seg[3]],[seg[4],seg[5]],[seg[6],seg[7]]];
@@ -87,14 +95,14 @@ function build(){
  for(const group of ['stroke','kana','part'])$(group+'-rows').innerHTML=CONTROLS[group].map(c=>c.length===1?`<span class="sub">${c[0]}</span>`:
   `<label for="r-${group}-${c[0]}" data-reset="${group}:${c[0]}" title="Double-click to reset">${c[1]}</label><button type="button" class="step" data-step="${group}:${c[0]}" data-dir="-1" aria-label="${c[1]}: less">−</button><input id="r-${group}-${c[0]}" type="range" min="${c[2]}" max="${c[3]}" step="${c[4]}"><button type="button" class="step" data-step="${group}:${c[0]}" data-dir="1" aria-label="${c[1]}: more">+</button><input id="n-${group}-${c[0]}" type="number" step="${c[4]}" aria-label="${c[1]}">`).join('');
  for(const group of ['stroke','kana','part'])for(const c of CONTROLS[group]){if(c.length===1)continue;
-  const a=acc(group,c),upd=v=>{if(group==='part'&&!state.sel.length)return;a.set(state.p,+v);render()};
+  const a=acc(group,c),upd=v=>{if(group==='part'&&!state.sel.length)return;checkpoint();a.set(state.p,+v);render()};
   $(`r-${group}-${c[0]}`).oninput=e=>upd(e.target.value);
   $(`n-${group}-${c[0]}`).onchange=e=>upd(c[6]?.show?BOLDS.indexOf(snap(+e.target.value)):e.target.value);
   // − and + step by ten slider steps (one grid step for weights); Shift for one slider step
   // (a part's weight moves one grid step of 2 either way)
   const unit=e=>c[6]?.show?1:group==='part'&&c[0]==='bold'?c[4]:(e.shiftKey?1:10)*c[4];
   for(const b of document.querySelectorAll(`[data-step="${group}:${c[0]}"]`))b.onclick=e=>upd(a.get(state.p)+ +b.dataset.dir*unit(e));
-  document.querySelector(`[data-reset="${group}:${c[0]}"]`).ondblclick=()=>{
+  document.querySelector(`[data-reset="${group}:${c[0]}"]`).ondblclick=()=>{checkpoint();
    if(group==='part'){for(const k of state.sel){const t={...PART_DEFAULT,...state.p.parts[k]};t[c[0]]=PART_DEFAULT[c[0]];state.p.parts={...state.p.parts,[k]:t}}}
    else a.set(state.p,a.get(START));render()}}
 }
@@ -119,11 +127,20 @@ function render(){
 }
 const name=key=>(key[0]==='k'?KANA:STROKE.multi?'small kana':'stroke')+' '+(+key.slice(1)+1);
 // ---- moving the selection: parts, or else the selected group ----
-function move(dx,dy){const p=state.p;
+function move(dx,dy){checkpoint();const p=state.p;
  if(state.sel.length){const parts={...p.parts};for(const k of state.sel){const t={...PART_DEFAULT,...parts[k]};t.dx=+(t.dx+dx).toFixed(2);t.dy=+(t.dy+dy).toFixed(2);parts[k]=t}p.parts=parts}
  else if(state.group==='kana'){p.kana_dx=+(p.kana_dx+dx).toFixed(2);p.kana_dy=+(p.kana_dy+dy).toFixed(2)}
  else{p.mark_x=+(p.mark_x+dx).toFixed(2);p.mark_dy=+(p.mark_dy+dy).toFixed(2)}}
-const nudge=(key,d)=>{state.p[key]=+(state.p[key]+d).toFixed(4)};
+const nudge=(key,d)=>{checkpoint();state.p[key]=+(state.p[key]+d).toFixed(4)};
+const allKeys=()=>[...document.querySelectorAll('#letter [data-key]')].map(e=>e.dataset.key).filter((k,i,a)=>a.indexOf(k)===i&&(STROKE.multi||k[0]==='k'));
+const knownKey=k=>/^k\d+$/.test(k)&&+k.slice(1)<KANA_PARTS.length||STROKE.multi&&/^m\d+$/.test(k)&&+k.slice(1)<STROKE.parts.length;
+let clipboard=null;
+const SHORTCUTS={   // with Ctrl or Cmd
+ z:e=>stepHistory(e.shiftKey?redo:undo,e.shiftKey?undo:redo),y:()=>stepHistory(redo,undo),
+ a:()=>{state.sel=allKeys()},
+ c:()=>{if(state.sel.length)clipboard={...PART_DEFAULT,...state.p.parts[state.sel[0]]}},
+ v:()=>{if(!clipboard||!state.sel.length)return;checkpoint();const parts={...state.p.parts};for(const k of state.sel)parts[k]={...clipboard};state.p.parts=parts},
+};
 const KEYS={
  ArrowUp:f=>move(0,f?2:10),ArrowDown:f=>move(0,f?-2:-10),ArrowLeft:f=>move(f?-2:-10,0),ArrowRight:f=>move(f?2:10,0),
  Escape:()=>{state.sel=[]},t:()=>{state.sel=[];state.group=state.group==='kana'?'mark':'kana'},h:()=>{state.tint=!state.tint},
@@ -133,7 +150,10 @@ const KEYS={
  a:f=>nudge('mark_slant',f?-2:-10),d:f=>nudge('mark_slant',f?2:10),w:f=>nudge('head_angle',f?1:5),r:f=>nudge('head_angle',f?-1:-5),
  x:f=>nudge('tail_angle',f?1:5),v:f=>nudge('tail_angle',f?-1:-5),
 };
-document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'&&!['range','checkbox'].includes(e.target.type)||e.ctrlKey&&e.key!=='Control'&&!e.key.startsWith('Arrow')||e.metaKey||e.altKey)return;
+document.addEventListener('keydown',e=>{
+ const typing=e.target.tagName==='INPUT'&&!['range','checkbox'].includes(e.target.type);
+ if((e.ctrlKey||e.metaKey)&&!e.altKey){const fn=SHORTCUTS[e.key.toLowerCase()];if(fn&&!typing){e.preventDefault();fn(e);render()}return}
+ if(typing||e.altKey)return;
  const fn=KEYS[e.key]||KEYS[e.key.toLowerCase()];if(!fn)return;
  if(e.target.type==='range'&&e.key.startsWith('Arrow'))return;   // a focused slider keeps its own arrows
  e.preventDefault();fn(e.shiftKey);render()});
@@ -147,17 +167,20 @@ for(const t of ['mark','kana'])$('t-'+t).onclick=()=>{state.sel=[];state.group=t
   if(e.shiftKey||e.ctrlKey||e.metaKey)state.sel=state.sel.includes(key)?state.sel.filter(k=>k!==key):[...state.sel,key];
   else if(!state.sel.includes(key))state.sel=STROKE.multi||key[0]==='k'?[key]:[];
   if(!state.sel.length)state.group=key[0]==='k'?'kana':'mark';
-  drag={x:e.clientX,y:e.clientY,k:big.getScreenCTM().a};big.setPointerCapture(e.pointerId);e.preventDefault();render()});
+  endBurst();drag={x:e.clientX,y:e.clientY,k:big.getScreenCTM().a};big.setPointerCapture(e.pointerId);e.preventDefault();render()});
  big.addEventListener('dblclick',e=>{const el=e.target.closest('[data-key]');if(!el)return;state.sel=[];state.group=el.dataset.key[0]==='k'?'kana':'mark';render()});
  big.addEventListener('pointermove',e=>{if(!drag)return;const dx=(e.clientX-drag.x)/drag.k,dy=-(e.clientY-drag.y)/drag.k;
   if(Math.abs(dx)+Math.abs(dy)<.5)return;drag.x=e.clientX;drag.y=e.clientY;move(dx,dy);render()});
- for(const ev of ['pointerup','pointercancel'])big.addEventListener(ev,()=>{drag=null});}
+ for(const ev of ['pointerup','pointercancel'])big.addEventListener(ev,()=>{drag=null;endBurst();history()});}
 $('tint').onchange=e=>{state.tint=e.target.checked;render()};
 const applyDark=()=>{const dark=state.dark??matchMedia('(prefers-color-scheme: dark)').matches;document.body.classList.toggle('dark',dark);document.body.classList.toggle('light',!dark);$('dark').checked=dark};
 $('dark').onchange=e=>{state.dark=e.target.checked;applyDark();persist()};
-$('reset').onclick=()=>{state.p=structuredClone(START);state.sel=[];render()};
+$('reset').onclick=()=>{checkpoint();endBurst();state.p=structuredClone(START);state.sel=[];render()};
+$('undo').onclick=()=>stepHistory(undo,redo);$('redo').onclick=()=>stepHistory(redo,undo);
+$('reset-parts').onclick=()=>{if(!state.sel.length)return;checkpoint();endBurst();const parts={...state.p.parts};for(const k of state.sel)delete parts[k];state.p.parts=parts;render()};
+$('select-all').onclick=()=>{state.sel=allKeys();render()};
 $('copy').onclick=async()=>{const text=JSON.stringify({arena:EXPERIMENT,protocol:'tune-v1',params:state.p,notes:$('notes').value});
  try{await navigator.clipboard.writeText(text);$('copy-status').textContent='Copied — paste it into the conversation'}catch{prompt('Copy this result:',text)}};
 if(STROKE.multi){document.querySelector('#stroke-panel h2').textContent='Small kana';$('t-mark').textContent='Small kana'}
 $('t-kana').textContent=KANA;
-build();applyDark();render();
+build();applyDark();render();history();

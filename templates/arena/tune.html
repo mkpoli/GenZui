@@ -2,6 +2,7 @@
  <header class="bar">
   <h1>__GLYPH__</h1>
   <div class="seg" role="group" aria-label="Select a whole group"><button type="button" id="t-mark">Stroke</button><button type="button" id="t-kana">Kana</button></div>
+  <div class="seg" role="group" aria-label="History"><button type="button" id="undo" title="Undo (Ctrl+Z)">↶ Undo</button><button type="button" id="redo" title="Redo (Ctrl+Shift+Z)">Redo ↷</button></div>
   <label class="toggle"><input id="tint" type="checkbox"> Tint added part</label>
   <label class="toggle"><input id="dark" type="checkbox"> Dark</label>
   <input id="notes" type="text" placeholder="Notes (optional)">
@@ -18,9 +19,10 @@
   <section class="panel"><h2>Kana</h2><div class="rows" id="kana-rows"></div></section>
  </div>
  <div class="column side">
-  <section class="panel" id="part-panel"><h2 id="part-title">Parts</h2><div class="rows" id="part-rows"></div></section>
+  <section class="panel" id="part-panel"><h2 id="part-title">Parts</h2><div class="rows" id="part-rows"></div>
+   <p class="part-actions"><button type="button" id="select-all" class="link">Select all parts</button> · <button type="button" id="reset-parts" class="link">Reset selected parts</button></p></section>
   <section class="panel"><h2>In text</h2><div id="lines"></div>
    <section id="tools"></section>
-   <p class="help">Shift on a button or arrow: fine steps · double-click a name to reset it · T switches group · Esc clears the selection · <button type="button" id="reset" class="link">Reset all</button></p></section>
+   <p class="help">Ctrl+Z / Ctrl+Shift+Z undo and redo · Ctrl+A selects all parts · Ctrl+C / Ctrl+V copy one part's settings to the selected parts · Shift on a button or arrow: fine steps · double-click a name to reset it · T switches group · Esc clears the selection · <button type="button" id="reset" class="link">Reset all</button></p></section>
  </div>
 </div>
