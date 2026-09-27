@@ -148,22 +148,28 @@ The fuller proof uses these optical source weights:
 | Component | Regular | Bold |
 | --- | --- | --- |
 | KWI body and vowel | 600 / 650 | 850 / 900 |
-| KWE body and vowel | 600 / 500 | 850 / 900 |
+| KWE body and vowel | 550 / 500 | 850 / 900 |
 | KWA body and complete わ | 550 / 750 | 700 / 900 |
-| HWA connector and わ | 600 / 750 | 850 / 900 |
-| TSI body and vowel | 600 / 650 | 900 / 900 |
+| HWA connector and わ | 600 / 850 | 850 / 900 |
+| TSI body and vowel | 700 / 650 | 900 / 900 |
 | TU / WU | 600 | 850 |
 | HWE diagonal and terminal | 650 / 650 | 900 / 650 |
 
-Regular KWE’s lower stroke sits closer to the native え baseline. HWI Bold
-retains the native い terminal and shortens the flick above its waist.
+Regular KWE combines the A く source with B え, using native 550/600
+terminal donors for the two foot-weight choices while holding the baseline.
+HWI Bold retains the earlier upright return, with a finite 18–20-unit cap
+and a smooth taper confined to the top of the hook. Its axis aims toward
+the beginning of the right い stroke.
 HWE gains weight in its diagonal while keeping a smaller Bold terminal.
 HWA/HWI/HWE vowels share an optical baseline.
 
-Native contours supply the terminals and bowls. TU/WU preserve more of
-と and を’s height before entering their native つ lower sweeps. No contour
-expansion is applied. The く, と, を and つ entries match their source kana’s
-top height.
+Native contours supply the terminals and bowls. TU joins the left flank of
+と to つ using both native と turn edges, avoiding the heavy bottom foot
+before the thin crown. WU retains its preceding sweep. No contour expansion
+is applied. The く, と and を entries match their source kana’s top height;
+TSI’s stronger つ reaches 25 units above its source top, with the dakuten
+raised by the same amount. HWA’s reduced わ is stronger and vertically
+fuller; its Bold placement leaves the small stroke separate from ふ.
 
 Dakuten come from native ど, で, ぐ, ず and づ. Each pair retains its
 outlines and internal spacing, with placement specific to the constructed
@@ -183,11 +189,14 @@ Open the local URL printed by `show`. Each option displays the source kana,
 constructed letter and vowel at the same size, with baseline and top guides.
 Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
 their vowel baselines. Regular and Bold choices are independent; confirmed
-shapes are retained, with TI and Bold KWE fixed to B. Copy choices for one
-character or the complete set as JSON.
+shapes are retained, with TI and Bold KWE fixed to B. Confirmed weights
+start collapsed and remain available through native disclosure controls.
+Expanded panels remain open across filtering, selection and reloads. A jump
+to a fully confirmed character opens its panel. Copy choices for one character
+or the complete set as JSON.
 
-TU/WU also show the saved v1 and R1–R7 drawings, plus four successive native
-composition rounds. `data/okinawan/tu-wu-history.json` stores 69 distinct
+TU/WU also show the saved v1 and R1–R7 drawings, plus five successive native
+composition rounds. `data/okinawan/tu-wu-history.json` stores 77 distinct
 outlines; identical shapes share their round labels. Each appears beside
 native kana at the same size. A selected historical reference is included
 in the copied choice without changing the candidate font.

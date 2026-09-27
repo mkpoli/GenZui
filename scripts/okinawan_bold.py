@@ -201,37 +201,55 @@ def drawings(font, contours, option="B", style="Bold"):
         return p + delta * (t*t*(3-2*t))
     rise = [tuple(anchor_rise(p) for p in seg) for seg in rise]
 
-    # Keep the native angled flick terminal. Shorten the return above its
-    # waist instead of cutting across the much wider lower hook.
-    def hook_shortened(ref):
-        r = ring('い', ref=ref)
-        for index in range(23, 30):
-            def shorten(p):
-                z = max(p[1]-177, 0)
-                return np.array([p[0], p[1]-.70*z*z/(z+40)])
-            r[index] = tuple(shorten(p) for p in r[index])
-        return clean(cut_keep(r, 1, 420, 'low'))
-    i = fit(hook_shortened(False), hook_shortened(True), (605, 40, 768, 375))
-    i = clean(cut_keep(i + [line(i[-1][3], i[0][0])], 1, 365, 'low'))
+    # The earlier upright return aimed at the right stroke's start. Retain
+    # that axis and a finite cap, narrowing only the upper part of the hook.
+    def short_i(ref):
+        return clean(cut_keep(ring('い', ref=ref), 1, 420, 'low'))
+    i = fit(short_i(False), short_i(True), (605, 40, 768, 375))
+    r = i + [line(i[-1][3], i[0][0])]
+    cuts = [c for c in O.crossings(r, 1, 215)
+            if O.point(r[c[0]], c[1])[0] > 705]
+    assert len(cuts) == 2
+    i = max((O.arc(r, *cuts), O.arc(r, *cuts[::-1])),
+            key=lambda a: max((p[1] for seg in a for p in seg if p[0]<705), default=-1000))
+    i += [line(i[-1][3], i[0][0])]
+    def narrow(p):
+        x,y = p
+        t = np.clip((y-160)/55, 0, 1)
+        side = np.clip((x-695)/15, 0, 1)
+        blend = t*t*(3-2*t)*side*side*(3-2*side)
+        axis = 733.4+.24*(y-215)
+        factor = .40 if fuller else .46
+        return np.array([x-factor*blend*(x-axis), y])
+    shaped = []
+    for seg in i:
+        pieces = [seg]
+        for _ in range(3):
+            pieces = [part for curve in pieces for part in O.split(curve,.5)]
+        shaped.extend(tuple(narrow(p) for p in part) for part in pieces)
+    i = clean(cut_keep(shaped, 1, 365, 'low'))
     hwi = [fu, guide_join(rise, i, approved['HWI'][1], not fuller), native('い', 1, (765.48, 68, 924.52, 341.6))]
 
     # The actual wa contours keep their native bowl/terminal contrast.
     wa_y = 25
-    wa_x = lambda x: 584 + (x-73)*410/877
+    wa_scale = .56 if fuller else .53
+    wa_x = lambda x: (604 if bold else 584) + (x-73)*410/877
     def hwa_map(r):
         out = []
         for seg in r:
             pieces = [seg]
             for _ in range(3):
                 pieces = [part for s in pieces for part in O.split(s, .5)]
-            out.extend(tuple(np.array([float(wa_x(p[0])), .49*p[1]+wa_y]) for p in s)
+            out.extend(tuple(np.array([float(wa_x(p[0])), wa_scale*p[1]+wa_y]) for p in s)
                        for s in pieces)
         return out
-    wa_font = vowel_source((900 if fuller else 875) if bold else (750 if fuller else 700))
+    wa_font = vowel_source((900 if fuller else 875) if bold else (850 if fuller else 800))
     wa_rings = [O.rings(contours(wa_font, ord('わ'), [n]))[0] for n in range(3)]
+    target_bottom = .49*bounds([wa_rings[2]])[1]+25
     if not bold:
         reference_wa = O.rings(contours(vowel_source(600), ord('わ'), [2]))
-        wa_y += .49*(bounds(reference_wa)[1]-bounds([wa_rings[2]])[1])
+        target_bottom = .49*bounds(reference_wa)[1]+25
+    wa_y = target_bottom-wa_scale*bounds([wa_rings[2]])[1]
     wa_stem = hwa_map(cut_keep(wa_rings[2], 1, 570, 'low'))
     # Extend the stem to the approved shoulder height. All native wa seams
     # below it share one map, preserving the small counter and bowl connection.
@@ -256,7 +274,7 @@ def drawings(font, contours, option="B", style="Bold"):
 
     # e keeps a complete native arch and terminal. A shear straightens its
     # diagonal; a uniform vertical fit lowers the arch without local warping.
-    def e_lower(ref, foot_weight=None):
+    def e_lower(ref, foot_weight=None, foot_scale=None):
         r = ring('え', ref=ref)
         if foot_weight and not ref:
             light = O.rings(contours(vowel_source(foot_weight), ord('え'), [0]))[0]
@@ -266,8 +284,10 @@ def drawings(font, contours, option="B", style="Bold"):
             body = r[2:64]
             foot = light[66:] + light[:1]
             baseline = light[0][0][1]
-            scale = .65 if fuller else .60
+            scale = foot_scale if foot_scale is not None else (.65 if fuller else .60)
             foot = move(foot, 1, scale, 0, baseline*(1-scale))
+            if foot_scale is not None:
+                foot = move(foot, 1, 1, 0, bounds([r[66:]+r[:1]])[1]-bounds([foot])[1])
             r = rounded_join(body, foot)
         cuts = sorted(O.crossings(r, 1, 380), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
@@ -299,8 +319,9 @@ def drawings(font, contours, option="B", style="Bold"):
            wa_placement(kwa_rings[1]), wa_placement(kwa_rings[0])]
     body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
     if not bold:
-        vowel_weight = 500 if fuller else 450
-    kwe_lower = fit(e_lower(False), e_lower(True), (203, -64 if bold else -12, 847, 286))
+        body_weight, vowel_weight = 550, 500
+    kwe_foot = (600 if fuller else 550) if not bold else None
+    kwe_lower = fit(e_lower(False, kwe_foot, 1 if not bold else None), e_lower(True), (203, -64 if bold else -12, 847, 286))
     upper = ku('KWE')
     target = (upper[0][0][0]+upper[-1][3][0])/2 + 35
     current = (kwe_lower[0][0][0]+kwe_lower[-1][3][0])/2
@@ -336,7 +357,7 @@ def drawings(font, contours, option="B", style="Bold"):
         r = ring('つ', ref=ref)
         cuts = sorted(O.crossings(r, 0, 470 if fuller else 450), key=lambda c: O.point(r[c[0]], c[1])[1])[:2]
         return max((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: max(p[1] for seg in a for p in seg))
-    body_weight += 50
+    body_weight = (900 if fuller else 875) if bold else (700 if fuller else 650)
     tsu_top = fit(tsu_arc(False), tsu_arc(True), (118, 294, 882, 690))
     tsi_i = native('ぃ', 0, (380, 19, 555, 280), (1, 375, 'low'))
     tsi_i = move(tsi_i, 1, .94, -25, .48)
@@ -348,28 +369,33 @@ def drawings(font, contours, option="B", style="Bold"):
     # Native to/wo entries feed native tsu bowls. Horizontal sweeps retain
     # the Bold master's thin edge instead of receiving a contour offset.
     body_weight, vowel_weight = ((850, 850) if fuller else (800, 800)) if bold else ((600, 600) if fuller else (550, 550))
-    def flowing(ch, index, box):
+    def wu_sweep(box):
         def recipe(ref):
-            r = ring(ch, index, ref)
-            if ch == 'と':
-                head = move(O.arc(r, (1, .55), (32, 0)), 1, .92 if fuller else .82, -5, 110 if fuller else 160)
-                tail = O.arc(ring('つ', ref=ref), (29, 0), (7, 0))
-                # Keep the native tsu bowl affine: warping its controls makes
-                # the outside develop a corner and flattens the lower curve.
-                tail_scale = .55 if fuller else .62
-                tail = move(tail, .88, tail_scale, 5, head[-1][3][1]-617.09*tail_scale)
-            else:
-                head = move(O.arc(r, (1, .55), (33, 0)), .87, .90 if fuller else .82, 1, 40 if fuller else 85)
-                tail = O.arc(ring('つ', ref=ref), (29, 0), (7, 0))
-                tail_scale = .50 if fuller else .58
-                tail = move(tail, .87, tail_scale, -2, head[-1][3][1]-617.09*tail_scale)
-            return rounded_join(clean(head), clean(tail), 1.02 if fuller else .98)
+            r = ring('を', ref=ref)
+            head = move(O.arc(r, (1,.55), (33,0)), .87, .90 if fuller else .82, 1, 40 if fuller else 85)
+            tail = O.arc(ring('つ', ref=ref), (29,0), (7,0))
+            sy = .50 if fuller else .58
+            tail = move(tail, .87, sy, -2, head[-1][3][1]-617.09*sy)
+            return rounded_join(clean(head),clean(tail),1.02 if fuller else .98)
+        return fit(recipe(False),recipe(True),box)
+    def tu_sweep(box):
+        def recipe(ref):
+            r = ring('と', ref=ref)
+            head = clean(cut_keep(r, 1, 150, 'high'))
+            head = move(head, 1, .92 if fuller else .82, -5, 110 if fuller else 160)
+            tail = clean(O.arc(ring('つ', ref=ref), (29,0), (7,0)))
+            sy = .55 if fuller else .62
+            tail = move(tail, .88, sy, 5, head[-1][3][1]-95-617.09*sy)
+            # Preserve Noto's actual round turn while cutting before the
+            # thick bottom foot. Both edges meet the crown at native tangents.
+            donor = ring('と', ref=ref)
+            return head+native_turn(donor[30:33],head,tail)+tail+native_turn(donor[0:3],tail,head)
         return fit(recipe(False), recipe(True), box)
     tu = [native('と', 1, (250, 380, 450, 774)),
-          flowing('と', 0, bounds([approved['TU'][1]]))]
+          tu_sweep(bounds([approved['TU'][1]]))]
     wu = [native('を', 1, (214, 160 if fuller else 195, 530, 797)),
           native('を', 2, bounds([approved['WU'][1]])),
-          flowing('を', 0, bounds([approved['WU'][2]]))]
+          wu_sweep(bounds([approved['WU'][2]]))]
     bottom, top = bounds([wu[0]])[[1,3]]
     scale = (top-(220 if fuller else 240))/(top-bottom)
     wu[0] = move(wu[0], 1, scale, 0, top*(1-scale))
@@ -405,6 +431,8 @@ def drawings(font, contours, option="B", style="Bold"):
     for label, donor, hinge in (('KWA','く',300), ('KWI','く',300), ('KWE','く',300),
                                ('TU','と',400), ('WU','を',350), ('TSI','つ',280)):
         target = round(bounds(O.rings(contours(body_source(700 if bold else 400), ord(donor))))[3])
+        if label == 'TSI':
+            target += 25
         current = bounds(result[label])[3]
         def align(p):
             return np.array([p[0], p[1] if p[1] <= hinge else hinge+(p[1]-hinge)*(target-hinge)/(current-hinge)])

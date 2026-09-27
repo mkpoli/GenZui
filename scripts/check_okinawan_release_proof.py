@@ -133,7 +133,7 @@ def check():
             for cp, donor in ((0xF454,'く'), (0xF456,'く'), (0xF458,'く'),
                               (0xF450,'と'), (0xF465,'を'), (0xF469,'つ')):
                 cm = face.getBestCmap()
-                assert abs(face['glyf'][cm[cp]].yMax-face['glyf'][cm[ord(donor)]].yMax) <= 1, (style, hex(cp), 'source top')
+                assert abs(face['glyf'][cm[cp]].yMax-face['glyf'][cm[ord(donor)]].yMax-(25 if cp==0xF469 else 0)) <= 1, (style, hex(cp), 'source top')
             for cp in DAKUTEN:
                 original = contours(face, cp)
                 parts = voiced_parts(face, cp, [original], contours, transform)
