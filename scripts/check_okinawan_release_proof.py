@@ -91,7 +91,7 @@ def check():
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
     retained = {0xF452}
-    same_regular_options = {0xF452, 0xF45B}
+    same_regular_options = {0xF452, 0xF454, 0xF45B}
     approved = approved_drawings()
     from okinawan_bold import drawings
     for style in ('Regular', 'Bold'):
@@ -118,6 +118,8 @@ def check():
             for cp in retained:
                 same_compiled(full, cp, approved[cp], geometric=True)
         for face in (selected, alternative):
+            kwa = face['glyf'][face.getBestCmap()[0xF454]]
+            assert abs(kwa.xMin+kwa.xMax-1000) <= 2, (style, 'KWA optical bounds off centre')
             assert pathops.op(marks(face, chr(0xF452)+'\u3099'), marks(face, 'で'), pathops.PathOp.XOR).area < .01, (style, 'DI marks differ from native de')
             # Compare the lowered vowels, excluding fu's own lower sweep.
             lower = []
