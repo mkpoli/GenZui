@@ -10,7 +10,6 @@ from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
 import okinawan_merge
-from okinawan_ligatures import drawings as ligature_drawings
 from sources import ROOT
 
 DATA = json.loads((ROOT/'data/okinawan/mappings.json').read_text())
@@ -24,15 +23,15 @@ DESCRIPTIONS = {cp: (f"{e['label']}. " +
     for cp, e in PUA.items()}
 
 # Native voiced kana supply the two marks, including their relative spacing.
-# TU and TSI need a higher pair; TI needs clearance below its upper arm.
+# TI places its pair below the upper arm; the other pairs follow their entries.
 DAKUTEN = {
-    0xF450: ('ど', (0, 3), 0, 35),
+    0xF450: ('ど', (0, 3), 0, 20),
     0xF452: ('で', (0, 2), 30, -45),
     0xF454: ('ぐ', (0, 2), 0, 0),
     0xF456: ('ぐ', (0, 2), 0, 0),
-    0xF458: ('ぐ', (0, 2), 0, 0),
+    0xF458: ('ぐ', (0, 2), -35, -35),
     0xF467: ('ず', (0, 5), 0, 0),
-    0xF469: ('づ', (0, 2), 0, 60),
+    0xF469: ('づ', (0, 2), -10, 0),
 }
 
 
@@ -43,7 +42,7 @@ def si_parts(font, contours, width=1.0):
 
 
 def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
-    """Native dakuten; SI retains its full-size base beside native zu."""
+    """Place an intact native pair beside the full-size constructed base."""
     char, indices, dx, dy = DAKUTEN[cp]
     outline = contours(font, ord(char))
     mark, current = RecordingPen(), RecordingPen()
@@ -61,11 +60,10 @@ def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
     x0, y0, x1, y1 = bounds.bounds
     assert 230 < x1 - x0 < 290 and 160 < y1 - y0 < 270, char
     assert sum(op == 'closePath' for op, _ in mark.value) == 2, char
-    # The compact proof keeps the pair's upper-right corner in place.
+    # Scale about the pair's upper-right corner, then apply its placement.
     mark = transform(mark, (mark_scale, 0, 0, mark_scale,
                            dx + x1 * (1 - mark_scale), dy + y1 * (1 - mark_scale)))
-    scale = 1.0 if cp == 0xF467 else .9
-    return [transform(p, (scale, 0, 0, scale, 0, 0)) for p in parts] + [mark]
+    return list(parts) + [mark]
 
 
 def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
@@ -86,11 +84,8 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         pen = contours(font, ord(ch), indices)
         return transform(pen, matrix) if matrix else pen
 
-    if bold:
-        from okinawan_bold import drawings as native_bold
-        recipes = native_bold(font, contours)
-    else:
-        recipes = ligature_drawings()
+    from okinawan_bold import drawings as native_drawings
+    recipes = native_drawings(font, contours, style='Bold' if bold else 'Regular')
     # The glottal letters and SI are Noto's own kana with a Noto stroke merged
     # into the outline (YA) or set beside it; see okinawan_merge. Bold reads
     # the same strokes from the wght 700 instance; the width given back to a

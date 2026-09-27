@@ -134,18 +134,31 @@ system drafts, copying fallback, responsive layout and the PUA inventory.
 
 ### Ligature outlines and Bold proof
 
-The ten approved Regular outlines are stored in
+The approved placement outlines are stored in
 `data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
-`scripts/okinawan_bold.py` composes Bold from Noto Serif JP at weight 700,
-with weight 750 for reduced vowels. KWI and KWE use 850/900 masters at the
-same placements; HWA’s reduced loop uses 900. Native curves supply the terminals and bowls. Individual
-shoulders, paired turns and continuous sweeps follow the approved connections.
-No contour expansion is applied.
+`scripts/okinawan_bold.py` composes both weights from native Noto Serif JP
+masters. Regular TI, HWI and HWE retain their approved outlines; SI and ZI
+retain their full native size. HWA uses the same native わ construction in
+both weights.
 
-The dakuten pairs come from native ど, で, ぐ, ず and づ, with placement
-specific to each base. Their relative spacing and individual outlines remain
-intact. SI retains native width and height when voiced; the other composed
-glyphs keep the existing nine-tenths base scale.
+The fuller proof uses these optical source weights:
+
+| Component | Regular | Bold |
+| --- | --- | --- |
+| KWI / KWE body and vowel | 600 / 650 | 850 / 900 |
+| KWA body and vowel | 550 / 600 | 700 / 850 |
+| HWA reduced わ | 600 | 900 |
+| TSI body and vowel | 550 / 650 | 850 / 900 |
+| TU / WU | 600 | 850 |
+
+Native contours supply the terminals and bowls. Local connections retain
+the て-to-い angle and the distinct thickness of the わ and つ curves.
+No contour expansion is applied. The く, と, を and つ entries match their
+source kana’s top height.
+
+Dakuten come from native ど, で, ぐ, ず and づ. Each pair retains its
+outlines and internal spacing, with placement specific to the constructed
+base. All voiced forms preserve the size of their unvoiced base.
 
 After building both Serif weights, run:
 
@@ -153,14 +166,14 @@ After building both Serif weights, run:
 .venv/bin/python scripts/okinawan_release_proof.py
 .venv/bin/python scripts/check_okinawan_release_proof.py
 .venv/bin/python scripts/okinawan_sns.py
-devrun python3 -m http.server 8766 --bind 127.0.0.1 --directory build/okinawan-release
+show build/okinawan-release --name genzui-okinawan
 ```
 
-Open `http://localhost:8766/`. The proof compares the approved Regular with
-two connection options, heavier KWI/KWE source masters and SI at 95% or
-native width. Separate controls compare native-size dakuten with a 95% pair.
-Native kana provide a size and weight reference; selections can be copied
-as JSON. A previous Bold snapshot is shown when available locally.
+Open the local URL printed by `show`. Each option displays the source kana,
+constructed letter and vowel at the same size, with baseline and top guides.
+Voiced forms appear in the same card. Regular and Bold choices are independent;
+SI/ZI are marked confirmed. Copy choices for one character or the complete set
+as JSON.
 
 The `sns/` page contains Japanese and English announcement copy and two
 2400px square sentence specimens rendered from the full candidate fonts.
