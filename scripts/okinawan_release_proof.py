@@ -92,7 +92,7 @@ def build():
             top = lambda ch: f['glyf'][f.getBestCmap()[ord(ch)]].yMax
             g['tops'][style] = dict(plain=top(g['neighbours'][0]),voiced=top(voices[cp]['reference']) if cp in voices else 0)
         glyphs.append(g)
-    data = dict(version=VERSION, glyphs=glyphs)
+    data = dict(version=VERSION, glyphs=glyphs, history=json.loads((ROOT/'data/okinawan/tu-wu-history.json').read_text())['designs'])
     template = (ROOT / 'templates/okinawan-release/index.html').read_text()
     def font_url(match):
         file = OUT / match[1]

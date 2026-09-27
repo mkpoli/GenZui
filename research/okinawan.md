@@ -137,26 +137,33 @@ system drafts, copying fallback, responsive layout and the PUA inventory.
 The approved placement outlines are stored in
 `data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
 `scripts/okinawan_bold.py` composes both weights from native Noto Serif JP
-masters. Regular TI retains its approved outline. KWI, SI and the accepted
-TI/TSI bodies are preserved. HWI/HWE vowels meet HWA’s optical baseline;
-HWA uses one affine native わ construction in both weights.
+masters. TI, KWI and SI retain their confirmed bodies in both weights;
+Regular HWI and Bold KWE also retain their accepted outlines. KWA uses one
+native わ master and affine transform for its diagonal, stem and bowl, so
+the continuous stroke keeps its native overlap at both joins. HWA takes
+more weight in its rising connector and reduced わ while retaining its foot.
 
 The fuller proof uses these optical source weights:
 
 | Component | Regular | Bold |
 | --- | --- | --- |
-| KWI / KWE body and vowel | 600 / 650 | 850 / 900 |
-| KWA body and stem | 550 / 600 | 700 / 850 |
-| KWA right loop | 750 | 900 |
-| HWA reduced わ | 600 | 900 |
-| TSI body and vowel | 550 / 650 | 850 / 900 |
+| KWI body and vowel | 600 / 650 | 850 / 900 |
+| KWE body and vowel | 600 / 500 | 850 / 900 |
+| KWA body and complete わ | 550 / 750 | 700 / 900 |
+| HWA connector and わ | 600 / 750 | 850 / 900 |
+| TSI body and vowel | 600 / 650 | 900 / 900 |
 | TU / WU | 600 | 850 |
-| HWE terminal | Approved source | 650 |
+| HWE diagonal and terminal | 650 / 650 | 900 / 650 |
 
-Native contours supply the terminals and bowls. Local connections retain
-the て-to-い angle and the distinct thickness of the わ and つ curves.
-No contour expansion is applied. The く, と, を and つ entries match their
-source kana’s top height.
+Regular KWE’s lower stroke sits closer to the native え baseline. HWI Bold
+retains the native い terminal and shortens the flick above its waist.
+HWE gains weight in its diagonal while keeping a smaller Bold terminal.
+HWA/HWI/HWE vowels share an optical baseline.
+
+Native contours supply the terminals and bowls. TU/WU preserve more of
+と and を’s height before entering their native つ lower sweeps. No contour
+expansion is applied. The く, と, を and つ entries match their source kana’s
+top height.
 
 Dakuten come from native ど, で, ぐ, ず and づ. Each pair retains its
 outlines and internal spacing, with placement specific to the constructed
@@ -176,8 +183,14 @@ Open the local URL printed by `show`. Each option displays the source kana,
 constructed letter and vowel at the same size, with baseline and top guides.
 Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
 their vowel baselines. Regular and Bold choices are independent; confirmed
-shapes are retained, with TI fixed to Bold B. Copy choices for one character
-or the complete set as JSON.
+shapes are retained, with TI and Bold KWE fixed to B. Copy choices for one
+character or the complete set as JSON.
+
+TU/WU also show the saved v1 and R1–R7 drawings, plus four successive native
+composition rounds. `data/okinawan/tu-wu-history.json` stores 69 distinct
+outlines; identical shapes share their round labels. Each appears beside
+native kana at the same size. A selected historical reference is included
+in the copied choice without changing the candidate font.
 
 The `sns/` page contains Japanese and English announcement copy and two
 2400px square sentence specimens rendered from the full candidate fonts.

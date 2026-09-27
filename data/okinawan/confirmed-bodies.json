@@ -10,13 +10,13 @@
         "codepoint": "F452",
         "sha256": "5c9634fc542951f93561a6ab7ce4dbc4c2a84c70f982d9ce75647c9d868788bf"
       },
-      "TSI": {
-        "codepoint": "F469",
-        "sha256": "52e9676e2282b3a5b9c8c8032d50474b9ca09ac2e1f91ffb858f53aa7db1ea18"
-      },
       "SI": {
         "codepoint": "F467",
         "sha256": "10d6315021e77c0bdd5892ae284c4b8cf0403cf67548e28136495fd772177dca"
+      },
+      "HWI": {
+        "codepoint": "F45B",
+        "sha256": "30b77e94a8926be3a473e9e01210a40d56920a923db745c09d760746d688f08d"
       }
     },
     "Bold": {
@@ -28,13 +28,13 @@
         "codepoint": "F452",
         "sha256": "f8f7d807988092d8794b7de6344f2101154865afc37e7aa6b7215a8bc0d8480e"
       },
-      "TSI": {
-        "codepoint": "F469",
-        "sha256": "d7814b9327878529614406903ac0e56d2d5407dc7471f9d043795fd2923e25aa"
-      },
       "SI": {
         "codepoint": "F467",
         "sha256": "68a7829b6426cc39b2c7fd426c7e4f0eee070329ff5d567646c21bc9a26c2b78"
+      },
+      "KWE": {
+        "codepoint": "F458",
+        "sha256": "22f0a0b8100082745b66dacedeee6219b9eb8306917aef490e4d59a2ce3a900f"
       }
     }
   }
