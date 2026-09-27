@@ -1,9 +1,9 @@
-# GenZui Serif 0.117
+# GenZui Serif 0.118
 
 GenZui Serif / 源萃明朝 is a Japanese Mincho derived from
 Noto Serif JP, Noto Serif Hentaigana, Noto Serif CJK JP and FRB Taiwanese Kana.
 
-The font contains 17,090 encoded characters, including 286 hentaigana, seven
+The font contains 17,271 encoded characters, including 286 hentaigana, seven
 Unicode 18 kana additions, historical kana ligatures, and 13 Minnan tone
 letters. Twenty-one historical kana forms are GenZui constructions. Archaic WU has a curved
 default and a hooked alternate selected by `ss01`.
@@ -13,10 +13,14 @@ outlines come from the fonts' own Bold instances, and every stroke GenZui draws
 has a Bold version of matching weight. TOMO, TOTE and TOKI share one position
 for their TO stem, with their weight centred in the cell.
 
-Version 0.117 raises TOMO's lower return, so the bars of its MO keep the spacing
-of native モ and the ligature no longer reads tall. Bold YORI draws its strokes
-at the weight of Noto Serif JP 650 and 95% size, so they match the kana beside
-it while its three verticals stay apart.
+Version 0.118 redraws the ten Funatsu ligatures TU, TI, KWA, KWI, KWE, HWA,
+HWI, HWE, WU and TSI from Noto Serif JP strokes. Their connections, proportions
+and terminal strokes follow the surrounding hiragana. Bold has separate stroke
+weight adjustments and spacing around the small counters in HWA and HWE.
+Voiced forms use the same base outlines with combining dakuten.
+
+The release also includes the Noto-based glottal letters and SI, and 181 Korean
+gugyeol forms at the Hanyang private-use positions.
 
 The Serif page includes an Okinawan composer with Funatsu’s 27 forms and
 eight raised katakana. The font uses 26 documented PUA positions; voiced forms
@@ -79,15 +83,15 @@ and `build/sans/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`; deploy with `bun run deploy` after committing the release.
 
-`releases/v0.117/` and `releases/sans-v0.103/` contain the immutable font assets;
+`releases/v0.118/` and `releases/sans-v0.103/` contain the immutable font assets;
 each holds its family's Regular and Bold faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
-CSS (`/v0.117/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
+CSS (`/v0.118/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
 alias (`/genzui.css`).
 
 The home page's share image shows both families from the distributed fonts'
 glyphs. Its text alternative is: “源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui
-Sans 源萃ゴシック. Archaic WU, KOTO and alternate NE in both families. 17,090 and 17,070
+Sans 源萃ゴシック. Archaic WU, KOTO and alternate NE in both families. 17,271 and 17,070
 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP, Noto Sans JP
 and Noto Hentaigana. genzui.mkpo.li.” The Sans page has its own card,
 described under GenZui Sans below.

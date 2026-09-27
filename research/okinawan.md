@@ -1,4 +1,4 @@
-# Okinawan kana in GenZui 0.114
+# Okinawan kana in GenZui Serif
 
 GenZui supplies all 27 forms in Funatsu’s New Okinawan Kana chart and the eight
 raised katakana used in Okinawa Prefecture’s notation guide. The home page has a
@@ -19,7 +19,7 @@ by `U+3099 COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK`. A `ccmp` lookup rende
 each as a composed glyph; the stored text remains the two-character sequence.
 These preferences are application conventions, not Unicode decomposition rules.
 
-There are 26 newly encoded PUA positions, taking the font total to 17,090:
+The two Okinawan systems use 26 PUA positions:
 
 | Funatsu base | PUA | Funatsu base | PUA |
 | --- | --- | --- | --- |
@@ -131,3 +131,26 @@ PUA runs, TTF/WOFF2 parity, raised metrics and neighboring Japanese kana.
 The existing complete Noto outline, metrics and shaping regression checks remain
 in force. Browser checks exercise input composition, selection replacement,
 system drafts, copying fallback, responsive layout and the PUA inventory.
+
+### Ligature outlines and Bold proof
+
+The ten Funatsu ligature outlines are stored in
+`data/okinawan/ligatures.json`, in a 1000-unit font coordinate system. Each
+component keeps its selected Noto weight and affine transform.
+`scripts/okinawan_ligatures.py` unions the components and applies separate
+horizontal and vertical expansion for Bold. HWA and HWE receive additional
+spacing to keep their counters open.
+
+After building and checking both Serif weights, run:
+
+```sh
+.venv/bin/python scripts/okinawan_release_proof.py
+.venv/bin/python scripts/check_okinawan_release_proof.py
+devrun python3 -m http.server 8766 --bind 127.0.0.1 --directory build/okinawan-release
+```
+
+Open `http://localhost:8766/`. The proof compares Regular with three Bold
+options for each character, including composed voiced forms. B uses the
+compiled Bold font; A and C use 85% and 115% of its added stroke expansion.
+Native hiragana alongside each option provide a weight reference. Selections
+are saved in the browser and can be copied as JSON.

@@ -12,6 +12,7 @@ from draft_bold import glyph_path, mask, parse, shape
 from minnan import BOLD as MINNAN_BOLD, source_font
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
+from okinawan_ligatures import POINTS as LIGATURE_POINTS
 from repertoire import MINNAN_MARKS, MINNAN_TONES
 from serif import BOLD_STEM, CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
 from serif_forms import DENSE_WEIGHT, CURVED_WU_BRIDGE, DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
@@ -96,7 +97,11 @@ def main():
     # Masters share their commands and points, so the pair stays interpolable.
     pairs = list(masters())
     shapes = [[[(c, len(v)) for c, v in parse(d)] for d in pair] for pair in pairs]
-    assert len(pairs) >= 40 and all(r == b for r, b in shapes)
+    # Nine literal master pairs were replaced by ten source-outline ligatures.
+    # Their stroke gain and topology are checked below rather than requiring
+    # matching point counts from the overlap-removal operation.
+    assert len(pairs) + len(LIGATURE_POINTS) >= 40
+    assert all(r == b for r, b in shapes)
     assert all(shape_of(r) == shape_of(b) for r, b in point_masters())
     # A Bold master that crosses itself where Regular does not folds into a
     # twist or a speck. Open paths are completed by native strokes.
@@ -109,6 +114,13 @@ def main():
     assert regular_path.exists(), 'Build Regular first: python scripts/serif.py'
     regular = TTFont(regular_path, recalcTimestamp=False)
     assert font.getBestCmap().keys() == regular.getBestCmap().keys()
+    for cp in LIGATURE_POINTS:
+        paths = []
+        for face in (regular, font):
+            contour = pathops.Path()
+            face.getGlyphSet()[face.getBestCmap()[cp]].draw(contour.getPen())
+            paths.append(pathops.simplify(contour))
+        assert len(list(paths[0].contours)) == len(list(paths[1].contours)), (hex(cp), 'Bold closes a gap or counter')
     native = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
               for cp in map(ord, 'トあけほんえヨリキテふゆゐゑすつ')]
     low, high = min(native) - .12, max(native) + .12
@@ -162,6 +174,7 @@ def main():
         'family': FAMILY, 'style': 'Bold', 'font_version': 'Version ' + VERSION,
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
+        'outline_ligatures': len(LIGATURE_POINTS),
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
         'drawing_gain': [min(gains.values()), max(gains.values())],
         'native_kana_gain': [round(min(native), 2), round(max(native), 2)],

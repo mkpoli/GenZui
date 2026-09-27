@@ -6,10 +6,10 @@ kana and Unicode 18.0 additions.
 | | 源萃明朝 GenZui Serif | 源萃ゴシック GenZui Sans |
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
-| Release | Regular and Bold 0.117 · 17,271 characters | Regular and Bold 0.103 · 17,251 characters |
+| Release | Regular and Bold 0.118 · 17,271 characters | Regular and Bold 0.103 · 17,251 characters |
 | Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) · [GenZuiSerif-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Bold.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) · [GenZuiSans-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Bold.ttf) |
-| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.117.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.103.zip) |
+| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.118.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.103.zip) |
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -29,7 +29,7 @@ Browser fallback depends on the website and browser settings.
 ### On the web
 
 ```html
-<link rel="stylesheet" href="https://genzui.mkpo.li/v0.117/genzui.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/v0.118/genzui.css">
 <link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.103/genzui-sans.css">
 ```
 
@@ -62,7 +62,7 @@ Extensions, Kana Supplement, Kana Extended-A, Kana Extended-B and Small Kana
 Extension blocks is present. The Hiragana and Katakana script properties and
 script extensions together cover **all 763 characters**, including halfwidth
 kana, enclosed kana, squared katakana and shared marks. Audits:
-[Serif 0.117](research/kana-coverage-0.117.json) ·
+[Serif 0.118](research/kana-coverage-0.118.json) ·
 [Sans 0.103](research/sans-kana-coverage-0.103.json). These are encoding
 checks; historical variants and arbitrary combining-mark sequences need
 separate typographic assessment.
