@@ -226,7 +226,7 @@ def drawings(font, contours, option="B", style="Bold"):
 
     # The actual wa contours keep their native bowl/terminal contrast.
     from scipy.interpolate import PchipInterpolator
-    wa_x = PchipInterpolator([73, 290, 430, 700, 950], [600, 685, 775, 860, 980])
+    wa_x = lambda x: 600 + (x-73)*380/877
     def hwa_map(r):
         out = []
         for seg in r:
@@ -252,11 +252,22 @@ def drawings(font, contours, option="B", style="Bold"):
 
     # e keeps a complete native arch and terminal. A shear straightens its
     # diagonal; a uniform vertical fit lowers the arch without local warping.
-    def e_lower(ref):
+    def e_lower(ref, foot_weight=None):
         r = ring('え', ref=ref)
+        if foot_weight and not ref:
+            light = O.rings(contours(vowel_source(foot_weight), ord('え'), [0]))[0]
+            assert len(r) == len(light) == 75
+            # Preserve the terminal's native aspect ratio after the vowel's
+            # narrow fit. The diagonal and arch keep their original master.
+            body = r[2:64]
+            foot = light[66:] + light[:1]
+            baseline = light[0][0][1]
+            scale = .65 if fuller else .60
+            foot = move(foot, 1, scale, 0, baseline*(1-scale))
+            r = rounded_join(body, foot)
         cuts = sorted(O.crossings(r, 1, 380), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
-    e = fit(e_lower(False), e_lower(True), (598, 20, 930, 365))
+    e = fit(e_lower(False, (650 if fuller else 600) if bold else None), e_lower(True), (598, 20, 930, 365))
     e = O.transform(e, np.array([[1, -.20], [0, 1]]), (4, 0))
     e = move(e, 1, 1, 32, 0)
     hwe = [fu, guide_join(rise, e, approved['HWE'][1], not fuller, outer_end=28)]
@@ -283,8 +294,11 @@ def drawings(font, contours, option="B", style="Bold"):
                        for s in pieces)
         return out
     kwa_stem = wa_placement(cut_keep(ring('わ', 2), 1, 400, 'low'))
+    kwa_loop_font = vowel_source((900 if fuller else 875) if bold else (750 if fuller else 700))
+    kwa_loop = O.rings(contours(kwa_loop_font, ord('わ'), [0]))[0]
+    loop_width = (.72 if bold else .70) if fuller else .67
     kwa = [selected_join(ku('KWA'), kwa_stem, (14,24) if fuller else (8,20), (23,26) if fuller else (20,24)), wa_placement(ring('わ', 1)),
-           move(ring('わ', 0), .67, .67, 495-356*.67, 339-536*.67)]
+           move(kwa_loop, loop_width, .67, 495-356*loop_width, 339-536*.67)]
     body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
     kwe_lower = fit(e_lower(False), e_lower(True), (203, -64, 847, 286))
     upper = ku('KWE')
@@ -293,7 +307,15 @@ def drawings(font, contours, option="B", style="Bold"):
     shear = (target-current)/(286+64)
     kwe_lower = O.transform(kwe_lower, np.array([[1, shear], [0, 1]]), (64*shear, 0))
     kwe_lower = move(kwe_lower, 1, .925, 0, -4.8)
-    kwe = [upper + [bridge(upper, kwe_lower)] + kwe_lower + [O.fair(kwe_lower[-1][3], O.tangent(kwe_lower[-1], 1), O.curvature(kwe_lower[-1], 1), upper[0][0], O.tangent(upper[0], 0), O.curvature(upper[0], 0))]]
+    # Back away from the original attachment so both tangent rays meet
+    # ahead of the edges. This convex turn has no reverse-curvature notch.
+    kwe_lower = kwe_lower[:-1]
+    p, q = kwe_lower[-1][3], upper[0][0]
+    u, v = O.tangent(kwe_lower[-1], 1), O.tangent(upper[0], 0)
+    a, b = np.linalg.solve(np.column_stack([u, v]), q-p)
+    assert a > 0 and b > 0, ('KWE inner turn', a, b)
+    inner = (p, p+u*a*2/3, q-v*b*2/3, q)
+    kwe = [upper + [bridge(upper, kwe_lower)] + kwe_lower + [inner]]
 
     body_weight, vowel_weight = (700, 750) if bold else (400, 500)
     te = native('て', 0, (107, 225, 882, 718), (1, 250, 'high'))
@@ -330,16 +352,16 @@ def drawings(font, contours, option="B", style="Bold"):
             if ch == 'と':
                 head = move(O.arc(r, (1, .55), (32, 0)), 1, .6, -5, 300)
                 tail = O.arc(ring('つ', ref=ref), (29, 0), (7, 0))
-                fy = PchipInterpolator([35,150,390,640], [-12,62,155,347])
-                tail = [tuple(np.array([.88*p[0]+5, float(fy(p[1]))]) for p in seg) for seg in tail]
+                # Keep the native tsu bowl affine: warping its controls makes
+                # the outside develop a corner and flattens the lower curve.
+                tail = move(tail, .88, .62 if fuller else .59, 5, -35)
                 head = [tuple(np.array([p[0], p[1]-50*np.clip((p[1]-420)/200,0,1)]) for p in seg) for seg in head]
             else:
                 fy = PchipInterpolator([-53, 100, 551], [190, 275, 570])
                 head = [tuple(np.array([.87*p[0]+1, float(fy(p[1]))]) for p in seg)
                         for seg in O.arc(r, (1, .55), (33, 0))]
                 tail = O.arc(ring('つ', ref=ref), (29, 0), (7, 0))
-                fy = PchipInterpolator([35,135,390,640], [-27,30,105,253])
-                tail = [tuple(np.array([.87*p[0]-2, float(fy(p[1]))]) for p in seg) for seg in tail]
+                tail = move(tail, .87, .50 if fuller else .47, -2, -60)
             return rounded_join(clean(head), clean(tail), 1.02 if fuller else .98)
         return fit(recipe(False), recipe(True), box)
     tu = [native('と', 1, bounds([approved['TU'][0]])),
@@ -355,9 +377,29 @@ def drawings(font, contours, option="B", style="Bold"):
             result[label] = approved[label]
         # Use the approved fu body and shoulder with the new native wa map.
         result['HWA'][0] = approved['HWA'][0]
+    # Set the reduced vowels on the same optical baseline as HWA's wa.
+    vowel_baseline = bounds([hwa_map(wa_rings[2])])[1]
+    if not bold:
+        baseline_source = O.rings(contours(vowel_source(600), ord('わ'), [2]))
+        vowel_baseline = bounds(baseline_source)[1]*.49+25
+    if bold:
+        hwi_body, hwe_body = i, e
+        hwi_rise, hwe_rise = rise, rise
+    else:
+        hwi_body, hwe_body = approved['HWI'][1][23:-1], approved['HWE'][1][28:-1]
+        hwi_rise, hwe_rise = approved['HWI'][1][:22], approved['HWE'][1][:22]
+    def stand(r, anchor=365):
+        bottom = bounds([r])[1]
+        sy = (anchor-vowel_baseline)/(anchor-bottom)
+        return move(r, 1, sy, 0, anchor*(1-sy)), sy
+    hwi_body, i_scale = stand(hwi_body)
+    hwe_body, _ = stand(hwe_body)
+    result['HWI'][1] = guide_join(hwi_rise, hwi_body, approved['HWI'][1], not fuller if bold else False)
+    result['HWI'][2] = move(result['HWI'][2], 1, i_scale, 0, 365*(1-i_scale))
+    result['HWE'][1] = guide_join(hwe_rise, hwe_body, approved['HWE'][1], not fuller if bold else False, outer_end=28)
     # Match native entry heights without moving the baseline or the lower join.
     for label, donor, hinge in (('KWA','く',300), ('KWI','く',300), ('KWE','く',300),
-                               ('TU','と',350), ('WU','を',350), ('TSI','つ',280)):
+                               ('TU','と',400), ('WU','を',350), ('TSI','つ',280)):
         target = round(bounds(O.rings(contours(body_source(700 if bold else 400), ord(donor))))[3])
         current = bounds(result[label])[3]
         def align(p):

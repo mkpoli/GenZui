@@ -1,0 +1,41 @@
+{
+  "description": "Compiled default outlines of the confirmed Okinawan bodies. Dakuten placement is verified separately.",
+  "styles": {
+    "Regular": {
+      "KWI": {
+        "codepoint": "F456",
+        "sha256": "353cf2a98083b953a0c372343454490f00aae996ceb6441bd8d9d6072a06e7cb"
+      },
+      "TI": {
+        "codepoint": "F452",
+        "sha256": "5c9634fc542951f93561a6ab7ce4dbc4c2a84c70f982d9ce75647c9d868788bf"
+      },
+      "TSI": {
+        "codepoint": "F469",
+        "sha256": "52e9676e2282b3a5b9c8c8032d50474b9ca09ac2e1f91ffb858f53aa7db1ea18"
+      },
+      "SI": {
+        "codepoint": "F467",
+        "sha256": "10d6315021e77c0bdd5892ae284c4b8cf0403cf67548e28136495fd772177dca"
+      }
+    },
+    "Bold": {
+      "KWI": {
+        "codepoint": "F456",
+        "sha256": "7d0dc9bc43a34d11180a0eea329ede99f88d2c68527ceae34ae8590eefd87cf9"
+      },
+      "TI": {
+        "codepoint": "F452",
+        "sha256": "f8f7d807988092d8794b7de6344f2101154865afc37e7aa6b7215a8bc0d8480e"
+      },
+      "TSI": {
+        "codepoint": "F469",
+        "sha256": "d7814b9327878529614406903ac0e56d2d5407dc7471f9d043795fd2923e25aa"
+      },
+      "SI": {
+        "codepoint": "F467",
+        "sha256": "68a7829b6426cc39b2c7fd426c7e4f0eee070329ff5d567646c21bc9a26c2b78"
+      }
+    }
+  }
+}

@@ -137,19 +137,21 @@ system drafts, copying fallback, responsive layout and the PUA inventory.
 The approved placement outlines are stored in
 `data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
 `scripts/okinawan_bold.py` composes both weights from native Noto Serif JP
-masters. Regular TI, HWI and HWE retain their approved outlines; SI and ZI
-retain their full native size. HWA uses the same native わ construction in
-both weights.
+masters. Regular TI retains its approved outline. KWI, SI and the accepted
+TI/TSI bodies are preserved. HWI/HWE vowels meet HWA’s optical baseline;
+HWA uses one affine native わ construction in both weights.
 
 The fuller proof uses these optical source weights:
 
 | Component | Regular | Bold |
 | --- | --- | --- |
 | KWI / KWE body and vowel | 600 / 650 | 850 / 900 |
-| KWA body and vowel | 550 / 600 | 700 / 850 |
+| KWA body and stem | 550 / 600 | 700 / 850 |
+| KWA right loop | 750 | 900 |
 | HWA reduced わ | 600 | 900 |
 | TSI body and vowel | 550 / 650 | 850 / 900 |
 | TU / WU | 600 | 850 |
+| HWE terminal | Approved source | 650 |
 
 Native contours supply the terminals and bowls. Local connections retain
 the て-to-い angle and the distinct thickness of the わ and つ curves.
@@ -158,7 +160,8 @@ source kana’s top height.
 
 Dakuten come from native ど, で, ぐ, ず and づ. Each pair retains its
 outlines and internal spacing, with placement specific to the constructed
-base. All voiced forms preserve the size of their unvoiced base.
+base. DI uses the native で positions; DZI has additional clearance above つ.
+All voiced forms preserve the size of their unvoiced base.
 
 After building both Serif weights, run:
 
@@ -171,9 +174,10 @@ show build/okinawan-release --name genzui-okinawan
 
 Open the local URL printed by `show`. Each option displays the source kana,
 constructed letter and vowel at the same size, with baseline and top guides.
-Voiced forms appear in the same card. Regular and Bold choices are independent;
-SI/ZI are marked confirmed. Copy choices for one character or the complete set
-as JSON.
+Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
+their vowel baselines. Regular and Bold choices are independent; confirmed
+shapes are retained, with TI fixed to Bold B. Copy choices for one character
+or the complete set as JSON.
 
 The `sns/` page contains Japanese and English announcement copy and two
 2400px square sentence specimens rendered from the full candidate fonts.

@@ -26,12 +26,12 @@ DESCRIPTIONS = {cp: (f"{e['label']}. " +
 # TI places its pair below the upper arm; the other pairs follow their entries.
 DAKUTEN = {
     0xF450: ('ど', (0, 3), 0, 20),
-    0xF452: ('で', (0, 2), 30, -45),
+    0xF452: ('で', (0, 2), 0, 0),
     0xF454: ('ぐ', (0, 2), 0, 0),
     0xF456: ('ぐ', (0, 2), 0, 0),
     0xF458: ('ぐ', (0, 2), -35, -35),
     0xF467: ('ず', (0, 5), 0, 0),
-    0xF469: ('づ', (0, 2), -10, 0),
+    0xF469: ('づ', (0, 2), 0, 20),
 }
 
 

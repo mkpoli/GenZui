@@ -1,5 +1,8 @@
 """Verify proof choices against the actual fonts and native kana context."""
 from functools import lru_cache
+import hashlib
+import json
+from sources import ROOT
 
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
@@ -67,16 +70,37 @@ def same_compiled(font, cp, parts, geometric=False):
         assert actual.getCoordinates(font['glyf']) == expected.getCoordinates(font['glyf']), (hex(cp), 'stale composition')
 
 
+def marks(font, text):
+    pen = RecordingPen()
+    pen.value = outline(font, text)
+    path, selected = pathops.Path(), pathops.Path()
+    pen.replay(path.getPen())
+    count = 0
+    for contour in path.contours:
+        x0,y0,x1,y1 = contour.bounds
+        if x0 > 600 and y0 > 300 and x1-x0 < 210 and y1-y0 < 190:
+            contour.draw(selected.getPen())
+            count += 1
+    assert count == 2, (text, 'expected two dakuten strokes')
+    return selected
+
+
 def check():
     samples = [chr(cp) for cp in sorted(POINTS | {0xF467})]
     voiced = [''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
-    retained = {0xF452, 0xF45B, 0xF45C}
+    retained = {0xF452}
+    same_regular_options = {0xF452, 0xF45B, 0xF45C}
     approved = approved_drawings()
     from okinawan_bold import drawings
     for style in ('Regular', 'Bold'):
         full = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf')
+        confirmed = json.loads((ROOT/'data/okinawan/confirmed-bodies.json').read_text())['styles'][style]
+        for label, record in confirmed.items():
+            pen = contours(full, int(record['codepoint'],16))
+            digest = hashlib.sha256(json.dumps(pen.value,separators=(',',':')).encode()).hexdigest()
+            assert digest == record['sha256'], (style, label, 'confirmed body changed')
         selected = opened(f'{style.lower()}-B.woff2')
         alternative = opened(f'{style.lower()}-A.woff2')
         for text in samples + voiced:
@@ -86,7 +110,7 @@ def check():
             assert outline(selected, text) == outline(alternative, text), (style, 'SI changed')
         for cp in POINTS:
             differs = outline(selected, chr(cp)) != outline(alternative, chr(cp))
-            assert differs == (style == 'Bold' or cp not in retained), (style, hex(cp), 'wrong option coverage')
+            assert differs == (style == 'Bold' or cp not in same_regular_options), (style, hex(cp), 'wrong option coverage')
         for cp, parts in drawings(full, contours, style=style).items():
             same_compiled(full, cp, parts)
             assert topology(contours(full, cp)) == topology(united(approved[cp])), (style, hex(cp), 'changed counters')
@@ -94,6 +118,18 @@ def check():
             for cp in retained:
                 same_compiled(full, cp, approved[cp], geometric=True)
         for face in (selected, alternative):
+            assert pathops.op(marks(face, chr(0xF452)+'\u3099'), marks(face, 'で'), pathops.PathOp.XOR).area < .01, (style, 'DI marks differ from native de')
+            # Compare the lowered vowels, excluding fu's own lower sweep.
+            lower = []
+            crop = pathops.Path()
+            pen = crop.getPen()
+            pen.moveTo((600,-200)); pen.lineTo((1100,-200))
+            pen.lineTo((1100,1000)); pen.lineTo((600,1000)); pen.closePath()
+            for cp in (0xF45A,0xF45B,0xF45C):
+                path = pathops.Path(); contours(face,cp).replay(path.getPen())
+                lower.append(pathops.op(path,crop,pathops.PathOp.INTERSECTION).bounds[1])
+            assert max(lower)-min(lower) <= 3, (style, 'labial vowel baselines', lower)
+
             for cp, donor in ((0xF454,'く'), (0xF456,'く'), (0xF458,'く'),
                               (0xF450,'と'), (0xF465,'を'), (0xF469,'つ')):
                 cm = face.getBestCmap()
