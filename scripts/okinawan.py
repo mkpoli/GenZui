@@ -5,6 +5,7 @@ No outlines are imported from Nishiki-teki, Xim Sans or legacy Okinawan fonts.
 """
 import json
 import pathops
+from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.ttLib.tables import otTables
 from fontTools.otlLib.builder import buildLigatureSubstSubtable
@@ -21,6 +22,43 @@ DESCRIPTIONS = {cp: (f"{e['label']}. " +
      'Okinawa prefectural raised katakana; Xim Sans PUA convention. ') +
     'GenZui drawing from Noto components. This is a private-use mapping, not a Unicode assignment.')
     for cp, e in PUA.items()}
+
+# Native voiced kana supply the two marks, including their relative spacing.
+# TU and TSI need a higher pair; TI needs clearance below its upper arm.
+DAKUTEN = {
+    0xF450: ('ど', (0, 3), 0, 35),
+    0xF452: ('で', (0, 2), 30, -45),
+    0xF454: ('ぐ', (0, 2), 0, 0),
+    0xF456: ('ぐ', (0, 2), 0, 0),
+    0xF458: ('ぐ', (0, 2), 0, 0),
+    0xF467: ('ず', (0, 5), 0, 0),
+    0xF469: ('づ', (0, 2), 0, 60),
+}
+
+
+def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
+    """A nine-tenths base with native Noto dakuten at an optical position."""
+    char, indices, dx, dy = DAKUTEN[cp]
+    outline = contours(font, ord(char))
+    mark, current = RecordingPen(), RecordingPen()
+    for op, args in outline.value:
+        getattr(current, op)(*args)
+        if op in ('closePath', 'endPath'):
+            b = BoundsPen(None)
+            current.replay(b)
+            x0, y0, x1, y1 = b.bounds
+            if x0 > 600 and y0 > 300 and x1 - x0 < 210 and y1 - y0 < 190:
+                mark.value.extend(current.value)
+            current = RecordingPen()
+    bounds = BoundsPen(None)
+    mark.replay(bounds)
+    x0, y0, x1, y1 = bounds.bounds
+    assert 230 < x1 - x0 < 290 and 160 < y1 - y0 < 270, char
+    assert sum(op == 'closePath' for op, _ in mark.value) == 2, char
+    # The compact proof keeps the pair's upper-right corner in place.
+    mark = transform(mark, (mark_scale, 0, 0, mark_scale,
+                           dx + x1 * (1 - mark_scale), dy + y1 * (1 - mark_scale)))
+    return [transform(p, (.9, 0, 0, .9, 0, 0)) for p in parts] + [mark]
 
 
 def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
@@ -41,7 +79,11 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         pen = contours(font, ord(ch), indices)
         return transform(pen, matrix) if matrix else pen
 
-    recipes = ligature_drawings(bold=bold)
+    if bold:
+        from okinawan_bold import drawings as native_bold
+        recipes = native_bold(font, contours)
+    else:
+        recipes = ligature_drawings()
     # The glottal letters and SI are Noto's own kana with a Noto stroke merged
     # into the outline (YA) or set beside it; see okinawan_merge. Bold reads
     # the same strokes from the wght 700 instance; the width given back to a
@@ -85,10 +127,8 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
             continue
         cp = int(e['output'][0], 16)
 
-        original_mark = font['glyf'][cmap[0x309B]]
-        mark = part('゛', matrix=(.72, 0, 0, .72, 810-.72*original_mark.xMin, 825-.72*original_mark.yMax))
-        name = add(font, f"okinawa.{e['id']}", unite([
-            transform(p, (.9, 0, 0, .9, 0, 0)) for p in recipes[cp]]+[mark]))
+        name = add(font, f"okinawa.{e['id']}",
+                   unite(voiced_parts(font, cp, recipes[cp], contours, transform)))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name

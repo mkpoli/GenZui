@@ -1,56 +1,64 @@
-"""Build a local Regular/Bold proof for the ten Okinawan ligatures."""
+"""Build the native Noto Bold proof with native dakuten comparisons."""
 import json
-from pathlib import Path
+import pathops
+from fontTools.pens.recordingPen import RecordingPen
 
 from fontTools import subset
 from fontTools.ttLib import TTFont
 
-from okinawan_ligatures import drawings, source
-from okinawan import ENTRIES
+from okinawan_ligatures import source
+from okinawan import DAKUTEN, ENTRIES, voiced_parts
 from serif import OUT as FONT_OUT, VERSION, glyph, contours, transform
 from sources import ROOT
 
 OUT = ROOT / 'build/okinawan-release'
-VARIANTS = {'A': .85, 'B': 1.0, 'C': 1.15}
+VARIANTS = {'A': 1.0, 'B': .95}
 NEIGHBOURS = {'TU': 'とつ', 'TI': 'てい', 'KWA': 'くわ', 'KWI': 'くい',
               'KWE': 'くえ', 'HWA': 'ふわ', 'HWI': 'ふい', 'HWE': 'ふえ',
               'WU': 'をう', 'TSI': 'つい'}
 
 
-def webfont(style, variant=None):
+def composed_name(font, cp):
+    cmap = font.getBestCmap()
+    names = {lig.LigGlyph
+             for lookup in font['GSUB'].table.LookupList.Lookup if lookup.LookupType == 4
+             for sub in lookup.SubTable
+             for lig in sub.ligatures.get(cmap[cp], [])
+             if lig.Component == [cmap[0x3099]]}
+    assert len(names) == 1, hex(cp)
+    return names.pop()
+
+
+def webfont(style, variant, vowel_weight=None):
     font = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf', recalcTimestamp=False)
-    if variant and variant != 'B':
+    if vowel_weight is not None:
+        from okinawan_bold import drawings
         cmap = font.getBestCmap()
-        recipes = drawings(bold=True, strength=VARIANTS[variant])
-        for cp, parts in recipes.items():
+        for cp, parts in drawings(font, contours, vowel_weight=vowel_weight).items():
+            merged = pathops.Path()
+            for part in parts:
+                shape = pathops.Path()
+                part.replay(shape.getPen())
+                merged = pathops.op(merged, shape, pathops.PathOp.UNION)
+            pen = RecordingPen()
+            merged.draw(pen)
+            g = glyph([pen])
             name = cmap[cp]
+            font['glyf'][name] = g
+            g.recalcBounds(font['glyf'])
+            font['hmtx'][name] = (1000, g.xMin)
+            font['vmtx'][name] = (1000, 880-g.yMax)
+    if variant != 'A' or vowel_weight is not None:
+        for cp in DAKUTEN:
+            name = composed_name(font, cp)
+            parts = voiced_parts(font, cp, [contours(font, cp)], contours, transform,
+                                 mark_scale=VARIANTS[variant])
             g = glyph(parts)
             font['glyf'][name] = g
             g.recalcBounds(font['glyf'])
             font['hmtx'][name] = (1000, g.xMin)
             font['vmtx'][name] = (1000, 880 - g.yMax)
-        mark_glyph = font['glyf'][cmap[0x309B]]
-        mark = transform(contours(font, 0x309B), (.72, 0, 0, .72,
-                         810 - .72 * mark_glyph.xMin, 825 - .72 * mark_glyph.yMax))
-        for entry in ENTRIES:
-            if len(entry['output']) != 2:
-                continue
-            cp = int(entry['output'][0], 16)
-            if cp not in recipes:
-                continue
-            names = {lig.LigGlyph
-                     for lookup in font['GSUB'].table.LookupList.Lookup if lookup.LookupType == 4
-                     for sub in lookup.SubTable
-                     for lig in sub.ligatures.get(cmap[cp], [])
-                     if lig.Component == [cmap[0x3099]]}
-            assert len(names) == 1, entry['id']
-            name = names.pop()
-            g = glyph([transform(p, (.9, 0, 0, .9, 0, 0)) for p in recipes[cp]] + [mark])
-            font['glyf'][name] = g
-            g.recalcBounds(font['glyf'])
-            font['hmtx'][name] = (1000, g.xMin)
-            font['vmtx'][name] = (1000, 880 - g.yMax)
-    points = {int(g['codepoint'], 16) for g in source()['glyphs']}
+    points = {int(g['codepoint'], 16) for g in source()['glyphs']} | set(DAKUTEN)
     points.update(range(0x3041, 0x30A0))
     options = subset.Options()
     options.recalc_timestamp = False
@@ -58,22 +66,32 @@ def webfont(style, variant=None):
     sub.populate(unicodes=points)
     sub.subset(font)
     font.flavor = 'woff2'
-    font.save(OUT / (f'bold-{variant}.woff2' if variant else 'regular.woff2'))
+    suffix = '-700' if vowel_weight is not None else ''
+    font.save(OUT / f'{style.lower()}-{variant}{suffix}.woff2')
 
 
 def build():
     OUT.mkdir(parents=True, exist_ok=True)
-    webfont('Regular')
+    for style in ('Regular', 'Bold'):
+        for variant in VARIANTS:
+            webfont(style, variant)
     for variant in VARIANTS:
-        webfont('Bold', variant)
+        webfont('Bold', variant, vowel_weight=700)
     data = {'version': VERSION, 'glyphs': [
-        {'label': g['label'], 'character': chr(int(g['codepoint'], 16)),
-         'neighbours': NEIGHBOURS[g['label']],
-         'voiced': next((''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES
-                         if len(e['output']) == 2 and e['output'][0] == g['codepoint']), None)} for g in source()['glyphs']]}
+        {'label': g['label'], 'character': chr(int(g['codepoint'], 16)), 'hasOptions': g['label'] not in ('TU', 'WU'),
+         'neighbours': NEIGHBOURS[g['label']]} for g in source()['glyphs']],
+        'voiced': [{'id': e['id'], 'label': e['label'],
+                    'character': ''.join(chr(int(c, 16)) for c in e['output']),
+                    'reference': DAKUTEN[int(e['output'][0], 16)][0],
+                    'baseLabel': next((g['label'] for g in source()['glyphs'] if g['codepoint'] == e['output'][0]), None)}
+                   for e in ENTRIES if len(e['output']) == 2
+                   and int(e['output'][0], 16) in DAKUTEN]}
     template = (ROOT / 'templates/okinawan-release/index.html').read_text()
     (OUT / 'index.html').write_text(template.replace('{{DATA}}', json.dumps(data, ensure_ascii=False)))
-    print(f'Okinawan {VERSION} proof: Regular and three Bold weights.')
+    # Remove superseded comparison fonts.
+    for name in ('regular.woff2', 'bold-C.woff2'):
+        (OUT / name).unlink(missing_ok=True)
+    print(f'Okinawan {VERSION} proof: native Bold recomposed; seven dakuten pairs in both weights.')
 
 
 if __name__ == '__main__':

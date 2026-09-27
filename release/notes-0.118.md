@@ -2,8 +2,8 @@
 
 The ten Funatsu Okinawan ligatures TU, TI, KWA, KWI, KWE, HWA, HWI, HWE, WU
 and TSI use Noto Serif JP stroke shapes, with revised connections, proportions
-and terminals. Regular and Bold share these forms. Bold has individual stroke
-weight adjustments and spacing for HWA’s and HWE’s small counters.
+and terminals. Regular and Bold share these forms. Bold is composed from Noto’s native Bold strokes, with heavier source
+weights for reduced vowels. Dakuten use the marks from native voiced kana.
 
 The release includes Noto-based glottal letters and SI, plus 181 Korean
 gugyeol forms at the Hanyang private-use positions. Both weights contain

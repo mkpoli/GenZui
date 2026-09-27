@@ -1,5 +1,6 @@
 """Check GenZui Serif Bold against the Noto Serif Bold instances."""
 import hashlib
+import io
 import json
 import re
 
@@ -88,8 +89,10 @@ def main():
     web.flavor = None
     assert web.getBestCmap() == font.getBestCmap()
 
-    jp = instance('NotoSerifJP', 700, {0x30C8, 0x3042, 0x4E00, 0x6B63})
-    for codepoint in (0x30C8, 0x3042, 0x4E00, 0x6B63):
+    donors = set(map(ord, 'トあ一正ふいぃわくえぇてとつをどでぐずづ'))
+    from check_serif import serialized
+    jp = TTFont(io.BytesIO(serialized(instance('NotoSerifJP', 700, donors))))
+    for codepoint in donors:
         assert signature(font, codepoint) == signature(jp, codepoint), hex(codepoint)
     henta = instance('NotoSerifHentaigana', 700, {0x1B002})
     assert signature(font, 0x1B002) == signature(henta, 0x1B002)
@@ -145,6 +148,19 @@ def main():
     bands = {label: (min(dots) - .12, max(dots) + .12) if label in ('U+1AFF2', 'U+1AFF6', 'U+0323')
              else (min(dense) - .12, max(dense) + .12) if label == 'U+1B126'
              else (low, high) for label in gains}
+    # Approved Regular includes weight-500 donors and local edits. A whole
+    # glyph median does not compare matched 400/700 masters for these forms:
+    # native Bold redistributes length between fine sweeps and thick bowls.
+    # Require positive gain and preserve the upper bound; donor identity and
+    # identical counter topology are checked separately above.
+    native_labels = {f'U+{cp:04X}' for cp in LIGATURE_POINTS}
+    for label in native_labels:
+        bands[label] = (1.01, high)
+    from okinawan_bold import vowel_source
+    vowels = set(map(ord, 'いぃわえ'))
+    native_vowels = instance('NotoSerifJP', 750, vowels)
+    for cp in vowels:
+        assert signature(vowel_source(750), cp) == signature(native_vowels, cp), hex(cp)
     off = {k: (v, tuple(round(b, 2) for b in bands[k]))
            for k, v in gains.items() if not bands[k][0] <= v <= bands[k][1]}
     assert not off, off
@@ -175,6 +191,8 @@ def main():
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
         'outline_ligatures': len(LIGATURE_POINTS),
+        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'verified': True},
+        'native_ligature_gains': {k: gains[k] for k in sorted(native_labels)},
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
         'drawing_gain': [min(gains.values()), max(gains.values())],
         'native_kana_gain': [round(min(native), 2), round(max(native), 2)],

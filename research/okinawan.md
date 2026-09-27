@@ -134,23 +134,33 @@ system drafts, copying fallback, responsive layout and the PUA inventory.
 
 ### Ligature outlines and Bold proof
 
-The ten Funatsu ligature outlines are stored in
-`data/okinawan/ligatures.json`, in a 1000-unit font coordinate system. Each
-component keeps its selected Noto weight and affine transform.
-`scripts/okinawan_ligatures.py` unions the components and applies separate
-horizontal and vertical expansion for Bold. HWA and HWE receive additional
-spacing to keep their counters open.
+The ten approved Regular outlines are stored in
+`data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
+`scripts/okinawan_bold.py` composes Bold from Noto Serif JP at weight 700,
+with weight 750 for reduced vowels. Native curves supply the terminals and
+bowls; connecting curves meet their edges. No contour expansion is applied.
 
-After building and checking both Serif weights, run:
+The dakuten pairs come from native ど, で, ぐ, ず and づ, with placement
+specific to each base. Their relative spacing and individual outlines remain
+intact. The composed glyph keeps the existing nine-tenths base scale.
+
+After building both Serif weights, run:
 
 ```sh
 .venv/bin/python scripts/okinawan_release_proof.py
 .venv/bin/python scripts/check_okinawan_release_proof.py
+.venv/bin/python scripts/okinawan_sns.py
 devrun python3 -m http.server 8766 --bind 127.0.0.1 --directory build/okinawan-release
 ```
 
-Open `http://localhost:8766/`. The proof compares Regular with three Bold
-options for each character, including composed voiced forms. B uses the
-compiled Bold font; A and C use 85% and 115% of its added stroke expansion.
-Native hiragana alongside each option provide a weight reference. Selections
-are saved in the browser and can be copied as JSON.
+Open `http://localhost:8766/`. The proof compares the approved Regular with
+native Bold compositions using weight 700 or 750 for reduced vowels. Separate
+controls compare native-size dakuten with a 95% pair. Native kana provide a
+weight reference, and selections can be copied as JSON.
+
+The `sns/` page contains Japanese and English announcement copy and two
+2400px square sentence specimens rendered from the full candidate fonts.
+Traditional proverbs follow the [University of Hawaiʻi handbook, lesson 3](https://manoa.hawaii.edu/okinawa/handbook_l3_proverbs.pdf),
+pages 3-2 and 3-3. Line breaks and punctuation are editorial; the kana
+digraphs are typeset as GenZui ligatures. Font hashes, source text and image
+metadata are recorded in `specimens.json` beside the images.
