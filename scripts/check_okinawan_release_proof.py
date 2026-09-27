@@ -34,7 +34,7 @@ def opened(name):
 
 
 def check():
-    samples = [chr(cp) for cp in sorted(POINTS)]
+    samples = [chr(cp) for cp in sorted(POINTS | {0xF467})]
     voiced = [''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
@@ -55,16 +55,18 @@ def check():
                 part.replay(body.getPen())
             parts[-1].replay(mark.getPen())
             assert pathops.op(body, mark, pathops.PathOp.INTERSECTION).area < .01, (style, hex(cp), 'dakuten collision')
-    alternative = opened('bold-A-700.woff2')
+    alternative = opened('bold-A-alt.woff2')
     selected = opened('bold-A.woff2')
     for cp in POINTS:
         a, b = outline(alternative, chr(cp)), outline(selected, chr(cp))
-        assert (a == b) == (cp in (0xF450, 0xF465)), (hex(cp), 'native donor choice')
+        assert a != b, (hex(cp), 'join/weight options did not change')
     for text in voiced:
-        # SI is native in both; TU keeps the same full-size body.
-        if ord(text[0]) not in (0xF450, 0xF467):
-            assert outline(alternative, text) != outline(selected, text), repr(text)
-    print('Native proof passed: exact full-font outlines, eight donor alternatives, seven dakuten pairs, fixed advances and no mark collisions.')
+        assert outline(alternative, text) != outline(selected, text), repr(text)
+    for style in ('Regular', 'Bold'):
+        face = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf')
+        parts = voiced_parts(face, 0xF467, [contours(face, 0xF467)], contours, transform)
+        assert parts[0].value == contours(face, 0xF467).value, 'SI body must not shrink when voiced'
+    print('Native proof passed: exact full-font outlines, ten join/weight alternatives and SI sizing, seven dakuten pairs, fixed advances and no mark collisions.')
 
 
 if __name__ == '__main__':

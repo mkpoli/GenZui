@@ -1,8 +1,8 @@
 """Compose Bold ligatures from Noto Serif JP's actual weight-700 contours.
 
-Affine placement is measured against the Regular donor. It is then applied to
-Bold, so the weight master's thin terminals and heavy bowls remain intact.
-Only connecting curves and the small HWI hook cut are newly drawn.
+Placement follows the approved Regular forms. Native masters supply the stroke
+contrast; each connection has its own turn, width transition and curvature.
+KWI and KWE use heavier source masters without changing their placement maps.
 """
 from functools import lru_cache
 
@@ -65,6 +65,48 @@ def join(a, b):
     return a + [bridge(a, b)] + b + [bridge(b, a)]
 
 
+def selected_join(a,b,outer,inner):
+    """Control the outer and inner KWA turn independently."""
+    a,b=clean(a),clean(b)
+    def edge(x,y,h):
+        p,q=x[-1][3],y[0][0]
+        return (p,p+O.tangent(x[-1],1)*h[0],q-O.tangent(y[0],0)*h[1],q)
+    return a+[edge(a,b,outer)]+b+[edge(b,a,inner)]
+
+def native_turn(donor,left,right):
+    """Fit the approved native turn to both Bold edges and their tangents."""
+    p,q=left[-1][3],right[0][0]
+    u,v=O.tangent(donor[0],0),O.tangent(donor[-1],1)
+    uv=np.column_stack([u,v]);a,b=np.linalg.solve(uv,donor[-1][3]-donor[0][0])
+    U,V=O.tangent(left[-1],1),O.tangent(right[0],0)
+    alpha,beta=np.linalg.solve(np.column_stack([a*U,b*V]),q-p)
+    assert alpha>0 and beta>0,(alpha,beta)
+    mat=np.column_stack([alpha*U,beta*V])@np.linalg.inv(uv)
+    return O.transform(donor,mat,p-mat@donor[0][0])
+
+def guide_join(a, b, guide, compact=False, outer_end=23):
+    """Carry over the approved outer and inner turns between native Bold edges."""
+    outer = native_turn(guide[22:outer_end], a, b)
+    inner = native_turn(guide[-1:], b, a)
+    if compact:
+        for path in (outer, inner):
+            first = list(path[0])
+            first[1] = first[0] + .78 * (first[1] - first[0])
+            path[0] = tuple(first)
+            last = list(path[-1])
+            last[2] = last[3] + .78 * (last[2] - last[3])
+            path[-1] = tuple(last)
+    return a + outer + b + inner
+
+
+def rounded_join(a,b,fullness=1.0):
+    """Match curvature where the continuous sweeps meet."""
+    a,b=clean(a),clean(b)
+    def edge(x,y):
+        return O.fair(x[-1][3],O.tangent(x[-1],1),O.curvature(x[-1],1),
+                      y[0][0],O.tangent(y[0],0),O.curvature(y[0],0),fullness=fullness)
+    return a+[edge(a,b)]+b+[edge(b,a)]
+
 def fit(r, ref, box):
     x0, y0, x1, y1 = bounds([ref])
     left, bottom, right, top = box
@@ -83,24 +125,27 @@ def _approved():
     return out
 
 
-@lru_cache(maxsize=1)
-def body_source():
+@lru_cache(maxsize=3)
+def body_source(weight=700):
     from serif import instance
-    return instance('NotoSerifJP', 700, set(map(ord, 'ふくてとつを')))
+    return instance('NotoSerifJP', weight, set(map(ord, 'ふくてとつを')))
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=4)
 def vowel_source(weight):
     from serif import instance
     return instance('NotoSerifJP', weight, set(map(ord, 'いぃわえ')))
 
 
-def drawings(font, contours, vowel_weight=750):
+def drawings(font, contours, option="B"):
+    assert option in ("A", "B")
+    fuller = option == "B"
+    body_weight, vowel_weight = 700, 750
     regular = reference()
     approved = _approved()
 
     def ring(ch, index=0, ref=False):
-        donor = regular if ref else vowel_source(vowel_weight) if ch in 'いぃわえ' else body_source()
+        donor = regular if ref else vowel_source(vowel_weight) if ch in 'いぃわえ' else body_source(body_weight)
         return O.rings(contours(donor, ord(ch), [index]))[0]
 
     def native(ch, index, box, cut=None):
@@ -146,6 +191,16 @@ def drawings(font, contours, vowel_weight=750):
     rise_target = approved['HWI'][1][:22]
     rise = fit(rising(False), rising(True), bounds([rise_target]))
 
+    # Keep the approved connection centre. The native master's terminal
+    # otherwise lifts the whole shoulder while barely increasing its width.
+    wanted = (rise_target[0][0] + rise_target[-1][3]) / 2
+    actual = (rise[0][0] + rise[-1][3]) / 2
+    delta = wanted - actual
+    def anchor_rise(p):
+        t = np.clip((p[0] - 350) / 190, 0, 1)
+        return p + delta * (t*t*(3-2*t))
+    rise = [tuple(anchor_rise(p) for p in seg) for seg in rise]
+
     # Retain the native i bowl and shorten only the flick above its waist.
     def short_i(ref):
         r = ring('い', ref=ref)
@@ -167,22 +222,33 @@ def drawings(font, contours, vowel_weight=750):
     # Trimming a closed stem is followed by reopening its attachment.
     i = trim_hook(i + [line(i[-1][3], i[0][0])])
     i = clean(cut_keep(i, 1, 365, 'low')) if np.linalg.norm(i[0][0]-i[-1][3]) < 1e-5 else i
-    hwi = [fu, join(rise, i), native('い', 1, (765.48, 68, 924.52, 341.6))]
+    hwi = [fu, guide_join(rise, i, approved['HWI'][1], not fuller), native('い', 1, (765.48, 68, 924.52, 341.6))]
 
     # The actual wa contours keep their native bowl/terminal contrast.
     from scipy.interpolate import PchipInterpolator
-    wa_x = PchipInterpolator([73, 360, 950], [620, 710, 980])
+    wa_x = PchipInterpolator([73, 290, 430, 700, 950], [600, 685, 775, 860, 980])
     def hwa_map(r):
         out = []
         for seg in r:
             pieces = [seg]
             for _ in range(3):
                 pieces = [part for s in pieces for part in O.split(s, .5)]
-            out.extend(tuple(np.array([float(wa_x(p[0])), .60*p[1]+28.8]) for p in s)
+            out.extend(tuple(np.array([float(wa_x(p[0])), .49*p[1]+25]) for p in s)
                        for s in pieces)
         return out
-    wa_stem = hwa_map(cut_keep(ring('わ', 2), 1, 570, 'low'))
-    hwa = [fu, join(rise, wa_stem), hwa_map(ring('わ', 1)), hwa_map(ring('わ', 0))]
+    wa_font = vowel_source(900 if fuller else 850)
+    wa_rings = [O.rings(contours(wa_font, ord('わ'), [n]))[0] for n in range(3)]
+    wa_stem = hwa_map(cut_keep(wa_rings[2], 1, 570, 'low'))
+    # Extend the stem to the approved shoulder height. All native wa seams
+    # below it share one map, preserving the small counter and bowl connection.
+    top = 370
+    first, last = wa_stem[0][0], wa_stem[-1][3]
+    tf, tl = O.tangent(wa_stem[0], 0), O.tangent(wa_stem[-1], 1)
+    q = first + tf * ((top-first[1])/tf[1])
+    p = last + tl * ((top-last[1])/tl[1])
+    wa_stem = [line(q, first)] + wa_stem + [line(last, p)]
+    hwa = [fu, guide_join(rise, wa_stem, approved['HWA'][1], not fuller),
+           hwa_map(wa_rings[0]), hwa_map(wa_rings[1])]
 
     # e keeps a complete native arch and terminal. A shear straightens its
     # diagonal; a uniform vertical fit lowers the arch without local warping.
@@ -193,11 +259,14 @@ def drawings(font, contours, vowel_weight=750):
     e = fit(e_lower(False), e_lower(True), (598, 20, 930, 365))
     e = O.transform(e, np.array([[1, -.20], [0, 1]]), (4, 0))
     e = move(e, 1, 1, 32, 0)
-    hwe = [fu, join(rise, e)]
+    hwe = [fu, guide_join(rise, e, approved['HWE'][1], not fuller, outer_end=28)]
 
+    # Preserve the KWI/KWE maps; increase the actual source masters.
+    body_weight, vowel_weight = (850, 900) if fuller else (800, 850)
     kwi_i = native('ぃ', 0, (475, -78, 620, 291), (1, 375, 'low'))
     kwi_i = move(kwi_i, 1, .90, -30, -9.4)
     kwi = [join(ku('KWI'), kwi_i), native('ぃ', 1, bounds([approved['KWI'][-1]]))]
+    body_weight, vowel_weight = 700, 750
     fx = PchipInterpolator([92, 360, 915], [229, 495, 872])
     fy = PchipInterpolator([-48, 536], [-64, 339])
     def wa_placement(r):
@@ -210,8 +279,9 @@ def drawings(font, contours, vowel_weight=750):
                        for s in pieces)
         return out
     kwa_stem = wa_placement(cut_keep(ring('わ', 2), 1, 400, 'low'))
-    kwa = [join(ku('KWA'), kwa_stem), wa_placement(ring('わ', 1)),
+    kwa = [selected_join(ku('KWA'), kwa_stem, (14,24) if fuller else (8,20), (23,26) if fuller else (20,24)), wa_placement(ring('わ', 1)),
            move(ring('わ', 0), .67, .67, 495-356*.67, 339-536*.67)]
+    body_weight, vowel_weight = (850, 900) if fuller else (800, 850)
     kwe_lower = fit(e_lower(False), e_lower(True), (203, -64, 847, 286))
     upper = ku('KWE')
     target = (upper[0][0][0]+upper[-1][3][0])/2 + 35
@@ -221,17 +291,26 @@ def drawings(font, contours, vowel_weight=750):
     kwe_lower = move(kwe_lower, 1, .925, 0, -4.8)
     kwe = [join(upper, kwe_lower)]
 
+    body_weight, vowel_weight = 700, 750
     te = native('て', 0, (107, 225, 882, 718), (1, 250, 'high'))
+    # Stop before te turns outward into its original terminal.
+    te = clean(cut_keep(te + [line(te[-1][3], te[0][0])], 1, 300 if fuller else 315, 'high'))
     ti_i = native('ぃ', 0, (415, -10, 612, 195), (1, 375, 'low'))
-    ti = [join(te, ti_i), native('ぃ', 1, bounds([approved['TI'][-1]]))]
+    ti_closed=ti_i+[line(ti_i[-1][3],ti_i[0][0])]
+    ti_cuts=sorted(O.crossings(ti_closed,1,125 if fuller else 140),key=lambda c:O.point(ti_closed[c[0]],c[1])[0])[:2]
+    ti_i=min((O.arc(ti_closed,*ti_cuts),O.arc(ti_closed,*ti_cuts[::-1])),key=lambda a:min(p[1] for seg in a for p in seg))
+    ti = [rounded_join(te, ti_i), native('ぃ', 1, bounds([approved['TI'][-1]]))]
     def tsu_arc(ref):
         r = ring('つ', ref=ref)
-        cuts = sorted(O.crossings(r, 0, 410), key=lambda c: O.point(r[c[0]], c[1])[1])[:2]
+        cuts = sorted(O.crossings(r, 0, 470 if fuller else 450), key=lambda c: O.point(r[c[0]], c[1])[1])[:2]
         return max((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: max(p[1] for seg in a for p in seg))
     tsu_top = fit(tsu_arc(False), tsu_arc(True), (118, 294, 882, 690))
     tsi_i = native('ぃ', 0, (380, 19, 555, 280), (1, 375, 'low'))
     tsi_i = move(tsi_i, 1, .94, -25, .48)
-    tsi = [join(tsu_top, tsi_i), move(native('ぃ', 1, bounds([approved['TSI'][-1]])), 1, 1, 0, -25)]
+    # The approved turn is an affine guide; native Bold edges set its width.
+    turn=ring('て', ref=True)[39:44]
+    tsi_join=tsu_top+native_turn(turn,tsu_top,tsi_i)+tsi_i+native_turn(turn,tsi_i,tsu_top)
+    tsi = [tsi_join, move(native('ぃ', 1, bounds([approved['TSI'][-1]])), 1, 1, 0, -25)]
 
     # Native to/wo entries feed native tsu bowls. Horizontal sweeps retain
     # the Bold master's thin edge instead of receiving a contour offset.
@@ -247,7 +326,7 @@ def drawings(font, contours, vowel_weight=750):
                 head = [tuple(np.array([.87*p[0]+1, float(fy(p[1]))]) for p in seg)
                         for seg in O.arc(r, (1, 0), (33, 0))]
                 tail = move(O.arc(ring('つ', ref=ref), (28, 0), (9, 0)), .87, .463, -2, -43)
-            return join(clean(head), clean(tail))
+            return rounded_join(clean(head), clean(tail), 1.02 if fuller else .98)
         return fit(recipe(False), recipe(True), box)
     tu = [native('と', 1, bounds([approved['TU'][0]])),
           flowing('と', 0, bounds([approved['TU'][1]]))]

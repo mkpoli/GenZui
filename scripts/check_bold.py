@@ -97,6 +97,25 @@ def main():
     henta = instance('NotoSerifHentaigana', 700, {0x1B002})
     assert signature(font, 0x1B002) == signature(henta, 0x1B002)
 
+    # Reject stale font files even when their names/version still match.
+    from okinawan_bold import drawings as native_drawings
+    from serif import contours, glyph
+    from fontTools.pens.recordingPen import RecordingPen
+    from fontTools.ttLib.tables._g_l_y_f import Glyph
+    for cp, parts in native_drawings(font, contours).items():
+        merged = pathops.Path()
+        for part in parts:
+            contour = pathops.Path()
+            part.replay(contour.getPen())
+            merged = pathops.op(merged, contour, pathops.PathOp.UNION)
+        pen = RecordingPen()
+        merged.draw(pen)
+        expected = glyph([pen])
+        expected = Glyph(expected.compile(font['glyf']))
+        expected.expand(font['glyf'])
+        actual = font['glyf'][font.getBestCmap()[cp]]
+        assert actual.getCoordinates(font['glyf']) == expected.getCoordinates(font['glyf']), (hex(cp), 'build differs from current composition')
+
     # Masters share their commands and points, so the pair stays interpolable.
     pairs = list(masters())
     shapes = [[[(c, len(v)) for c, v in parse(d)] for d in pair] for pair in pairs]
@@ -123,7 +142,8 @@ def main():
             contour = pathops.Path()
             face.getGlyphSet()[face.getBestCmap()[cp]].draw(contour.getPen())
             paths.append(pathops.simplify(contour))
-        assert len(list(paths[0].contours)) == len(list(paths[1].contours)), (hex(cp), 'Bold closes a gap or counter')
+        topology = lambda p: (sum(not c.clockwise for c in p.contours), sum(c.clockwise for c in p.contours))
+        assert topology(paths[0]) == topology(paths[1]), (hex(cp), 'Bold changes connected bodies or holes', topology(paths[0]), topology(paths[1]))
     native = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
               for cp in map(ord, 'トあけほんえヨリキテふゆゐゑすつ')]
     low, high = min(native) - .12, max(native) + .12
@@ -158,9 +178,10 @@ def main():
         bands[label] = (1.01, high)
     from okinawan_bold import vowel_source
     vowels = set(map(ord, 'いぃわえ'))
-    native_vowels = instance('NotoSerifJP', 750, vowels)
-    for cp in vowels:
-        assert signature(vowel_source(750), cp) == signature(native_vowels, cp), hex(cp)
+    for source_weight in (750, 900):
+        native_vowels = instance('NotoSerifJP', source_weight, vowels)
+        for cp in vowels:
+            assert signature(vowel_source(source_weight), cp) == signature(native_vowels, cp), hex(cp)
     off = {k: (v, tuple(round(b, 2) for b in bands[k]))
            for k, v in gains.items() if not bands[k][0] <= v <= bands[k][1]}
     assert not off, off
@@ -191,7 +212,7 @@ def main():
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
         'outline_ligatures': len(LIGATURE_POINTS),
-        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'verified': True},
+        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'KWI_KWE': {'body': 850, 'vowel': 900}, 'HWA_loop': 900, 'verified': True},
         'native_ligature_gains': {k: gains[k] for k in sorted(native_labels)},
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
         'drawing_gain': [min(gains.values()), max(gains.values())],

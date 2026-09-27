@@ -17,7 +17,8 @@ Version 0.118 redraws the ten Funatsu ligatures TU, TI, KWA, KWI, KWE, HWA,
 HWI, HWE, WU and TSI from Noto Serif JP strokes. Their connections, proportions
 and terminal strokes follow the surrounding hiragana. Bold is composed from Noto’s native Bold strokes, with heavier source
 weights for reduced vowels and spacing around HWA’s and HWE’s counters.
-Voiced forms use the same base outlines with combining dakuten.
+Voiced forms use the same base outlines with combining dakuten. SI retains
+native kana size in both unvoiced and voiced forms.
 
 The release also includes the Noto-based glottal letters and SI, and 181 Korean
 gugyeol forms at the Hanyang private-use positions.

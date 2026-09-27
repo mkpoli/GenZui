@@ -36,8 +36,14 @@ DAKUTEN = {
 }
 
 
+def si_parts(font, contours, width=1.0):
+    """Keep SI's su at native height and its chosen full optical width."""
+    return okinawan_merge.glottal_beside(font, contours, 'す',
+                                       **dict(okinawan_merge.SI, kana_sx=width))
+
+
 def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
-    """A nine-tenths base with native Noto dakuten at an optical position."""
+    """Native dakuten; SI retains its full-size base beside native zu."""
     char, indices, dx, dy = DAKUTEN[cp]
     outline = contours(font, ord(char))
     mark, current = RecordingPen(), RecordingPen()
@@ -58,7 +64,8 @@ def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
     # The compact proof keeps the pair's upper-right corner in place.
     mark = transform(mark, (mark_scale, 0, 0, mark_scale,
                            dx + x1 * (1 - mark_scale), dy + y1 * (1 - mark_scale)))
-    return [transform(p, (.9, 0, 0, .9, 0, 0)) for p in parts] + [mark]
+    scale = 1.0 if cp == 0xF467 else .9
+    return [transform(p, (scale, 0, 0, scale, 0, 0)) for p in parts] + [mark]
 
 
 def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
@@ -101,7 +108,7 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         0xF461: beside('ゐ', okinawan_merge.WI),
         0xF462: beside('ゑ', okinawan_merge.WE),
         0xF463: beside('ん', okinawan_merge.N),
-        0xF467: beside('す', okinawan_merge.SI),
+        0xF467: si_parts(font, contours),
     })
     for cp, entry in PUA.items():
         if entry['system'] == 'prefecture':

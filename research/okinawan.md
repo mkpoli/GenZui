@@ -137,12 +137,15 @@ system drafts, copying fallback, responsive layout and the PUA inventory.
 The ten approved Regular outlines are stored in
 `data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
 `scripts/okinawan_bold.py` composes Bold from Noto Serif JP at weight 700,
-with weight 750 for reduced vowels. Native curves supply the terminals and
-bowls; connecting curves meet their edges. No contour expansion is applied.
+with weight 750 for reduced vowels. KWI and KWE use 850/900 masters at the
+same placements; HWA’s reduced loop uses 900. Native curves supply the terminals and bowls. Individual
+shoulders, paired turns and continuous sweeps follow the approved connections.
+No contour expansion is applied.
 
 The dakuten pairs come from native ど, で, ぐ, ず and づ, with placement
 specific to each base. Their relative spacing and individual outlines remain
-intact. The composed glyph keeps the existing nine-tenths base scale.
+intact. SI retains native width and height when voiced; the other composed
+glyphs keep the existing nine-tenths base scale.
 
 After building both Serif weights, run:
 
@@ -154,9 +157,10 @@ devrun python3 -m http.server 8766 --bind 127.0.0.1 --directory build/okinawan-r
 ```
 
 Open `http://localhost:8766/`. The proof compares the approved Regular with
-native Bold compositions using weight 700 or 750 for reduced vowels. Separate
-controls compare native-size dakuten with a 95% pair. Native kana provide a
-weight reference, and selections can be copied as JSON.
+two connection options, heavier KWI/KWE source masters and SI at 95% or
+native width. Separate controls compare native-size dakuten with a 95% pair.
+Native kana provide a size and weight reference; selections can be copied
+as JSON. A previous Bold snapshot is shown when available locally.
 
 The `sns/` page contains Japanese and English announcement copy and two
 2400px square sentence specimens rendered from the full candidate fonts.
