@@ -314,18 +314,18 @@ def drawings(font, contours, option="B", style="Bold"):
             r = rounded_join(body, foot)
         cuts = sorted(O.crossings(r, 1, cut_height), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
-    vowel_weight = (850 if fuller else 800) if bold else (650 if fuller else 600)
+    vowel_weight = (800 if fuller else 750) if bold else (600 if fuller else 550)
     # Take the native lower stroke below its separate pen-start head.
-    e=clean(e_lower(False,cut_height=460))
+    e=clean(e_lower(False,foot_weight=650 if bold else 450,foot_scale=.85,cut_height=460))
     left,bottom,_,_ = bounds([e])
-    sx,sy = (.50,.68) if fuller else (.47,.64)
-    e = move(e,sx,sy,600-sx*left,vowel_target_bottom-sy*bottom)
+    sx,sy = (.50,.74) if fuller else (.48,.70)
+    e = move(e,sx,sy,580-sx*left,vowel_target_bottom-sy*bottom)
     # Keep the lower native arch and terminal. Above them, bring the long
     # diagonal upright so the shoulder can rise with HWA and HWI.
     def upright_e(p):
-        x,y=p; z=y-200
+        x,y=p; z=y-175
         ramp=0 if z<=-30 else z if z>=30 else (z+30)**2/120
-        return np.array([x-(.70 if fuller else .62)*ramp,y])
+        return np.array([x-(.38 if fuller else .30)*ramp,y])
     shaped=[]
     for seg in e:
         pieces=[seg]
@@ -411,30 +411,50 @@ def drawings(font, contours, option="B", style="Bold"):
     tsi_join=tsu_top+native_turn(turn,tsu_top,tsi_i)+tsi_i+native_turn(turn,tsi_i,tsu_top)
     tsi = [tsi_join, move(native('ぃ', 1, bounds([approved['TSI'][-1]])), 1, 1, 0, -25)]
 
-    # Keep the rising native tsu crown in a shallower bowl. Separate tangent
-    # handles leave an open inner radius at the left turn.
+    # Retain the native rounded turn into the rightward exit. The old cut
+    # on the descending edge forced a cramped reversal before the tsu bowl.
     body_weight, vowel_weight = ((850, 850) if fuller else (800, 800)) if bold else ((600, 600) if fuller else (550, 550))
     def flowing_sweep(ch):
-        # Give the source entry more height above the reduced tsu bowl.
-        head = clean(cut_keep(ring(ch),1,(190 if fuller else 210) if ch=='と' else 170,'high'))
-        head = move(head,.90 if ch=='と' else .86,.90 if ch=='と' else .88,
-                    5 if ch=='と' else 25,120 if ch=='と' else 65)
-        tail_weight=(900 if fuller else 875) if bold else (650 if fuller else 600)
-        r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
-        cuts = sorted(O.crossings(r,0,(465 if fuller else 485) if ch=='を' else (385 if fuller else 425)),
-                      key=lambda c: O.point(r[c[0]],c[1])[1])[-2:]
-        tail = max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
-                   key=lambda a: max(p[0] for seg in a for p in seg))
-        scale = (.52 if fuller else .50) if ch=='を' else (.72 if fuller else .68)
-        tail = move(clean(tail),(.80 if fuller else .76) if ch=='を' else scale,scale,
-                    60 if ch=='を' else 130,-55 if ch=='を' else -38)
-        bottom=bounds([tail])[1]
-        compression=.76 if ch=='と' else .80
-        tail=move(tail,1,compression,0,bottom*(1-compression))
+        r=ring(ch)
         if ch=='を':
-            turn=ring('と')
-            return head+native_turn(turn[29:33],head,tail)+tail+native_turn(turn[:3],tail,head)
-        return selected_join(head,tail,(100,80),(100,100))
+            # The native lower return needs less optical compensation than
+            # the reduced upper entry. Blend masters before placing the turn.
+            weight=(700 if fuller else 650) if bold else (500 if fuller else 450)
+            light=O.rings(contours(body_source(weight),ord('を'),[0]))[0]
+            assert len(light)==len(r)
+            def blend(p,q):
+                t=np.clip((p[1]-100)/220,0,1); t=t*t*(3-2*t)
+                return q+(p-q)*t
+            r=[tuple(blend(p,q) for p,q in zip(a,b)) for a,b in zip(r,light)]
+        cuts=sorted(O.crossings(r,0,(400 if bold else 375) if ch=='を' else 325),key=lambda c: O.point(r[c[0]],c[1])[1])[:2]
+        assert len(cuts)==2 and max(O.point(r[i],t)[1] for i,t in cuts)<130, 'Expected the native rightward exit'
+        head=max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
+                 key=lambda a:max(p[1] for seg in a for p in seg))
+        head=clean(head)
+        if ch=='を':
+            # Leave the native upper diagonal at its established height.
+            # Extra room for the left return belongs below the central stem.
+            def lower_turn(p):
+                x,y=p
+                t=np.clip(y/400,0,1); t=t*t*(3-2*t)
+                return np.array([.86*x+25,.88*y+65+(80 if fuller else 90)*(1-t)])
+            shaped=[]
+            for seg in head:
+                pieces=[seg]
+                for _ in range(3):pieces=[part for s in pieces for part in O.split(s,.5)]
+                shaped.extend(tuple(lower_turn(p) for p in s) for s in pieces)
+            head=shaped
+        else:
+            head=move(head,.90,.74,5,175 if fuller else 190)
+        tail_weight=(900 if fuller else 850) if bold else (650 if fuller else 600)
+        r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
+        cuts=sorted(O.crossings(r,0,600 if ch=='を' else 470),key=lambda c:O.point(r[c[0]],c[1])[1])[-2:]
+        tail=max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
+                 key=lambda a:max(p[0] for seg in a for p in seg))
+        tail=move(clean(tail),.78 if ch=='と' else .82,
+                  (.53 if fuller else .50) if ch=='と' else (.45 if fuller else .43),
+                  115 if ch=='と' else 80,-62 if ch=='と' else -63)
+        return selected_join(head,tail,(100,75),(100,85)) if ch=='を' else selected_join(head,tail,(90,75),(85,85))
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
     wu = [native('を', 1, (214, 220, 530, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]

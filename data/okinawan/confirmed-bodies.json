@@ -29,6 +29,10 @@
       "TSI": {
         "codepoint": "F469",
         "sha256": "2b055a69d2cbd80342faff8d60d6bd0368b147af93b68493be937f09da1be432"
+      },
+      "KWA": {
+        "codepoint": "F454",
+        "sha256": "ee446a3fbe474e1a383ae6e4a2127ae9d2610ab2d5dfc6b35ab275f4b998d790"
       }
     },
     "Bold": {
@@ -59,6 +63,10 @@
       "TSI": {
         "codepoint": "F469",
         "sha256": "c39dac820fc0e992bbd8124c88e7648030a77b9036b09f7f5c575ead264b814a"
+      },
+      "KWA": {
+        "codepoint": "F454",
+        "sha256": "b1c21b79a3c23439ca55379d7c37415607b6e7cd72d85010422f95ae4d1ad9ae"
       }
     }
   }
