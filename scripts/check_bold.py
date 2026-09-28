@@ -212,7 +212,7 @@ def main():
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
         'outline_ligatures': len(LIGATURE_POINTS),
-        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'KWI_KWE': {'body': 850, 'vowel': 900}, 'HWA_loop': 900, 'KWA_vowel': 900, 'KWA_loop': 900, 'HWE_diagonal': 900, 'HWE_terminal': 900, 'TSI': [900, 900], 'TU_WU': 850, 'verified': True},
+        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'KWI_KWE': {'body': 850, 'vowel': 900}, 'HWA_loop': 900, 'KWA_vowel': 900, 'KWA_loop': 900, 'HWE_diagonal': 850, 'HWE_terminal': 850, 'TSI': [900, 900], 'TU_WU': 850, 'verified': True},
         'native_ligature_gains': {k: gains[k] for k in sorted(native_labels)},
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
         'drawing_gain': [min(gains.values()), max(gains.values())],

@@ -138,11 +138,12 @@ The approved placement outlines are stored in
 `data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
 `scripts/okinawan_bold.py` composes both weights from native Noto Serif JP
 masters. TI, KWI and SI retain their confirmed bodies in both weights;
-HWI and KWE also retain their accepted B outlines in both weights. KWA
+HWI, KWE and HWA also retain their accepted B outlines in both weights.
+TSI/DZI retain Regular A and Bold B. KWA
 joins the diagonal and bowl into one continuous outline, removing the
 component caps, and centers its bounds in the 1000-unit advance. Its weights
-follow Regular A and Bold B. HWA uses the native つ shoulder turn and offers
-two connector heights at the accepted Regular B weight. Bold HWA reduces
+follow Regular A and Bold B. HWA uses the accepted B native つ shoulder
+turn. Bold HWA reduces
 the bowl counter to restore weight after the narrow fit.
 
 The fuller proof uses these optical source weights:
@@ -153,24 +154,27 @@ The fuller proof uses these optical source weights:
 | KWE body and vowel | 550 / 500 | 850 / 900 |
 | KWA body and complete わ | 500 / 700 | 700 / 900 |
 | HWA connector and わ | 600 / 850 | 850 / 900 |
-| TSI body and vowel | 700 / 650 | 900 / 900 |
+| TSI body and vowel | 650 / 600 | 900 / 900 |
 | TU / WU | 600 | 850 |
-| HWE diagonal and terminal | 650 / 650 | 900 / 900 |
+| HWE diagonal and terminal | 650 / 650 | 850 / 850 |
 
 Regular KWE combines the A く source with B え, using native 550/600
 terminal donors for the two foot-weight choices while holding the baseline.
 HWI Bold retains the earlier upright return, with a finite 18–20-unit cap
 and a smooth taper confined to the top of the hook. Its axis aims toward
 the beginning of the right い stroke.
-HWE uses one native え master. Its lower arch and terminal retain nearly
-uniform proportions; the upper diagonal takes the additional height.
+HWE retains the native え diagonal, arch and terminal in one affine map.
+Its upper corner is trimmed to remove the isolated pen-start swelling,
+then joined to the rising ふ stroke. The previous upright hinge is removed.
 HWA/HWI/HWE vowels share an optical baseline.
 
-Native contours supply the terminals and bowls. TU joins the left flank of
-と to つ using both native と turn edges, avoiding the heavy bottom foot
-before the crown. WU uses the same native round edges. Both preserve the
-つ crown thickness and shorten the bowl below it through a smooth height
-transition. No contour expansion is applied. The く, と and を entries match their source kana’s top height;
+Native contours supply the terminals and bowls. TU and WU connect the left
+flank of と or を to a rising section of the native つ crown. Each つ bowl
+uses one uniform scale; the two connection edges have separate tangent
+handles. WU has a smaller bowl and a shorter central を stem to leave
+clearance above the crown. Its native arch and rounded terminal are retained;
+only the straight stem sections are shortened. No contour expansion is applied. The く, と and
+を entries match their source kana’s top height;
 TSI’s stronger つ reaches 25 units above its source top, with the dakuten
 raised by the same amount. HWA’s reduced わ is stronger and vertically
 fuller; its Bold placement leaves the small stroke separate from ふ.
@@ -193,16 +197,17 @@ Open the local URL printed by `show`. Each option displays the source kana,
 constructed letter and vowel at the same size, with baseline and top guides.
 Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
 their vowel baselines. Regular and Bold choices are independent; confirmed
-shapes are retained, with TI, KWE and HWI fixed to B. KWA uses Regular A and Bold B; its revised drawings remain open for review. Confirmed weights
+shapes are retained, with TI, KWE, HWI and HWA fixed to B. TSI uses
+Regular A and Bold B. KWA uses Regular A and Bold B; its revised drawings remain open for review. Confirmed weights
 start collapsed and remain available through native disclosure controls.
 Expanded panels remain open across filtering, selection and reloads. A jump
 to a fully confirmed character opens its panel. Copy choices for one character
 or the complete set as JSON.
 
-TU/WU also show the saved v1 and R1–R7 drawings, plus six successive native
+TU/WU also show the saved v1 and R1–R7 drawings, plus seven successive native
 composition rounds. TSI/DZI include v1, R1–R3 and the native rounds, including
 the accepted R3-B with only the right い part lowered 16 units.
-`data/okinawan/design-history.json` stores 116 distinct outlines; identical
+`data/okinawan/design-history.json` stores 124 distinct outlines; identical
 shapes share their round labels. Historical native voiced samples use the
 current dakuten placement, as noted on their cards. Each appears beside
 native kana at the same size. A selected historical reference is included

@@ -91,7 +91,7 @@ def check():
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
     retained = {0xF452}
-    same_regular_options = {0xF452, 0xF454, 0xF45B}
+    same_regular_options = {0xF452, 0xF454, 0xF45B, 0xF469}
     approved = approved_drawings()
     from okinawan_bold import drawings
     for style in ('Regular', 'Bold'):
