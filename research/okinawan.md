@@ -155,7 +155,7 @@ The fuller proof uses these optical source weights:
 | KWA body and complete わ | 500 / 700 | 700 / 900 |
 | HWA connector and わ | 600 / 850 | 850 / 900 |
 | TSI body and vowel | 650 / 600 | 900 / 900 |
-| TU / WU | 600 | 850 |
+| TU / WU entry and bowl | 600 / 650 | 850 / 900 |
 | HWE diagonal and terminal | 650 / 650 | 850 / 850 |
 
 Regular KWE combines the A く source with B え, using native 550/600
@@ -163,18 +163,21 @@ terminal donors for the two foot-weight choices while holding the baseline.
 HWI Bold retains the earlier upright return, with a finite 18–20-unit cap
 and a smooth taper confined to the top of the hook. Its axis aims toward
 the beginning of the right い stroke.
-HWE retains the native え diagonal, arch and terminal in one affine map.
-Its upper corner is trimmed to remove the isolated pen-start swelling,
-then joined to the rising ふ stroke. The previous upright hinge is removed.
+HWE uses the same native rounded shoulder as HWA. Its upper え diagonal
+stands more upright, while the lower native arch and terminal keep their
+shape. The shoulder rises to match the HWA/HWI group.
 HWA/HWI/HWE vowels share an optical baseline.
 
-Native contours supply the terminals and bowls. TU and WU connect the left
-flank of と or を to a rising section of the native つ crown. Each つ bowl
-uses one uniform scale; the two connection edges have separate tangent
-handles. WU has a smaller bowl and a shorter central を stem to leave
-clearance above the crown. Its native arch and rounded terminal are retained;
-only the straight stem sections are shortened. No contour expansion is applied. The く, と and
-を entries match their source kana’s top height;
+Native contours supply the terminals and bowls. TU keeps the rising つ
+curve with its height reduced to 76%, giving the と entry more room. Its
+balance follows R5-B. WU uses a broader bowl at 80% height and a longer
+visible central を stem, following the R6 proportions. Both use heavier
+native bowl donors to retain contrast after the vertical reduction. The
+TU connection edges have separate tangent handles. WU uses native rounded
+turns between its source entry and bowl, and retains its native
+arch and rounded terminal, shortening only the straight stem sections.
+No contour expansion is applied. The く, と and を entries match their
+source kana’s top height;
 TSI’s stronger つ reaches 25 units above its source top, with the dakuten
 raised by the same amount. HWA’s reduced わ is stronger and vertically
 fuller; its Bold placement leaves the small stroke separate from ふ.
@@ -199,15 +202,17 @@ Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
 their vowel baselines. Regular and Bold choices are independent; confirmed
 shapes are retained, with TI, KWE, HWI and HWA fixed to B. TSI uses
 Regular A and Bold B. KWA uses Regular A and Bold B; its revised drawings remain open for review. Confirmed weights
-start collapsed and remain available through native disclosure controls.
-Expanded panels remain open across filtering, selection and reloads. A jump
-to a fully confirmed character opens its panel. Copy choices for one character
+start collapsed on every page load and remain available through native
+disclosure controls. Open panels stay open across filtering and selection;
+only unconfirmed history panels restore their open state after reload.
+HWE, TU, WU and KWA appear first, and HWE includes the shared baseline
+comparison. A jump to a fully confirmed character opens its panel. Copy choices for one character
 or the complete set as JSON.
 
-TU/WU also show the saved v1 and R1–R7 drawings, plus seven successive native
+TU/WU also show the saved v1 and R1–R7 drawings, plus eight successive native
 composition rounds. TSI/DZI include v1, R1–R3 and the native rounds, including
 the accepted R3-B with only the right い part lowered 16 units.
-`data/okinawan/design-history.json` stores 124 distinct outlines; identical
+`data/okinawan/design-history.json` stores 132 distinct outlines; identical
 shapes share their round labels. Historical native voiced samples use the
 current dakuten placement, as noted on their cards. Each appears beside
 native kana at the same size. A selected historical reference is included

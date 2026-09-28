@@ -65,7 +65,7 @@ def join(a, b):
 
 
 def selected_join(a,b,outer,inner):
-    """Control the outer and inner KWA turn independently."""
+    """Join open contours with independent handles for their two edges."""
     a,b=clean(a),clean(b)
     def edge(x,y,h):
         p,q=x[-1][3],y[0][0]
@@ -73,7 +73,7 @@ def selected_join(a,b,outer,inner):
     return a+[edge(a,b,outer)]+b+[edge(b,a,inner)]
 
 def native_turn(donor,left,right):
-    """Fit the approved native turn to both Bold edges and their tangents."""
+    """Fit a native turn to both endpoints and their tangents."""
     p,q=left[-1][3],right[0][0]
     u,v=O.tangent(donor[0],0),O.tangent(donor[-1],1)
     uv=np.column_stack([u,v]);a,b=np.linalg.solve(uv,donor[-1][3]-donor[0][0])
@@ -296,8 +296,8 @@ def drawings(font, contours, option="B", style="Bold"):
            + wa_stem + native_turn(shoulder[4:9], wa_stem, hwa_rise),
            hwa_map(wa_sweep(wa_rings))]
 
-    # KWE keeps the native arch; its terminal has an independent donor weight.
-    def e_lower(ref, foot_weight=None, foot_scale=None):
+    # Select the native e body, with an optional independent terminal weight.
+    def e_lower(ref, foot_weight=None, foot_scale=None, cut_height=380):
         r = ring('え', ref=ref)
         if foot_weight and not ref:
             light = O.rings(contours(vowel_source(foot_weight), ord('え'), [0]))[0]
@@ -312,27 +312,31 @@ def drawings(font, contours, option="B", style="Bold"):
             if foot_scale is not None:
                 foot = move(foot, 1, 1, 0, bounds([r[66:]+r[:1]])[1]-bounds([foot])[1])
             r = rounded_join(body, foot)
-        cuts = sorted(O.crossings(r, 1, 380), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
+        cuts = sorted(O.crossings(r, 1, cut_height), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
     vowel_weight = (850 if fuller else 800) if bold else (650 if fuller else 600)
-    # Retain e's own entry corner, diagonal, arch and terminal. Cut on the
-    # nearly straight entry run, so the join never has to invent its corner.
-    er = ring('え')
-    assert len(er)==75
-    # Remove the isolated pen-start swelling from the now-continuous entry.
-    er = er[:43]+[bridge(er[:43],er[50:],.40)]+er[50:]
-    cuts = sorted(O.crossings(er, 0, 420),
-                  key=lambda c: O.point(er[c[0]],c[1])[1])[-2:]
-    e = max((O.arc(er,*cuts),O.arc(er,*cuts[::-1])),
-            key=lambda a: max(p[0] for seg in a for p in seg))
-    e = clean(e)
+    # Take the native lower stroke below its separate pen-start head.
+    e=clean(e_lower(False,cut_height=460))
     left,bottom,_,_ = bounds([e])
     sx,sy = (.50,.68) if fuller else (.47,.64)
     e = move(e,sx,sy,600-sx*left,vowel_target_bottom-sy*bottom)
-    # Stop fu's rising run before its old shoulder. This gives the native
-    # e entry room to continue upward without a dip between two high points.
-    erise = clean(cut_keep(hwa_rise+[line(hwa_rise[-1][3],hwa_rise[0][0])],0,400,'low'))
-    hwe = [fu, selected_join(erise,e,(35,45),(45,35))]
+    # Keep the lower native arch and terminal. Above them, bring the long
+    # diagonal upright so the shoulder can rise with HWA and HWI.
+    def upright_e(p):
+        x,y=p; z=y-200
+        ramp=0 if z<=-30 else z if z>=30 else (z+30)**2/120
+        return np.array([x-(.70 if fuller else .62)*ramp,y])
+    shaped=[]
+    for seg in e:
+        pieces=[seg]
+        for _ in range(3):pieces=[part for s in pieces for part in O.split(s,.5)]
+        shaped.extend(tuple(upright_e(p) for p in s) for s in pieces)
+    e=shaped
+    # Use the same native rounded shoulder as HWA. The e diagonal takes
+    # over below the turn, without retaining an isolated pen-start head.
+    e=clean(cut_keep(e+[line(e[-1][3],e[0][0])],1,300 if fuller else 290,'low'))
+    hwe=[fu,hwa_rise+native_turn(shoulder[27:33],hwa_rise,e)+e
+         +native_turn(shoulder[4:9],e,hwa_rise)]
 
     # Native optical weights compensate for the compressed vowel components.
     body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
@@ -407,24 +411,30 @@ def drawings(font, contours, option="B", style="Bold"):
     tsi_join=tsu_top+native_turn(turn,tsu_top,tsi_i)+tsi_i+native_turn(turn,tsi_i,tsu_top)
     tsi = [tsi_join, move(native('ぃ', 1, bounds([approved['TSI'][-1]])), 1, 1, 0, -25)]
 
-    # Keep the rising native tsu crown and scale the whole bowl uniformly.
-    # Separate tangent handles leave an open inner radius at the left turn.
+    # Keep the rising native tsu crown in a shallower bowl. Separate tangent
+    # handles leave an open inner radius at the left turn.
     body_weight, vowel_weight = ((850, 850) if fuller else (800, 800)) if bold else ((600, 600) if fuller else (550, 550))
     def flowing_sweep(ch):
-        # The tsu entry rises into its full native crown. Neither the crown
-        # nor the bowl is flattened into a horizontal connecting belt.
-        head = clean(cut_keep(ring(ch),1,(190 if fuller else 210) if ch=='と' else (150 if fuller else 170),'high'))
-        head = move(head,.90 if ch=='と' else .86,.75,
-                    5 if ch=='と' else 25,230 if ch=='と' else 130)
-        r = ring('つ')
-        cuts = sorted(O.crossings(r,0,385 if fuller else 425),
+        # Give the source entry more height above the reduced tsu bowl.
+        head = clean(cut_keep(ring(ch),1,(190 if fuller else 210) if ch=='と' else 170,'high'))
+        head = move(head,.90 if ch=='と' else .86,.90 if ch=='と' else .88,
+                    5 if ch=='と' else 25,120 if ch=='と' else 65)
+        tail_weight=(900 if fuller else 875) if bold else (650 if fuller else 600)
+        r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
+        cuts = sorted(O.crossings(r,0,(465 if fuller else 485) if ch=='を' else (385 if fuller else 425)),
                       key=lambda c: O.point(r[c[0]],c[1])[1])[-2:]
         tail = max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
                    key=lambda a: max(p[0] for seg in a for p in seg))
         scale = (.52 if fuller else .50) if ch=='を' else (.72 if fuller else .68)
-        tail = move(clean(tail),scale,scale,250 if ch=='を' else 130,-25 if ch=='を' else -38)
-        return selected_join(head,tail,(100,80) if ch=='と' else (70,60),
-                             (100,100) if ch=='と' else (70,80))
+        tail = move(clean(tail),(.80 if fuller else .76) if ch=='を' else scale,scale,
+                    60 if ch=='を' else 130,-55 if ch=='を' else -38)
+        bottom=bounds([tail])[1]
+        compression=.76 if ch=='と' else .80
+        tail=move(tail,1,compression,0,bottom*(1-compression))
+        if ch=='を':
+            turn=ring('と')
+            return head+native_turn(turn[29:33],head,tail)+tail+native_turn(turn[:3],tail,head)
+        return selected_join(head,tail,(100,80),(100,100))
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
     wu = [native('を', 1, (214, 220, 530, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
@@ -433,7 +443,7 @@ def drawings(font, contours, option="B", style="Bold"):
     stem=wu[0]
     assert len(stem)==49, 'Native wo stem contour layout changed'
     body=stem[5:44]
-    cap=move(stem[47:]+stem[:2],dy=115)
+    cap=move(stem[47:]+stem[:2],dy=45)
     wu[0]=selected_join(body,cap,(20,20),(8,8))
     result = dict(TU=tu, TI=ti, KWA=kwa, KWI=kwi, KWE=kwe,
                   HWA=hwa, HWI=hwi, HWE=hwe, WU=wu, TSI=tsi)
