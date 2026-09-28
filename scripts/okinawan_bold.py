@@ -107,6 +107,28 @@ def rounded_join(a,b,fullness=1.0):
     return a+[edge(a,b)]+b+[edge(b,a)]
 
 
+def curvature_join(a, b):
+    """Join a continuing stroke with matching tangent and endpoint curvature."""
+    from scipy.optimize import least_squares
+    def edge(left, right):
+        p,q=left[-1][3],right[0][0]
+        u,v=O.tangent(left[-1],1),O.tangent(right[0],0)
+        k0,k1=O.curvature(left[-1],1),O.curvature(right[0],0)
+        span=np.linalg.norm(q-p)
+        def segment(h):return (p,p+u*h[0],q-v*h[1],q)
+        def residual(h):
+            s=segment(h)
+            return span*np.array([O.curvature(s,0)-k0,O.curvature(s,1)-k1])
+        attempts=[least_squares(residual,np.array(start)*span,
+                                bounds=([span*.02]*2,[span*2]*2),
+                                ftol=1e-12,xtol=1e-12,gtol=1e-12)
+                  for start in ((.30,.60),(.60,.30),(.75,.75))]
+        solved=min(attempts,key=lambda result:np.linalg.norm(result.fun))
+        assert np.max(np.abs(residual(solved.x)))<1e-5, ('No smooth positive-handle join',p,q,k0,k1,solved.x,residual(solved.x))
+        return segment(solved.x)
+    return a+[edge(a,b)]+b+[edge(b,a)]
+
+
 def wa_sweep(rings):
     """Draw the diagonal and bowl as one stroke, removing their component caps."""
     bowl, diagonal = rings[:2]
@@ -214,6 +236,8 @@ def drawings(font, contours, option="B", style="Bold"):
 
     # The earlier upright return aimed at the right stroke's start. Retain
     # that axis and a finite cap, narrowing only the upper part of the hook.
+    if not bold:
+        vowel_weight = 500 if fuller else 475
     def short_i(ref):
         return clean(cut_keep(ring('い', ref=ref), 1, 420, 'low'))
     i = fit(short_i(False), short_i(True), (605, 40, 768, 375))
@@ -230,7 +254,7 @@ def drawings(font, contours, option="B", style="Bold"):
         side = np.clip((x-695)/15, 0, 1)
         blend = t*t*(3-2*t)*side*side*(3-2*side)
         axis = 733.4+.24*(y-215)
-        factor = .40 if fuller else .46
+        factor = (.40 if fuller else .46) if bold else 0
         return np.array([x-factor*blend*(x-axis), y])
     shaped = []
     for seg in i:
@@ -297,8 +321,20 @@ def drawings(font, contours, option="B", style="Bold"):
            hwa_map(wa_sweep(wa_rings))]
 
     # Select the native e body, with an optional independent terminal weight.
-    def e_lower(ref, foot_weight=None, foot_scale=None, cut_height=380):
+    def e_lower(ref, foot_weight=None, foot_scale=None, cut_height=380, smooth_left=False):
         r = ring('え', ref=ref)
+        if smooth_left and not ref:
+            from scipy.interpolate import CubicSpline
+            cap=r[11:19]
+            points=np.array([cap[0][0]]+[seg[3] for seg in cap])
+            lengths=[sum(np.linalg.norm(O.point(seg,t)-O.point(seg,t-.05))
+                         for t in np.linspace(.05,1,20)) for seg in cap]
+            knots=np.r_[0,np.cumsum(lengths)]
+            spline=CubicSpline(knots,points,axis=0,
+                               bc_type=((1,O.tangent(cap[0],0)),(1,O.tangent(cap[-1],1))))
+            r[11:19]=[(spline(a),spline(a)+spline(a,1)*(b-a)/3,
+                       spline(b)-spline(b,1)*(b-a)/3,spline(b))
+                      for a,b in zip(knots[:-1],knots[1:])]
         if foot_weight and not ref:
             light = O.rings(contours(vowel_source(foot_weight), ord('え'), [0]))[0]
             assert len(r) == len(light) == 75
@@ -316,7 +352,7 @@ def drawings(font, contours, option="B", style="Bold"):
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
     vowel_weight = (800 if fuller else 750) if bold else (600 if fuller else 550)
     # Take the native lower stroke below its separate pen-start head.
-    e=clean(e_lower(False,foot_weight=650 if bold else 450,foot_scale=.85,cut_height=460))
+    e=clean(e_lower(False,foot_weight=650 if bold else 450,foot_scale=.85,cut_height=460,smooth_left=True))
     left,bottom,_,_ = bounds([e])
     sx,sy = (.50,.74) if fuller else (.48,.70)
     e = move(e,sx,sy,580-sx*left,vowel_target_bottom-sy*bottom)
@@ -335,8 +371,18 @@ def drawings(font, contours, option="B", style="Bold"):
     # Use the same native rounded shoulder as HWA. The e diagonal takes
     # over below the turn, without retaining an isolated pen-start head.
     e=clean(cut_keep(e+[line(e[-1][3],e[0][0])],1,300 if fuller else 290,'low'))
-    hwe=[fu,hwa_rise+native_turn(shoulder[27:33],hwa_rise,e)+e
-         +native_turn(shoulder[4:9],e,hwa_rise)]
+    outside=native_turn(shoulder[27:33],hwa_rise,e)
+    # Relieve the outer shoulder locally, leaving both attachment tangents.
+    span=sum(np.linalg.norm(seg[3]-seg[0]) for seg in outside)
+    offset=0; shaped=[]
+    for seg in outside:
+        length=np.linalg.norm(seg[3]-seg[0]); a=offset/span; b=(offset+length)/span
+        f=lambda t:np.sin(np.pi*t)**2
+        df=lambda t:np.pi*np.sin(2*np.pi*t)
+        relief=(f(a),f(a)+(b-a)*df(a)/3,f(b)-(b-a)*df(b)/3,f(b))
+        shaped.append(tuple(p+np.array([-4.,-5.])*v for p,v in zip(seg,relief)))
+        offset+=length
+    hwe=[fu,hwa_rise+shaped+e+native_turn(shoulder[4:9],e,hwa_rise)]
 
     # Native optical weights compensate for the compressed vowel components.
     body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
@@ -437,7 +483,7 @@ def drawings(font, contours, option="B", style="Bold"):
             def lower_turn(p):
                 x,y=p
                 t=np.clip(y/400,0,1); t=t*t*(3-2*t)
-                return np.array([.86*x+25,.88*y+65+(80 if fuller else 90)*(1-t)])
+                return np.array([.86*x+25,.88*y+65+80*(1-t)])
             shaped=[]
             for seg in head:
                 pieces=[seg]
@@ -445,16 +491,32 @@ def drawings(font, contours, option="B", style="Bold"):
                 shaped.extend(tuple(lower_turn(p) for p in s) for s in pieces)
             head=shaped
         else:
-            head=move(head,.90,.74,5,175 if fuller else 190)
+            head=move(head,.90,.74,5,175)
         tail_weight=(900 if fuller else 850) if bold else (650 if fuller else 600)
         r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
+        # Compensate for the vertical reduction of the tsu hairline.
+        # The native outer bowl and tapered terminal retain their contours.
+        shaped=[]
+        scale=.53 if ch=='と' else .45
+        depth=(22 if bold else 14)/scale
+        for index,seg in enumerate(r):
+            if index>=12:
+                shaped.append(seg)
+                continue
+            pieces=[seg]
+            for _ in range(2):pieces=[part for curve in pieces for part in O.split(curve,.5)]
+            def inner(p):
+                x,y=p; t=np.clip((y-150)/400,0,1); t=t*t*(3-2*t)
+                return np.array([x,y-depth*t])
+            shaped.extend(tuple(inner(p) for p in part) for part in pieces)
+        r=shaped
         cuts=sorted(O.crossings(r,0,600 if ch=='を' else 470),key=lambda c:O.point(r[c[0]],c[1])[1])[-2:]
         tail=max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
                  key=lambda a:max(p[0] for seg in a for p in seg))
         tail=move(clean(tail),.78 if ch=='と' else .82,
-                  (.53 if fuller else .50) if ch=='と' else (.45 if fuller else .43),
+                  .53 if ch=='と' else .45,
                   115 if ch=='と' else 80,-62 if ch=='と' else -63)
-        return selected_join(head,tail,(100,75),(100,85)) if ch=='を' else selected_join(head,tail,(90,75),(85,85))
+        return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
     wu = [native('を', 1, (214, 220, 530, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
@@ -469,7 +531,7 @@ def drawings(font, contours, option="B", style="Bold"):
                   HWA=hwa, HWI=hwi, HWE=hwe, WU=wu, TSI=tsi)
     if not bold:
         # Retain the accepted Regular forms outside the requested revisions.
-        for label in ('TI', 'HWI'):
+        for label in ('TI',):
             result[label] = approved[label]
         # Use the approved fu body and shoulder with the new native wa map.
         result['HWA'][0] = approved['HWA'][0]
@@ -482,7 +544,15 @@ def drawings(font, contours, option="B", style="Bold"):
         hwi_body = i
         hwi_rise = rise
     else:
-        hwi_body = approved['HWI'][1][23:-1]
+        result['HWI'][0] = approved['HWI'][0]
+        # Add weight toward the counter while preserving the accepted outer
+        # contour, terminal direction and finite tip. The right stroke uses
+        # the native heavier master selected above.
+        hwi_body=approved['HWI'][1][23:-1]
+        offsets=np.array([(6,0),(6,0),(3,7),(0,7)]+[(0,0)]*8,float)
+        offsets*=1 if fuller else .75
+        hwi_body=[tuple(p+d for p,d in zip(seg,(offsets[j],offsets[j],offsets[j+1],offsets[j+1])))
+                  for j,seg in enumerate(hwi_body)]
         hwi_rise = approved['HWI'][1][:22]
     def stand(r, anchor=365):
         bottom = bounds([r])[1]

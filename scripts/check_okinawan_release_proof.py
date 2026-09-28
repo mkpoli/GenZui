@@ -6,12 +6,14 @@ from sources import ROOT
 
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
+from fontTools.pens.transformPen import TransformPen
+from fontTools.svgLib.path import parse_path
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.tables._g_l_y_f import Glyph
 
 from check_serif import serialized, shape, shaper
 from okinawan import DAKUTEN, ENTRIES, voiced_parts
-from okinawan_ligatures import POINTS, drawings as approved_drawings
+from okinawan_ligatures import POINTS, drawings as approved_drawings, source
 from okinawan_release_proof import OUT
 from serif import OUT as FONT_OUT, contours, glyph, transform
 
@@ -91,7 +93,7 @@ def check():
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
     retained = {0xF452}
-    same_regular_options = {0xF452, 0xF454, 0xF45B, 0xF469}
+    same_regular_options = {0xF452, 0xF454, 0xF469}
     approved = approved_drawings()
     from okinawan_bold import drawings
     for style in ('Regular', 'Bold'):
@@ -113,6 +115,12 @@ def check():
             assert differs == (style == 'Bold' or cp not in same_regular_options), (style, hex(cp), 'wrong option coverage')
         for cp, parts in drawings(full, contours, style=style).items():
             same_compiled(full, cp, parts)
+            if style=='Regular' and cp==0xF45B:
+                body,approved_body=pathops.Path(),pathops.Path()
+                component=next(g for g in source()['glyphs'] if g['label']=='HWI')['components'][0]
+                parts[0].replay(body.getPen())
+                parse_path(component['path'],TransformPen(approved_body.getPen(),component['transform']))
+                assert pathops.op(body,approved_body,pathops.PathOp.XOR).area<.01, 'HWI fu body changed'
             assert topology(contours(full, cp)) == topology(united(approved[cp])), (style, hex(cp), 'changed counters')
         if style == 'Regular':
             for cp in retained:
