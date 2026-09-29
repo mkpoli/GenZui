@@ -372,6 +372,8 @@ def drawings(font, contours, option="B", style="Bold"):
     # over below the turn, without retaining an isolated pen-start head.
     e=clean(cut_keep(e+[line(e[-1][3],e[0][0])],1,300 if fuller else 290,'low'))
     outside=native_turn(shoulder[27:33],hwa_rise,e)
+    for _ in range(3):
+        outside=[part for seg in outside for part in O.split(seg,.5)]
     # Relieve the outer shoulder locally, leaving both attachment tangents.
     span=sum(np.linalg.norm(seg[3]-seg[0]) for seg in outside)
     offset=0; shaped=[]
@@ -380,7 +382,7 @@ def drawings(font, contours, option="B", style="Bold"):
         f=lambda t:np.sin(np.pi*t)**2
         df=lambda t:np.pi*np.sin(2*np.pi*t)
         relief=(f(a),f(a)+(b-a)*df(a)/3,f(b)-(b-a)*df(b)/3,f(b))
-        shaped.append(tuple(p+np.array([-4.,-5.])*v for p,v in zip(seg,relief)))
+        shaped.append(tuple(p+np.array([-24.,-20.] if bold else [-18.,-16.])*v for p,v in zip(seg,relief)))
         offset+=length
     hwe=[fu,hwa_rise+shaped+e+native_turn(shoulder[4:9],e,hwa_rise)]
 
@@ -498,7 +500,7 @@ def drawings(font, contours, option="B", style="Bold"):
         # The native outer bowl and tapered terminal retain their contours.
         shaped=[]
         scale=.53 if ch=='と' else .45
-        depth=(22 if bold else 14)/scale
+        depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
         for index,seg in enumerate(r):
             if index>=12:
                 shaped.append(seg)
