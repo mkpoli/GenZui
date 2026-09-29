@@ -175,6 +175,11 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
     assert wu_return in ("A", "B", "C", "D")
     fuller = option == "B"
     bold = style == "Bold"
+    # Regular uses the latest B construction at three lighter native weights.
+    # A retains the preceding drawing for an exact visual comparison.
+    wu_body,wu_bowl,wu_crown={
+        'A':(600,650,34),'B':(500,550,28),
+        'C':(475,525,26),'D':(450,500,24)}[wu_return]
     body_weight, vowel_weight = (700, 750) if bold else (400, 500)
     regular = reference()
     approved = _approved()
@@ -480,7 +485,7 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
             # Both fades finish before the upper crossing and lower join.
             strength=({'A':18,'B':36,'C':54,'D':72} if bold else
                       {'A':28,'B':28,'C':28,'D':28})[wu_return]
-            lower_fade=180 if bold else {'A':180,'B':145,'C':145,'D':180}[wu_return]
+            lower_fade=180 if bold else 145
             assert len(r)==45, 'Native wo return contour layout changed'
             widened=[]
             def open_return(p):
@@ -488,7 +493,7 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
                 a=np.clip((y-60)/lower_fade,0,1); b=np.clip((350-y)/100,0,1)
                 amount=strength*a*a*(3-2*a)*b*b*(3-2*b)
                 direction=np.array([.35,-1.])
-                if not bold and wu_return in ('B','D'):
+                if not bold:
                     turn=np.clip((240-y)/130,0,1);turn=turn*turn*(3-2*turn)
                     direction+=np.array([.65,.75])*turn
                 return p+direction*amount
@@ -521,12 +526,16 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
         else:
             head=move(head,.90,.74,5,175)
         tail_weight=(900 if fuller else 850) if bold else (650 if fuller else 600)
+        if ch=='を' and not bold:
+            tail_weight=wu_bowl
         r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
         # Compensate for the vertical reduction of the tsu hairline.
         # The native outer bowl and tapered terminal retain their contours.
         shaped=[]
         scale=.53 if ch=='と' else .45
         depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
+        if ch=='を' and not bold:
+            depth=wu_crown/scale
         if ch=='を':
             assert len(r)==41, 'Native tsu terminal contour layout changed'
         for index,seg in enumerate(r):
@@ -572,7 +581,7 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
     # WU candidates share the accepted B placement and terminal.
     original_fuller=fuller
     fuller=True
-    body_weight=850 if bold else 600
+    body_weight=850 if bold else wu_body
     # Restore horizontal room to wo's reduced upper arch. Its native
     # contour stays intact, with the entry height and lower sweep fixed.
     wu = [native('を', 1, (214, 220, 565, 797)),
