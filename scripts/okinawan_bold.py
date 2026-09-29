@@ -169,17 +169,14 @@ def vowel_source(weight):
     return instance('NotoSerifJP', weight, set(map(ord, 'いぃわえ')))
 
 
-def drawings(font, contours, option="B", style="Bold", wu_return=None):
+def drawings(font, contours, option="B", style="Bold", wu_variant=None):
     assert option in ("A", "B")
-    wu_return = option if wu_return is None else wu_return
-    assert wu_return in ("A", "B", "C", "D")
+    wu_variant = option if wu_variant is None else wu_variant
+    assert wu_variant in ("A", "B", "C", "D")
     fuller = option == "B"
     bold = style == "Bold"
-    # Regular uses the latest B construction at three lighter native weights.
-    # A retains the preceding drawing for an exact visual comparison.
-    wu_body,wu_bowl,wu_crown={
-        'A':(600,650,34),'B':(500,550,28),
-        'C':(475,525,26),'D':(450,500,24)}[wu_return]
+    # Keep the chosen B weight and construction in every WU comparison.
+    wu_body,wu_bowl,wu_crown=500,550,28
     body_weight, vowel_weight = (700, 750) if bold else (400, 500)
     regular = reference()
     approved = _approved()
@@ -483,8 +480,7 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
             r=[tuple(blend(p,q) for p,q in zip(a,b)) for a,b in zip(r,light)]
             # Separate the native inner edge only along the thin return.
             # Both fades finish before the upper crossing and lower join.
-            strength=({'A':18,'B':36,'C':54,'D':72} if bold else
-                      {'A':28,'B':28,'C':28,'D':28})[wu_return]
+            strength=36 if bold else 28
             lower_fade=180 if bold else 145
             assert len(r)==45, 'Native wo return contour layout changed'
             widened=[]
@@ -586,6 +582,14 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
     # contour stays intact, with the entry height and lower sweep fixed.
     wu = [native('を', 1, (214, 220, 565, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
+    # Scale around the native bar's centre so the explicit lift opens the
+    # space below it without moving the arch, entry or lower sweep.
+    sx,sy,lift={'A':(1,1,0),'B':(.90,.90,14),
+                'C':(.86,.88,20),'D':(.92,.84,25)}[wu_variant]
+    if wu_variant!='A':
+        left,bottom,right,top=bounds([wu[1]])
+        cx,cy=(left+right)/2,(bottom+top)/2
+        wu[1]=move(wu[1],sx,sy,cx*(1-sx),cy*(1-sy)+lift)
     # Shorten the two straight sides above wo's native terminal. The arch,
     # entry and rounded cap retain their native outlines.
     stem=wu[0]

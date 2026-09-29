@@ -36,7 +36,7 @@ def webfont(style, variant):
     if variant != 'B':
         from okinawan_bold import drawings
         cmap = font.getBestCmap()
-        for cp, parts in drawings(font, contours, option="A" if variant=="A" else "B", style=style, wu_return=variant).items():
+        for cp, parts in drawings(font, contours, option="A" if variant=="A" else "B", style=style, wu_variant=variant).items():
             if variant in ("C","D") and cp!=0xF465:
                 continue
             merged = pathops.Path()

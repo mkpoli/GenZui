@@ -107,12 +107,12 @@ def check():
         alternative = opened(f'{style.lower()}-A.woff2')
         for text in samples + voiced:
             assert outline(selected, text) == outline(full, text), (style, repr(text), 'full font differs')
-        # Four WU candidates vary only the marked return. C/D proof fonts
+        # Four WU candidates vary only the upper horizontal stroke. C/D proof fonts
         # retain every other full-font outline and the same native context.
         candidates=[alternative,selected]
         for variant in ('C','D'):
             face=opened(f'{style.lower()}-{variant}.woff2')
-            parts=drawings(full,contours,option='B',style=style,wu_return=variant)[0xF465]
+            parts=drawings(full,contours,option='B',style=style,wu_variant=variant)[0xF465]
             same_compiled(face,0xF465,parts)
             assert topology(contours(face,0xF465))==topology(united(approved[0xF465])), (style,variant,'WU counters changed')
             for text in samples+voiced+list('をう'):
@@ -124,10 +124,16 @@ def check():
         areas=[]
         for face in candidates:
             path=pathops.Path();contours(face,0xF465).replay(path.getPen());areas.append(path.area)
-        if style=='Bold':
-            assert all(a<b for a,b in zip(areas,areas[1:])), (style,'WU return weights are not ordered',areas)
-        else:
-            assert all(a>b for a,b in zip(areas,areas[1:])), (style,'WU Regular weights are not ordered',areas)
+        assert all(area<areas[0] for area in areas[1:]), (style,'WU bar did not become lighter',areas)
+        from okinawan_bold import bounds
+        import okinawan_outline as O
+        reference_parts=drawings(full,contours,option='B',style=style,wu_variant='A')[0xF465]
+        ref_bar=bounds(O.rings(reference_parts[1]))
+        for variant in ('B','C','D'):
+            parts=drawings(full,contours,option='B',style=style,wu_variant=variant)[0xF465]
+            assert all(parts[i].value==reference_parts[i].value for i in (0,2)), (style,variant,'WU body or sweep changed')
+            bar=bounds(O.rings(parts[1]))
+            assert bar[2]-bar[0]<ref_bar[2]-ref_bar[0] and bar[1]>ref_bar[1], (style,variant,'WU bar did not shorten and rise')
         # SI and ZI are confirmed and identical in both options.
         for text in (chr(0xF467), chr(0xF467)+'\u3099'):
             assert outline(selected, text) == outline(alternative, text), (style, 'SI changed')
