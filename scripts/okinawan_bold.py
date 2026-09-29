@@ -485,7 +485,7 @@ def drawings(font, contours, option="B", style="Bold"):
             def lower_turn(p):
                 x,y=p
                 t=np.clip(y/400,0,1); t=t*t*(3-2*t)
-                return np.array([.86*x+25,.88*y+65+80*(1-t)])
+                return np.array([.86*x+25,.88*y+65+(120 if fuller else 100)*(1-t)])
             shaped=[]
             for seg in head:
                 pieces=[seg]
@@ -501,7 +501,24 @@ def drawings(font, contours, option="B", style="Bold"):
         shaped=[]
         scale=.53 if ch=='と' else .45
         depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
+        if ch=='を':
+            assert len(r)==41, 'Native tsu terminal contour layout changed'
         for index,seg in enumerate(r):
+            if ch=='を' and index<3:
+                if index==0:
+                    # Give the reduced terminal a native slanted cut and a
+                    # continuous taper into the untouched right-hand bowl.
+                    bottom=r[-1][0]
+                    height=((36 if fuller else 30) if bold else (28 if fuller else 22))/scale
+                    tip=bottom+(r[0][0]-bottom)*height/(r[0][0][1]-bottom[1])
+                    end=r[2][3]
+                    span=np.linalg.norm(end-tip)
+                    shaped.append((tip,tip+O.tangent(r[0],0)*span*.40,
+                                   end-O.tangent(r[2],1)*span*.30,end))
+                continue
+            if ch=='を' and index==len(r)-1:
+                shaped.append(line(seg[0],tip))
+                continue
             if index>=12:
                 shaped.append(seg)
                 continue
@@ -512,6 +529,12 @@ def drawings(font, contours, option="B", style="Bold"):
                 return np.array([x,y-depth*t])
             shaped.extend(tuple(inner(p) for p in part) for part in pieces)
         r=shaped
+        if ch=='を':
+            # Match the crown correction's final endpoint and tangent.
+            tip,end=r[0][0],r[1][0]
+            span=np.linalg.norm(end-tip)
+            r[0]=(tip,tip+O.tangent(r[0],0)*span*.40,
+                  end-O.tangent(r[1],0)*span*.30,end)
         cuts=sorted(O.crossings(r,0,600 if ch=='を' else 470),key=lambda c:O.point(r[c[0]],c[1])[1])[-2:]
         tail=max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
                  key=lambda a:max(p[0] for seg in a for p in seg))

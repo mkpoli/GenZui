@@ -29,6 +29,14 @@
       "KWA": {
         "codepoint": "F454",
         "sha256": "ee446a3fbe474e1a383ae6e4a2127ae9d2610ab2d5dfc6b35ab275f4b998d790"
+      },
+      "HWE": {
+        "codepoint": "F45C",
+        "sha256": "3c7344edb6141a311dbde9407a736d5c330a940be316e43314d9b4a3c6f0ae56"
+      },
+      "TU": {
+        "codepoint": "F450",
+        "sha256": "e6e869abdcfd30392800e285192a5c4326ac1ac9a85f1b8166f3c085066b8d8a"
       }
     },
     "Bold": {
@@ -63,6 +71,14 @@
       "KWA": {
         "codepoint": "F454",
         "sha256": "b1c21b79a3c23439ca55379d7c37415607b6e7cd72d85010422f95ae4d1ad9ae"
+      },
+      "HWE": {
+        "codepoint": "F45C",
+        "sha256": "e92eec4b2d33914560524f2266182b3d0bd4230b1fd7d417cc3129a623c32a72"
+      },
+      "TU": {
+        "codepoint": "F450",
+        "sha256": "451965f99d8b37a0a76b3711a80601808ed5188a78998e5a14e2bb74a8f39dec"
       }
     }
   }
