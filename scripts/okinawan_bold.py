@@ -547,6 +547,8 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
         depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
         if ch=='を' and not bold:
             depth=wu_crown/scale
+        if ch=='を' and wu_variant!='A':
+            depth+=(6 if bold else 4)/scale
         if ch=='を':
             assert len(r)==41, 'Native tsu terminal contour layout changed'
         for index,seg in enumerate(r):
@@ -608,7 +610,8 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                 lowered.extend(tuple(lower_shoulder(p) for p in part) for part in pieces)
             tail=lowered
             head=clean(cut_keep(head+[line(head[-1][3],head[0][0])],1,360,'high'))
-            inner_x=outer_x+(68 if bold else 42)
+            return_width=68 if bold else 42
+            inner_x=outer_x+return_width
             left_inner=np.array([inner_x,float(turn_y)])
             left_outer=np.array([float(outer_x),float(turn_y)])
             p,q=head[-1][3],tail[0][0]
@@ -628,7 +631,30 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                     curve[index]=point+direction*handle
                 return [tuple(before),tuple(after)]
             inside=rounded_left(inside,50)
-            outside=rounded_left(outside,50+(68 if bold else 42))
+            outside=rounded_left(outside,50+return_width)
+            # Restore weight through the diagonal's thin middle. Local
+            # pressure tapers to zero before either end of each curve,
+            # leaving the rounded reversal and native crossing intact.
+            def weighted_edge(curve):
+                pieces=[curve]
+                for _ in range(5):
+                    pieces=[part for segment in pieces for part in O.split(segment,.5)]
+                result=[]
+                amount=20 if bold else 16
+                for j,part in enumerate(pieces):
+                    points=[]
+                    for k,p in enumerate(part):
+                        t=(j+k/3)/len(pieces)
+                        w=64*t**3*(1-t)**3
+                        tangent=O.tangent(curve,t)
+                        normal=np.array([-tangent[1],tangent[0]])
+                        points.append(p+normal*amount*w)
+                    result.append(tuple(points))
+                # Exact native endpoint derivatives, including curvature.
+                result[0]=pieces[0][:3]+(result[0][3],)
+                result[-1]=(result[-1][0],)+pieces[-1][1:]
+                return result
+            inside=weighted_edge(inside[0])+inside[1:]
             return head+inside+tail+outside
         if ch=='を':
             # Start the return on the descending diagonal. Replacing both
