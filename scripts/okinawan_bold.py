@@ -479,14 +479,19 @@ def drawings(font, contours, option="B", style="Bold", wu_return=None):
             # Separate the native inner edge only along the thin return.
             # Both fades finish before the upper crossing and lower join.
             strength=({'A':18,'B':36,'C':54,'D':72} if bold else
-                      {'A':14,'B':28,'C':42,'D':56})[wu_return]
+                      {'A':28,'B':28,'C':28,'D':28})[wu_return]
+            lower_fade=180 if bold else {'A':180,'B':145,'C':145,'D':180}[wu_return]
             assert len(r)==45, 'Native wo return contour layout changed'
             widened=[]
             def open_return(p):
                 x,y=p
-                a=np.clip((y-60)/180,0,1); b=np.clip((350-y)/100,0,1)
+                a=np.clip((y-60)/lower_fade,0,1); b=np.clip((350-y)/100,0,1)
                 amount=strength*a*a*(3-2*a)*b*b*(3-2*b)
-                return p+np.array([.35,-1.])*amount
+                direction=np.array([.35,-1.])
+                if not bold and wu_return in ('B','D'):
+                    turn=np.clip((240-y)/130,0,1);turn=turn*turn*(3-2*turn)
+                    direction+=np.array([.65,.75])*turn
+                return p+direction*amount
             for index,seg in enumerate(r):
                 if not 25<=index<=33:
                     widened.append(seg)
