@@ -606,7 +606,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                 lowered.extend(tuple(lower_shoulder(p) for p in part) for part in pieces)
             tail=lowered
             head=clean(cut_keep(head+[line(head[-1][3],head[0][0])],1,360,'high'))
-            return_width=68 if bold else 42
+            return_width=(68 if bold else 42)+{'A':0,'B':6,'C':12,'D':18}[wu_variant]
             inner_x=outer_x+return_width
             left_inner=np.array([inner_x,float(turn_y)])
             left_outer=np.array([float(outer_x),float(turn_y)])
@@ -616,8 +616,8 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
             p,q=tail[-1][3],head[0][0]
             outside=[(p,p+O.tangent(tail[-1],1)*205,left_outer-np.array([0.,80.]),left_outer),
                      (left_outer,left_outer+np.array([0.,70.]),q-O.tangent(head[0],0)*110,q)]
-            # Match curvature at the vertical reversals. The outer radius
-            # includes the local stroke width, keeping both edges round.
+            # Match curvature at each vertical reversal. Preserve the selected
+            # outside contour while increasing weight along the inner edge.
             def rounded_left(pair,radius):
                 before,after=map(list,pair)
                 point=before[3]
@@ -627,44 +627,13 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                     curve[index]=point+direction*handle
                 return [tuple(before),tuple(after)]
             inside=rounded_left(inside,50)
-            outside=rounded_left(outside,50+return_width)
-            # Preserve the previous C for direct comparison. Its local
-            # pressure adjustment is replaced by continuous curves below.
-            def weighted_edge(curve):
-                pieces=[curve]
-                for _ in range(5):
-                    pieces=[part for segment in pieces for part in O.split(segment,.5)]
-                result=[]
-                amount=20 if bold else 16
-                for j,part in enumerate(pieces):
-                    points=[]
-                    for k,p in enumerate(part):
-                        t=(j+k/3)/len(pieces)
-                        w=64*t**3*(1-t)**3
-                        tangent=O.tangent(curve,t)
-                        normal=np.array([-tangent[1],tangent[0]])
-                        points.append(p+normal*amount*w)
-                    result.append(tuple(points))
-                # Exact native endpoint derivatives, including curvature.
-                result[0]=pieces[0][:3]+(result[0][3],)
-                result[-1]=(result[-1][0],)+pieces[-1][1:]
-                return result
-            if wu_variant=='A':
-                inside=weighted_edge(inside[0])+inside[1:]
-            elif wu_variant=='B':
-                # Fit the native inner arc and match its terminal curvature.
-                donor=O.rings(contours(body_source(700 if bold else 500),ord('を'),[0]))[0][27:31]
-                incoming=native_turn(donor,head,inside[1:])
-                radius=1/abs(O.curvature(incoming[-1],1))
-                after=list(inside[1])
-                point=after[0]
-                after[1]=point-np.array([0.,np.sqrt(2*abs(after[2][0]-point[0])*radius/3)])
-                inside=incoming+[tuple(after)]
-            else:
-                # Longer tangent handles keep the incoming edge convex.
-                length={'C':(210,200),'D':(220,210)}[wu_variant][bold]
-                first=list(inside[0]);first[1]=first[0]+O.tangent(head[-1],1)*length
-                inside=rounded_left([tuple(first),inside[1]],50)
+            outside=rounded_left(outside,118 if bold else 92)
+            # Extend the inner tangent through the diagonal so its weight
+            # builds smoothly into the rounded return. A preserves selected C.
+            length={'A':(210,200),'B':(220,210),'C':(220,210),'D':(210,200)}[wu_variant][bold]
+            first=list(inside[0])
+            first[1]=first[0]+O.tangent(head[-1],1)*length
+            inside=rounded_left([tuple(first),inside[1]],50)
             return head+inside+tail+outside
         return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
