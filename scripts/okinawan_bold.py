@@ -500,6 +500,22 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                 pieces=[seg]
                 for _ in range(3):pieces=[part for curve in pieces for part in O.split(curve,.5)]
                 widened.extend(tuple(open_return(p) for p in part) for part in pieces)
+            if wu_variant in ('B','D'):
+                # Fit the diagonal's weighted inner edge as one cubic. Its
+                # endpoint tangents and mean width guide the fit,
+                # without retaining the short swell from the local offset.
+                first,last=25,25+6*8
+                arc=widened[first:last]
+                samples=np.array([O.point(seg,t) for seg in arc for t in np.linspace(0,1,9)[:-1]]+[arc[-1][3]])
+                distance=np.r_[0,np.cumsum(np.linalg.norm(np.diff(samples,axis=0),axis=1))]
+                t=(distance/distance[-1])[:,None]
+                p,q=arc[0][0],arc[-1][3]
+                u,v=O.tangent(arc[0],0),O.tangent(arc[-1],1)
+                base=(1-t)**2*(1+2*t)*p+t*t*(3-2*t)*q
+                matrix=np.stack([3*t*(1-t)**2*u,-3*t*t*(1-t)*v],axis=-1).reshape(-1,2)
+                h=np.linalg.lstsq(matrix,(samples-base).reshape(-1),rcond=None)[0]
+                assert np.all(h>0), 'WU diagonal fit reversed a tangent'
+                widened=widened[:first]+[(p,p+u*h[0],q-v*h[1],q)]+widened[last:]
             r=widened
         cuts=sorted(O.crossings(r,0,(400 if bold else 375) if ch=='を' else 325),key=lambda c: O.point(r[c[0]],c[1])[1])[:2]
         assert len(cuts)==2 and max(O.point(r[i],t)[1] for i,t in cuts)<130, 'Expected the native rightward exit'
@@ -572,6 +588,16 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
         tail=move(clean(tail),.78 if ch=='と' else .82,
                   .53 if ch=='と' else .45,
                   115 if ch=='と' else 80,-62 if ch=='と' else -63)
+        if ch=='を' and wu_variant!='A':
+            # Start the return on the descending diagonal. Replacing both
+            # edges here removes the low belly of the old native exit.
+            level,inside,outside={
+                'B':(330,(220,160),(200,170)),
+                'C':(330,(220,160),(200,170)),
+                'D':(330,(195,145),(185,160)),
+            }[wu_variant]
+            head=clean(cut_keep(head+[line(head[-1][3],head[0][0])],1,level,'high'))
+            return selected_join(head,tail,inside,outside)
         return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
     # WU candidates share the accepted B placement and terminal.
@@ -584,12 +610,9 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
     # Scale around the native bar's centre so the explicit lift opens the
     # space below it without moving the arch, entry or lower sweep.
-    sx,sy,lift={'A':(1,1,0),'B':(.90,.90,14),
-                'C':(.86,.88,20),'D':(.92,.84,25)}[wu_variant]
-    if wu_variant!='A':
-        left,bottom,right,top=bounds([wu[1]])
-        cx,cy=(left+right)/2,(bottom+top)/2
-        wu[1]=move(wu[1],sx,sy,cx*(1-sx),cy*(1-sy)+lift)
+    left,bottom,right,top=bounds([wu[1]])
+    cx,cy=(left+right)/2,(bottom+top)/2
+    wu[1]=move(wu[1],.90,.90,cx*(1-.90),cy*(1-.90)+14)
     # Shorten the two straight sides above wo's native terminal. The arch,
     # entry and rounded cap retain their native outlines.
     stem=wu[0]
