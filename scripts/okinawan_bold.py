@@ -547,7 +547,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
         depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
         if ch=='を' and not bold:
             depth=wu_crown/scale
-        if ch=='を' and wu_variant!='A':
+        if ch=='を':
             depth+=(6 if bold else 4)/scale
         if ch=='を':
             assert len(r)==41, 'Native tsu terminal contour layout changed'
@@ -589,14 +589,10 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
         tail=move(clean(tail),.78 if ch=='と' else .82,
                   .53 if ch=='と' else .45,
                   115 if ch=='と' else 80,-62 if ch=='と' else -63)
-        if ch=='を' and wu_variant!='A':
+        if ch=='を':
             # Spread the reversal across a full-height arc. The native
             # diagonal flows into two round edges before the bowl shoulder.
-            drop,outer_x,turn_y={
-                'B':(14,265,250),
-                'C':(8,275,245),
-                'D':(20,250,255),
-            }[wu_variant]
+            drop,outer_x,turn_y=8,275,245
             lowered=[]
             _,floor,_,crown=bounds([tail])
             def lower_shoulder(p):
@@ -632,9 +628,8 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                 return [tuple(before),tuple(after)]
             inside=rounded_left(inside,50)
             outside=rounded_left(outside,50+return_width)
-            # Restore weight through the diagonal's thin middle. Local
-            # pressure tapers to zero before either end of each curve,
-            # leaving the rounded reversal and native crossing intact.
+            # Preserve the previous C for direct comparison. Its local
+            # pressure adjustment is replaced by continuous curves below.
             def weighted_edge(curve):
                 pieces=[curve]
                 for _ in range(5):
@@ -654,42 +649,23 @@ def drawings(font, contours, option="B", style="Bold", wu_variant=None):
                 result[0]=pieces[0][:3]+(result[0][3],)
                 result[-1]=(result[-1][0],)+pieces[-1][1:]
                 return result
-            inside=weighted_edge(inside[0])+inside[1:]
+            if wu_variant=='A':
+                inside=weighted_edge(inside[0])+inside[1:]
+            elif wu_variant=='B':
+                # Fit the native inner arc and match its terminal curvature.
+                donor=O.rings(contours(body_source(700 if bold else 500),ord('を'),[0]))[0][27:31]
+                incoming=native_turn(donor,head,inside[1:])
+                radius=1/abs(O.curvature(incoming[-1],1))
+                after=list(inside[1])
+                point=after[0]
+                after[1]=point-np.array([0.,np.sqrt(2*abs(after[2][0]-point[0])*radius/3)])
+                inside=incoming+[tuple(after)]
+            else:
+                # Longer tangent handles keep the incoming edge convex.
+                length={'C':(210,200),'D':(220,210)}[wu_variant][bold]
+                first=list(inside[0]);first[1]=first[0]+O.tangent(head[-1],1)*length
+                inside=rounded_left([tuple(first),inside[1]],50)
             return head+inside+tail+outside
-        if ch=='を':
-            # Start the return on the descending diagonal. Replacing both
-            # edges here removes the low belly of the old native exit.
-            head=clean(cut_keep(head+[line(head[-1][3],head[0][0])],1,330,'high'))
-            joined=selected_join(head,tail,(220,160),(200,170))
-            # Move both edges together around the reversal, preserving
-            # B's thickness while opening the space below the stem.
-            # The displacement fades before the upper crossing and bowl.
-            dx,dy=-40,-36
-            def open_turn(p):
-                x,y=p
-                a=np.clip((572-x)/(572-390),0,1)
-                b=np.clip((430-y)/(430-300),0,1)
-                smooth=lambda t:t*t*t*(10+t*(-15+6*t))
-                return p+np.array([dx,dy])*smooth(a)*smooth(b)
-            opened=[]
-            for index,seg in enumerate(joined):
-                # Native right bowl and terminal remain exact. Only the
-                # head and its two joining curves receive displacement.
-                points=np.array(seg)
-                if (len(head)<index<len(head)+len(tail)+1 or
-                    points[:,0].min()>=572 or points[:,1].min()>=430):
-                    opened.append(seg)
-                    continue
-                if points[:,0].max()<=390 and points[:,1].max()<=300:
-                    opened.append(tuple(p+np.array([dx,dy]) for p in seg))
-                    continue
-                pieces=[seg]
-                depth=max(0,int(np.ceil(np.log2(max(np.ptp(points,axis=0))/16))))
-                for _ in range(depth):
-                    pieces=[part for curve in pieces for part in O.split(curve,.5)]
-                opened.extend(tuple(open_turn(p) for p in part) for part in pieces)
-            joined=opened
-            return joined
         return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
     # WU candidates share the accepted B placement and terminal.
