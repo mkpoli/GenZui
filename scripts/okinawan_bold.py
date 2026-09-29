@@ -169,8 +169,10 @@ def vowel_source(weight):
     return instance('NotoSerifJP', weight, set(map(ord, 'いぃわえ')))
 
 
-def drawings(font, contours, option="B", style="Bold"):
+def drawings(font, contours, option="B", style="Bold", wu_return=None):
     assert option in ("A", "B")
+    wu_return = option if wu_return is None else wu_return
+    assert wu_return in ("A", "B", "C", "D")
     fuller = option == "B"
     bold = style == "Bold"
     body_weight, vowel_weight = (700, 750) if bold else (400, 500)
@@ -474,6 +476,25 @@ def drawings(font, contours, option="B", style="Bold"):
                 t=np.clip((p[1]-100)/220,0,1); t=t*t*(3-2*t)
                 return q+(p-q)*t
             r=[tuple(blend(p,q) for p,q in zip(a,b)) for a,b in zip(r,light)]
+            # Separate the native inner edge only along the thin return.
+            # Both fades finish before the upper crossing and lower join.
+            strength=({'A':18,'B':36,'C':54,'D':72} if bold else
+                      {'A':14,'B':28,'C':42,'D':56})[wu_return]
+            assert len(r)==45, 'Native wo return contour layout changed'
+            widened=[]
+            def open_return(p):
+                x,y=p
+                a=np.clip((y-60)/180,0,1); b=np.clip((350-y)/100,0,1)
+                amount=strength*a*a*(3-2*a)*b*b*(3-2*b)
+                return p+np.array([.35,-1.])*amount
+            for index,seg in enumerate(r):
+                if not 25<=index<=33:
+                    widened.append(seg)
+                    continue
+                pieces=[seg]
+                for _ in range(3):pieces=[part for curve in pieces for part in O.split(curve,.5)]
+                widened.extend(tuple(open_return(p) for p in part) for part in pieces)
+            r=widened
         cuts=sorted(O.crossings(r,0,(400 if bold else 375) if ch=='を' else 325),key=lambda c: O.point(r[c[0]],c[1])[1])[:2]
         assert len(cuts)==2 and max(O.point(r[i],t)[1] for i,t in cuts)<130, 'Expected the native rightward exit'
         head=max((O.arc(r,*cuts),O.arc(r,*cuts[::-1])),
@@ -543,9 +564,13 @@ def drawings(font, contours, option="B", style="Bold"):
                   115 if ch=='と' else 80,-62 if ch=='と' else -63)
         return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
+    # WU candidates share the accepted B placement and terminal.
+    original_fuller=fuller
+    fuller=True
+    body_weight=850 if bold else 600
     # Restore horizontal room to wo's reduced upper arch. Its native
     # contour stays intact, with the entry height and lower sweep fixed.
-    wu = [native('を', 1, (214, 220, 565 if fuller else 555, 797)),
+    wu = [native('を', 1, (214, 220, 565, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
     # Shorten the two straight sides above wo's native terminal. The arch,
     # entry and rounded cap retain their native outlines.
@@ -554,6 +579,7 @@ def drawings(font, contours, option="B", style="Bold"):
     body=stem[5:44]
     cap=move(stem[47:]+stem[:2],dy=45)
     wu[0]=selected_join(body,cap,(20,20),(8,8))
+    fuller=original_fuller
     result = dict(TU=tu, TI=ti, KWA=kwa, KWI=kwi, KWE=kwe,
                   HWA=hwa, HWI=hwi, HWE=hwe, WU=wu, TSI=tsi)
     if not bold:

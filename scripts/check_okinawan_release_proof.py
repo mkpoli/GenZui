@@ -107,6 +107,24 @@ def check():
         alternative = opened(f'{style.lower()}-A.woff2')
         for text in samples + voiced:
             assert outline(selected, text) == outline(full, text), (style, repr(text), 'full font differs')
+        # Four WU candidates vary only the marked return. C/D proof fonts
+        # retain every other full-font outline and the same native context.
+        candidates=[alternative,selected]
+        for variant in ('C','D'):
+            face=opened(f'{style.lower()}-{variant}.woff2')
+            parts=drawings(full,contours,option='B',style=style,wu_return=variant)[0xF465]
+            same_compiled(face,0xF465,parts)
+            assert topology(contours(face,0xF465))==topology(united(approved[0xF465])), (style,variant,'WU counters changed')
+            for text in samples+voiced+list('をう'):
+                if text!=chr(0xF465):
+                    assert outline(face,text)==outline(selected,text), (style,variant,repr(text),'unrelated outline changed')
+            candidates.append(face)
+        shapes=[json.dumps(outline(face,chr(0xF465))) for face in candidates]
+        assert len(set(shapes))==4, (style,'WU candidates are not distinct')
+        areas=[]
+        for face in candidates:
+            path=pathops.Path();contours(face,0xF465).replay(path.getPen());areas.append(path.area)
+        assert all(a<b for a,b in zip(areas,areas[1:])), (style,'WU return weights are not ordered',areas)
         # SI and ZI are confirmed and identical in both options.
         for text in (chr(0xF467), chr(0xF467)+'\u3099'):
             assert outline(selected, text) == outline(alternative, text), (style, 'SI changed')

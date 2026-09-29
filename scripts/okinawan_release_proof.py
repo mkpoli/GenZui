@@ -14,7 +14,7 @@ from serif import OUT as FONT_OUT, VERSION, glyph, contours, transform
 from sources import ROOT
 
 OUT = ROOT / 'build/okinawan-release'
-VARIANTS = ('A', 'B')
+VARIANTS = ('A', 'B', 'C', 'D')
 NEIGHBOURS = {'TU': 'とつ', 'TI': 'てい', 'KWA': 'くわ', 'KWI': 'くい',
               'KWE': 'くえ', 'HWA': 'ふわ', 'HWI': 'ふい', 'HWE': 'ふえ',
               'WU': 'をう', 'TSI': 'つい'}
@@ -33,10 +33,12 @@ def composed_name(font, cp):
 
 def webfont(style, variant):
     font = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf', recalcTimestamp=False)
-    if variant == 'A':
+    if variant != 'B':
         from okinawan_bold import drawings
         cmap = font.getBestCmap()
-        for cp, parts in drawings(font, contours, option="A", style=style).items():
+        for cp, parts in drawings(font, contours, option="A" if variant=="A" else "B", style=style, wu_return=variant).items():
+            if variant in ("C","D") and cp!=0xF465:
+                continue
             merged = pathops.Path()
             for part in parts:
                 shape = pathops.Path()
@@ -101,7 +103,7 @@ def build():
     template = re.sub(r'url\(([^()]+\.woff2)\)', font_url, template)
     (OUT / 'index.html').write_text(template.replace('{{DATA}}', json.dumps(data, ensure_ascii=False)))
     # Remove superseded comparison fonts.
-    for name in ('regular.woff2', 'bold-C.woff2', 'bold-A-700.woff2', 'bold-B-700.woff2', 'regular-before.woff2', 'regular-A-alt.woff2', 'regular-B-alt.woff2', 'bold-A-alt.woff2', 'bold-B-alt.woff2', 'bold-before.woff2'):
+    for name in ('regular.woff2', 'bold-A-700.woff2', 'bold-B-700.woff2', 'regular-before.woff2', 'regular-A-alt.woff2', 'regular-B-alt.woff2', 'bold-A-alt.woff2', 'bold-B-alt.woff2', 'bold-before.woff2'):
         (OUT / name).unlink(missing_ok=True)
     print(f'Okinawan {VERSION}: equal-size source context, per-weight choices and voiced pairs.')
 
