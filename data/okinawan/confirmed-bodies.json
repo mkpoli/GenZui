@@ -37,6 +37,10 @@
       "TU": {
         "codepoint": "F450",
         "sha256": "e6e869abdcfd30392800e285192a5c4326ac1ac9a85f1b8166f3c085066b8d8a"
+      },
+      "HWI": {
+        "codepoint": "F45B",
+        "sha256": "35498ca7229919fb52182f35d2a3214774e23c7e953c063c902a421951fd90f6"
       }
     },
     "Bold": {

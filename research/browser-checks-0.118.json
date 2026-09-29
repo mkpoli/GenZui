@@ -1,10 +1,10 @@
 {
   "version": "0.118",
   "method": "Windows headless Chrome, Vivaldi and Firefox with isolated profiles; Chrome and Vivaldi confirm with CSS.getPlatformFontsForNode that mixed, vertical, mark, all 340 historical and all 35 Okinawan strings use the GenZui face alone from both TTF and WOFF2, and Firefox requires identical canvas rasters from TTF and WOFF2 for every target.",
-  "ttf_sha256": "0e8fbbbef9766e3658e4d64c5a7d8ec28677cba330ab73772795e7fdecdd6811",
-  "woff2_sha256": "7afcb02b1f38d5cf3c5f5c573d8ec3073b005843c9bf1130bbf170149de689cc",
-  "bold_ttf_sha256": "48f215ceac827b4a1dac18506908237b40a94ac321f96a652d3bba3042bbd179",
-  "bold_woff2_sha256": "3990b876cc436b1aee27beda02701aacbb1bd65933782ae235e8a9cfc170f71e",
+  "ttf_sha256": "99118eb099efc17ff86f542d9468d6815f0d9a47b7ef22b1af8b6c1e7ff373c0",
+  "woff2_sha256": "5947301e6dc843a01ec0c5fc6dfbdc723317a9af1ea5846766bddcdf250761b5",
+  "bold_ttf_sha256": "e1ae59ab67eaf3056d92fc5f2f7d1175b5bdb1fde7a5efc4479062fa8cb7b697",
+  "bold_woff2_sha256": "dfd8020d63db0c8c3bc2cd58a9ea3a3510af57a665b2d0787038781e1f0cea9e",
   "results": [
     {
       "browser": "chrome",
@@ -35,8 +35,8 @@
       "faces": {
         "Regular": {
           "weight": 400,
-          "ttf_sha256": "0e8fbbbef9766e3658e4d64c5a7d8ec28677cba330ab73772795e7fdecdd6811",
-          "woff2_sha256": "7afcb02b1f38d5cf3c5f5c573d8ec3073b005843c9bf1130bbf170149de689cc",
+          "ttf_sha256": "99118eb099efc17ff86f542d9468d6815f0d9a47b7ef22b1af8b6c1e7ff373c0",
+          "woff2_sha256": "5947301e6dc843a01ec0c5fc6dfbdc723317a9af1ea5846766bddcdf250761b5",
           "actual_fonts": {
             "ttf-400-marks": [
               {
@@ -122,8 +122,8 @@
         },
         "Bold": {
           "weight": 700,
-          "ttf_sha256": "48f215ceac827b4a1dac18506908237b40a94ac321f96a652d3bba3042bbd179",
-          "woff2_sha256": "3990b876cc436b1aee27beda02701aacbb1bd65933782ae235e8a9cfc170f71e",
+          "ttf_sha256": "e1ae59ab67eaf3056d92fc5f2f7d1175b5bdb1fde7a5efc4479062fa8cb7b697",
+          "woff2_sha256": "dfd8020d63db0c8c3bc2cd58a9ea3a3510af57a665b2d0787038781e1f0cea9e",
           "actual_fonts": {
             "ttf-700-mixed": [
               {
@@ -241,8 +241,8 @@
       "faces": {
         "Regular": {
           "weight": 400,
-          "ttf_sha256": "0e8fbbbef9766e3658e4d64c5a7d8ec28677cba330ab73772795e7fdecdd6811",
-          "woff2_sha256": "7afcb02b1f38d5cf3c5f5c573d8ec3073b005843c9bf1130bbf170149de689cc",
+          "ttf_sha256": "99118eb099efc17ff86f542d9468d6815f0d9a47b7ef22b1af8b6c1e7ff373c0",
+          "woff2_sha256": "5947301e6dc843a01ec0c5fc6dfbdc723317a9af1ea5846766bddcdf250761b5",
           "actual_fonts": {
             "ttf-400-marks": [
               {
@@ -328,8 +328,8 @@
         },
         "Bold": {
           "weight": 700,
-          "ttf_sha256": "48f215ceac827b4a1dac18506908237b40a94ac321f96a652d3bba3042bbd179",
-          "woff2_sha256": "3990b876cc436b1aee27beda02701aacbb1bd65933782ae235e8a9cfc170f71e",
+          "ttf_sha256": "e1ae59ab67eaf3056d92fc5f2f7d1175b5bdb1fde7a5efc4479062fa8cb7b697",
+          "woff2_sha256": "dfd8020d63db0c8c3bc2cd58a9ea3a3510af57a665b2d0787038781e1f0cea9e",
           "actual_fonts": {
             "ttf-700-mixed": [
               {
@@ -448,15 +448,15 @@
           "weight": 400,
           "target_count": 375,
           "raster_equivalence": true,
-          "ttf_sha256": "0e8fbbbef9766e3658e4d64c5a7d8ec28677cba330ab73772795e7fdecdd6811",
-          "woff2_sha256": "7afcb02b1f38d5cf3c5f5c573d8ec3073b005843c9bf1130bbf170149de689cc"
+          "ttf_sha256": "99118eb099efc17ff86f542d9468d6815f0d9a47b7ef22b1af8b6c1e7ff373c0",
+          "woff2_sha256": "5947301e6dc843a01ec0c5fc6dfbdc723317a9af1ea5846766bddcdf250761b5"
         },
         "Bold": {
           "weight": 700,
           "target_count": 375,
           "raster_equivalence": true,
-          "ttf_sha256": "48f215ceac827b4a1dac18506908237b40a94ac321f96a652d3bba3042bbd179",
-          "woff2_sha256": "3990b876cc436b1aee27beda02701aacbb1bd65933782ae235e8a9cfc170f71e"
+          "ttf_sha256": "e1ae59ab67eaf3056d92fc5f2f7d1175b5bdb1fde7a5efc4479062fa8cb7b697",
+          "woff2_sha256": "dfd8020d63db0c8c3bc2cd58a9ea3a3510af57a665b2d0787038781e1f0cea9e"
         }
       },
       "owned_processes_stopped": true,

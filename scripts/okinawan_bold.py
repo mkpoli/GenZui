@@ -543,7 +543,9 @@ def drawings(font, contours, option="B", style="Bold"):
                   115 if ch=='と' else 80,-62 if ch=='と' else -63)
         return curvature_join(head,tail)
     tu = [native('と', 1, (250, 380, 450, 774)), flowing_sweep('と')]
-    wu = [native('を', 1, (214, 220, 530, 797)),
+    # Restore horizontal room to wo's reduced upper arch. Its native
+    # contour stays intact, with the entry height and lower sweep fixed.
+    wu = [native('を', 1, (214, 220, 565 if fuller else 555, 797)),
           native('を', 2, bounds([approved['WU'][1]])), flowing_sweep('を')]
     # Shorten the two straight sides above wo's native terminal. The arch,
     # entry and rounded cap retain their native outlines.
