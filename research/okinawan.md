@@ -1,4 +1,4 @@
-# Okinawan kana in GenZui 0.114
+# Okinawan kana in GenZui Serif
 
 GenZui supplies all 27 forms in Funatsu’s New Okinawan Kana chart and the eight
 raised katakana used in Okinawa Prefecture’s notation guide. The home page has a
@@ -19,7 +19,7 @@ by `U+3099 COMBINING KATAKANA-HIRAGANA VOICED SOUND MARK`. A `ccmp` lookup rende
 each as a composed glyph; the stored text remains the two-character sequence.
 These preferences are application conventions, not Unicode decomposition rules.
 
-There are 26 newly encoded PUA positions, taking the font total to 17,090:
+The two Okinawan systems use 26 PUA positions:
 
 | Funatsu base | PUA | Funatsu base | PUA |
 | --- | --- | --- | --- |
@@ -131,3 +131,97 @@ PUA runs, TTF/WOFF2 parity, raised metrics and neighboring Japanese kana.
 The existing complete Noto outline, metrics and shaping regression checks remain
 in force. Browser checks exercise input composition, selection replacement,
 system drafts, copying fallback, responsive layout and the PUA inventory.
+
+### Ligature outlines and Bold proof
+
+The approved placement outlines are stored in
+`data/okinawan/ligatures.json`, in a 1000-unit font coordinate system.
+`scripts/okinawan_bold.py` composes both weights from native Noto Serif JP
+masters. TI, KWI and SI retain their confirmed bodies in both weights;
+HWI, KWE and HWA also retain their accepted B outlines in both weights.
+TSI/DZI retain Regular A and Bold B. KWA
+joins the diagonal and bowl into one continuous outline, removing the
+component caps, and centers its bounds in the 1000-unit advance. Its weights
+follow Regular A and Bold B. HWA uses the accepted B native つ shoulder
+turn. Bold HWA reduces
+the bowl counter to restore weight after the narrow fit.
+
+The fuller proof uses these optical source weights:
+
+| Component | Regular | Bold |
+| --- | --- | --- |
+| KWI body and vowel | 600 / 650 | 850 / 900 |
+| KWE body and vowel | 550 / 500 | 850 / 900 |
+| KWA body and complete わ | 500 / 700 | 700 / 900 |
+| HWA connector and わ | 600 / 850 | 850 / 900 |
+| TSI body and vowel | 650 / 600 | 900 / 900 |
+| TU / WU entry and bowl | 600 / 650 | 850 / 900 |
+| HWE diagonal and terminal | 650 / 650 | 850 / 850 |
+
+Regular KWE combines the A く source with B え, using native 550/600
+terminal donors for the two foot-weight choices while holding the baseline.
+HWI Bold retains the earlier upright return, with a finite 18–20-unit cap
+and a smooth taper confined to the top of the hook. Its axis aims toward
+the beginning of the right い stroke.
+HWE uses the same native rounded shoulder as HWA. Its upper え diagonal
+stands more upright, while the lower native arch and terminal keep their
+shape. The shoulder rises to match the HWA/HWI group.
+HWA/HWI/HWE vowels share an optical baseline.
+
+Native contours supply the terminals and bowls. TU keeps the rising つ
+curve with its height reduced to 76%, giving the と entry more room. Its
+balance follows R5-B. WU uses a broader bowl at 80% height and a longer
+visible central を stem, following the R6 proportions. Both use heavier
+native bowl donors to retain contrast after the vertical reduction. The
+TU connection edges have separate tangent handles. WU uses native rounded
+turns between its source entry and bowl, and retains its native
+arch and rounded terminal, shortening only the straight stem sections.
+No contour expansion is applied. The く, と and を entries match their
+source kana’s top height;
+TSI’s stronger つ reaches 25 units above its source top, with the dakuten
+raised by the same amount. HWA’s reduced わ is stronger and vertically
+fuller; its Bold placement leaves the small stroke separate from ふ.
+
+Dakuten come from native ど, で, ぐ, ず and づ. Each pair retains its
+outlines and internal spacing, with placement specific to the constructed
+base. DI uses the native で positions; DZI has additional clearance above つ.
+All voiced forms preserve the size of their unvoiced base.
+
+After building both Serif weights, run:
+
+```sh
+.venv/bin/python scripts/okinawan_release_proof.py
+.venv/bin/python scripts/check_okinawan_release_proof.py
+.venv/bin/python scripts/okinawan_sns.py
+show build/okinawan-release --name genzui-okinawan
+```
+
+Open the local URL printed by `show`. Each option displays the source kana,
+constructed letter and vowel at the same size, with baseline and top guides.
+Voiced forms appear in the same card. The shared ふ/HWA/HWI/HWE comparison
+shows their baselines. All 11 entries are confirmed in both weights: KWA and
+TSI use Regular A / Bold B, WU uses C / C, and the others use B / B.
+Confirmed panels start collapsed on each page load and can be expanded through
+the disclosure controls or character navigation. The characters retain their
+data order; none is moved ahead as undecided. Open panels stay open while
+filtering within the page. Choices can be copied individually or as a complete
+JSON record.
+
+TU/WU also show the saved v1 and R1–R7 drawings, plus eight successive native
+composition rounds. TSI/DZI include v1, R1–R3 and the native rounds, including
+the accepted R3-B with only the right い part lowered 16 units.
+`data/okinawan/design-history.json` stores 132 distinct outlines; identical
+shapes share their round labels. Historical native voiced samples use the
+current dakuten placement, as noted on their cards. Each appears beside
+native kana at the same size. A selected historical reference is included
+in the copied choice without changing the candidate font.
+
+The `sns/` page contains Japanese and English announcement copy and one
+2400×1260 specimen rendered from the full fonts, with Regular and Bold in
+separate columns. It shows all 27 forms and examples from
+[宮良信詳『うちなーぐち活用辞典』(2021)](https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf),
+pages 121 and 123 (PDF pages 136 and 138). Spacing and line breaks are adjusted
+for the specimen; the documented kana sequences are replaced by ligatures.
+Font hashes, source text and image metadata are recorded in `specimens.json`.
+A separate `sns-raised/` image shows the eight raised katakana with notation
+examples from the Okinawa writing guide and its Unicode proposal.

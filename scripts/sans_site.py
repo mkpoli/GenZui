@@ -11,6 +11,7 @@ from fontTools.ttLib import TTFont
 from family_switch import css as switch_css, html as switch_html
 from weight_switch import css as weight_css
 from inventory import KANA_GROUPS, character_data
+from gugyeol import FORMS as GUGYEOL_FORMS, PUA as GUGYEOL_PUA
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
 
@@ -81,6 +82,17 @@ def inventory(font, provenance):
     return entries
 
 
+def gugyeol_coverage(font, provenance):
+    """Coverage of the checked parent, agreeing with its source record."""
+    cmap=set(font.getBestCmap())
+    assert {int(k.removeprefix('U+'),16) for k in provenance}==cmap
+    registered={int(f['codepoint'],16) for f in GUGYEOL_FORMS}
+    actual=cmap & registered
+    tagged={int(k.removeprefix('U+'),16) for k,v in provenance.items() if source_key(v)=='gugyeol'}
+    assert actual==tagged and actual<=set(GUGYEOL_PUA)
+    return actual
+
+
 def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     """Render the page; font arguments are the URLs the page loads."""
     version, checks, package = checked()
@@ -88,10 +100,16 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     kinds = Counter(value.split(';')[0] for value in provenance.values())
     genzui = sum(count for kind, count in kinds.items() if 'GenZui' in kind or 'squared-katakana' in kind)
     assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 20
-    entries = inventory(TTFont(OUT/(STEM+'.ttf')), provenance)
+    parent=TTFont(OUT/(STEM+'.ttf'))
+    available=gugyeol_coverage(parent,provenance)
+    bold_provenance=json.loads((OUT/'sources-bold.json').read_text())['source_kinds']
+    assert available==gugyeol_coverage(TTFont(OUT/(BOLD_STEM+'.ttf')),bold_provenance)
+    entries = inventory(parent, provenance)
+    assert available=={e['cp'] for e in entries if e['source']=='gugyeol'}
     counts = dict(Counter(e['source'] for e in entries))
-    assert counts == {'jp': 16732, 'hentaigana': 290, 'genseki': 20, 'frb': 15, 'cjk': 1,
-                       'genzui': genzui, 'gugyeol': 181}, counts
+    expected={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':genzui}
+    if available:expected['gugyeol']=len(available)
+    assert counts==expected,counts
     assert len(entries) == checks['encoded_characters']
     data = {'version': version, 'family': 'GenZui Sans', 'origins': ORIGINS, 'characters': entries,
             'counts': counts, 'total': len(entries),
@@ -99,6 +117,7 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     hentaigana = ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)) + ' 𛀀𛄠𛄡𛄢 𛄣𛄤𛄥𛄦𛄧𛄨𛅨'
     page = (ROOT/'templates/sans.html').read_text()
     replacement = {
+        '{{GUGYEOL_FILTER}}': '<option value="gugyeol">구결자 twin ideographs</option>' if available else '',
         '{{SANS_FONT}}': sans_font, '{{SERIF_FONT}}': serif_font,
         '{{SANS_BOLD_FONT}}': sans_bold_font or data_uri(OUT/(BOLD_STEM+'.woff2')),
         '{{WEIGHT_SWITCH_CSS}}': weight_css(OUT/(STEM+'.woff2'), OUT/(BOLD_STEM+'.woff2')),

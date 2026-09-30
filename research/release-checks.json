@@ -1,18 +1,19 @@
 {
-  "version": "0.117",
-  "font_sha256": "5a82926802477b79538ecc0f9fb68f31fb4a4ac2c15aa85e166c377e4d08f78c",
+  "version": "0.118",
+  "font_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
   "sans_version": "0.103",
   "sans_font_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-  "local_links_checked": 106,
+  "local_links_checked": 108,
   "public_gallery_forms": 21,
-  "release_files_checked": 176,
+  "release_files_checked": 191,
   "inventory_collections": {
     "han-numeral": 80,
     "tally-mark": 5,
-    "ideographic-description": 17
+    "ideographic-description": 17,
+    "gugyeol": 181
   },
   "extended_kana_characters": 329,
-  "font_chunks_checked": 10374,
+  "font_chunks_checked": 10367,
   "font_bytes_unchanged": true,
   "status": "passed"
 }

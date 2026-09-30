@@ -1,0 +1,22 @@
+{
+  "family": "GenZui Serif Okinawan",
+  "status": "passed",
+  "faces": [
+    {
+      "style": "Regular",
+      "encoded_characters": 805,
+      "forms": 35,
+      "parent_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+      "ttf_sha256": "139de19b365ef36ef32da3724badea2fcb2c5234d8574f96d60ff9c5cd9e0f9c",
+      "woff2_sha256": "8f5b718633ffb6a0ebec58b5b893d7cfac78d3c41080bd412c91cdf3ad0df15f"
+    },
+    {
+      "style": "Bold",
+      "encoded_characters": 805,
+      "forms": 35,
+      "parent_sha256": "21ceb8c677f81534eac0650c2b5e609cf3576b30023f4887d64bfaf081606f7e",
+      "ttf_sha256": "0c89c27fdb17e1dcce8c543617f358dcba4aaf36d054b6b0bbe472524f3a566a",
+      "woff2_sha256": "c708470151a9a5c2a65299cad22d1d9506f1e29be471b5060f2c535ba3610a67"
+    }
+  ]
+}

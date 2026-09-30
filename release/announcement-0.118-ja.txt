@@ -1,0 +1,6 @@
+【源萃明朝0.118】
+
+船津好明氏の「新沖縄文字」27字に対応。「とぅ」「てぃ」「くゎ」などの合字や、語頭の発音を書き分ける仮名を、Noto Serif JPを基に作字しました。
+
+Regular・Boldの2ウェイト。仮名の文章向けの軽量版「GenZui Serif Okinawan」も公開しました。
+https://genzui.mkpo.li/serif

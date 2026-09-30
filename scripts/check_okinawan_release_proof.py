@@ -1,0 +1,244 @@
+"""Verify proof choices against the actual fonts and native kana context."""
+from functools import lru_cache
+import hashlib
+import json
+from sources import ROOT
+
+import numpy as np
+import pathops
+from fontTools.pens.recordingPen import RecordingPen
+from fontTools.pens.transformPen import TransformPen
+from fontTools.svgLib.path import parse_path
+from fontTools.ttLib import TTFont
+from fontTools.ttLib.tables._g_l_y_f import Glyph
+
+from check_serif import serialized, shape, shaper
+from okinawan import DAKUTEN, ENTRIES, voiced_parts
+from okinawan_ligatures import POINTS, drawings as approved_drawings, source
+from okinawan_release_proof import OUT
+from serif import OUT as FONT_OUT, contours, glyph, transform
+
+
+@lru_cache(maxsize=None)
+def engine_for(font):
+    return shaper(serialized(font))
+
+
+def outline(font, text):
+    shaped = shape(engine_for(font), text, 'ltr')
+    assert len(shaped) == 1 and shaped[0][0], repr(text)
+    assert shaped[0][1] == 1000, (repr(text), 'advance')
+    name = font.getGlyphName(shaped[0][0])
+    pen = RecordingPen()
+    font.getGlyphSet()[name].draw(pen)
+    return pen.value
+
+
+def opened(name):
+    font = TTFont(OUT / name)
+    font.flavor = None
+    return font
+
+
+def united(parts):
+    merged = pathops.Path()
+    for part in parts:
+        path = pathops.Path()
+        part.replay(path.getPen())
+        merged = pathops.op(merged, path, pathops.PathOp.UNION)
+    pen = RecordingPen()
+    merged.draw(pen)
+    return pen
+
+
+def topology(pen):
+    p = pathops.Path()
+    pen.replay(p.getPen())
+    p = pathops.simplify(p)
+    return (sum(not c.clockwise for c in p.contours),
+            sum(c.clockwise for c in p.contours))
+
+
+def same_compiled(font, cp, parts, geometric=False):
+    expected = glyph([united(parts)])
+    expected = Glyph(expected.compile(font['glyf']))
+    expected.expand(font['glyf'])
+    actual = font['glyf'][font.getBestCmap()[cp]]
+    if geometric:
+        a, b = pathops.Path(), pathops.Path()
+        expected.draw(a.getPen(), font['glyf'])
+        actual.draw(b.getPen(), font['glyf'])
+        assert pathops.op(a, b, pathops.PathOp.XOR).area < .01, (hex(cp), 'approved shape changed')
+    else:
+        assert actual.getCoordinates(font['glyf']) == expected.getCoordinates(font['glyf']), (hex(cp), 'stale composition')
+
+
+def marks(font, text):
+    pen = RecordingPen()
+    pen.value = outline(font, text)
+    path, selected = pathops.Path(), pathops.Path()
+    pen.replay(path.getPen())
+    count = 0
+    for contour in path.contours:
+        x0,y0,x1,y1 = contour.bounds
+        if x0 > 600 and y0 > 300 and x1-x0 < 210 and y1-y0 < 190:
+            contour.draw(selected.getPen())
+            count += 1
+    assert count == 2, (text, 'expected two dakuten strokes')
+    return selected
+
+
+def check_ti_arm(parts):
+    """TI may gain a little arm weight without moving its accepted skeleton."""
+    import okinawan_outline as O
+
+    original = []
+    entry = next(g for g in source()['glyphs'] if g['label'] == 'TI')
+    for component in entry['components']:
+        pen = RecordingPen()
+        parse_path(component['path'], TransformPen(pen, component['transform']))
+        original.extend(O.rings(pen))
+    actual = [ring for part in parts for ring in O.rings(part)]
+    assert len(actual) == len(original) == 2, 'TI components changed'
+    assert np.array_equal(actual[1], original[1]), 'TI right stroke changed'
+    # The long underside is the sole editable edge. In particular, the
+    # descending stem and its elbow precede it and must remain exact.
+    before, after = original[0][:12], original[0][13:]
+    end = len(actual[0]) - len(after)
+    assert end > len(before), 'TI arm is missing'
+    assert np.array_equal(actual[0][:12], before), 'TI elbow or stem changed'
+    assert np.array_equal(actual[0][end:], after), 'TI upper edge or cap changed'
+    arm, reference = actual[0][12:end], original[0][12]
+    assert np.array_equal(arm[0][0], reference[0]), 'TI arm start moved'
+    assert np.array_equal(arm[-1][3], reference[3]), 'TI arm end moved'
+    assert np.allclose(O.tangent(arm[0], 0), O.tangent(reference, 0), atol=1e-9, rtol=0), 'TI arm start tangent changed'
+    assert np.allclose(O.tangent(arm[-1], 1), O.tangent(reference, 1), atol=1e-9, rtol=0), 'TI arm end tangent changed'
+    for left, right in zip(arm, arm[1:]):
+        assert np.allclose(left[3], right[0], atol=1e-9, rtol=0), 'TI arm seam opened'
+        assert np.allclose(O.tangent(left, 1), O.tangent(right, 0), atol=1e-9, rtol=0), 'TI arm seam has a corner'
+
+    # Compare vertical thickness at equal x, independently of the number of
+    # replacement curves and the function used to draw the correction.
+    samples = [O.point(seg, t) for seg in arm for t in np.linspace(0, 1, 65)]
+    assert np.all(np.diff([p[0] for p in samples]) <= 1e-8), 'TI arm doubles back'
+    gains = []
+    for x, y in samples:
+        lo, hi = 0., 1.
+        for _ in range(45):
+            mid = (lo + hi) / 2
+            if O.point(reference, mid)[0] > x:
+                lo = mid
+            else:
+                hi = mid
+        gains.append(O.point(reference, (lo + hi) / 2)[1] - y)
+    assert min(gains) >= -1e-7 and 2 <= max(gains) <= 2.501, ('TI arm weight out of bounds', min(gains), max(gains))
+
+    def reversals(curves):
+        values = [O.curvature(seg, t) for seg in curves for t in np.linspace(.001, .999, 65)]
+        signs = np.sign([v for v in values if abs(v) > 1e-10])
+        return np.count_nonzero(signs[1:] != signs[:-1])
+    assert reversals(arm) == reversals([reference]) == 1, 'TI arm gained a curvature reversal'
+    assert topology(united(parts)) == (2, 0), 'TI correction changed topology'
+
+
+def check():
+    samples = [chr(cp) for cp in sorted(POINTS | {0xF467})]
+    voiced = [''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES
+              if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
+    assert len(voiced) == 7
+    same_regular_options = {0xF452, 0xF454, 0xF469}
+    approved = approved_drawings()
+    from okinawan_bold import drawings
+    for style in ('Regular', 'Bold'):
+        full = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf')
+        confirmed = json.loads((ROOT/'data/okinawan/confirmed-bodies.json').read_text())['styles'][style]
+        for label, record in confirmed.items():
+            pen = contours(full, int(record['codepoint'],16))
+            digest = hashlib.sha256(json.dumps(pen.value,separators=(',',':')).encode()).hexdigest()
+            assert digest == record['sha256'], (style, label, 'body differs from recorded confirmed/revised outline')
+        selected = opened(f'{style.lower()}-C.woff2')
+        alternative = opened(f'{style.lower()}-A.woff2')
+        for text in samples + voiced:
+            assert outline(selected, text) == outline(full, text), (style, repr(text), 'full font differs')
+        # The accepted C is the full-font default. Explicit A-D remain distinct
+        # historical WU drawings; B-D retain all other full-font outlines.
+        candidates=[]
+        for variant in ('A','B','C','D'):
+            face=opened(f'{style.lower()}-{variant}.woff2')
+            parts=drawings(full,contours,option='B',style=style,wu_variant=variant)[0xF465]
+            same_compiled(face,0xF465,parts)
+            assert topology(contours(face,0xF465))==topology(united(approved[0xF465])), (style,variant,'WU counters changed')
+            for text in samples+voiced+list('をう'):
+                if variant!='A' and text!=chr(0xF465):
+                    assert outline(face,text)==outline(selected,text), (style,variant,repr(text),'unrelated outline changed')
+            candidates.append(face)
+        shapes=[json.dumps(outline(face,chr(0xF465))) for face in candidates]
+        assert len(set(shapes))==4, (style,'WU candidates are not distinct')
+        reference_parts=drawings(full,contours,option='B',style=style,wu_variant='A')[0xF465]
+        for variant in ('B','C','D'):
+            parts=drawings(full,contours,option='B',style=style,wu_variant=variant)[0xF465]
+            assert all(parts[i].value==reference_parts[i].value for i in (0,1)), (style,variant,'WU upper body or bar changed')
+        # SI and ZI are confirmed and identical in both options.
+        for text in (chr(0xF467), chr(0xF467)+'\u3099'):
+            assert outline(selected, text) == outline(alternative, text), (style, 'SI changed')
+        for cp in POINTS:
+            differs = outline(selected, chr(cp)) != outline(alternative, chr(cp))
+            assert differs == (style == 'Bold' or cp not in same_regular_options), (style, hex(cp), 'wrong option coverage')
+        for cp, parts in drawings(full, contours, style=style).items():
+            same_compiled(full, cp, parts)
+            if style == 'Regular' and cp == 0xF452:
+                check_ti_arm(parts)
+            if style=='Regular' and cp==0xF45B:
+                body,approved_body=pathops.Path(),pathops.Path()
+                component=next(g for g in source()['glyphs'] if g['label']=='HWI')['components'][0]
+                parts[0].replay(body.getPen())
+                parse_path(component['path'],TransformPen(approved_body.getPen(),component['transform']))
+                assert pathops.op(body,approved_body,pathops.PathOp.XOR).area<.01, 'HWI fu body changed'
+            assert topology(contours(full, cp)) == topology(united(approved[cp])), (style, hex(cp), 'changed counters')
+        for face in (selected, alternative):
+            kwa = face['glyf'][face.getBestCmap()[0xF454]]
+            assert abs(kwa.xMin+kwa.xMax-1000) <= 2, (style, 'KWA optical bounds off centre')
+            assert pathops.op(marks(face, chr(0xF452)+'\u3099'), marks(face, 'で'), pathops.PathOp.XOR).area < .01, (style, 'DI marks differ from native de')
+            # Compare the lowered vowels, excluding fu's own lower sweep.
+            lower = []
+            crop = pathops.Path()
+            pen = crop.getPen()
+            pen.moveTo((600,-200)); pen.lineTo((1100,-200))
+            pen.lineTo((1100,1000)); pen.lineTo((600,1000)); pen.closePath()
+            for cp in (0xF45A,0xF45B,0xF45C):
+                path = pathops.Path(); contours(face,cp).replay(path.getPen())
+                lower.append(pathops.op(path,crop,pathops.PathOp.INTERSECTION).bounds[1])
+            assert max(lower)-min(lower) <= 3, (style, 'labial vowel baselines', lower)
+
+            for cp, donor in ((0xF454,'く'), (0xF456,'く'), (0xF458,'く'),
+                              (0xF450,'と'), (0xF465,'を'), (0xF469,'つ')):
+                cm = face.getBestCmap()
+                assert abs(face['glyf'][cm[cp]].yMax-face['glyf'][cm[ord(donor)]].yMax-(25 if cp==0xF469 else 0)) <= 1, (style, hex(cp), 'source top')
+            for cp in DAKUTEN:
+                original = contours(face, cp)
+                parts = voiced_parts(face, cp, [original], contours, transform)
+                assert parts[0].value == original.value, (style, hex(cp), 'voiced body shrank')
+                body, mark = pathops.Path(), pathops.Path()
+                parts[0].replay(body.getPen())
+                parts[-1].replay(mark.getPen())
+                assert pathops.op(body, mark, pathops.PathOp.INTERSECTION).area < .01, (style, hex(cp), 'dakuten collision')
+                assert topology(parts[-1]) == (2,0), (style, hex(cp), 'dakuten pair')
+                if face is alternative:
+                    # A rebuilds voiced glyphs; C was compared with the full font above.
+                    expected = glyph(parts)
+                    expected = Glyph(expected.compile(face['glyf']))
+                    expected.expand(face['glyf'])
+                    ep = RecordingPen()
+                    expected.draw(ep, face['glyf'])
+                    actual = RecordingPen()
+                    actual.value = outline(face, chr(cp)+'\u3099')
+                    a, b = pathops.Path(), pathops.Path()
+                    ep.replay(a.getPen())
+                    actual.replay(b.getPen())
+                    assert pathops.op(a, b, pathops.PathOp.XOR).area < .01, (style, hex(cp), 'voiced option does not follow base')
+
+    print('Context proof passed: exact compiled choices, approved counters, bounded TI arm correction, native top heights, unchanged voiced bodies, SI/ZI and clear dakuten in both options.')
+
+
+if __name__ == '__main__':
+    check()

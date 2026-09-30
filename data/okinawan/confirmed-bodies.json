@@ -1,0 +1,105 @@
+{
+  "description": "Compiled outlines of the approved Okinawan bodies, including the final Regular weight corrections. Dakuten placement is verified separately.",
+  "styles": {
+    "Regular": {
+      "KWI": {
+        "codepoint": "F456",
+        "sha256": "e97abdbbc37bc21f54cdbe3f738f80f077bc6a5e070e9f61ba2cfdf17a3825e2"
+      },
+      "TI": {
+        "codepoint": "F452",
+        "sha256": "e11a3c8e11591d3371999efc1c07d34d33a431fce7640bb6910a0f159407dc2e"
+      },
+      "SI": {
+        "codepoint": "F467",
+        "sha256": "10d6315021e77c0bdd5892ae284c4b8cf0403cf67548e28136495fd772177dca"
+      },
+      "KWE": {
+        "codepoint": "F458",
+        "sha256": "a058dfb23e22310b5be55a816f491e6e6714702776a3745f663304dcc58e78f9"
+      },
+      "HWA": {
+        "codepoint": "F45A",
+        "sha256": "71e21c3950dc54fede6afd02808213c45789b1c9567352b72f476204da46e40f"
+      },
+      "TSI": {
+        "codepoint": "F469",
+        "sha256": "109aa9fdb159c120ab82c1d7b4a95300c623ac28c833e8c1c3afe18932f97421"
+      },
+      "KWA": {
+        "codepoint": "F454",
+        "sha256": "1c7283820864ef36eb197efebdbc2bd28905506e743dd7e69c9b99e41abe7b35"
+      },
+      "HWE": {
+        "codepoint": "F45C",
+        "sha256": "eb1a9d10aaec5080ae1ae3d7fd6902d1048c41a1ab8d12e2d58e429de128f1a3"
+      },
+      "TU": {
+        "codepoint": "F450",
+        "sha256": "87c69ed70bbc00763048745125f7dfc4c3be62f4798076f418003f42710f440e"
+      },
+      "HWI": {
+        "codepoint": "F45B",
+        "sha256": "2c2d9c3e835fded9d73bb56fe451ef1f338e8742aafe1311fd0e1811e371f6bb"
+      },
+      "WU": {
+        "codepoint": "F465",
+        "sha256": "526597998ddef5f0c00e39c95fc4fec9896e0f8a9dc05259c0409612e47cbcc7"
+      },
+      "Glottal YA": {
+        "codepoint": "F45D",
+        "sha256": "675579838e2726259dbd65eea1502396ccf40b5923a81e106cdc8496e60d8a1d"
+      },
+      "Glottal YO": {
+        "codepoint": "F45F",
+        "sha256": "d5ab0d93a3262dc4b90f218cda475e4b99a3fd5cd1ebe8ecbe31e0ef9f9a6232"
+      }
+    },
+    "Bold": {
+      "KWI": {
+        "codepoint": "F456",
+        "sha256": "7d0dc9bc43a34d11180a0eea329ede99f88d2c68527ceae34ae8590eefd87cf9"
+      },
+      "TI": {
+        "codepoint": "F452",
+        "sha256": "f8f7d807988092d8794b7de6344f2101154865afc37e7aa6b7215a8bc0d8480e"
+      },
+      "SI": {
+        "codepoint": "F467",
+        "sha256": "68a7829b6426cc39b2c7fd426c7e4f0eee070329ff5d567646c21bc9a26c2b78"
+      },
+      "KWE": {
+        "codepoint": "F458",
+        "sha256": "22f0a0b8100082745b66dacedeee6219b9eb8306917aef490e4d59a2ce3a900f"
+      },
+      "HWI": {
+        "codepoint": "F45B",
+        "sha256": "8bbe6e21becddd7b6bed23fc83d231fa4b21561be759ab8bd56b0e7f66fe19d4"
+      },
+      "HWA": {
+        "codepoint": "F45A",
+        "sha256": "33d5084e8d2311fd09ce0a2e6621ca75a8e3f025cb2093318daa467b54299a4f"
+      },
+      "TSI": {
+        "codepoint": "F469",
+        "sha256": "c39dac820fc0e992bbd8124c88e7648030a77b9036b09f7f5c575ead264b814a"
+      },
+      "KWA": {
+        "codepoint": "F454",
+        "sha256": "b1c21b79a3c23439ca55379d7c37415607b6e7cd72d85010422f95ae4d1ad9ae"
+      },
+      "HWE": {
+        "codepoint": "F45C",
+        "sha256": "e92eec4b2d33914560524f2266182b3d0bd4230b1fd7d417cc3129a623c32a72"
+      },
+      "TU": {
+        "codepoint": "F450",
+        "sha256": "451965f99d8b37a0a76b3711a80601808ed5188a78998e5a14e2bb74a8f39dec"
+      },
+      "WU": {
+        "codepoint": "F465",
+        "sha256": "939f0f5472617de8efa1c01a13946c41987c7ecd2c7e6dc2920531007a491209"
+      }
+    }
+  }
+}

@@ -144,6 +144,9 @@ def build():
         if old.name != package.name:
             old.unlink()
     shutil.copyfile(package, downloads/package.name)
+    from okinawan_subset import checked_assets
+    for source in checked_assets():
+        shutil.copyfile(source, downloads/source.name)
     for old in downloads.glob('GenZui-Serif-*-Sans-*.zip'):
         if old.name != both.name:
             old.unlink()

@@ -2,11 +2,12 @@ GenZui Serif / 源萃明朝（げんずい）
 Regular and Bold, version {{VERSION}}
 
 One font for Japanese text and historical kana:
-  17,090 encoded characters from the Noto Serif JP base and kana additions
+  17,271 encoded characters from the Noto Serif JP base and kana additions
   27 Funatsu Okinawan forms and eight raised katakana
   26 PUA bases; other forms use standard combining dakuten
   See okinawan-mappings.json and the home-page Okinawan input tool.
   13 Minnan tone letters with overline and dot-below support
+  181 Korean gugyeol forms at the Hanyang PUA convention
   286 hentaigana
   All seven Unicode 18 kana additions
   Four CJK-encoded kana ligatures: U+2A708, U+2CEFF, U+2CF00, U+2CF02

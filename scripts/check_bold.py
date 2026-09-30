@@ -1,5 +1,6 @@
 """Check GenZui Serif Bold against the Noto Serif Bold instances."""
 import hashlib
+import io
 import json
 import re
 
@@ -12,6 +13,7 @@ from draft_bold import glyph_path, mask, parse, shape
 from minnan import BOLD as MINNAN_BOLD, source_font
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
+from okinawan_ligatures import POINTS as LIGATURE_POINTS
 from repertoire import MINNAN_MARKS, MINNAN_TONES
 from serif import BOLD_STEM, CJK_BOLD, FAMILY, FAMILY_JA, OUT, STEM, VERSION, instance
 from serif_forms import DENSE_WEIGHT, CURVED_WU_BRIDGE, DESCRIPTIONS, HOOKED_WU, NARI_WAVE, wu_alternate
@@ -87,16 +89,41 @@ def main():
     web.flavor = None
     assert web.getBestCmap() == font.getBestCmap()
 
-    jp = instance('NotoSerifJP', 700, {0x30C8, 0x3042, 0x4E00, 0x6B63})
-    for codepoint in (0x30C8, 0x3042, 0x4E00, 0x6B63):
+    donors = set(map(ord, 'トあ一正ふいぃわくえぇてとつをどでぐずづ'))
+    from check_serif import serialized
+    jp = TTFont(io.BytesIO(serialized(instance('NotoSerifJP', 700, donors))))
+    for codepoint in donors:
         assert signature(font, codepoint) == signature(jp, codepoint), hex(codepoint)
     henta = instance('NotoSerifHentaigana', 700, {0x1B002})
     assert signature(font, 0x1B002) == signature(henta, 0x1B002)
 
+    # Reject stale font files even when their names/version still match.
+    from okinawan_bold import drawings as native_drawings
+    from serif import contours, glyph
+    from fontTools.pens.recordingPen import RecordingPen
+    from fontTools.ttLib.tables._g_l_y_f import Glyph
+    for cp, parts in native_drawings(font, contours).items():
+        merged = pathops.Path()
+        for part in parts:
+            contour = pathops.Path()
+            part.replay(contour.getPen())
+            merged = pathops.op(merged, contour, pathops.PathOp.UNION)
+        pen = RecordingPen()
+        merged.draw(pen)
+        expected = glyph([pen])
+        expected = Glyph(expected.compile(font['glyf']))
+        expected.expand(font['glyf'])
+        actual = font['glyf'][font.getBestCmap()[cp]]
+        assert actual.getCoordinates(font['glyf']) == expected.getCoordinates(font['glyf']), (hex(cp), 'build differs from current composition')
+
     # Masters share their commands and points, so the pair stays interpolable.
     pairs = list(masters())
     shapes = [[[(c, len(v)) for c, v in parse(d)] for d in pair] for pair in pairs]
-    assert len(pairs) >= 40 and all(r == b for r, b in shapes)
+    # Nine literal master pairs were replaced by ten source-outline ligatures.
+    # Their stroke gain and topology are checked below rather than requiring
+    # matching point counts from the overlap-removal operation.
+    assert len(pairs) + len(LIGATURE_POINTS) >= 40
+    assert all(r == b for r, b in shapes)
     assert all(shape_of(r) == shape_of(b) for r, b in point_masters())
     # A Bold master that crosses itself where Regular does not folds into a
     # twist or a speck. Open paths are completed by native strokes.
@@ -109,6 +136,14 @@ def main():
     assert regular_path.exists(), 'Build Regular first: python scripts/serif.py'
     regular = TTFont(regular_path, recalcTimestamp=False)
     assert font.getBestCmap().keys() == regular.getBestCmap().keys()
+    for cp in LIGATURE_POINTS:
+        paths = []
+        for face in (regular, font):
+            contour = pathops.Path()
+            face.getGlyphSet()[face.getBestCmap()[cp]].draw(contour.getPen())
+            paths.append(pathops.simplify(contour))
+        topology = lambda p: (sum(not c.clockwise for c in p.contours), sum(c.clockwise for c in p.contours))
+        assert topology(paths[0]) == topology(paths[1]), (hex(cp), 'Bold changes connected bodies or holes', topology(paths[0]), topology(paths[1]))
     native = [weight(font, font.getBestCmap()[cp]) / weight(regular, regular.getBestCmap()[cp])
               for cp in map(ord, 'トあけほんえヨリキテふゆゐゑすつ')]
     low, high = min(native) - .12, max(native) + .12
@@ -133,6 +168,20 @@ def main():
     bands = {label: (min(dots) - .12, max(dots) + .12) if label in ('U+1AFF2', 'U+1AFF6', 'U+0323')
              else (min(dense) - .12, max(dense) + .12) if label == 'U+1B126'
              else (low, high) for label in gains}
+    # Approved Regular includes weight-500 donors and local edits. A whole
+    # glyph median does not compare matched 400/700 masters for these forms:
+    # native Bold redistributes length between fine sweeps and thick bowls.
+    # Require positive gain and preserve the upper bound; donor identity and
+    # identical counter topology are checked separately above.
+    native_labels = {f'U+{cp:04X}' for cp in LIGATURE_POINTS}
+    for label in native_labels:
+        bands[label] = (1.01, high)
+    from okinawan_bold import vowel_source
+    vowels = set(map(ord, 'いぃわえ'))
+    for source_weight in (750, 900):
+        native_vowels = instance('NotoSerifJP', source_weight, vowels)
+        for cp in vowels:
+            assert signature(vowel_source(source_weight), cp) == signature(native_vowels, cp), hex(cp)
     off = {k: (v, tuple(round(b, 2) for b in bands[k]))
            for k, v in gains.items() if not bands[k][0] <= v <= bands[k][1]}
     assert not off, off
@@ -162,6 +211,9 @@ def main():
         'family': FAMILY, 'style': 'Bold', 'font_version': 'Version ' + VERSION,
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
+        'outline_ligatures': len(LIGATURE_POINTS),
+        'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'KWI_KWE': {'body': 850, 'vowel': 900}, 'HWA_loop': 900, 'KWA_vowel': 900, 'KWA_loop': 900, 'HWE_diagonal': 800, 'HWE_terminal': 650, 'TSI': [900, 900], 'TU_WU': {'entry': 850, 'bowl': 900, 'WU_return': 700}, 'verified': True},
+        'native_ligature_gains': {k: gains[k] for k in sorted(native_labels)},
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
         'drawing_gain': [min(gains.values()), max(gains.values())],
         'native_kana_gain': [round(min(native), 2), round(max(native), 2)],

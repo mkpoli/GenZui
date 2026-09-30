@@ -1,0 +1,6 @@
+GenZui Serif 0.118
+
+All 27 of Yoshiaki Funatsu’s New Okinawan Kana, including ligatures for とぅ, てぃ and くゎ and letters distinguishing word-initial sounds.
+
+Drawn from Noto Serif JP in Regular and Bold.
+https://genzui.mkpo.li/serif
