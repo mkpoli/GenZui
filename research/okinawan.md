@@ -198,16 +198,14 @@ show build/okinawan-release --name genzui-okinawan
 
 Open the local URL printed by `show`. Each option displays the source kana,
 constructed letter and vowel at the same size, with baseline and top guides.
-Voiced forms appear in the same card. A shared HWA/HWI/HWE row compares
-their vowel baselines. Regular and Bold choices are independent; confirmed
-shapes are retained, with TI, KWE, HWI and HWA fixed to B. TSI uses
-Regular A and Bold B. KWA uses Regular A and Bold B; its revised drawings remain open for review. Confirmed weights
-start collapsed on every page load and remain available through native
-disclosure controls. Open panels stay open across filtering and selection;
-only unconfirmed history panels restore their open state after reload.
-HWE, TU, WU and KWA appear first, and HWE includes the shared baseline
-comparison. A jump to a fully confirmed character opens its panel. Copy choices for one character
-or the complete set as JSON.
+Voiced forms appear in the same card. The shared ふ/HWA/HWI/HWE comparison
+shows their baselines. All 11 entries are confirmed in both weights: KWA and
+TSI use Regular A / Bold B, WU uses C / C, and the others use B / B.
+Confirmed panels start collapsed on each page load and can be expanded through
+the disclosure controls or character navigation. The characters retain their
+data order; none is moved ahead as undecided. Open panels stay open while
+filtering within the page. Choices can be copied individually or as a complete
+JSON record.
 
 TU/WU also show the saved v1 and R1–R7 drawings, plus eight successive native
 composition rounds. TSI/DZI include v1, R1–R3 and the native rounds, including
@@ -218,9 +216,12 @@ current dakuten placement, as noted on their cards. Each appears beside
 native kana at the same size. A selected historical reference is included
 in the copied choice without changing the candidate font.
 
-The `sns/` page contains Japanese and English announcement copy and two
-2400px square sentence specimens rendered from the full candidate fonts.
-Traditional proverbs follow the [University of Hawaiʻi handbook, lesson 3](https://manoa.hawaii.edu/okinawa/handbook_l3_proverbs.pdf),
-pages 3-2 and 3-3. Line breaks and punctuation are editorial; the kana
-digraphs are typeset as GenZui ligatures. Font hashes, source text and image
-metadata are recorded in `specimens.json` beside the images.
+The `sns/` page contains Japanese and English announcement copy and one
+2400×1260 specimen rendered from the full fonts, with Regular and Bold in
+separate columns. It shows all 27 forms and examples from
+[宮良信詳『うちなーぐち活用辞典』(2021)](https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf),
+pages 121 and 123 (PDF pages 136 and 138). Spacing and line breaks are adjusted
+for the specimen; the documented kana sequences are replaced by ligatures.
+Font hashes, source text and image metadata are recorded in `specimens.json`.
+A separate `sns-raised/` image shows the eight raised katakana with notation
+examples from the Okinawa writing guide and its Unicode proposal.

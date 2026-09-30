@@ -125,20 +125,20 @@ def build():
                 'size': [2400, 1260], 'colour_mode': 'RGB',
                 'note': 'Dictionary examples; line breaks and spacing adjusted for the specimen. Only the listed digraphs are substituted, including source ふぁ as Funatsu HWA. No glottal marks are inferred. Japanese meanings are paraphrases.'}
     manifest['images'] = [{'file': name, 'alt_ja': alt, 'sha256': hashlib.sha256((OUT/name).read_bytes()).hexdigest()} for name, alt in cards]
-    (OUT/'specimens.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n')
-    (OUT/'alt-ja.txt').write_text('\n\n'.join(n+'\n'+alt for n, alt in cards)+'\n')
-    page = '''<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>源萃明朝 · SNS</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#25382e;font:16px/1.7 system-ui,sans-serif}main{max-width:1240px;margin:auto;padding:30px}a{color:#214e3c}.images{max-width:960px}figure{margin:0}img{width:100%;display:block}textarea{width:100%;min-height:220px;padding:16px;font:inherit;background:white;border:1px solid #cdd7cb}button{padding:8px 16px;font:inherit;background:#214e3c;color:white;border:0;cursor:pointer}p{color:#63776a}h1{font-size:28px}@media(max-width:700px){.images{grid-template-columns:1fr}main{padding:18px}}</style><main><a href="../">字形比較に戻る</a><h1>源萃明朝0.118 · SNS</h1><p>PNG・2400×1260px。</p><div class="images">'''
+    (OUT/'specimens.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    (OUT/'alt-ja.txt').write_text('\n\n'.join(n+'\n'+alt for n, alt in cards)+'\n', encoding='utf-8')
+    page = '''<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>源萃明朝 · SNS</title><style>*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#25382e;font:16px/1.7 system-ui,sans-serif}main{max-width:1240px;margin:auto;padding:30px}a{color:#214e3c}.images{max-width:960px}figure{margin:0}img{width:100%;display:block}textarea{width:100%;min-height:220px;padding:16px;font:inherit;background:white;border:1px solid #cdd7cb}button{padding:8px 16px;font:inherit;background:#214e3c;color:white;border:0;cursor:pointer}p{color:#63776a}h1{font-size:28px}@media(max-width:700px){.images{grid-template-columns:1fr}main{padding:18px}}</style><main><a href="/genzui-okinawan/">字形比較に戻る</a><h1>源萃明朝0.118 · SNS</h1><p>PNG・2400×1260px。</p><div class="images">'''
     for name, alt in cards:
         page += f'<figure><a href="{name}"><img src="{name}" alt="{html.escape(alt)}"></a><figcaption><a href="{name}" download>PNGを保存</a></figcaption></figure>'
     page += '</div>'
     for lang, label in [('ja', '日本語'), ('en', 'English')]:
-        copy = (OUT/f'announcement-{lang}.txt').read_text()
+        copy = (OUT/f'announcement-{lang}.txt').read_text(encoding='utf-8')
         page += f'<h2>{label}</h2><textarea id="{lang}">{html.escape(copy)}</textarea><button data-copy="{lang}">Copy</button>'
     page += f'<p>例文の出典：<a href="{SOURCE_URL}">宮良信詳『うちなーぐち活用辞典』(2021)</a>。'
     page += ' '.join(f'{s["style"]}：<a href="{SOURCE_URL}#page={s["pdf_page"]}">{s["page"]}頁「{s["headword"]}」</a>。{s["meaning"]}' for s in SENTENCES)
     page += '</p><p>原文の語句と句読点を保ち、字間と改行を調整。「とぅ・てぃ・でぃ・くゎ・くぃ・くぇ・ふぁ・ふぇ」を合字に置換。「ふぁ」は船津式のHWA字形で表記しています。</p>'
     page += f'<p>文字の由来：<a href="{CHARACTER_SOURCE_URL}">新沖縄文字の符号化提案</a></p><p><a href="alt-ja.txt">画像の代替テキスト</a></p><span id="status" role="status"></span></main><script>document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=async()=>{{const t=document.getElementById(b.dataset.copy);try{{await navigator.clipboard.writeText(t.value);document.getElementById("status").textContent="Copied."}}catch{{t.focus();t.select();document.getElementById("status").textContent="Select and copy the text."}}}})</script></html>'
-    (OUT/'index.html').write_text(page)
+    (OUT/'index.html').write_text(page, encoding='utf-8')
     print('SNS: one 2400px character and sentence image, JA/EN copy, alt text and source record.')
 
 
