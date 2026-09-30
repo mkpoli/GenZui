@@ -5,8 +5,19 @@
   const source = $('okinawan-source'), output = $('okinawan-output');
   const system = $('okinawan-system'), method = $('okinawan-method');
   let composing = false;
-  const drafts = {funatsu: 'とぅい　うとぅ　{' + "'ya" + '}ー', prefecture: 'ウトゥ　^uウトゥ'};
+  const examples = {
+    funatsu: 'ふしいちゃー くふぁさくとぅ くぃーちっち かむしが、あじくーたー やてぃ いっぺー まーさん。\n\nなま くゎっちー かむんち そーる とぅくるんかい ふぇーりんち ちゅーる っちゅんかい くぇーぶーぬ あんでぃ いーん。',
+    prefecture: 'ウトゥ　^uウトゥ',
+  };
+  const drafts = {...examples};
   let previousSystem = system.value;
+  function fitEditors() {
+    source.style.height = output.style.height = 'auto';
+    const height = Math.max(source.scrollHeight, output.scrollHeight);
+    source.style.height = output.style.height = `${height}px`;
+  }
+  window.addEventListener('resize', fitEditors);
+  document.fonts.ready.then(fitEditors);
   function update() {
     if (composing) return;
     const result = input.convert(source.value, system.value, method.value);
@@ -14,6 +25,7 @@
     $('okinawan-warning').textContent = result.warnings.join(' ');
     $('okinawan-codepoints').textContent = [...result.text].map(ch => 'U+' + ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')).join(' ');
     $('okinawan-copy-status').textContent = '';
+    fitEditors();
   }
   function palette() {
     const fragment = document.createDocumentFragment();
@@ -37,6 +49,7 @@
     }
     $('okinawan-palette').replaceChildren(fragment);
     $('okinawan-funatsu-help').hidden = system.value !== 'funatsu';
+    $('okinawan-example-source').hidden = system.value !== 'funatsu';
     $('okinawan-prefecture-help').hidden = system.value !== 'prefecture';
   }
   source.addEventListener('input', update);
@@ -56,8 +69,8 @@
   method.addEventListener('change', update);
   $('okinawan-clear').addEventListener('click', () => { source.value = ''; source.focus(); update(); });
   $('okinawan-example').addEventListener('click', () => {
-    source.value = system.value === 'funatsu' ? "tui utu {'ya}ー" : 'utu ^uutu';
-    method.value = 'romaji'; update();
+    source.value = examples[system.value];
+    method.value = 'kana'; update();
   });
   $('okinawan-copy').addEventListener('click', async () => {
     let copied = false;

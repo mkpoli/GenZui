@@ -41,7 +41,10 @@
         Object.assign(roman, {tsa:'つぁ',tse:'つぇ',tso:'つぉ',nye:'にぇ',wo:'うぉ',tya:'てゃ',tyu:'てゅ',tyo:'てょ',dya:'でゃ',dyu:'でゅ',dyo:'でょ',dzi:'ずぃ',tu:'とぅ',ti:'てぃ',du:'どぅ',di:'でぃ',si:'すぃ',zi:'ずぃ',wu:'う',yi:'い',ye:'いぇ',wi:'うぃ',we:'うぇ'});
         Object.keys(roman).forEach(key => { roman[key] = katakana(roman[key]); });
       }
-      const kana = active.filter(e => e.kana).sort((a,b) => b.kana.length-a.kana.length);
+      // The dictionary specimens spell HWA as ふぁ; accept it alongside ふゎ.
+      const kana = active.flatMap(entry => [entry.kana, ...(entry.id === 'hwa' ? ['ふぁ'] : [])]
+        .filter(Boolean).map(spelling => ({spelling, entry})))
+        .sort((a,b) => b.spelling.length-a.spelling.length);
       const keys = Object.keys(roman).sort((a,b) => b.length-a.length);
       let input = normalize(source), output = '', warnings = [];
       for (let i = 0; i < input.length;) {
@@ -60,8 +63,8 @@
           if (raised) { output += tokens.get(raised[0]); i += raised[0].length; continue; }
         }
         if (method === 'kana') {
-          const match = kana.find(e => rest.startsWith(e.kana));
-          if (match) { output += text(match); i += match.kana.length; continue; }
+          const match = kana.find(e => rest.startsWith(e.spelling));
+          if (match) { output += text(match.entry); i += match.spelling.length; continue; }
         } else {
           // n' is the syllabic nasal before a vowel; initial 'n is Funatsu's
           // glottal nasal. Explicit {'n} always resolves the latter.

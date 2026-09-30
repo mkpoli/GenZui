@@ -87,8 +87,8 @@
       <div class="okinawan-composer">
         <div class="type-controls">
           <label><span class="control-label">WRITING SYSTEM</span><select id="okinawan-system"><option value="funatsu">Funatsu · 新沖縄文字</option><option value="prefecture">Prefecture · 上付きカタカナ</option></select></label>
-          <label><span class="control-label">INPUT</span><select id="okinawan-method"><option value="kana">Kana & shortcuts</option><option value="romaji">Romaji & shortcuts</option></select></label>
-          <button type="button" id="okinawan-example">Try a romaji example</button>
+          <label><span class="control-label">INPUT</span><select id="okinawan-method"><option value="kana">Kana → letters</option><option value="romaji">Romaji & shortcuts</option></select></label>
+          <button type="button" id="okinawan-example">Try a kana example</button>
         </div>
         <div class="okinawan-editors">
           <label for="okinawan-source"><span class="control-label">YOUR INPUT</span><textarea id="okinawan-source" class="face" lang="ryu" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="okinawan-help"></textarea></label>
@@ -101,9 +101,10 @@
         <div class="type-footer"><button type="button" id="okinawan-clear">Clear input</button><span id="okinawan-copy-status" role="status"></span><button type="button" class="copy-button" id="okinawan-copy" aria-describedby="okinawan-portability">Copy result</button></div>
         <p id="okinawan-warning" class="okinawan-warning" role="status"></p>
       </div>
+      <p class="small-note" id="okinawan-example-source">Examples: <a href="https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf" lang="ja">宮良信詳『うちなーぐち活用辞典』</a> (2021), pp. 121, 123.</p>
       <div id="okinawan-help" class="okinawan-help">
-        <p>Type kana with your usual keyboard, or select <b>Romaji</b> and type lowercase syllables. Select a letter below to insert its shortcut at the cursor. Nothing is sent to a server.</p>
-        <div id="okinawan-funatsu-help"><p>In kana mode, <span lang="ryu">とぅ・てぃ・くゎ・すぃ</span> become Funatsu letters. In romaji mode use <code>tu ti kwa si tsi</code>; <code>tsu chi shi</code> give ordinary <span lang="ja">つ・ち・し</span>. Use <code>du di gwa zi dzi</code> for their voiced forms. <code>yi ye</code> produce <span class="face" lang="ryu">い゙・え゙</span>.</p><p><code>{'ya}</code>, <code>{'yu}</code>, <code>{'yo}</code>, <code>{'wa}</code>, <code>{'wi}</code>, <code>{'we}</code> and <code>{'n}</code> select the glottal initial forms. Funatsu uses these at the start of a word. Plain <code>ya yu yo wa wi we n</code> remain ordinary kana.</p></div>
+        <p>Type or paste kana with your usual keyboard. Select a letter below to insert its shortcut at the cursor. Nothing is sent to a server.</p>
+        <div id="okinawan-funatsu-help"><p>In kana mode, <span lang="ryu">とぅ・てぃ・くゎ・くぃ・くぇ・ふぁ・ふぃ・ふぇ・すぃ</span> become Funatsu letters. <span lang="ryu">ふぁ</span> and <span lang="ryu">ふゎ</span> both produce HWA. In romaji mode use <code>tu ti kwa si tsi</code>; <code>tsu chi shi</code> give ordinary <span lang="ja">つ・ち・し</span>. Use <code>du di gwa zi dzi</code> for their voiced forms. <code>yi ye</code> produce <span class="face" lang="ryu">い゙・え゙</span>.</p><p><code>{'ya}</code>, <code>{'yu}</code>, <code>{'yo}</code>, <code>{'wa}</code>, <code>{'wi}</code>, <code>{'we}</code> and <code>{'n}</code> select the glottal initial forms. Funatsu uses these at the start of a word. Plain <code>ya yu yo wa wi we n</code> remain ordinary kana.</p></div>
         <div id="okinawan-prefecture-help" hidden><p>Use <code>^a ^i ^u ^e ^o ^tsu ^fu ^n</code> to insert the eight raised letters. A raised vowel before a full vowel marks a non-glottal onset: <code>^uウトゥ</code> (husband) contrasts with <span lang="ryu">ウトゥ</span> (sound). Raised <span lang="ja">ツ</span> marks the glottal onset in the guide’s specified contexts; raised <span lang="ja">フ</span> distinguishes /f/ from /ɸ/. Choose these signs according to the variety you are writing.</p><p>The guide covers several Ryukyuan languages. This keyboard provides its eight raised signs; it does not infer pronunciation or convert between orthographies.</p></div>
         <p>In romaji mode, <code>n'</code> separates a nasal from the next vowel (<code>kan'i</code> → <span lang="ja">かんい</span>); double a consonant for small <span lang="ja">っ</span>, or type <code>xtsu</code>. Use <code>-</code> for <span lang="ja">ー</span>. Uppercase text and punctuation stay as typed. Check the result before copying.</p>
       </div>
