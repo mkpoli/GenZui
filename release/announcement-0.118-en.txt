@@ -1,6 +1,6 @@
 GenZui Serif 0.118 refines the Okinawan kana ligatures in Regular and Bold.
 
-The images show 18 characters in each weight, followed by Okinawan proverbs set in the font.
+The specimen shows 18 characters in each weight with two Okinawan proverbs.
 
 TTF / WOFF2 · SIL OFL 1.1
 https://genzui.mkpo.li/serif
