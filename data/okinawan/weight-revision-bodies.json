@@ -1,0 +1,51 @@
+{
+  "description": "Regular weight revisions for review. Earlier confirmed outlines remain recorded in confirmed-bodies.json.",
+  "styles": {
+    "Regular": {
+      "TU": {
+        "codepoint": "F450",
+        "sha256": "87c69ed70bbc00763048745125f7dfc4c3be62f4798076f418003f42710f440e"
+      },
+      "TI": {
+        "codepoint": "F452",
+        "sha256": "e11a3c8e11591d3371999efc1c07d34d33a431fce7640bb6910a0f159407dc2e"
+      },
+      "KWA": {
+        "codepoint": "F454",
+        "sha256": "1c7283820864ef36eb197efebdbc2bd28905506e743dd7e69c9b99e41abe7b35"
+      },
+      "KWI": {
+        "codepoint": "F456",
+        "sha256": "e97abdbbc37bc21f54cdbe3f738f80f077bc6a5e070e9f61ba2cfdf17a3825e2"
+      },
+      "KWE": {
+        "codepoint": "F458",
+        "sha256": "a058dfb23e22310b5be55a816f491e6e6714702776a3745f663304dcc58e78f9"
+      },
+      "HWA": {
+        "codepoint": "F45A",
+        "sha256": "71e21c3950dc54fede6afd02808213c45789b1c9567352b72f476204da46e40f"
+      },
+      "HWI": {
+        "codepoint": "F45B",
+        "sha256": "2c2d9c3e835fded9d73bb56fe451ef1f338e8742aafe1311fd0e1811e371f6bb"
+      },
+      "HWE": {
+        "codepoint": "F45C",
+        "sha256": "eb1a9d10aaec5080ae1ae3d7fd6902d1048c41a1ab8d12e2d58e429de128f1a3"
+      },
+      "Glottal YA": {
+        "codepoint": "F45D",
+        "sha256": "675579838e2726259dbd65eea1502396ccf40b5923a81e106cdc8496e60d8a1d"
+      },
+      "Glottal YO": {
+        "codepoint": "F45F",
+        "sha256": "d5ab0d93a3262dc4b90f218cda475e4b99a3fd5cd1ebe8ecbe31e0ef9f9a6232"
+      },
+      "TSI": {
+        "codepoint": "F469",
+        "sha256": "109aa9fdb159c120ab82c1d7b4a95300c623ac28c833e8c1c3afe18932f97421"
+      }
+    }
+  }
+}

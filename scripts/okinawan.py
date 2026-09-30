@@ -95,10 +95,13 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         if bold:
             params = dict(params, kana_bold=params['kana_bold'] * 125.3 / 77.8)
         return okinawan_merge.glottal_beside(font, contours, kana, **params)
+    # Relieve Regular's YA/YO marks and excess sideways compensation.
+    ya_params = okinawan_merge.YA if bold else dict(okinawan_merge.YA, neck_w=.96, head_w=.86)
+    yo_params = okinawan_merge.YO if bold else dict(okinawan_merge.YO, neck_w=1.12, head_w=1.04, kana_bold=6.5)
     recipes.update({
-        0xF45D: [okinawan_merge.glottal_ya(font, contours, **okinawan_merge.YA)],
+        0xF45D: [okinawan_merge.glottal_ya(font, contours, **ya_params)],
         0xF45E: beside('ゆ', okinawan_merge.YU),
-        0xF45F: beside('よ', okinawan_merge.YO),
+        0xF45F: beside('よ', yo_params),
         0xF460: beside('ゐわ', okinawan_merge.WA),
         0xF461: beside('ゐ', okinawan_merge.WI),
         0xF462: beside('ゑ', okinawan_merge.WE),

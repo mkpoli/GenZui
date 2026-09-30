@@ -241,7 +241,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     # The earlier upright return aimed at the right stroke's start. Retain
     # that axis and a finite cap, narrowing only the upper part of the hook.
     if not bold:
-        vowel_weight = 500 if fuller else 475
+        vowel_weight = 475
     def short_i(ref):
         return clean(cut_keep(ring('い', ref=ref), 1, 420, 'low'))
     i = fit(short_i(False), short_i(True), (605, 40, 768, 375))
@@ -282,7 +282,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
             out.extend(tuple(np.array([float(wa_x(p[0])), wa_scale*p[1]+wa_y]) for p in s)
                        for s in pieces)
         return out
-    wa_font = vowel_source(900 if bold else 850)
+    wa_font = vowel_source(900 if bold else 825)
     wa_rings = [O.rings(contours(wa_font, ord('わ'), [n]))[0] for n in range(3)]
     if bold:
         # Enlarge the right stroke inward while retaining its native outside
@@ -308,7 +308,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     p = last + tl * ((top-last[1])/tl[1])
     wa_stem = [line(q, first)] + wa_stem + [line(last, p)]
     saved_weight = body_weight
-    body_weight = 850 if bold else 600
+    body_weight = 850 if bold else 575
     hwa_rise = fit(rising(False), rising(True), bounds([rise_target]))
     body_weight = saved_weight
     # Keep the established connector endpoints while taking the heavier master.
@@ -319,7 +319,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
                       for p,q in zip(a,b)) for a,b in zip(rise,hwa_rise)]
     # One rising shoulder turns directly into the stem. Both candidates use
     # the accepted weight, differing only in shoulder height and curvature.
-    shoulder = O.rings(contours(body_source(850 if bold else 600), ord('つ'), [0]))[0]
+    shoulder = O.rings(contours(body_source(850 if bold else 575), ord('つ'), [0]))[0]
     hwa = [fu, hwa_rise + native_turn(shoulder[27:33], hwa_rise, wa_stem)
            + wa_stem + native_turn(shoulder[4:9], wa_stem, hwa_rise),
            hwa_map(wa_sweep(wa_rings))]
@@ -354,7 +354,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
             r = rounded_join(body, foot)
         cuts = sorted(O.crossings(r, 1, cut_height), key=lambda c: O.point(r[c[0]], c[1])[0])[-2:]
         return min((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: min(p[1] for seg in a for p in seg))
-    vowel_weight = (800 if fuller else 750) if bold else (600 if fuller else 550)
+    vowel_weight = (800 if fuller else 750) if bold else (575 if fuller else 550)
     # Take the native lower stroke below its separate pen-start head.
     e=clean(e_lower(False,foot_weight=650 if bold else 450,foot_scale=.85,cut_height=460,smooth_left=True))
     left,bottom,_,_ = bounds([e])
@@ -391,7 +391,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     hwe=[fu,hwa_rise+shaped+e+native_turn(shoulder[4:9],e,hwa_rise)]
 
     # Native optical weights compensate for the compressed vowel components.
-    body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
+    body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((500, 575) if fuller else (475, 550))
     kwi_i = native('ぃ', 0, (475, -78, 620, 291), (1, 375, 'low'))
     kwi_i = move(kwi_i, 1, .90, -30, -9.4)
     upper = ku('KWI')
@@ -399,10 +399,10 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     donor = [tuple(reversed(s)) for s in reversed(approved['KWI'][0][31:36])]
     kwi_join = upper + native_turn(donor, upper, kwi_i) + kwi_i + [bridge(kwi_i, upper, .27)]
     kwi = [kwi_join, native('ぃ', 1, bounds([approved['KWI'][-1]]))]
-    body_weight, vowel_weight = (700,850) if bold else (500,550)
+    body_weight, vowel_weight = (700,850) if bold else (475,550)
     # The entire native wa shares one master and one affine map. Its three
     # component caps are covered by the native stem, so no seam is exposed.
-    wa_font = vowel_source((900 if fuller else 875) if bold else 700)
+    wa_font = vowel_source((900 if fuller else 875) if bold else 600)
     kwa_rings = [O.rings(contours(wa_font, ord('わ'), [n]))[0] for n in range(3)]
     def wa_placement(r):
         sx = .82 if bold and fuller else .80
@@ -415,8 +415,8 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     kwa=[move(r,1,1,500-(left+right)/2,0) for r in kwa]
     body_weight, vowel_weight = ((850, 900) if fuller else (800, 850)) if bold else ((600, 650) if fuller else (550, 600))
     if not bold:
-        body_weight, vowel_weight = 550, 500
-    kwe_foot = (600 if fuller else 550) if not bold else None
+        body_weight, vowel_weight = 500, 475
+    kwe_foot = (550 if fuller else 525) if not bold else None
     kwe_lower = fit(e_lower(False, kwe_foot, 1 if not bold else None), e_lower(True), (203, -64 if bold else -12, 847, 286))
     upper = ku('KWE')
     target = (upper[0][0][0]+upper[-1][3][0])/2 + 35
@@ -454,7 +454,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
         r = ring('つ', ref=ref)
         cuts = sorted(O.crossings(r, 0, 470 if tsi_fuller else 450), key=lambda c: O.point(r[c[0]], c[1])[1])[:2]
         return max((O.arc(r, *cuts), O.arc(r, *cuts[::-1])), key=lambda a: max(p[1] for seg in a for p in seg))
-    body_weight = (900 if tsi_fuller else 875) if bold else (700 if tsi_fuller else 650)
+    body_weight = (900 if tsi_fuller else 875) if bold else (675 if tsi_fuller else 625)
     tsu_top = fit(tsu_arc(False), tsu_arc(True), (118, 294, 882, 690))
     tsi_i = native('ぃ', 0, (380, 19, 555, 280), (1, 375, 'low'))
     tsi_i = move(tsi_i, 1, .94, -25, .48)
@@ -465,7 +465,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
 
     # Retain the native rounded turn into the rightward exit. The old cut
     # on the descending edge forced a cramped reversal before the tsu bowl.
-    body_weight, vowel_weight = ((850, 850) if fuller else (800, 800)) if bold else ((600, 600) if fuller else (550, 550))
+    body_weight, vowel_weight = ((850, 850) if fuller else (800, 800)) if bold else ((550, 600) if fuller else (525, 550))
     def flowing_sweep(ch):
         r=ring(ch)
         if ch=='を':
@@ -536,7 +536,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
             head=shaped
         else:
             head=move(head,.90,.74,5,175)
-        tail_weight=(900 if fuller else 850) if bold else (650 if fuller else 600)
+        tail_weight=(900 if fuller else 850) if bold else (600 if fuller else 575)
         if ch=='を' and not bold:
             tail_weight=wu_bowl
         r=O.rings(contours(body_source(tail_weight),ord('つ'),[0]))[0]
@@ -544,7 +544,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
         # The native outer bowl and tapered terminal retain their contours.
         shaped=[]
         scale=.53 if ch=='と' else .45
-        depth=((54 if fuller else 46) if bold else (34 if fuller else 28))/scale
+        depth=((54 if fuller else 46) if bold else (32 if fuller else 28))/scale
         if ch=='を' and not bold:
             depth=wu_crown/scale
         if ch=='を':
@@ -663,7 +663,21 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     if not bold:
         # Retain the accepted Regular forms outside the requested revisions.
         for label in ('TI',):
-            result[label] = approved[label]
+            result[label] = [list(r) for r in approved[label]]
+        # Restore a little weight beneath TI's long upper arm. The correction
+        # vanishes with its tangent at both ends; its accepted elbow is intact.
+        arm = result['TI'][0][12]
+        pieces = [arm]
+        for _ in range(3):
+            pieces = [part for curve in pieces for part in O.split(curve, .5)]
+        w = lambda t: t**2*(1-t)**3/.03456
+        dw = lambda t: t*(1-t)**2*(2-5*t)/.03456
+        adjusted = []
+        for j, seg in enumerate(pieces):
+            a, b, h = j/8, (j+1)/8, 1/8
+            offsets = (w(a), w(a)+h*dw(a)/3, w(b)-h*dw(b)/3, w(b))
+            adjusted.append(tuple(p+np.array([0., -2.5])*v for p,v in zip(seg,offsets)))
+        result['TI'][0][12:13] = adjusted
         # Use the approved fu body and shoulder with the new native wa map.
         result['HWA'][0] = approved['HWA'][0]
     # Set the reduced vowels on the same optical baseline as HWA's wa.
@@ -681,7 +695,7 @@ def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
         # the native heavier master selected above.
         hwi_body=approved['HWI'][1][23:-1]
         offsets=np.array([(6,0),(6,0),(3,7),(0,7)]+[(0,0)]*8,float)
-        offsets*=1 if fuller else .75
+        offsets*=.85 if fuller else .75
         hwi_body=[tuple(p+d for p,d in zip(seg,(offsets[j],offsets[j],offsets[j+1],offsets[j+1])))
                   for j,seg in enumerate(hwi_body)]
         hwi_rise = approved['HWI'][1][:22]

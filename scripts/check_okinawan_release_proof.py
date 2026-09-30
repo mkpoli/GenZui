@@ -4,6 +4,7 @@ import hashlib
 import json
 from sources import ROOT
 
+import numpy as np
 import pathops
 from fontTools.pens.recordingPen import RecordingPen
 from fontTools.pens.transformPen import TransformPen
@@ -87,22 +88,75 @@ def marks(font, text):
     return selected
 
 
+def check_ti_arm(parts):
+    """TI may gain a little arm weight without moving its accepted skeleton."""
+    import okinawan_outline as O
+
+    original = []
+    entry = next(g for g in source()['glyphs'] if g['label'] == 'TI')
+    for component in entry['components']:
+        pen = RecordingPen()
+        parse_path(component['path'], TransformPen(pen, component['transform']))
+        original.extend(O.rings(pen))
+    actual = [ring for part in parts for ring in O.rings(part)]
+    assert len(actual) == len(original) == 2, 'TI components changed'
+    assert np.array_equal(actual[1], original[1]), 'TI right stroke changed'
+    # The long underside is the sole editable edge. In particular, the
+    # descending stem and its elbow precede it and must remain exact.
+    before, after = original[0][:12], original[0][13:]
+    end = len(actual[0]) - len(after)
+    assert end > len(before), 'TI arm is missing'
+    assert np.array_equal(actual[0][:12], before), 'TI elbow or stem changed'
+    assert np.array_equal(actual[0][end:], after), 'TI upper edge or cap changed'
+    arm, reference = actual[0][12:end], original[0][12]
+    assert np.array_equal(arm[0][0], reference[0]), 'TI arm start moved'
+    assert np.array_equal(arm[-1][3], reference[3]), 'TI arm end moved'
+    assert np.allclose(O.tangent(arm[0], 0), O.tangent(reference, 0), atol=1e-9, rtol=0), 'TI arm start tangent changed'
+    assert np.allclose(O.tangent(arm[-1], 1), O.tangent(reference, 1), atol=1e-9, rtol=0), 'TI arm end tangent changed'
+    for left, right in zip(arm, arm[1:]):
+        assert np.allclose(left[3], right[0], atol=1e-9, rtol=0), 'TI arm seam opened'
+        assert np.allclose(O.tangent(left, 1), O.tangent(right, 0), atol=1e-9, rtol=0), 'TI arm seam has a corner'
+
+    # Compare vertical thickness at equal x, independently of the number of
+    # replacement curves and the function used to draw the correction.
+    samples = [O.point(seg, t) for seg in arm for t in np.linspace(0, 1, 65)]
+    assert np.all(np.diff([p[0] for p in samples]) <= 1e-8), 'TI arm doubles back'
+    gains = []
+    for x, y in samples:
+        lo, hi = 0., 1.
+        for _ in range(45):
+            mid = (lo + hi) / 2
+            if O.point(reference, mid)[0] > x:
+                lo = mid
+            else:
+                hi = mid
+        gains.append(O.point(reference, (lo + hi) / 2)[1] - y)
+    assert min(gains) >= -1e-7 and 2 <= max(gains) <= 2.501, ('TI arm weight out of bounds', min(gains), max(gains))
+
+    def reversals(curves):
+        values = [O.curvature(seg, t) for seg in curves for t in np.linspace(.001, .999, 65)]
+        signs = np.sign([v for v in values if abs(v) > 1e-10])
+        return np.count_nonzero(signs[1:] != signs[:-1])
+    assert reversals(arm) == reversals([reference]) == 1, 'TI arm gained a curvature reversal'
+    assert topology(united(parts)) == (2, 0), 'TI correction changed topology'
+
+
 def check():
     samples = [chr(cp) for cp in sorted(POINTS | {0xF467})]
     voiced = [''.join(chr(int(c, 16)) for c in e['output']) for e in ENTRIES
               if len(e['output']) == 2 and int(e['output'][0], 16) in DAKUTEN]
     assert len(voiced) == 7
-    retained = {0xF452}
     same_regular_options = {0xF452, 0xF454, 0xF469}
     approved = approved_drawings()
     from okinawan_bold import drawings
     for style in ('Regular', 'Bold'):
         full = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf')
         confirmed = json.loads((ROOT/'data/okinawan/confirmed-bodies.json').read_text())['styles'][style]
-        for label, record in confirmed.items():
+        revisions = json.loads((ROOT/'data/okinawan/weight-revision-bodies.json').read_text())['styles'].get(style,{})
+        for label, record in {**confirmed, **revisions}.items():
             pen = contours(full, int(record['codepoint'],16))
             digest = hashlib.sha256(json.dumps(pen.value,separators=(',',':')).encode()).hexdigest()
-            assert digest == record['sha256'], (style, label, 'confirmed body changed')
+            assert digest == record['sha256'], (style, label, 'body differs from recorded confirmed/revised outline')
         selected = opened(f'{style.lower()}-C.woff2')
         alternative = opened(f'{style.lower()}-A.woff2')
         for text in samples + voiced:
@@ -133,6 +187,8 @@ def check():
             assert differs == (style == 'Bold' or cp not in same_regular_options), (style, hex(cp), 'wrong option coverage')
         for cp, parts in drawings(full, contours, style=style).items():
             same_compiled(full, cp, parts)
+            if style == 'Regular' and cp == 0xF452:
+                check_ti_arm(parts)
             if style=='Regular' and cp==0xF45B:
                 body,approved_body=pathops.Path(),pathops.Path()
                 component=next(g for g in source()['glyphs'] if g['label']=='HWI')['components'][0]
@@ -140,9 +196,6 @@ def check():
                 parse_path(component['path'],TransformPen(approved_body.getPen(),component['transform']))
                 assert pathops.op(body,approved_body,pathops.PathOp.XOR).area<.01, 'HWI fu body changed'
             assert topology(contours(full, cp)) == topology(united(approved[cp])), (style, hex(cp), 'changed counters')
-        if style == 'Regular':
-            for cp in retained:
-                same_compiled(full, cp, approved[cp], geometric=True)
         for face in (selected, alternative):
             kwa = face['glyf'][face.getBestCmap()[0xF454]]
             assert abs(kwa.xMin+kwa.xMax-1000) <= 2, (style, 'KWA optical bounds off centre')
@@ -185,7 +238,7 @@ def check():
                     actual.replay(b.getPen())
                     assert pathops.op(a, b, pathops.PathOp.XOR).area < .01, (style, hex(cp), 'voiced option does not follow base')
 
-    print('Context proof passed: exact compiled choices, approved counters, retained forms, native top heights, unchanged voiced bodies, SI/ZI and clear dakuten in both options.')
+    print('Context proof passed: exact compiled choices, approved counters, bounded TI arm correction, native top heights, unchanged voiced bodies, SI/ZI and clear dakuten in both options.')
 
 
 if __name__ == '__main__':

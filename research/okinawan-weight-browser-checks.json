@@ -1,0 +1,19 @@
+{
+  "weight_report": {
+    "cards": 27,
+    "regular_changed": 17,
+    "bold_changed": 0,
+    "native_measurements": 33452,
+    "hangul": 208,
+    "slider": 120,
+    "mobile": "passed",
+    "version": "Chrome/154.0.8037.92",
+    "status": "passed"
+  },
+  "design_proof": {
+    "characters": 11,
+    "regular_revisions": 9,
+    "confirmed": 2,
+    "status": "passed"
+  }
+}

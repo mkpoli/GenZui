@@ -1,8 +1,8 @@
 {
   "version": "0.118",
   "method": "Windows headless Chrome, Vivaldi and Firefox with isolated profiles; Chrome and Vivaldi confirm with CSS.getPlatformFontsForNode that mixed, vertical, mark, all 340 historical and all 35 Okinawan strings use the GenZui face alone from both TTF and WOFF2, and Firefox requires identical canvas rasters from TTF and WOFF2 for every target.",
-  "ttf_sha256": "5e4f6e91f6f8f1c25edcf42a9e2e6c0d7d5dd90b913e2314cacb1f780a9a7606",
-  "woff2_sha256": "4dcd7b5e1c88bad08e9dd304c1541f473786582aefb20d05f5f609644267aae4",
+  "ttf_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+  "woff2_sha256": "f5b08e00631edf60a1388d13f4b399073ded308172e67029a64eb92f96f4f441",
   "bold_ttf_sha256": "21ceb8c677f81534eac0650c2b5e609cf3576b30023f4887d64bfaf081606f7e",
   "bold_woff2_sha256": "838e57a8b0983dae595ba6771a26f7d30995b24d7c1691a34ebc51e6b22dae9f",
   "results": [
@@ -35,8 +35,8 @@
       "faces": {
         "Regular": {
           "weight": 400,
-          "ttf_sha256": "5e4f6e91f6f8f1c25edcf42a9e2e6c0d7d5dd90b913e2314cacb1f780a9a7606",
-          "woff2_sha256": "4dcd7b5e1c88bad08e9dd304c1541f473786582aefb20d05f5f609644267aae4",
+          "ttf_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+          "woff2_sha256": "f5b08e00631edf60a1388d13f4b399073ded308172e67029a64eb92f96f4f441",
           "actual_fonts": {
             "ttf-400-marks": [
               {
@@ -241,8 +241,8 @@
       "faces": {
         "Regular": {
           "weight": 400,
-          "ttf_sha256": "5e4f6e91f6f8f1c25edcf42a9e2e6c0d7d5dd90b913e2314cacb1f780a9a7606",
-          "woff2_sha256": "4dcd7b5e1c88bad08e9dd304c1541f473786582aefb20d05f5f609644267aae4",
+          "ttf_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+          "woff2_sha256": "f5b08e00631edf60a1388d13f4b399073ded308172e67029a64eb92f96f4f441",
           "actual_fonts": {
             "ttf-400-marks": [
               {
@@ -448,8 +448,8 @@
           "weight": 400,
           "target_count": 375,
           "raster_equivalence": true,
-          "ttf_sha256": "5e4f6e91f6f8f1c25edcf42a9e2e6c0d7d5dd90b913e2314cacb1f780a9a7606",
-          "woff2_sha256": "4dcd7b5e1c88bad08e9dd304c1541f473786582aefb20d05f5f609644267aae4"
+          "ttf_sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+          "woff2_sha256": "f5b08e00631edf60a1388d13f4b399073ded308172e67029a64eb92f96f4f441"
         },
         "Bold": {
           "weight": 700,
