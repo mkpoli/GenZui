@@ -1,6 +1,6 @@
-GenZui Serif 0.118 refines the Okinawan kana ligatures in Regular and Bold.
+GenZui Serif 0.118
 
-The specimen shows 18 characters in each weight with two Okinawan proverbs.
+All 27 of Yoshiaki Funatsu’s New Okinawan Kana, including ligatures for とぅ, てぃ and くゎ and letters distinguishing word-initial sounds.
 
-TTF / WOFF2 · SIL OFL 1.1
+Drawn from Noto Serif JP in Regular and Bold.
 https://genzui.mkpo.li/serif
