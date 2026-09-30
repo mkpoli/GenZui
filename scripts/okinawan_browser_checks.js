@@ -7,6 +7,11 @@
   const emit=el=>el.dispatchEvent(new Event('input',{bubbles:true}));
   const change=(el,value)=>{el.value=value;el.dispatchEvent(new Event('change',{bubbles:true}));};
   const set=value=>{source.value=value;emit(source);};
+  const example=source.value;
+  check('initial kana example',method.value==='kana'&&example.includes('くふぁさくとぅ')&&example.includes('くぇーぶーぬ'));
+  check('eight ligatures in sentence examples',['tu','ti','di','kwa','kwi','kwe','hwa','hwe'].every(id=>output.value.includes(input.text(data.characters.find(e=>e.id===id)))));
+  check('example has no conversion warnings',!$('okinawan-warning').textContent);
+  check('full sentence editors visible',source.scrollHeight<=source.clientHeight+1&&output.scrollHeight<=output.clientHeight+1);
   change(system,'funatsu'); change(method,'kana');
   check('27 Funatsu palette keys', document.querySelectorAll('.okinawan-key').length===27);
   set('とぅ い\u3099'); check('kana and canonical combining output',output.value==='\uF450 い\u3099');
@@ -43,6 +48,11 @@
   } finally { if(clipboard)Object.defineProperty(navigator,'clipboard',clipboard);else delete navigator.clipboard;document.execCommand=exec; }
   $('okinawan-clear').click();check('clear updates result and codepoints',source.value===''&&output.value===''&&$('okinawan-codepoints').textContent==='');
   $('okinawan-example').click();
+  check('example resets to kana',method.value==='kana'&&source.value===example);
+  change(system,'prefecture');$('okinawan-example').click();
+  check('prefecture example uses kana',method.value==='kana'&&source.value==='ウトゥ　^uウトゥ'&&output.value==='ウトゥ　\uE534ウトゥ');
+  change(system,'funatsu');
+  check('restored example remains kana',method.value==='kana'&&source.value===example);
   document.querySelector('[data-filter="okinawan"]').click();
   check('26 visible PUA inventory entries',document.querySelectorAll('#character-grid .glyph-button').length===26&&!document.querySelector('#character-grid .nonprinting'));
   check('PUA identified as private use',$('detail-age').textContent==='Private use');

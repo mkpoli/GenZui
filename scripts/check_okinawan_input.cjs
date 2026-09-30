@@ -26,6 +26,8 @@ assert.equal(convert('tsa tse tso nye wo dzi tya dyu cha', 'prefecture'), 'ツ�
 assert.equal(convert('ti tu si tsi','prefecture'),'ティ トゥ スィ ツィ');
 assert.equal(convert('^tsuヤ ^fuァ ^nマ','prefecture','kana'),output('^tsu')+'ヤ '+output('^fu')+'ァ '+output('^n')+'マ');
 assert.equal(convert('English とぅ か\u3099 🌺','funatsu','kana'),'English '+output('tu')+' が 🌺');
+assert.equal(convert('ふぁ ふゎ くふぁさくとぅ','funatsu','kana'),output('hwa')+' '+output('hwa')+' く'+output('hwa')+'さく'+output('tu'));
+assert.equal(convert('ふぁ とぅ','prefecture','kana'),'ふぁ とぅ');
 assert.equal(convert('{tu}', 'prefecture', 'kana'),'{tu}');
 assert.equal(input.convert('{tu}', 'prefecture').warnings.length,1);
 assert.equal(input.convert('qzx', 'funatsu','romaji').warnings.length,3);
