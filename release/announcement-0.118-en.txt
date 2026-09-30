@@ -1,6 +1,6 @@
-GenZui Serif 0.118 revises the Okinawan ligatures, including tu, ti and kwa. Regular and Bold use stroke shapes from their respective Noto Serif JP weights, with new joins and dakuten placement.
+GenZui Serif 0.118 refines the Okinawan kana ligatures in Regular and Bold.
 
-The specimens set Okinawan proverbs in both weights. TTF and WOFF2, SIL OFL 1.1.
+The images show 18 characters in each weight, followed by Okinawan proverbs set in the font.
 
-Try the font:
+TTF / WOFF2 · SIL OFL 1.1
 https://genzui.mkpo.li/serif

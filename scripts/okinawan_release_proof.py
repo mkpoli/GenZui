@@ -33,11 +33,12 @@ def composed_name(font, cp):
 
 def webfont(style, variant):
     font = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf', recalcTimestamp=False)
-    if variant != 'B':
+    # C is the accepted full font. Regenerate historical WU B explicitly.
+    if variant != 'C':
         from okinawan_bold import drawings
         cmap = font.getBestCmap()
         for cp, parts in drawings(font, contours, option="A" if variant=="A" else "B", style=style, wu_variant=variant).items():
-            if variant in ("C","D") and cp!=0xF465:
+            if variant in ("B","D") and cp!=0xF465:
                 continue
             merged = pathops.Path()
             for part in parts:

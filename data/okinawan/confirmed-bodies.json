@@ -41,6 +41,10 @@
       "HWI": {
         "codepoint": "F45B",
         "sha256": "35498ca7229919fb52182f35d2a3214774e23c7e953c063c902a421951fd90f6"
+      },
+      "WU": {
+        "codepoint": "F465",
+        "sha256": "526597998ddef5f0c00e39c95fc4fec9896e0f8a9dc05259c0409612e47cbcc7"
       }
     },
     "Bold": {
@@ -83,6 +87,10 @@
       "TU": {
         "codepoint": "F450",
         "sha256": "451965f99d8b37a0a76b3711a80601808ed5188a78998e5a14e2bb74a8f39dec"
+      },
+      "WU": {
+        "codepoint": "F465",
+        "sha256": "939f0f5472617de8efa1c01a13946c41987c7ecd2c7e6dc2920531007a491209"
       }
     }
   }

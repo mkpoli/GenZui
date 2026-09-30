@@ -169,9 +169,9 @@ def vowel_source(weight):
     return instance('NotoSerifJP', weight, set(map(ord, 'いぃわえ')))
 
 
-def drawings(font, contours, option="B", style="Bold", wu_variant=None):
+def drawings(font, contours, option="B", style="Bold", wu_variant="C"):
     assert option in ("A", "B")
-    wu_variant = option if wu_variant is None else wu_variant
+    # Both weights use accepted round-24 C; explicit A-D preserve the proofs.
     assert wu_variant in ("A", "B", "C", "D")
     fuller = option == "B"
     bold = style == "Bold"

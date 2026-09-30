@@ -103,20 +103,20 @@ def check():
             pen = contours(full, int(record['codepoint'],16))
             digest = hashlib.sha256(json.dumps(pen.value,separators=(',',':')).encode()).hexdigest()
             assert digest == record['sha256'], (style, label, 'confirmed body changed')
-        selected = opened(f'{style.lower()}-B.woff2')
+        selected = opened(f'{style.lower()}-C.woff2')
         alternative = opened(f'{style.lower()}-A.woff2')
         for text in samples + voiced:
             assert outline(selected, text) == outline(full, text), (style, repr(text), 'full font differs')
-        # Four WU candidates vary only the diagonal and lower return. C/D proof fonts
-        # retain every other full-font outline and the same native context.
-        candidates=[alternative,selected]
-        for variant in ('C','D'):
+        # The accepted C is the full-font default. Explicit A-D remain distinct
+        # historical WU drawings; B-D retain all other full-font outlines.
+        candidates=[]
+        for variant in ('A','B','C','D'):
             face=opened(f'{style.lower()}-{variant}.woff2')
             parts=drawings(full,contours,option='B',style=style,wu_variant=variant)[0xF465]
             same_compiled(face,0xF465,parts)
             assert topology(contours(face,0xF465))==topology(united(approved[0xF465])), (style,variant,'WU counters changed')
             for text in samples+voiced+list('をう'):
-                if text!=chr(0xF465):
+                if variant!='A' and text!=chr(0xF465):
                     assert outline(face,text)==outline(selected,text), (style,variant,repr(text),'unrelated outline changed')
             candidates.append(face)
         shapes=[json.dumps(outline(face,chr(0xF465))) for face in candidates]
@@ -172,7 +172,7 @@ def check():
                 assert pathops.op(body, mark, pathops.PathOp.INTERSECTION).area < .01, (style, hex(cp), 'dakuten collision')
                 assert topology(parts[-1]) == (2,0), (style, hex(cp), 'dakuten pair')
                 if face is alternative:
-                    # A rebuilds voiced glyphs; B was compared with the full font above.
+                    # A rebuilds voiced glyphs; C was compared with the full font above.
                     expected = glyph(parts)
                     expected = Glyph(expected.compile(face['glyf']))
                     expected.expand(face['glyf'])
