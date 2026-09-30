@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "forms": 35,
+  "styles": 2,
+  "sentences": 4,
+  "mobile": "passed",
+  "version": "Chrome/154.0.8037.92",
+  "fonts": {
+    "verified": 74
+  }
+}

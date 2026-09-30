@@ -198,6 +198,10 @@ Outputs are in `build/sans/`. The [build guide](research/genzui-sans.md)
 covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
 drawings, the browser check and packaging to `dist/`.
 
+The Sans Okinawan candidate build provides matching Regular/Bold sentence-ready
+subsets and extends the published full Sans repertoire. See its
+[build and proof guide](research/sans-okinawan.md).
+
 ### GenZui Serif Kugyol and GenZui Sans Kugyol
 
 GenZui Serif Kugyol and GenZui Sans Kugyol are cut from the built Serif and
