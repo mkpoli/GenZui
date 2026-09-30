@@ -112,6 +112,11 @@ def check():
             for folder in ('downloads','v'+VERSION):
                 actual=hashlib.sha256((OUT/folder/(stem+'.'+suffix)).read_bytes()).hexdigest()
                 assert actual==record[suffix+'_sha256'],(stem,suffix,folder)
+    from okinawan_subset import checked_assets, PACKAGE as OKINAWAN_PACKAGE
+    for source in checked_assets():
+        for folder in ('downloads','v'+VERSION):
+            assert (OUT/folder/source.name).read_bytes()==source.read_bytes()
+    assert f'downloads/{OKINAWAN_PACKAGE}' in home
     css=(OUT/('v'+VERSION)/'genzui.css').read_text()
     assert f"url('./{BOLD_STEM}.woff2')" in css and 'font-weight: 700;' in css
     with ZipFile(OUT/'downloads'/PACKAGE) as z:
@@ -142,6 +147,8 @@ def check():
                                             (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZuiSans',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf'))):
+        source_font=TTFont(font_path)
+        source_cmap=set(source_font.getBestCmap())
         faces=re.findall(rf'@font-face\{{font-family:{family};src:url\(assets/({re.escape(stem)}-[a-z0-9]+-[0-9a-f]{{16}}\.woff2)\)[^}}]*unicode-range:([^}}]+)\}}',page_text)
         assert len(faces)>=10,(family,stem,len(faces))
         covered=set()
@@ -155,7 +162,7 @@ def check():
             assert declared<=set(chunk.getBestCmap()),filename
             assert not covered&declared,filename
             covered|=declared;chunk_cases+=1
-        assert covered==set(TTFont(font_path).getBestCmap()),(family,stem)
+        assert covered==source_cmap,(family,stem)
         # Bold loads on demand, so only Regular text chunks are preloaded.
         assert re.search(rf'<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/{re.escape(stem)}-text-[0-9a-f]{{16}}\.woff2">',page_text) or family=='GenZuiSerif' or stem in (BOLD_STEM,SANS_BOLD_STEM)
         text_face=re.search(rf'@font-face\{{font-family:{family};src:url\(assets/{re.escape(stem)}-text-[^}}]*\}}',page_text)[0]
@@ -163,7 +170,7 @@ def check():
         # Every character the page itself sets comes from the preloaded text chunk.
         visible=set(re.sub(r'<(script|style)\b[^>]*>.*?</\1>|<[^>]+>|&[#a-zA-Z0-9]+;',' ',page_text,flags=re.S))
         text_chunk=TTFont(OUT/'assets'/next(f for f,_ in faces if '-text-' in f))
-        assert not {ord(c) for c in visible if ord(c) in set(TTFont(font_path).getBestCmap())}-set(text_chunk.getBestCmap())
+        assert not {ord(c) for c in visible if ord(c) in source_cmap}-set(text_chunk.getBestCmap())
         # Every variation sequence still resolves, to the same outline.
         # Subsetting renumbers glyphs, so the sequences are compared by
         # (selector, base) and the outlines are spot-checked.
@@ -171,7 +178,7 @@ def check():
             # A None glyph is a default-variation entry: it selects the base glyph.
             return {(sel,cp):glyph for t in font['cmap'].tables if t.format==14
                     for sel,pairs in t.uvsDict.items() for cp,glyph in pairs if glyph}
-        source_font=TTFont(font_path); source_uvs=uvs(source_font)
+        source_uvs=uvs(source_font)
         chunk_fonts=[TTFont(OUT/'assets'/f) for f,_ in faces]
         kept={}
         for chunk in chunk_fonts:
@@ -217,7 +224,16 @@ def check():
         assert json.loads((OUT/'downloads/GenZuiSans-kana-coverage.json').read_text())==json.loads(z.read('kana-coverage.json'))
     sans_data=json.loads(next((OUT/'assets').glob('sans-characters-*.json')).read_text())
     assert sans_data['family']=='GenZui Sans' and sans_data['total']==sans_checks['encoded_characters']==len(sans_data['characters'])
-    assert sans_data['historical']==329 and sans_data['counts']=={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12,'gugyeol':len(GUGYEOL_PUA)}
+    registry={int(f['codepoint'],16) for f in GUGYEOL_DATA['forms']}
+    sans_cmap=set(TTFont(OUT/'downloads'/f'{SANS_STEM}.ttf').getBestCmap())
+    sans_gugyeol=sans_cmap & registry
+    assert sans_gugyeol<=set(GUGYEOL_PUA)
+    assert sans_gugyeol==set(TTFont(OUT/'downloads'/f'{SANS_BOLD_STEM}.ttf').getBestCmap()) & registry
+    assert sans_gugyeol=={c['cp'] for c in sans_data['characters'] if c['source']=='gugyeol'}
+    expected_sans={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12}
+    if sans_gugyeol:expected_sans['gugyeol']=len(sans_gugyeol)
+    assert sans_data['historical']==329 and sans_data['counts']==expected_sans
+    assert ('<option value="gugyeol">' in sans)==bool(sans_gugyeol)
     assert 'sans-characters-' in sans and 'id="character-grid"' in sans and 'id="unicode-grid"' in sans
     assert {c['cp'] for c in sans_data['characters'] if c['description']}>= {0x1B123,0x1B127,0x1B128,0x1B168}
     assert 'HISTORICAL KANA · DRAWINGS' not in sans and 'Windows / macOS / Linux' in sans and 'Windows / macOS / Linux' in home

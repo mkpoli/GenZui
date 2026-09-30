@@ -38,6 +38,26 @@ The font is distributed under SIL OFL 1.1; source notices accompany the download
 The site is https://genzui.mkpo.li/: a landing page with both families, the Serif page at /serif and the Sans page at /sans. Related typeface:
 [Kureedo](https://kureedo.mkpo.li/), based on Klee One.
 
+## GenZui Serif Okinawan
+
+源萃明朝 沖縄文字 is the sentence-ready companion subset. Regular and Bold each
+contain 805 encoded characters: ordinary kana, Latin, punctuation, combining
+marks, all 27 Funatsu forms and eight raised katakana. Kanji require the full
+family. The ZIP includes an editable sentence specimen and encoding mappings.
+
+Build it from the checked full fonts with:
+
+```sh
+.venv/bin/python scripts/okinawan_subset.py
+.venv/bin/python scripts/check_okinawan_subset.py
+.venv/bin/python scripts/okinawan_subset.py --package
+```
+
+`scripts/okinawan_sns.py` produces the Funatsu announcement image;
+`scripts/okinawan_raised_sns.py` produces the raised-katakana follow-up.
+The Japanese captions are `announcement-0.118-ja.txt` and
+`announcement-raised-0.118-ja.txt`.
+
 ## GenZui Sans 0.103
 
 GenZui Sans / 源萃ゴシック is the gothic family, derived from Noto Sans JP,
@@ -80,9 +100,10 @@ genzui.mkpo.li; 286 hentaigana, Unicode 18.0, free under SIL OFL 1.1.”
 
 `bun install --frozen-lockfile`, then `bun run release:build`. The build requires
 the checked font packages in `dist/` and their matching checks in `build/serif/`
-and `build/sans/`.
+and `build/sans/`, plus the checked Okinawan subset in `build/okinawan/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
-branch is `main`; deploy with `bun run deploy` after committing the release.
+branch is `main`. After the release PR is merged, fetch and verify its commit,
+then build and deploy from that clean committed tree with `bun run deploy`.
 
 `releases/v0.118/` and `releases/sans-v0.103/` contain the immutable font assets;
 each holds its family's Regular and Bold faces.

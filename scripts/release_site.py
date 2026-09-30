@@ -140,6 +140,13 @@ def build():
         assert css_path.read_text() == css, 'Versioned CSS is immutable.'
     else:
         css_path.write_text(css)
+    from okinawan_subset import checked_assets
+    for source in checked_assets():
+        target=versioned/source.name
+        if target.exists():
+            assert target.read_bytes()==source.read_bytes(), 'Versioned subset assets are immutable.'
+        else:
+            target.write_bytes(source.read_bytes())
     sans_version, sans_checks, sans_archive = sans_checked()
     sans_versioned = ROOT/'releases'/('sans-v'+sans_version)
     sans_versioned.mkdir(parents=True, exist_ok=True)

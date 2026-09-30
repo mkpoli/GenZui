@@ -17,3 +17,10 @@ documents and composer shortcuts require no conversion.
 The package contains Regular and Bold TTF and WOFF2 fonts, an offline
 specimen, the Windows installer, licences and validation reports. GenZui Serif
 is distributed under SIL OFL 1.1.
+
+GenZui Serif Okinawan / 源萃明朝 沖縄文字 is a smaller companion family for
+kana sentences. Each weight contains 805 encoded characters: kana, Latin,
+punctuation, combining marks, the 27 Funatsu forms and eight raised katakana
+used in Okinawa Prefecture’s writing guide. The package includes an editable
+sentence specimen and encoding mappings. Its outlines and spacing match the
+full font. Kanji require the full family.

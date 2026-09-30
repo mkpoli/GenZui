@@ -15,4 +15,4 @@ python scripts/okinawan_weight_audit.py --phase after --pixels 1024
 python scripts/okinawan_weight_report.py
 ```
 
-The Regular correction changes 11 unvoiced bodies and six voiced counterparts. Bold, WU, SI/ZI, YU, WA/WI/WE, N, YI and YE retain their prior outlines. TI’s added upper-arm thickness is bounded at 2.5 units; its elbow, cap and right stroke remain exact. Earlier confirmed fingerprints remain in `confirmed-bodies.json`; the new weights are recorded separately in `weight-revision-bodies.json` for review.
+The Regular correction changes 11 unvoiced bodies and six voiced counterparts. Bold, WU, SI/ZI, YU, WA/WI/WE, N, YI and YE retain their prior outlines. TI’s added upper-arm thickness is bounded at 2.5 units; its elbow, cap and right stroke remain exact. The approved final outlines are recorded in `confirmed-bodies.json`; the structured comparison preserves the earlier measurements.

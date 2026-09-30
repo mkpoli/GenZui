@@ -1,14 +1,14 @@
 {
-  "description": "Compiled default outlines of the confirmed Okinawan bodies. Dakuten placement is verified separately.",
+  "description": "Compiled outlines of the approved Okinawan bodies, including the final Regular weight corrections. Dakuten placement is verified separately.",
   "styles": {
     "Regular": {
       "KWI": {
         "codepoint": "F456",
-        "sha256": "353cf2a98083b953a0c372343454490f00aae996ceb6441bd8d9d6072a06e7cb"
+        "sha256": "e97abdbbc37bc21f54cdbe3f738f80f077bc6a5e070e9f61ba2cfdf17a3825e2"
       },
       "TI": {
         "codepoint": "F452",
-        "sha256": "5c9634fc542951f93561a6ab7ce4dbc4c2a84c70f982d9ce75647c9d868788bf"
+        "sha256": "e11a3c8e11591d3371999efc1c07d34d33a431fce7640bb6910a0f159407dc2e"
       },
       "SI": {
         "codepoint": "F467",
@@ -16,35 +16,43 @@
       },
       "KWE": {
         "codepoint": "F458",
-        "sha256": "7b2e40131c8939c0f85179a1116be9d49fdb92684917083c44c4a3f895676344"
+        "sha256": "a058dfb23e22310b5be55a816f491e6e6714702776a3745f663304dcc58e78f9"
       },
       "HWA": {
         "codepoint": "F45A",
-        "sha256": "b1253ba6d63c2df2f1e8da1d084c9056b4391ea5c5f40bc0c1ce94eaf7b1464a"
+        "sha256": "71e21c3950dc54fede6afd02808213c45789b1c9567352b72f476204da46e40f"
       },
       "TSI": {
         "codepoint": "F469",
-        "sha256": "2b055a69d2cbd80342faff8d60d6bd0368b147af93b68493be937f09da1be432"
+        "sha256": "109aa9fdb159c120ab82c1d7b4a95300c623ac28c833e8c1c3afe18932f97421"
       },
       "KWA": {
         "codepoint": "F454",
-        "sha256": "ee446a3fbe474e1a383ae6e4a2127ae9d2610ab2d5dfc6b35ab275f4b998d790"
+        "sha256": "1c7283820864ef36eb197efebdbc2bd28905506e743dd7e69c9b99e41abe7b35"
       },
       "HWE": {
         "codepoint": "F45C",
-        "sha256": "3c7344edb6141a311dbde9407a736d5c330a940be316e43314d9b4a3c6f0ae56"
+        "sha256": "eb1a9d10aaec5080ae1ae3d7fd6902d1048c41a1ab8d12e2d58e429de128f1a3"
       },
       "TU": {
         "codepoint": "F450",
-        "sha256": "e6e869abdcfd30392800e285192a5c4326ac1ac9a85f1b8166f3c085066b8d8a"
+        "sha256": "87c69ed70bbc00763048745125f7dfc4c3be62f4798076f418003f42710f440e"
       },
       "HWI": {
         "codepoint": "F45B",
-        "sha256": "35498ca7229919fb52182f35d2a3214774e23c7e953c063c902a421951fd90f6"
+        "sha256": "2c2d9c3e835fded9d73bb56fe451ef1f338e8742aafe1311fd0e1811e371f6bb"
       },
       "WU": {
         "codepoint": "F465",
         "sha256": "526597998ddef5f0c00e39c95fc4fec9896e0f8a9dc05259c0409612e47cbcc7"
+      },
+      "Glottal YA": {
+        "codepoint": "F45D",
+        "sha256": "675579838e2726259dbd65eea1502396ccf40b5923a81e106cdc8496e60d8a1d"
+      },
+      "Glottal YO": {
+        "codepoint": "F45F",
+        "sha256": "d5ab0d93a3262dc4b90f218cda475e4b99a3fd5cd1ebe8ecbe31e0ef9f9a6232"
       }
     },
     "Bold": {

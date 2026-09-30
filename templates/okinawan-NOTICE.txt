@@ -1,0 +1,23 @@
+GenZui Serif Okinawan / 源萃明朝 沖縄文字
+
+A repertoire subset of GenZui Serif, distributed under SIL OFL 1.1.
+The retained outlines, metrics and shaping rules match the full parent family.
+
+Noto Serif JP supplies the ordinary kana, Latin letters, numbers, punctuation,
+combining dakuten and components of the Okinawan constructions. The Google,
+Adobe and Noto Project notices are retained in OFL.txt and the font metadata.
+https://github.com/google/fonts/tree/main/ofl/notoserifjp
+
+GenZui supplies 18 Funatsu bases and eight raised katakana from Noto components.
+Voiced forms and YI/YE use combining dakuten. Private-use mappings follow
+Nishiki-teki and Xim Sans conventions; see okinawan-mappings.json.
+The character-system references identify the letters; the outlines are GenZui
+constructions from Noto components.
+
+FRB Taiwanese Kana by Fredrick R. Brennan supplies U+0305 and U+0323.
+GenZui provides their kana attachment and contextual vertical placement.
+https://github.com/ctrlcctrlv/FRBTaiwaneseKana
+See FRB-OFL.txt and FRB-README.md.
+
+sources.json identifies the parent font hashes. source-manifest.json records
+the full family's pinned sources. Unicode data terms are in Unicode-LICENSE.txt.

@@ -26,7 +26,7 @@ NOTES = {
  'TSI':'Whole-glyph median was below native つ; only a small optical reduction of the fuller つ component.',
  'WU':'Retained as a control.', 'SI':'Retained as a control.', 'Glottal YU':'Retained as a control.',
  'Glottal WA':'Retained as a control.', 'Glottal WI':'Retained as a control.', 'Glottal WE':'Retained as a control.',
- 'Glottal N':'Native ん body retained. No change pending clarification of the weight concern.',
+ 'Glottal N':'Native ん body retained.',
  'YI':'Native い body is unchanged; the added dakuten changes whole-glyph statistics.',
  'YE':'Native え body is unchanged; the added dakuten changes whole-glyph statistics.',
 }

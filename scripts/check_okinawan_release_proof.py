@@ -152,8 +152,7 @@ def check():
     for style in ('Regular', 'Bold'):
         full = TTFont(FONT_OUT / f'GenZuiSerif-{style}.ttf')
         confirmed = json.loads((ROOT/'data/okinawan/confirmed-bodies.json').read_text())['styles'][style]
-        revisions = json.loads((ROOT/'data/okinawan/weight-revision-bodies.json').read_text())['styles'].get(style,{})
-        for label, record in {**confirmed, **revisions}.items():
+        for label, record in confirmed.items():
             pen = contours(full, int(record['codepoint'],16))
             digest = hashlib.sha256(json.dumps(pen.value,separators=(',',':')).encode()).hexdigest()
             assert digest == record['sha256'], (style, label, 'body differs from recorded confirmed/revised outline')

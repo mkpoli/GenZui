@@ -1,0 +1,5 @@
+源萃明朝は、沖縄県の「しまくとぅば」表記に使われる上付きカタカナ8字にも対応しています。母音の出だしや声門閉鎖などを書き分ける文字です。
+
+Regular・Boldの2ウェイト。軽量版のGenZui Serif Okinawanにも収録しています。
+
+https://genzui.mkpo.li/serif
