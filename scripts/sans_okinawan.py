@@ -47,8 +47,8 @@ def build():
         'Kana, Latin, punctuation and new Okinawan drawings derive from Noto Sans JP.\n'
         'Retained combining marks derive from FRB Taiwanese Kana.\n'
         'Regular and Bold use the native Noto masters at weights 400 and 700; reduced\n'
-        'components use optical donor weights 500 and 800. The 27 Funatsu forms and\n'
-        'eight raised katakana use the same private-use conventions as GenZui Serif.\n'
+        'components use optical donor weights 450–600 and 750–900. The 27 Funatsu forms\n'
+        'and eight raised katakana use the same private-use conventions as GenZui Serif.\n'
         'No outlines were imported from the fonts defining those mappings.\n\n'
         'Licensed under SIL Open Font License 1.1. Original notices are retained.\n')
     records=[]
@@ -86,19 +86,24 @@ def source_text(e):
 
 def proof():
     sections=[]
+    previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     for e in ENTRIES:
         text=''.join(chr(int(c,16)) for c in e['output']);src=source_text(e)
         cards=[]
         for style,weight in [('Regular',400),('Bold',700)]:
             context=src[0]+text+src[-1] if len(src)>1 else src+text+src
-            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div></article>')
+            history=(f'<details><summary>前の字形と比較</summary><div class="previous">{context}</div></details>' if previous else '')
+            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div>{history}</article>')
         sections.append(f'<section><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>')
     sentences=[]
     for style,weight in [('Regular',400),('Bold',700)]:
         sentences.append(f'<article style="--weight:{weight}"><h3>{style}</h3>'+''.join(f'<p class="sentence" contenteditable="true">{html.escape(compose(s["text"]))}</p>' for s in SENTENCES)+'</article>')
     page='''<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GenZui Sans Okinawan</title><link rel="stylesheet" href="genzui-sans-okinawan.css"><style>
-*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context{font-size:8.5vw}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
+*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence,.previous{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.previous{font-family:'GenZui Sans Okinawan Previous';font-size:clamp(60px,8.9vw,128px);line-height:1.2;white-space:nowrap}details{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}summary{cursor:pointer;font-size:13px;color:#64746b}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context,.previous{font-size:8.5vw}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
 </style><main><header><h1>GenZui Sans Okinawan</h1><p>Regular / Bold · 船津式沖縄文字 27字・上付きカタカナ 8字</p><p>字形見本：元の仮名 / 沖縄文字 / 元の仮名</p></header>'''
+    if previous:
+        faces=''.join(f"@font-face{{font-family:'GenZui Sans Okinawan Previous';src:url('previous/{style}.woff2');font-weight:{weight};font-display:swap}}" for style,weight in [('Regular',400),('Bold',700)])
+        page=page.replace('</style>','</style><style>'+faces+'</style>',1)
     page+='<section><h2>組見本</h2><div class="columns">'+''.join(sentences)+'</div></section>'+''.join(sections)
     page+='<footer>組見本の出典：<a href="https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf">沖縄語辞典</a>、121・123頁。<br>私用領域の文字を含みます。対応フォントと入力方法が必要です。</footer></main></html>'
     (OUT/'index.html').write_text(page)
@@ -124,6 +129,8 @@ def package():
     names=[f'{PREFIX}-{style}.{ext}' for style in ('Regular','Bold') for ext in ('ttf','woff2')]
     names+=['genzui-sans-okinawan.css','index.html','README.txt','NOTICE.txt','OFL.txt','FRB-OFL.txt',
             'FRB-README.md','Unicode-LICENSE.txt','source-manifest.json','sources.json','checks.json','okinawan-mappings.json']
+    if all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold')):
+        names += [f'previous/{style}.woff2' for style in ('Regular','Bold')]
     archive=ROOT/'dist'/f'{PREFIX}-{VERSION}.zip';archive.parent.mkdir(exist_ok=True)
     with ZipFile(archive,'w',compression=ZIP_DEFLATED) as z:
         for name in names:z.write(OUT/name,name)

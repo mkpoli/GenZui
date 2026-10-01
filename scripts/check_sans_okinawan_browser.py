@@ -9,9 +9,10 @@ registry=json.loads((Path.home()/'.config/genzui/windows-browsers.json').read_te
 s=Path('scripts/browser/serif-chromium.ps1').read_text()
 s=s.replace('__ROOT__',q(win)).replace('__BINARY__',q(registry['chrome.exe']['path'])).replace('__EXTRA__','').replace('__PAGE__',q('http://localhost:8790/genzui-sans-okinawan/'))
 a=s.index(' $report=@{}');b=s.index(" $report.version=",a)
-s=s[:a]+""" $report=Evaluate '(()=>{const assert=(v,m)=>{if(!v)throw Error(m)};assert(document.querySelectorAll(".context").length===70,"all35bothweights");assert(document.querySelectorAll("[contenteditable]").length===4,"sentences");document.querySelectorAll(".context,.sentence").forEach((e,i)=>{e.id="probe"+i});return {status:"passed",forms:35,styles:2,sentences:4,mobile:null,version:null,fonts:{verified:0}}})()'
+s=s[:a]+""" Evaluate '[...document.querySelectorAll("details")].forEach(e=>e.open=true)'|Out-Null
+ $report=Evaluate '(()=>{const assert=(v,m)=>{if(!v)throw Error(m)};assert(document.querySelectorAll(".context").length===70,"all35bothweights");assert(document.querySelectorAll("[contenteditable]").length===4,"sentences");document.querySelectorAll(".context,.sentence,.previous").forEach((e,i)=>{e.id="probe"+i});return {status:"passed",forms:35,styles:2,sentences:4,previous:document.querySelectorAll(".previous").length,mobile:null,version:null,fonts:{verified:0}}})()'
  $doc=Call-CDP 'DOM.getDocument'
- foreach($probe in (Evaluate '[...document.querySelectorAll(".context,.sentence")].map(e=>e.id)')){
+ foreach($probe in (Evaluate '[...document.querySelectorAll(".context,.sentence,.previous")].map(e=>e.id)')){
   $node=Call-CDP 'DOM.querySelector' @{nodeId=$doc.root.nodeId;selector=('#'+$probe)}
   $fonts=@((Call-CDP 'CSS.getPlatformFontsForNode' @{nodeId=$node.nodeId}).fonts)
   if($fonts.Count -eq 0){throw ('No rendered font in '+$probe)}
@@ -20,6 +21,7 @@ s=s[:a]+""" $report=Evaluate '(()=>{const assert=(v,m)=>{if(!v)throw Error(m)};a
  }
  Call-CDP 'Emulation.setDeviceMetricsOverride' @{width=390;height=1000;deviceScaleFactor=1;mobile=$false}|Out-Null
  $report.mobile=Evaluate '(()=>{if(document.documentElement.scrollWidth>390)throw Error("overflow");if(getComputedStyle(document.querySelector(".columns")).gridTemplateColumns.split(" ").length!==2)throw Error("columns");return "passed"})()'
+ Evaluate '[...document.querySelectorAll("details")].forEach(e=>e.open=false)'|Out-Null
  Call-CDP 'Emulation.setDeviceMetricsOverride' @{width=1450;height=1550;deviceScaleFactor=1;mobile=$false}|Out-Null
 """+s[b:]
 

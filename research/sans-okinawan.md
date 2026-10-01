@@ -9,8 +9,10 @@ characters.
 ## Drawings
 
 The drawings use Noto Sans JP's native Regular and Bold masters at weights
-400 and 700. Reduced components use weights 500 and 800 for optical
-compensation. New joining strokes follow cubic skeletons with flat Sans
+400 and 700. Reduced components use weights 450–600 and 750–900 for optical
+compensation. The ふ head and body retain their native dimensions and weight.
+TU and WU use continuous strokes through their lower turns, and glottal
+WA/WI/WE use a curved native こ stroke for the upper mark. New joining strokes follow cubic skeletons with flat Sans
 terminals. Their widths are set separately for each weight. The drawings
 reuse no Serif outlines and apply no blanket outline expansion.
 
@@ -40,7 +42,10 @@ and sentence, plus the two-column layout at a 390-pixel viewport.
 
 The output directory contains the subset TTF/WOFF2 files, CSS and an editable
 proof. The proof shows all 35 forms in two columns, with native kana beside
-each drawing, small-size comparisons and dictionary sentence samples.
+each drawing, small-size comparisons and dictionary sentence samples. When
+`previous/Regular.woff2` and `previous/Bold.woff2` are present, each card also
+includes an expandable comparison with that earlier drawing. The package
+includes these comparison fonts when available.
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.104.zip` after validation.
 
@@ -60,7 +65,8 @@ also shaped in both directions. It checks the subset repertoire, family
 metadata, all 35 forms, native combining sequences and sentence samples,
 including TTF/WOFF2 parity. It verifies exact non-intersection of dakuten and
 their bases, an additional sampled clearance margin, and separation of the
-TSI and HWA strokes that should remain distinct.
+TSI and HWA strokes that should remain distinct. Detached glottal marks and
+vowel strokes have additional minimum-clearance checks in both weights.
 
 These checks establish structural correctness and preservation of existing
 characters. Visual review of the joins, counters and balance remains part of

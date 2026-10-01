@@ -4,41 +4,59 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "fabbe8f58ec875539fe3d795dd57eace8514d4243dffcfa7ba09706f8add46a0",
+      "full_sha256": "88a560ad1b260824aba19065a807687d1e83961627b2fe3313241b1933afb794",
       "encoded_characters": 805,
-      "ttf_sha256": "5078745df950c087f0968928c2ef8f99587af30594dbaadcf2da2961fecbc6bd",
-      "woff2_sha256": "bd57e5eef47bf64be8036f37d077a28738784913c6b590419964596a07707169",
+      "ttf_sha256": "905c71aa7ecd2746c5c004704463177cf772a4dfabdeb63de5fc5ca3f600157b",
+      "woff2_sha256": "63ecdd22de6cc841ba961fe481bfe66520fea1d79d55f6f1346b174d1a916af3",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
       "dakuten_clearance_units": {
-        "U+F450": 115.08,
-        "U+F452": 78.99,
+        "U+F450": 120.81,
+        "U+F452": 62.97,
         "U+F454": 53.07,
         "U+F456": 100.86,
         "U+F458": 87.44,
-        "U+F467": 30.53,
+        "U+F467": 30.43,
         "U+F469": 29.52
+      },
+      "component_clearance_units": {
+        "U+F460": 58.8,
+        "U+F461": 58.8,
+        "U+F462": 56.11,
+        "U+F463": 204.6,
+        "U+F467": 188.04,
+        "U+F45E": 84.1,
+        "U+F452": 89.09
       }
     },
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "2899671902aef9016f850ec0fbec54cf43406f1c89d877a4f270fb4fc765ec9b",
+      "full_sha256": "de9c8975b93cc32b382675dfa6e980dad3d829f491f6924e6b54e89da85fdc60",
       "encoded_characters": 805,
-      "ttf_sha256": "db46f071dda00769286db2078dec2944fc3551d5e8e42d70989e9b09aae67ab9",
-      "woff2_sha256": "2e87be9de7fb52f675a8961ee317763a3df0413917f5017001505d5f02ceab02",
+      "ttf_sha256": "a41e36e58f97ec81bfff188324c43d2373d583b4c907062a0e5e62ff2b6c1d40",
+      "woff2_sha256": "0f7007f9a92580fafa6d3bc48abdc4dba995fdbed18cd088a554ad2e95ecb47d",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
       "dakuten_clearance_units": {
-        "U+F450": 95.7,
-        "U+F452": 44.99,
+        "U+F450": 112.99,
+        "U+F452": 53.46,
         "U+F454": 26.89,
         "U+F456": 65.34,
         "U+F458": 51.2,
-        "U+F467": 21.06,
+        "U+F467": 21.05,
         "U+F469": 19.19
+      },
+      "component_clearance_units": {
+        "U+F460": 59.05,
+        "U+F461": 59.05,
+        "U+F462": 56.31,
+        "U+F463": 151.22,
+        "U+F467": 140.92,
+        "U+F45E": 48.05,
+        "U+F452": 58.87
       }
     }
   ]

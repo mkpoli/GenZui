@@ -35,7 +35,16 @@ def geometry(weight):
         clearances[f'U+{cp:04X}']=round(gap,2)
     for cp,a,b in [(0xF469,0,1),(0xF45A,1,3)]:
         assert pathops.op(shape([recipes[cp][a]]),shape([recipes[cp][b]]),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp))
-    return clearances
+    component_gaps={}
+    # Marks, detached vowels and the glottal prefix must retain whitespace in
+    # Bold as well as Regular; the former top marks nearly touched their bases.
+    for cp in (0xF460,0xF461,0xF462,0xF463,0xF467,0xF45E,0xF452):
+        a,b=recipes[cp][:1],recipes[cp][1:]
+        assert pathops.op(shape(a),shape(b),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp))
+        gap=float(cKDTree(points(a)).query(points(b))[0].min())
+        assert gap>=35,(weight,hex(cp),gap)
+        component_gaps[f'U+{cp:04X}']=round(gap,2)
+    return clearances,component_gaps
 
 def check():
     (OUT/'checks.json').unlink(missing_ok=True)
@@ -95,8 +104,9 @@ def check():
         assert record['base_sha256']==digest(BASE/f'GenZuiSans-{style}.ttf')
         assert record['full_sha256']==digest(full_path)
         for ext in ('ttf','woff2'):assert record[ext+'_sha256']==digest(OUT/f'{PREFIX}-{style}.{ext}')
+        dakuten_gaps,component_gaps=geometry(400 if style=='Regular' else 700)
         records.append(dict(record,full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
-                            dakuten_clearance_units=geometry(400 if style=='Regular' else 700)))
+                            dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
     (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records),indent=2)+'\n')
 
