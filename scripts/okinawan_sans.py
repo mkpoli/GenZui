@@ -37,9 +37,9 @@ def attach(native, path, width, start):
     if score(reverse(arc))<score(arc):arc=reverse(arc)
     return O.draw([join(native,arc)])
 
-def drawings(weight):
+def drawings(weight, detached=False):
     f=source(weight); optical=source(min(900,weight+100))
-    reduced=source(weight+200); yu_source=source(weight+50)
+    reduced=source(weight+200)
     # Main kana stem widths; Bold is a separate native master, not an offset.
     w=76 if weight==400 else 116
     topology={'く':[30],'て':[37],'と':[31,8],'つ':[28],'を':[31,14,31],
@@ -61,32 +61,32 @@ def drawings(weight):
     assert len(cuts)==2,cuts
     ku=max((O.arc(original,*cuts),O.arc(original,*reversed(cuts))),key=lambda r:max(p[1] for seg in r for p in seg))
     kw=w*1.12
-    out[0xF456]=[attach(ku,'M 375 260 C 419 224 517 245 500 198 C 483 164 483 75 536 28 C 580 -9 630 95 653 160',kw,(375,260)),
+    out[0xF456]=[attach(ku,'M 375 260 C 419 224 456 228 465 165 C 474 102 480 28 555 28 C 615 28 639 103 661 168',w,(375,260)),
                  s('M 735 260 C 813 210 844 98 849 20')]
-    out[0xF458]=[attach(ku,'M 375 260 C 419 224 548 239 500 195 L 208 -18',kw,(375,260)),
+    out[0xF458]=[attach(ku,'M 375 260 C 419 224 465 210 500 195 L 208 -18',kw,(375,260)),
         s('M 330 71 C 415 133 520 210 553 109 C 579 19 563 -8 670 -8 L 851 -8',kw)]
     # One uninterrupted diagonal/bowl stroke, with a separate upright.
     out[0xF454]=[attach(ku,'M 375 260 C 419 224 517 245 500 198 C 494 155 488 50 500 -20',kw,(375,260)),
         s('M 205 18 C 302 110 392 217 506 307 C 630 399 790 429 842 316 C 907 172 793 51 633 7')]
-    te=cut_keep(rings('て')[0],1,360,'high')
-    out[0xF452]=[attach(te,'M 408 300 C 395 219 398 117 456 49 C 519 -27 623 85 659 199',w,(408,300)),
+    te=cut_keep(rings('て')[0],1,420,'high')
+    out[0xF452]=[attach(te,'M 398 260 C 386 180 398 117 456 49 C 519 -27 623 85 659 199',w,(398,260)),
                  s('M 790 270 C 867 215 907 109 915 20')]
     # Keep full stroke width through the return and lower bowl. Compressing
     # the source outline vertically made its horizontal sections too light.
-    bowl_width=88 if weight==400 else 138
-    tu_tail=12 if weight==400 else 22
+    bowl_width=76 if weight==400 else 116
+    tu_tail=10 if weight==400 else 15
     wu_tail=-1 if weight==400 else 9
-    out[0xF450]=[native('と',[1],sx=.91,sy=.78,dx=-100,dy=190,font=reduced),
+    out[0xF450]=[native('と',[1],sx=.91,sy=.78,dx=-100,dy=190,font=optical),
         s(f'M 620 685 C 529 630 415 559 310 491 C 224 435 163 400 163 340 '
           f'C 163 245 245 240 329 243 C 458 247.6 587 301 699 280 '
           f'C 839 254 864 184 799 120 C 717 41 530 {tu_tail} 329 {tu_tail}',bowl_width)]
-    out[0xF465]=[native('を',[0],sx=.9,sy=.69,dx=20,dy=272,font=reduced),
+    out[0xF465]=[native('を',[0],sx=.9,sy=.69,dx=20,dy=272,font=optical),
         native('を',[1],sx=.83,sy=1,dx=25,dy=60,font=optical),
         s(f'M 790 600 C 690 550 609 510 529 470 C 449 430 240 430 240 320 '
           f'C 240 210 365 216 547 221 C 709 225.45 819 204 839 143 '
-          f'C 867 46 656 {wu_tail} 340 {wu_tail}',88 if weight==400 else 124)]
+          f'C 867 46 656 {wu_tail} 340 {wu_tail}',w)]
     # TSI carries the bowl into the left stroke of い.
-    ts=rings('つ',optical)[0]
+    ts=rings('つ',reduced)[0]
     ts=move(ts[:14]+[line(ts[14][0],ts[15][0])]+ts[15:],sx=.91,sy=.7,dx=0,dy=245)
     # Open the terminal rather than intersecting two closed outlines.
     ts=ts[15:]+ts[:14]
@@ -103,26 +103,40 @@ def drawings(weight):
         s('M 853 324 C 913 257 949 132 953 20',fu_width)]
     out[0xF45C]=fu+[s(left+'C 755 440 761 370 710 278 L 630 0',fu_width),
         s('M 675 155 C 739 267 784 267 801 163 C 795 68 793 6 862 3 L 960 5',fu_width)]
+    if detached:
+        left_dot=native('ふ',[3],sx=.85,sy=.85,dx=20,dy=10 if weight==400 else 70)
+        for cp,path in ((0xF45A,'M 672 337 L 646 -2'),
+                        (0xF45B,'M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160'),
+                        (0xF45C,'M 742 389 L 630 0')):
+            dx=20 if weight==700 else 0
+            vowel=[transform(p,(1,0,0,1,dx,0)) for p in (s(path),out[cp][-1])]
+            out[cp]=fu+[left_dot]+vowel
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
-    neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20)
+    neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
     out[0xF45D]=[native('や',[0,1],dx=120),O.draw([join(neck,arm)])]
-    out[0xF45E]=[native('は',[2],sx=.74,sy=.72,dx=-25,dy=200,font=optical),
-                  native('ゆ',sx=.88,dx=175,font=yu_source)]
-    out[0xF45F]=[native('は',[2],sx=.74,sy=.9,dx=-25,dy=45,font=optical),
-                  native('よ',sx=.76,dx=237,font=optical)]
+    out[0xF45E]=[native('は',[2],sx=.72,sy=.70,dx=-25,dy=150,font=optical),
+                  native('ゆ',sx=.94,dx=150)]
+    out[0xF45F]=[native('は',[2],sx=.74,sy=.59,dx=-25,dy=305,font=optical),
+                  native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
-    body_sy=.83 if weight==400 else .79
+    body_sy=.82
     for cp,ch in ((0xF460,None),(0xF461,'ゐ'),(0xF462,'ゑ')):
-        body=O.draw([move(wa,sx=.94,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.94,sy=body_sy,dx=20,font=optical)
-        out[cp]=[body,native('こ',[0],sx=.55,dx=224 if cp==0xF462 else 134,dy=85 if weight==400 else 95)]
+        body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=optical)
+        mark=native('こ',[0],sx=.55,sy=.72,font=optical)
+        bb=BoundsPen(None);body.replay(bb)
+        mb=BoundsPen(None);mark.replay(mb)
+        mx=(mb.bounds[0]+mb.bounds[2])/2
+        out[cp]=[body,transform(mark,(1,0,0,1,(460 if cp==0xF462 else 365)-mx,bb.bounds[3]+50-mb.bounds[1]))]
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)
     db=BoundsPen(None);dot.replay(db);x0,y0,x1,y1=db.bounds
-    out[0xF463]=[native('ん'),transform(dot,(1,0,0,1,945-x1,804-y1))]
-    out[0xF467]=[native('す',sx=.86,dx=15,font=optical),transform(dot,(1,0,0,1,945-x1,-y0))]
+    out[0xF463]=[native('ん'),transform(dot,(1,0,0,1,870-x1,(650 if weight==400 else 675)-y1))]
+    si_dot=native('ぃ',[1],sx=.8,sy=1,font=optical)
+    sb=BoundsPen(None);si_dot.replay(sb)
+    out[0xF467]=[native('す',sx=.86,dx=15,font=optical),transform(si_dot,(1,0,0,1,905-sb.bounds[2],10-sb.bounds[1]))]
     # Optical centering applies to base forms; voiced pairs retain native spacing.
     for cp,parts in out.items():
         b=BoundsPen(None)
@@ -134,7 +148,7 @@ def drawings(weight):
 def voiced_parts(font, cp, parts, contours, transform):
     from okinawan import DAKUTEN
     ch,_,dx,dy=DAKUTEN[cp]
-    if cp==0xF469:dy+=35
+    if cp==0xF469:dy+=43
     if cp==0xF454:dx,dy=40,80
     if cp==0xF467:dy=50
     pair=[]

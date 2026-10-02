@@ -6,7 +6,8 @@ import pathops
 from scipy.spatial import cKDTree
 import okinawan_sans as drawings
 import okinawan_outline as O
-from serif import contours,transform
+from serif import contours,transform,instance
+from fontTools.pens.boundsPen import BoundsPen
 from okinawan import DAKUTEN
 from fontTools.ttLib import TTFont
 from sans_okinawan import OUT,BASE,PREFIX,FAMILY,digest
@@ -44,6 +45,15 @@ def geometry(weight):
         gap=float(cKDTree(points(a)).query(points(b))[0].min())
         assert gap>=35,(weight,hex(cp),gap)
         component_gaps[f'U+{cp:04X}']=round(gap,2)
+    detached=drawings.drawings(weight,detached=True)
+    for cp in (0xF45A,0xF45B,0xF45C):
+        body,dot=detached[cp][1:2],detached[cp][2:3]
+        assert pathops.op(shape(body),shape(dot),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp),'left dot')
+        assert float(cKDTree(points(body)).query(points(dot))[0].min())>=28,(weight,hex(cp),'left dot')
+        a,b=detached[cp][:3],detached[cp][3:]
+        assert pathops.op(shape(a),shape(b),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp),'detached')
+        gap=float(cKDTree(points(a)).query(points(b))[0].min())
+        assert gap>=30,(weight,hex(cp),'detached',gap)
     return clearances,component_gaps
 
 def check():
@@ -108,6 +118,41 @@ def check():
         records.append(dict(record,full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
-    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records),indent=2)+'\n')
+    variants=check_variants()
+    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants),indent=2)+'\n')
+
+def check_variants():
+    variants=json.loads((OUT/'variants/manifest.json').read_text())
+    for record in variants:
+        path=OUT/record['file'];assert digest(path)==record['sha256']
+        web=TTFont(path);ttf=TTFont(path.with_suffix('.ttf'))
+        assert web['name'].getDebugName(1)==record['family']
+        assert web.getBestCmap().keys()==ttf.getBestCmap().keys()
+        for cp,name in web.getBestCmap().items():
+            tn=ttf.getBestCmap()[cp]
+            assert outline(web,name)==outline(ttf,tn)
+            for tag in ('hmtx','vmtx'):assert web[tag][name]==ttf[tag][tn]
+        if record['kind']=='Detached':
+            for cp in (0xF45A,0xF45B,0xF45C):
+                g=web['glyf'][web.getBestCmap()[cp]]
+                assert 0<=g.xMin<g.xMax<=1000,(record['file'],hex(cp),g.xMin,g.xMax)
+            parent=TTFont(OUT/f'{PREFIX}-{record["style"]}.ttf')
+            assert web.getBestCmap().keys()==parent.getBestCmap().keys()
+            for cp,name in parent.getBestCmap().items():
+                if cp not in (0xF45A,0xF45B,0xF45C):
+                    assert outline(parent,name)==outline(web,web.getBestCmap()[cp])
+        else:
+            raised=[e for e in ENTRIES if e['system']=='prefecture']
+            family='NotoSerifJP' if 'Serif' in record['family'] else 'NotoSansJP'
+            donor=instance(family,record['donor'],{int(e['base'],16) for e in raised})
+            for e in raised:
+                if e['system']=='prefecture':
+                    name=web.getBestCmap()[int(e['output'][0],16)]
+                    assert web['hmtx'][name][0]==500
+                    bounds=BoundsPen(None)
+                    transform(contours(donor,int(e['base'],16)),(.48,0,0,.48,10,410)).replay(bounds)
+                    actual=web['glyf'][name]
+                    assert all(abs(a-b)<=2 for a,b in zip((actual.xMin,actual.yMin,actual.xMax,actual.yMax),bounds.bounds)),(record['file'],e['id'])
+    return variants
 
 if __name__=='__main__':check()
