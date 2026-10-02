@@ -52,7 +52,12 @@ included in the proof package, with hashes checked against the release. When
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
-HWA/HWI/HWE use separate left dots and right vowel components. Confirmed
+HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
+the upper return of its vowel stroke. YU and YO use separately fitted glottal
+marks, and WE has a narrower, angled upper mark. TU uses the native 700 donor
+for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
+a 70-unit return, while Bold retains its 116-unit return. Its upright extends
+farther below the crossing. Confirmed
 forms are collapsed by default, with unresolved forms at the top. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable

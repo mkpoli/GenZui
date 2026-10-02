@@ -76,15 +76,21 @@ def drawings(weight):
     bowl_width=76 if weight==400 else 116
     tu_tail=10 if weight==400 else 15
     wu_tail=-1 if weight==400 else 9
-    out[0xF450]=[native('と',[1],sx=.91,sy=.78,dx=-100,dy=190,font=source(weight+50)),
+    out[0xF450]=[native('と',[1],sx=.91,sy=.78,dx=-100,dy=190,font=source(450 if weight==400 else 700)),
         s(f'M 620 685 C 529 630 415 559 310 491 C 224 435 163 400 163 340 '
           f'C 163 245 245 240 329 243 C 458 247.6 587 301 699 280 '
           f'C 839 254 864 184 799 120 C 717 41 530 {tu_tail} 329 {tu_tail}',bowl_width)]
-    out[0xF465]=[native('を',[0],sx=.9,sy=.69,dx=20,dy=272,font=optical),
+    # Restore the downward continuation after the crossing without scaling
+    # its width or changing the upper arch. Blend only the upright's ends.
+    wo=O.rings(contours(source(450) if weight==400 else optical,ord('を'),[0]))[0]
+    extension=25 if weight==400 else 35
+    for i in range(10,18):
+        wo[i]=tuple(np.array([x,y-extension/.69*max(0,min(1,(310-y)/180))**2]) for x,y in wo[i])
+    out[0xF465]=[O.draw([move(wo,sx=.9,sy=.69,dx=20,dy=272)]),
         native('を',[1],sx=.83,sy=1,dx=25,dy=60),
-        s(f'M 790 600 C 690 550 609 510 529 470 C 449 430 240 430 240 320 '
+        s(f'M 815 612.5 C 715 562.5 609 510 529 470 C 449 430 240 430 240 320 '
           f'C 240 210 365 216 547 221 C 709 225.45 819 204 839 143 '
-          f'C 867 46 656 {wu_tail} 340 {wu_tail}',w)]
+          f'C 867 46 656 {wu_tail} 340 {wu_tail}',70 if weight==400 else w)]
     # TSI carries the bowl into the left stroke of い.
     ts=rings('つ',reduced)[0]
     ts=move(ts[:14]+[line(ts[14][0],ts[15][0])]+ts[15:],sx=.91,sy=.7,dx=0,dy=245)
@@ -101,7 +107,7 @@ def drawings(weight):
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:('M 810 410 L 610 0',
+        0xF45C:('M 620 430 C 686 464 780 491 794 426 C 806 370 747 312 714 237 L 610 0',
                  f'M 687 158 C 747 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
     }
     for cp,paths in vowels.items():
@@ -111,9 +117,11 @@ def drawings(weight):
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
     out[0xF45D]=[native('や',[0,1],dx=120),O.draw([rounded_join(neck,arm)])]
-    out[0xF45E]=[native('は',[2],sx=.72,sy=.70,dx=-25,dy=185,font=optical),
+    yu_mark=native('は',[2],sx=.78,sy=.66,dx=-20 if weight==400 else -52,dy=160,font=optical)
+    yu_mark=transform(yu_mark,(1,0,.06,1,-12,0))
+    out[0xF45E]=[yu_mark,
                   native('ゆ',sx=.94,dx=150)]
-    out[0xF45F]=[native('は',[2],sx=.72,sy=.70,dx=-25,dy=185,font=optical),
+    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.75,dx=15 if weight==400 else -20,dy=135,font=optical),
                   native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
@@ -121,6 +129,9 @@ def drawings(weight):
     for cp,ch in ((0xF460,None),(0xF461,'ゐ'),(0xF462,'ゑ')):
         body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=f if ch=='ゑ' else optical)
         mark=native('こ',[0],sx=.55,sy=.72,font=optical)
+        if cp==0xF462:
+            mark=native('こ',[0],sx=.42,sy=.58)
+            mark=transform(mark,(.985,-.174,.174,.985,0,0))
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
