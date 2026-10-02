@@ -4,15 +4,15 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "6523669697add4607b3d37412187b22c2e7030fb777af378e2264cd26c36ae90",
+      "full_sha256": "fa18050a8bd842144de3b7b1bdc66c7c6646eac7c54469c3a845611e31af0fcb",
       "encoded_characters": 805,
-      "ttf_sha256": "a70fdd103ecb519b26687c3a2dbef4ec50f6b96e8befe5837e5c83bf01a7da73",
-      "woff2_sha256": "f24feaf28084b5cc05ea6ab3301db2dcd2d9e3b676131472747a2c7d540c7f4a",
+      "ttf_sha256": "90ae8c5345c05e8fc38df10bbcb2c66fd5ac6fb0af8a27252c7056c7de14a82d",
+      "woff2_sha256": "2293319ef02dad1a1ad77fd78394b79ce3681dde05f94ef119196f3c40120d24",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
       "dakuten_clearance_units": {
-        "U+F450": 120.9,
+        "U+F450": 122.95,
         "U+F452": 62.97,
         "U+F454": 53.07,
         "U+F456": 100.86,
@@ -23,25 +23,26 @@
       "component_clearance_units": {
         "U+F460": 54.03,
         "U+F461": 54.03,
-        "U+F462": 55.11,
+        "U+F462": 55.03,
         "U+F463": 76.61,
         "U+F467": 107.12,
-        "U+F45E": 77.75,
+        "U+F45E": 77.55,
+        "U+F45F": 132.16,
         "U+F452": 89.09
       }
     },
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "45cbe3684e36535b3d882fa5ec4f2d0e18a3f4db1c3ee1da196f5e2dc5cc4b64",
+      "full_sha256": "7ef1b29f9d496db565438d8b8fc39a0a9c66bfb4e00554dd54688047ae020e2e",
       "encoded_characters": 805,
-      "ttf_sha256": "6c8b78d46f8d19ce96e26d5ebd71f5b25ab36d327a622ccf3e10cc692e2d0ef8",
-      "woff2_sha256": "1929733421d7fced2ce8efdeed49c63d8cd16271418a61f45c2bd5120b9b252f",
+      "ttf_sha256": "6949d957b1c56c74422f2e762ba8694b2d398e6607d0ad0952462c8978a17084",
+      "woff2_sha256": "c5cf9471fe5b4b60210ddc17e710d39d2d391c8a59d53cab04ac555ec7157dc6",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
       "dakuten_clearance_units": {
-        "U+F450": 111.52,
+        "U+F450": 112.89,
         "U+F452": 53.46,
         "U+F454": 26.89,
         "U+F456": 65.34,
@@ -52,31 +53,16 @@
       "component_clearance_units": {
         "U+F460": 54.05,
         "U+F461": 54.05,
-        "U+F462": 54.67,
+        "U+F462": 54.63,
         "U+F463": 48.78,
         "U+F467": 61.9,
-        "U+F45E": 39.19,
+        "U+F45E": 38.88,
+        "U+F45F": 95.81,
         "U+F452": 58.87
       }
     }
   ],
   "proof_variants": [
-    {
-      "family": "GenZui Sans Okinawan Detached",
-      "style": "Regular",
-      "kind": "Detached",
-      "donor": null,
-      "file": "variants/GenZuiSansOkinawanDetached-Regular.woff2",
-      "sha256": "6c427f8ea25328ccdf0eb5f9123e6956ab16da4ff02392275910ab67f941ffba"
-    },
-    {
-      "family": "GenZui Sans Okinawan Detached",
-      "style": "Bold",
-      "kind": "Detached",
-      "donor": null,
-      "file": "variants/GenZuiSansOkinawanDetached-Bold.woff2",
-      "sha256": "7b8f4189c4b0160a25bf86b9414c8d6932d1502f84ee496a21d61460b4377612"
-    },
     {
       "family": "GenZui Serif Okinawan Optical",
       "style": "Regular",
@@ -92,14 +78,6 @@
       "donor": 750,
       "file": "variants/GenZuiSerifOkinawanOptical-Bold.woff2",
       "sha256": "07de1b495b1874b438f2a635e0e8272cfbd302fb53d0f093ac396f984299b65a"
-    },
-    {
-      "family": "GenZui Sans Okinawan Optical",
-      "style": "Regular",
-      "kind": "Optical",
-      "donor": 450,
-      "file": "variants/GenZuiSansOkinawanOptical-Regular.woff2",
-      "sha256": "6cc7a399828b30f0ea1a60829d3a364a46f322b2d98acdaf2eaeecd3be264d37"
     }
   ]
 }

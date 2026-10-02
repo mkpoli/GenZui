@@ -39,13 +39,13 @@ def geometry(weight):
     component_gaps={}
     # Marks, detached vowels and the glottal prefix must retain whitespace in
     # Bold as well as Regular; the former top marks nearly touched their bases.
-    for cp in (0xF460,0xF461,0xF462,0xF463,0xF467,0xF45E,0xF452):
+    for cp in (0xF460,0xF461,0xF462,0xF463,0xF467,0xF45E,0xF45F,0xF452):
         a,b=recipes[cp][:1],recipes[cp][1:]
         assert pathops.op(shape(a),shape(b),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp))
         gap=float(cKDTree(points(a)).query(points(b))[0].min())
         assert gap>=35,(weight,hex(cp),gap)
         component_gaps[f'U+{cp:04X}']=round(gap,2)
-    detached=drawings.drawings(weight,detached=True)
+    detached=recipes
     for cp in (0xF45A,0xF45B,0xF45C):
         body,dot=detached[cp][1:2],detached[cp][2:3]
         assert pathops.op(shape(body),shape(dot),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp),'left dot')
@@ -109,7 +109,15 @@ def check():
                 hb.shape(full._audit_hb,buffer)
                 voiced=full['glyf'][full.getGlyphName(buffer.glyph_infos[0].codepoint)]
                 assert voiced.numberOfContours==base.numberOfContours+2,e['id']
-            if e['system']=='prefecture':assert sub['hmtx'][sc[ord(text)]][0]==500
+            if e['system']=='prefecture':
+                assert sub['hmtx'][sc[ord(text)]][0]==500
+                pen=BoundsPen(None)
+                for part in drawings.raised_parts(400 if style=='Regular' else 700,chr(int(e['base'],16))):part.replay(pen)
+                g=sub['glyf'][sc[ord(text)]]
+                assert all(abs(a-b)<=2 for a,b in zip((g.xMin,g.yMin,g.xMax,g.yMax),pen.bounds))
+            if e['id'] in ('hwa','hwi','hwe'):
+                g=sub['glyf'][sc[ord(text)]]
+                assert 0<=g.xMin<g.xMax<=1000
         record=next(r for r in manifest['faces'] if r['style']==style)
         assert record['base_sha256']==digest(BASE/f'GenZuiSans-{style}.ttf')
         assert record['full_sha256']==digest(full_path)
@@ -132,27 +140,16 @@ def check_variants():
             tn=ttf.getBestCmap()[cp]
             assert outline(web,name)==outline(ttf,tn)
             for tag in ('hmtx','vmtx'):assert web[tag][name]==ttf[tag][tn]
-        if record['kind']=='Detached':
-            for cp in (0xF45A,0xF45B,0xF45C):
-                g=web['glyf'][web.getBestCmap()[cp]]
-                assert 0<=g.xMin<g.xMax<=1000,(record['file'],hex(cp),g.xMin,g.xMax)
-            parent=TTFont(OUT/f'{PREFIX}-{record["style"]}.ttf')
-            assert web.getBestCmap().keys()==parent.getBestCmap().keys()
-            for cp,name in parent.getBestCmap().items():
-                if cp not in (0xF45A,0xF45B,0xF45C):
-                    assert outline(parent,name)==outline(web,web.getBestCmap()[cp])
-        else:
-            raised=[e for e in ENTRIES if e['system']=='prefecture']
-            family='NotoSerifJP' if 'Serif' in record['family'] else 'NotoSansJP'
-            donor=instance(family,record['donor'],{int(e['base'],16) for e in raised})
-            for e in raised:
-                if e['system']=='prefecture':
-                    name=web.getBestCmap()[int(e['output'][0],16)]
-                    assert web['hmtx'][name][0]==500
-                    bounds=BoundsPen(None)
-                    transform(contours(donor,int(e['base'],16)),(.48,0,0,.48,10,410)).replay(bounds)
-                    actual=web['glyf'][name]
-                    assert all(abs(a-b)<=2 for a,b in zip((actual.xMin,actual.yMin,actual.xMax,actual.yMax),bounds.bounds)),(record['file'],e['id'])
+        raised=[e for e in ENTRIES if e['system']=='prefecture']
+        family='NotoSerifJP' if 'Serif' in record['family'] else 'NotoSansJP'
+        donor=instance(family,record['donor'],{int(e['base'],16) for e in raised})
+        for e in raised:
+            name=web.getBestCmap()[int(e['output'][0],16)]
+            assert web['hmtx'][name][0]==500
+            bounds=BoundsPen(None)
+            transform(contours(donor,int(e['base'],16)),(.48,0,0,.48,10,410)).replay(bounds)
+            actual=web['glyf'][name]
+            assert all(abs(a-b)<=2 for a,b in zip((actual.xMin,actual.yMin,actual.xMax,actual.yMax),bounds.bounds)),(record['file'],e['id'])
     return variants
 
 if __name__=='__main__':check()

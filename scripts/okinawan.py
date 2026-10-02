@@ -114,7 +114,11 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
     for cp, entry in PUA.items():
         if entry['system'] == 'prefecture':
             # Half-em advance, raised into the upper half of a full kana cell.
-            recipes[cp] = [part(chr(int(entry['base'], 16)), matrix=(.48, 0, 0, .48, 10, 410))]
+            char=chr(int(entry['base'],16))
+            if provider is not None and hasattr(provider,'raised_parts'):
+                recipes[cp]=provider.raised_parts(700 if bold else 400,char)
+            else:
+                recipes[cp] = [part(char, matrix=(.48, 0, 0, .48, 10, 410))]
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]

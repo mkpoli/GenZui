@@ -51,7 +51,7 @@ def build():
         'Kana, Latin, punctuation and new Okinawan drawings derive from Noto Sans JP.\n'
         'Retained combining marks derive from FRB Taiwanese Kana.\n'
         'Regular and Bold use the native Noto masters at weights 400 and 700; reduced\n'
-        'components use optical donor weights 500–600 and 800–900. The 27 Funatsu forms\n'
+        'components use optical donor weights 450–600 and 750–900. The 27 Funatsu forms\n'
         'and eight raised katakana use the same private-use conventions as GenZui Serif.\n'
         'No outlines were imported from the fonts defining those mappings.\n\n'
         'Proof references and optical alternatives for GenZui Serif derive from\n'
@@ -99,22 +99,24 @@ def proof():
             assert digest(reference/f"GenZuiSerifOkinawan-{face['style']}.woff2")==face['woff2_sha256']
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
-    sections=[]
+    sections=[];accepted=[];other=[]
+    active_ids={'tu','du','hwe',"'ya","'yu","'yo","'we",'wu'}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     for e in ENTRIES:
         text=''.join(chr(int(c,16)) for c in e['output']);src=source_text(e)
         cards=[]
         for style,weight in [('Regular',400),('Bold',700)]:
             context=src[0]+text+src[-1] if len(src)>1 else src+text+src
-            alternative=(f'<div class="variant-row"><small>ふ：非連結案</small><div class="detached" data-family="GenZui Sans Okinawan Detached">{context}</div></div>' if e["id"] in ("hwa","hwi","hwe") else "")
             history=(f'<details><summary>前の字形と比較</summary><div class="previous">{context}</div></details>' if previous else '')
-            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif">{context}</span></div>{alternative}{history}</article>')
-        sections.append(f'<section><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>')
+            serif_face='GenZui Serif Okinawan Optical' if e['system']=='prefecture' else 'GenZui Serif Okinawan'
+            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{history}</article>')
+        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>'
+        (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
     for style,weight in [('Regular',400),('Bold',700)]:
         sentences.append(f'<article style="--weight:{weight}"><h3>{style}</h3>'+''.join(f'<p class="sentence" contenteditable="true">{html.escape(compose(s["text"]))}</p>' for s in SENTENCES)+'</article>')
     page='''<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GenZui Sans Okinawan</title><link rel="stylesheet" href="genzui-sans-okinawan.css"><style>
-*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence,.previous,.serif,.detached,.raised-sample{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.previous{font-family:'GenZui Sans Okinawan Previous';font-size:clamp(60px,8.9vw,128px);line-height:1.2;white-space:nowrap}details{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}summary{cursor:pointer;font-size:13px;color:#64746b}.serif-row{display:flex;align-items:center;gap:18px;margin-top:20px}.serif-row small{font-size:12px;color:#64746b}.serif{font-family:'GenZui Serif Okinawan';font-size:30px;line-height:1.5;white-space:nowrap}.variant-row{margin-top:20px}.variant-row small{font-size:12px;color:#64746b}.detached{font-family:"GenZui Sans Okinawan Detached";font-size:64px;line-height:1.5}.raised-sample{line-height:1.8}.raised-sample span{display:inline-block;margin-right:.3em}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context,.previous{font-size:8.5vw}.detached{font-size:8.5vw}.serif-row{gap:6px;flex-wrap:wrap}.serif{font-size:24px}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
+*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence,.previous,.serif,.raised-sample{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.previous{font-family:'GenZui Sans Okinawan Previous';font-size:clamp(60px,8.9vw,128px);line-height:1.2;white-space:nowrap}details{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}.approved-group>summary,.other-group>summary{font-size:18px;font-weight:600;padding:12px 0}.approved-group,.other-group{margin-top:32px}summary{cursor:pointer;font-size:13px;color:#64746b}.serif-row{display:flex;align-items:center;gap:18px;margin-top:20px}.serif-row small{font-size:12px;color:#64746b}.serif{font-family:'GenZui Serif Okinawan';font-size:30px;line-height:1.5;white-space:nowrap}.raised-sample{line-height:1.8}.raised-sample span{display:inline-block;margin-right:.3em}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context,.previous{font-size:8.5vw}.serif-row{gap:6px;flex-wrap:wrap}.serif{font-size:24px}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
 </style><main><header><h1>GenZui Sans Okinawan</h1><p>Regular / Bold · 船津式沖縄文字 27字・上付きカタカナ 8字</p><p>字形見本：元の仮名 / 沖縄文字 / 元の仮名</p></header>'''
     serif_faces=''.join(f"@font-face{{font-family:'GenZui Serif Okinawan';src:url('serif/GenZuiSerifOkinawan-{style}.woff2');font-weight:{weight};font-display:swap}}" for style,weight in [('Regular',400),('Bold',700)])
     page=page.replace('</style>','</style><style>'+serif_faces+'</style>',1)
@@ -129,15 +131,15 @@ def proof():
     for family in ('Serif','Sans'):
         rows=[]
         for style,weight in [('Regular',400),('Bold',700)]:
-            options=[('現行',f'GenZui {family} Okinawan')]
-            donor=500 if family=='Serif' and style=='Regular' else 750 if family=='Serif' else 450
-            if family=='Serif' or style=='Regular':options.append((f'比較案 · {donor}',f'GenZui {family} Okinawan Optical'))
-            for label,face in options:
-                samples=''.join(f'<div class="raised-sample" data-family="{face}" style="font-family:{face};--weight:{weight};font-size:{size}px">{pairs}</div>' for size in (24,32))
-                rows.append(f'<h3>{style} · {label}</h3>'+samples)
+            face='GenZui Serif Okinawan Optical' if family=='Serif' else 'GenZui Sans Okinawan'
+            samples=''.join(f'<div class="raised-sample" data-family="{face}" style="font-family:{face};--weight:{weight};font-size:{size}px">{pairs}</div>' for size in (24,32))
+            rows.append(f'<h3>{style}</h3>'+samples)
         optical_cards.append(f'<article><h2>{family}</h2>'+''.join(rows)+'</article>')
-    optical_section='<section><h2>上付きカタカナ · 24 / 32 px</h2><div class="columns">'+''.join(optical_cards)+'</div></section>'
-    page+='<section><h2>組見本</h2><div class="columns">'+''.join(sentences)+'</div></section>'+optical_section+''.join(sections)
+    optical_section='<section id="raised-comparison"><h2>上付きカタカナ · 24 / 32 px</h2><div class="columns">'+''.join(optical_cards)+'</div></section>'
+    page+=''.join(sections)
+    page+='<section><h2>組見本</h2><div class="columns">'+''.join(sentences)+'</div></section>'
+    page+='<details class="approved-group"><summary>確認済み · 25字</summary>'+optical_section+''.join(accepted)+'</details>'
+    page+='<details class="other-group"><summary>YI / YE</summary>'+''.join(other)+'</details>'
     page+='<footer>組見本の出典：<a href="https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf">沖縄語辞典</a>、121・123頁。<br>私用領域の文字を含みます。対応フォントと入力方法が必要です。</footer></main></html>'
     (OUT/'index.html').write_text(page)
     # Raster overview uses the exact TTFs with HarfBuzz shaping.
