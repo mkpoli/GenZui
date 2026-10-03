@@ -140,6 +140,25 @@ def check_variants():
             tn=ttf.getBestCmap()[cp]
             assert outline(web,name)==outline(ttf,tn)
             for tag in ('hmtx','vmtx'):assert web[tag][name]==ttf[tag][tn]
+        if record['kind']=='WEFalling':
+            assert set(web.getBestCmap())=={ord('ゑ'),0xF462}
+            main=TTFont(OUT/f'{PREFIX}-{record["style"]}.ttf')
+            cp=ord('ゑ')
+            assert outline(web,web.getBestCmap()[cp])==outline(main,main.getBestCmap()[cp])
+            name=web.getBestCmap()[0xF462]
+            assert web['hmtx'][name][0]==1000
+            parts=drawings.drawings(400 if record['style']=='Regular' else 700,'falling')[0xF462]
+            paths=[];points=[];bounds=BoundsPen(None)
+            for part in parts:
+                part.replay(bounds)
+                p=pathops.Path();part.replay(p.getPen());paths.append(p)
+                points.append(np.array([O.point(seg,t) for ring in O.rings(part) for seg in ring for t in np.linspace(0,1,81)]))
+            assert pathops.op(*paths,pathops.PathOp.INTERSECTION).area<.01
+            assert cKDTree(points[0]).query(points[1])[0].min()>=35
+            actual=web['glyf'][name]
+            assert all(abs(a-b)<=2 for a,b in zip((actual.xMin,actual.yMin,actual.xMax,actual.yMax),bounds.bounds))
+            assert len(shaped(web,'ゑ\uf462ゑ'))==3
+            continue
         raised=[e for e in ENTRIES if e['system']=='prefecture']
         family='NotoSerifJP' if 'Serif' in record['family'] else 'NotoSansJP'
         donor=instance(family,record['donor'],{int(e['base'],16) for e in raised})

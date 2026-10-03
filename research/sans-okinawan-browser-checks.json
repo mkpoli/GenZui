@@ -7,11 +7,12 @@
   "confirmed": 29,
   "unresolved": 4,
   "raised": 8,
+  "weAlternatives": 6,
   "previous": 70,
   "mobile": "passed",
   "raisedDpr2": "passed",
   "version": "Chrome/154.0.8037.93",
   "fonts": {
-    "verified": 222
+    "verified": 228
   }
 }

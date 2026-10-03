@@ -37,7 +37,8 @@ def attach(native, path, width, start):
     if score(reverse(arc))<score(arc):arc=reverse(arc)
     return O.draw([join(native,arc)])
 
-def drawings(weight):
+def drawings(weight, we_variant="slanted"):
+    assert we_variant in ("slanted","falling")
     f=source(weight); optical=source(min(900,weight+100))
     reduced=source(weight+200)
     # Main kana stem widths; Bold is a separate native master, not an offset.
@@ -131,14 +132,20 @@ def drawings(weight):
     }
     for cp,paths in vowels.items():
         dx=(32 if cp==0xF45C else 20) if weight==700 else 0
-        vowel_width=(80 if weight==400 else 128) if cp==0xF45C else w
+        vowel_width=(74 if weight==400 else 110) if cp==0xF45C else w
         if cp==0xF45C and weight==700:dx+=7
         out[cp]=fu+[left_dot]+[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
     out[0xF45D]=[native('や',[0,1],dx=120),O.draw([rounded_join(neck,arm)])]
-    yu_mark=native('は',[2],sx=.78,sy=.74,dx=8 if weight==400 else -30,dy=130,font=optical)
+    # A lighter donor preserves the native shape; retain the accepted height.
+    yu_mark=contours(source(450 if weight==400 else 700),ord('は'),[2])
+    mb=BoundsPen(None);yu_mark.replay(mb)
+    rb=BoundsPen(None);contours(optical,ord('は'),[2]).replay(rb)
+    height=(rb.bounds[3]-rb.bounds[1])/(mb.bounds[3]-mb.bounds[1])
+    yu_mark=transform(yu_mark,(1,0,0,height,0,rb.bounds[1]-height*mb.bounds[1]))
+    yu_mark=transform(yu_mark,(.78,0,0,.74,8 if weight==400 else -30,130))
     yu_mark=transform(yu_mark,(1,0,-.044 if weight==400 else -.045,1,0,0))
     yu_body=native('ゆ',sx=.94,dx=150)
     # Match the adjacent left stroke's top, retaining the parallel slopes.
@@ -146,19 +153,7 @@ def drawings(weight):
     mb=BoundsPen(None);yu_mark.replay(mb)
     yu_mark=transform(yu_mark,(1,0,0,1,0,yu_top-mb.bounds[3]))
     out[0xF45E]=[yu_mark,yu_body]
-    # Reduce the mark's bow without narrowing its horizontal sections.
-    yo=O.rings(contours(optical,ord('は'),[2]))[0]
-    mb=BoundsPen(None);O.draw([yo]).replay(mb)
-    lo,hi=mb.bounds[1],mb.bounds[3]
-    def straighten(q):
-        x,y=q;u=max(0,min(1,(y-lo)/(hi-lo)));amount=28 if weight==400 else 32
-        return np.array([x+amount*np.sin(np.pi*u)**2,y]),amount*np.pi*np.sin(2*np.pi*u)/(hi-lo)
-    for i,(p0,p1,p2,p3) in enumerate(yo):
-        q0,d0=straighten(p0);q3,d3=straighten(p3)
-        q1=q0+(p1-p0)+np.array([d0*(p1[1]-p0[1]),0])
-        q2=q3+(p2-p3)+np.array([d3*(p2[1]-p3[1]),0])
-        yo[i]=(q0,q1,q2,q3)
-    out[0xF45F]=[O.draw([move(yo,sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315)]),
+    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315,font=optical),
                   native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
@@ -167,7 +162,12 @@ def drawings(weight):
         body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=f if ch=='ゑ' else optical)
         mark=native('こ',[0],sx=.55,sy=.72,font=optical)
         if cp==0xF462:
-            mark=native('え',[0],sx=.72,sy=.72,font=optical)
+            if we_variant=='falling':
+                mark=native('ぃ',[1],sx=.55,sy=.34,font=reduced)
+            else:
+                mark=native('え',[0],sx=.65,sy=.65)
+                angle=np.radians(12)
+                mark=transform(mark,(np.cos(angle),-np.sin(angle),np.sin(angle),np.cos(angle),0,0))
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
