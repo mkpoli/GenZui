@@ -4,15 +4,15 @@
   "styles": 2,
   "sentences": 4,
   "serif": 70,
-  "confirmed": 29,
-  "unresolved": 4,
+  "confirmed": 30,
+  "unresolved": 3,
   "raised": 8,
-  "weAlternatives": 6,
+  "structures": 8,
   "previous": 70,
   "mobile": "passed",
   "raisedDpr2": "passed",
   "version": "Chrome/154.0.8037.93",
   "fonts": {
-    "verified": 228
+    "verified": 230
   }
 }

@@ -12,8 +12,8 @@ The drawings use Noto Sans JP's native Regular and Bold masters at weights
 400 and 700. Reduced components use weights 450–600 and 750–900 for optical
 compensation. The ふ head and body retain their native dimensions and weight.
 TU and WU use continuous strokes through their lower turns, and glottal
-WA/WI use a curved native こ stroke for the upper mark; WE uses the native
-え upper stroke. New joining strokes follow cubic skeletons with flat Sans
+WA/WI use a curved native こ stroke for the upper mark; WE follows the
+native ゑ upper edge with a parallel stroke. New joining strokes follow cubic skeletons with flat Sans
 terminals. Their widths are set separately for each weight. The drawings
 reuse no Serif outlines and apply no blanket outline expansion.
 
@@ -49,8 +49,8 @@ each drawing, small-size comparisons and dictionary sentence samples. Each
 card includes a compact comparison in the matching weight of GenZui Serif
 Okinawan 0.118. Those immutable reference webfonts and their notices are
 included in the proof package, with hashes checked against the release.
-The WE row also includes a separate falling-mark font in both weights,
-shown beside native kana at large and small sizes. When
+YO and WE also show related native and Okinawan forms alongside each
+drawing, with a compact Serif row for the same characters. When
 `previous/Regular.woff2` and `previous/Bold.woff2` are present, each card also
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
@@ -58,10 +58,10 @@ includes these comparison fonts when available.
 HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
 an open upper return of its vowel stroke, with vowel widths of 74/110 units.
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
-slope and alignment with ゆ’s left stroke. YO’s native mark sits above the
-bowl, matching Serif’s vertical placement. WE compares a lighter diagonal
-え mark with a compact falling ぃ mark. Both sit over the native ゑ body with
-a 30-unit vertical bounds gap. TU uses the native 700 donor
+slope and alignment with ゆ’s left stroke. YO Regular reuses that mark at
+480 units high, positioned closer to よ above its bowl. Bold retains its
+native mark. WE’s added stroke follows the curve of its native upper bar
+at widths of 45.6/69.6 units, with a 30-unit vertical bounds gap. TU uses the native 700 donor
 for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from

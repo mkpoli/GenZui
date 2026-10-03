@@ -37,8 +37,7 @@ def attach(native, path, width, start):
     if score(reverse(arc))<score(arc):arc=reverse(arc)
     return O.draw([join(native,arc)])
 
-def drawings(weight, we_variant="slanted"):
-    assert we_variant in ("slanted","falling")
+def drawings(weight):
     f=source(weight); optical=source(min(900,weight+100))
     reduced=source(weight+200)
     # Main kana stem widths; Bold is a separate native master, not an offset.
@@ -153,8 +152,14 @@ def drawings(weight, we_variant="slanted"):
     mb=BoundsPen(None);yu_mark.replay(mb)
     yu_mark=transform(yu_mark,(1,0,0,1,0,yu_top-mb.bounds[3]))
     out[0xF45E]=[yu_mark,yu_body]
-    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315,font=optical),
-                  native('よ',sx=.96,dx=150)]
+    if weight==400:
+        # Reuse the approved YU gesture at YO's shorter height. Keep its width.
+        mb=BoundsPen(None);yu_mark.replay(mb)
+        scale=480/(mb.bounds[3]-mb.bounds[1])
+        yo_mark=transform(yu_mark,(1,0,0,scale,263-(mb.bounds[0]+mb.bounds[2])/2,770-scale*mb.bounds[3]))
+    else:
+        yo_mark=native('は',[2],sx=.85,sy=.60,dx=-20,dy=315,font=optical)
+    out[0xF45F]=[yo_mark,native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
     body_sy=.82
@@ -162,16 +167,15 @@ def drawings(weight, we_variant="slanted"):
         body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=f if ch=='ゑ' else optical)
         mark=native('こ',[0],sx=.55,sy=.72,font=optical)
         if cp==0xF462:
-            if we_variant=='falling':
-                mark=native('ぃ',[1],sx=.55,sy=.34,font=reduced)
-            else:
-                mark=native('え',[0],sx=.65,sy=.65)
-                angle=np.radians(12)
-                mark=transform(mark,(np.cos(angle),-np.sin(angle),np.sin(angle),np.cos(angle),0,0))
+            # Follow the corresponding native upper edge, preserving its curve.
+            arc=O.rings(body)[0][2:8]
+            path='M '+ ' '.join(str(v) for v in arc[0][0])
+            path+=''.join(' C '+' '.join(str(v) for point in seg[1:] for v in point) for seg in arc)
+            mark=s(path,w*.6)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
-        out[cp]=[body,transform(mark,(1,0,0,1,(400 if cp==0xF462 else 365)-mx,bb.bounds[3]+(30 if cp==0xF462 else 50)-mb.bounds[1]))]
+        out[cp]=[body,transform(mark,(1,0,0,1,(mx if cp==0xF462 else 365)-mx,bb.bounds[3]+(30 if cp==0xF462 else 50)-mb.bounds[1]))]
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)

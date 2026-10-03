@@ -1,4 +1,4 @@
-"""Optical Serif references and WE alternatives for the Sans comparison proof."""
+"""Selected optical Serif references for the Sans comparison proof."""
 import hashlib
 import json
 import pathops
@@ -16,23 +16,16 @@ def build(out, root, version):
     for old in dest.glob('GenZuiSansOkinawan*.woff2'):old.unlink()
     raised=[e for e in ENTRIES if e['system']=='prefecture']
     records=[]
-    specs=[('Serif','Regular','Optical',500),('Serif','Bold','Optical',750),
-           ('Sans','Regular','WEFalling',600),('Sans','Bold','WEFalling',900)]
+    specs=[('Serif','Regular','Optical',500),('Serif','Bold','Optical',750)]
     for family,style,kind,donor_weight in specs:
         source=(out/f'GenZuiSansOkinawan-{style}.ttf' if family=='Sans' else
                 root/'releases/v0.118'/f'GenZuiSerifOkinawan-{style}.ttf')
         font=TTFont(source,recalcTimestamp=False)
         notices=[parent_name(font,n) for n in (0,13,14)]
-        if kind=='WEFalling':
-            import okinawan_sans
-            replacements={0xF462:okinawan_sans.drawings(400 if style=='Regular' else 700,'falling')[0xF462]}
-            points={0xF462,ord('ゑ')}
-            advance=1000
-        else:
-            donor=instance('Noto'+family+'JP',donor_weight,{int(e['base'],16) for e in raised})
-            replacements={int(e['output'][0],16):[transform(contours(donor,int(e['base'],16)),(.48,0,0,.48,10,410))] for e in raised}
-            points=set(replacements)|{int(e['base'],16) for e in raised}
-            advance=500
+        donor=instance('Noto'+family+'JP',donor_weight,{int(e['base'],16) for e in raised})
+        replacements={int(e['output'][0],16):[transform(contours(donor,int(e['base'],16)),(.48,0,0,.48,10,410))] for e in raised}
+        points=set(replacements)|{int(e['base'],16) for e in raised}
+        advance=500
         options=subset.Options();options.layout_features=['*'];options.recalc_timestamp=False
         sub=subset.Subsetter(options=options)
         sub.populate(unicodes=points);sub.subset(font)
