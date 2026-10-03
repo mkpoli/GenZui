@@ -54,9 +54,11 @@ includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
-an open upper return of its vowel stroke. YU’s glottal mark follows the slope
-of ゆ’s left stroke. YO’s shorter mark sits above the bowl, matching Serif’s
-vertical placement. TU uses the native 700 donor
+an open upper return of its vowel stroke, with widths of 80/128 units to
+match the adjacent native ふ descent. YU’s glottal mark follows the slope of
+ゆ’s left stroke and aligns with its top. YO’s shorter mark has a reduced bow
+and sits above the bowl, matching Serif’s vertical placement. WE’s upper mark
+sits over its upper body with a 30-unit vertical bounds gap. TU uses the native 700 donor
 for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from

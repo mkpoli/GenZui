@@ -131,16 +131,34 @@ def drawings(weight):
     }
     for cp,paths in vowels.items():
         dx=(32 if cp==0xF45C else 20) if weight==700 else 0
-        out[cp]=fu+[left_dot]+[transform(s(path),(1,0,0,1,dx,0)) for path in paths]
+        vowel_width=(80 if weight==400 else 128) if cp==0xF45C else w
+        if cp==0xF45C and weight==700:dx+=7
+        out[cp]=fu+[left_dot]+[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
     out[0xF45D]=[native('や',[0,1],dx=120),O.draw([rounded_join(neck,arm)])]
     yu_mark=native('は',[2],sx=.78,sy=.74,dx=8 if weight==400 else -30,dy=130,font=optical)
     yu_mark=transform(yu_mark,(1,0,-.044 if weight==400 else -.045,1,0,0))
-    out[0xF45E]=[yu_mark,
-                  native('ゆ',sx=.94,dx=150)]
-    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315,font=optical),
+    yu_body=native('ゆ',sx=.94,dx=150)
+    # Match the adjacent left stroke's top, retaining the parallel slopes.
+    yu_top=max(q[1] for seg in O.rings(yu_body)[0][-3:] for q in seg)
+    mb=BoundsPen(None);yu_mark.replay(mb)
+    yu_mark=transform(yu_mark,(1,0,0,1,0,yu_top-mb.bounds[3]))
+    out[0xF45E]=[yu_mark,yu_body]
+    # Reduce the mark's bow without narrowing its horizontal sections.
+    yo=O.rings(contours(optical,ord('は'),[2]))[0]
+    mb=BoundsPen(None);O.draw([yo]).replay(mb)
+    lo,hi=mb.bounds[1],mb.bounds[3]
+    def straighten(q):
+        x,y=q;u=max(0,min(1,(y-lo)/(hi-lo)));amount=28 if weight==400 else 32
+        return np.array([x+amount*np.sin(np.pi*u)**2,y]),amount*np.pi*np.sin(2*np.pi*u)/(hi-lo)
+    for i,(p0,p1,p2,p3) in enumerate(yo):
+        q0,d0=straighten(p0);q3,d3=straighten(p3)
+        q1=q0+(p1-p0)+np.array([d0*(p1[1]-p0[1]),0])
+        q2=q3+(p2-p3)+np.array([d3*(p2[1]-p3[1]),0])
+        yo[i]=(q0,q1,q2,q3)
+    out[0xF45F]=[O.draw([move(yo,sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315)]),
                   native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
@@ -153,7 +171,7 @@ def drawings(weight):
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
-        out[cp]=[body,transform(mark,(1,0,0,1,(460 if cp==0xF462 else 365)-mx,bb.bounds[3]+50-mb.bounds[1]))]
+        out[cp]=[body,transform(mark,(1,0,0,1,(400 if cp==0xF462 else 365)-mx,bb.bounds[3]+(30 if cp==0xF462 else 50)-mb.bounds[1]))]
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)

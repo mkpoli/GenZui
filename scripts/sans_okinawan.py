@@ -100,7 +100,7 @@ def proof():
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
     sections=[];accepted=[];other=[]
-    active_ids={'tu','du','hwe',"'yu","'yo","'we",'wu'}
+    active_ids={'hwe',"'yu","'yo","'we"}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     for e in ENTRIES:
         text=''.join(chr(int(c,16)) for c in e['output']);src=source_text(e)
@@ -138,7 +138,7 @@ def proof():
     optical_section='<section id="raised-comparison"><h2>上付きカタカナ · 24 / 32 px</h2><div class="columns">'+''.join(optical_cards)+'</div></section>'
     page+=''.join(sections)
     page+='<section><h2>組見本</h2><div class="columns">'+''.join(sentences)+'</div></section>'
-    page+='<details class="approved-group"><summary>確認済み · 26字</summary>'+optical_section+''.join(accepted)+'</details>'
+    page+='<details class="approved-group"><summary>確認済み · 29字</summary>'+optical_section+''.join(accepted)+'</details>'
     page+='<details class="other-group"><summary>YI / YE</summary>'+''.join(other)+'</details>'
     page+='<footer>組見本の出典：<a href="https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf">沖縄語辞典</a>、121・123頁。<br>私用領域の文字を含みます。対応フォントと入力方法が必要です。</footer></main></html>'
     (OUT/'index.html').write_text(page)
