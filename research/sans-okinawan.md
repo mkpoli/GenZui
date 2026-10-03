@@ -12,7 +12,8 @@ The drawings use Noto Sans JP's native Regular and Bold masters at weights
 400 and 700. Reduced components use weights 450–600 and 750–900 for optical
 compensation. The ふ head and body retain their native dimensions and weight.
 TU and WU use continuous strokes through their lower turns, and glottal
-WA/WI/WE use a curved native こ stroke for the upper mark. New joining strokes follow cubic skeletons with flat Sans
+WA/WI use a curved native こ stroke for the upper mark; WE uses the native
+え upper stroke. New joining strokes follow cubic skeletons with flat Sans
 terminals. Their widths are set separately for each weight. The drawings
 reuse no Serif outlines and apply no blanket outline expansion.
 
@@ -53,11 +54,14 @@ includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
-the upper return of its vowel stroke. YU and YO use separately fitted glottal
-marks, and WE has a narrower, angled upper mark. TU uses the native 700 donor
+an open upper return of its vowel stroke. YU’s glottal mark follows the slope
+of ゆ’s left stroke. YO’s shorter mark sits above the bowl, matching Serif’s
+vertical placement. TU uses the native 700 donor
 for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
-farther below the crossing. Confirmed
+farther below the crossing. A local correction restores weight lost from
+the upper arch during vertical compression, preserving the native tangents.
+Bold’s top bar is raised slightly to retain space above the arch. Confirmed
 forms are collapsed by default, with unresolved forms at the top. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable

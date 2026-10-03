@@ -80,14 +80,33 @@ def drawings(weight):
         s(f'M 620 685 C 529 630 415 559 310 491 C 224 435 163 400 163 340 '
           f'C 163 245 245 240 329 243 C 458 247.6 587 301 699 280 '
           f'C 839 254 864 184 799 120 C 717 41 530 {tu_tail} 329 {tu_tail}',bowl_width)]
-    # Restore the downward continuation after the crossing without scaling
-    # its width or changing the upper arch. Blend only the upright's ends.
+    # Fit the native を arch and upright to the space above the return.
     wo=O.rings(contours(source(450) if weight==400 else optical,ord('を'),[0]))[0]
+    # The arch loses vertical weight when compressed. Restore that section
+    # alone, tapering the correction to zero at the native joins.
+    arch_gain=(15 if weight==400 else 26)/2/.69
+    peak=wo[20][0][0]
+    for start,end,sign in ((4,9,1),(18,22,-1)):
+        lo,hi=sorted((wo[start][0][0],wo[end-1][3][0]))
+        def arch_point(q):
+            x,y=q
+            t=max(0,min(1,(x-lo)/(peak-lo) if x<=peak else (hi-x)/(hi-peak)))
+            dt=1/(peak-lo) if x<=peak else -1/(hi-peak)
+            slope=sign*arch_gain*6*t*(1-t)*dt
+            return np.array([x,y+sign*arch_gain*t*t*(3-2*t)]),slope
+        # Transform endpoint tangents with the warp, keeping the native joins.
+        for i in range(start,end):
+            p0,p1,p2,p3=wo[i]
+            q0,d0=arch_point(p0);q3,d3=arch_point(p3)
+            q1=q0+(p1-p0)+np.array([0,d0*(p1[0]-p0[0])])
+            q2=q3+(p2-p3)+np.array([0,d3*(p2[0]-p3[0])])
+            wo[i]=(q0,q1,q2,q3)
+    # Extend only the upright below the crossing, preserving its width.
     extension=25 if weight==400 else 35
     for i in range(10,18):
         wo[i]=tuple(np.array([x,y-extension/.69*max(0,min(1,(310-y)/180))**2]) for x,y in wo[i])
     out[0xF465]=[O.draw([move(wo,sx=.9,sy=.69,dx=20,dy=272)]),
-        native('を',[1],sx=.83,sy=1,dx=25,dy=60),
+        native('を',[1],sx=.83,sy=1,dx=25,dy=60 if weight==400 else 80),
         s(f'M 815 612.5 C 715 562.5 609 510 529 470 C 449 430 240 430 240 320 '
           f'C 240 210 365 216 547 221 C 709 225.45 819 204 839 143 '
           f'C 867 46 656 {wu_tail} 340 {wu_tail}',70 if weight==400 else w)]
@@ -107,8 +126,8 @@ def drawings(weight):
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:('M 620 430 C 686 464 780 491 794 426 C 806 370 747 312 714 237 L 610 0',
-                 f'M 687 158 C 747 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
+        0xF45C:('M 550 415 L 650 465 C 688.84 484.42 735.78 476.55 766.17 445.52 C 796.56 414.49 803.44 367.40 783.21 328.97 L 610 0',
+                 f'M 697 158 C 747 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
     }
     for cp,paths in vowels.items():
         dx=(32 if cp==0xF45C else 20) if weight==700 else 0
@@ -117,11 +136,11 @@ def drawings(weight):
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
     out[0xF45D]=[native('や',[0,1],dx=120),O.draw([rounded_join(neck,arm)])]
-    yu_mark=native('は',[2],sx=.78,sy=.66,dx=-20 if weight==400 else -52,dy=160,font=optical)
-    yu_mark=transform(yu_mark,(1,0,.06,1,-12,0))
+    yu_mark=native('は',[2],sx=.78,sy=.74,dx=8 if weight==400 else -30,dy=130,font=optical)
+    yu_mark=transform(yu_mark,(1,0,-.044 if weight==400 else -.045,1,0,0))
     out[0xF45E]=[yu_mark,
                   native('ゆ',sx=.94,dx=150)]
-    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.75,dx=15 if weight==400 else -20,dy=135,font=optical),
+    out[0xF45F]=[native('は',[2],sx=.90 if weight==400 else .85,sy=.60,dx=15 if weight==400 else -20,dy=315,font=optical),
                   native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
@@ -130,8 +149,7 @@ def drawings(weight):
         body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=f if ch=='ゑ' else optical)
         mark=native('こ',[0],sx=.55,sy=.72,font=optical)
         if cp==0xF462:
-            mark=native('こ',[0],sx=.42,sy=.58)
-            mark=transform(mark,(.985,-.174,.174,.985,0,0))
+            mark=native('え',[0],sx=.72,sy=.72,font=optical)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
