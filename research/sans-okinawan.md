@@ -55,18 +55,19 @@ drawing, with a compact Serif row for the same characters. When
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
-HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
-an open upper return of its vowel stroke, with vowel widths of 74/110 units.
-Its lower, wider upper return follows a virtual arch from the left dot,
-flattening continuously across the gap. The lower branch starts on the
-descending stem so its flat cap stays inside the stroke.
+HWA/HWI/HWE use separate left dots and right vowel components. HWE has
+two candidates, shown with native kana at display and reading sizes. A
+uses the intact main contour of native え, with 450/800 donors scaled by
+.54 horizontally and .80 vertically. B uses a higher rising shoulder and
+an open return, with widths of 74/110 units. Its branch cap stays inside
+the descending stem. The main font contains A; B is a separate proof font.
+
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
-slope and alignment with ゆ’s left stroke. YO Regular reuses that mark at
-480 units high. Bold uses a 900 donor at 500 units high to retain sufficient
-weight in the shorter mark. Both are positioned above よ’s bowl; the
-approved Regular drawing is unchanged. WE’s added stroke follows the curve
-of its native upper bar at widths of 65.36/99.76 units, with a 30-unit vertical
-bounds gap. Its reduced body uses the same 500/800 optical donors as WI.
+slope and alignment with ゆ’s left stroke. YO uses 475/900 donors at heights
+of 480/500 units. The approved Bold drawing is unchanged. WE’s upper mark
+follows the native upper bar with widths of 75/108 units and a 50-unit
+vertical bounds gap. Its ink area per horizontal unit is 73.56/104.76,
+matching WA/WI’s 73.91/105.04. Its reduced body retains the 500/800 donors.
 TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from

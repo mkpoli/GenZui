@@ -8,11 +8,12 @@
   "unresolved": 3,
   "raised": 8,
   "structures": 12,
+  "hweAlternatives": 6,
   "previous": 70,
   "mobile": "passed",
   "raisedDpr2": "passed",
   "version": "Chrome/154.0.8037.93",
   "fonts": {
-    "verified": 234
+    "verified": 240
   }
 }

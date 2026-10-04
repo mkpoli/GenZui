@@ -37,7 +37,7 @@ def attach(native, path, width, start):
     if score(reverse(arc))<score(arc):arc=reverse(arc)
     return O.draw([join(native,arc)])
 
-def drawings(weight):
+def drawings(weight, hwe_variant='A'):
     f=source(weight); optical=source(min(900,weight+100))
     reduced=source(weight+200)
     # Main kana stem widths; Bold is a separate native master, not an offset.
@@ -123,22 +123,30 @@ def drawings(weight):
     left_dot=native('ふ',[3],sx=.85,sy=.85,dx=20,dy=10 if weight==400 else 70)
     # This is the visible end of one virtual arch from the left dot's cap.
     # Across the gap its tangent flattens continuously into the open hook.
-    hwe_entry=('M 550 380.16 C 603.30 398.06 657.07 409 705 409'
+    hwe_entry=('M 580 442.614 C 637.436 477.460 691.323 505.923 730 520'
                if weight==400 else
-               'M 550 399.07 C 605.66 406.03 659.95 409 705 409')
+               'M 580 464.374 C 639.350 487.403 693.512 506.720 730 520')
     vowels={
         0xF45A:('M 672 337 L 646 -2',
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:(hwe_entry+' C 760 409 801 373 801 327 C 801 288 771.1 236.9 746 200 L 610 0',
-                 f'M 717.44 158 C 767.44 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
+        0xF45C:(hwe_entry+' C 775.120 536.422 825.679 521.681 854.902 483.583 C 884.126 445.485 885.262 392.833 857.708 353.510 L 610 0',
+                 f'M 720.71 158 C 770.71 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
     }
     for cp,paths in vowels.items():
         dx=(32 if cp==0xF45C else 20) if weight==700 else 0
         vowel_width=(74 if weight==400 else 110) if cp==0xF45C else w
         if cp==0xF45C and weight==700:dx+=7
         out[cp]=fu+[left_dot]+[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
+    if hwe_variant=='A':
+        # Keep the native vowel's bar, reversal, branching stroke and foot.
+        vowel=native('え',[1],sx=.54,sy=.80,
+                     dx=514.04 if weight==400 else 535.46,
+                     font=source(450 if weight==400 else 800))
+        out[0xF45C]=fu+[left_dot,vowel]
+    elif hwe_variant!='B':
+        raise ValueError(hwe_variant)
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
@@ -157,12 +165,10 @@ def drawings(weight):
     mb=BoundsPen(None);yu_mark.replay(mb)
     yu_mark=transform(yu_mark,(1,0,0,1,0,yu_top-mb.bounds[3]))
     out[0xF45E]=[yu_mark,yu_body]
-    # Preserve the accepted Regular gesture; compensate the short Bold mark
-    # with a heavier native donor, retaining its curve and terminal.
-    yo_source=yu_mark
-    if weight==700:
-        yo_source=native('は',[2],sx=.78,sy=.74,font=source(900))
-        yo_source=transform(yo_source,(1,0,-.045,1,0,0))
+    # Optical donors restore weight in the shortened glottal mark while
+    # retaining the native curve and terminal.
+    yo_source=native('は',[2],sx=.78,sy=.74,font=source(475 if weight==400 else 900))
+    yo_source=transform(yo_source,(1,0,-.044 if weight==400 else -.045,1,0,0))
     mb=BoundsPen(None);yo_source.replay(mb)
     scale=(480 if weight==400 else 500)/(mb.bounds[3]-mb.bounds[1])
     top=770 if weight==400 else 786
@@ -179,11 +185,12 @@ def drawings(weight):
             arc=O.rings(body)[0][2:8]
             path='M '+ ' '.join(str(v) for v in arc[0][0])
             path+=''.join(' C '+' '.join(str(v) for point in seg[1:] for v in point) for seg in arc)
-            mark=s(path,w*.86)
+            # Match WA/WI's upper-mark ink per horizontal unit (74/105).
+            mark=s(path,75 if weight==400 else 108)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
-        out[cp]=[body,transform(mark,(1,0,0,1,(mx if cp==0xF462 else 365)-mx,bb.bounds[3]+(30 if cp==0xF462 else 50)-mb.bounds[1]))]
+        out[cp]=[body,transform(mark,(1,0,0,1,(mx if cp==0xF462 else 365)-mx,bb.bounds[3]+50-mb.bounds[1]))]
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)

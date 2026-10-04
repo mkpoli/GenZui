@@ -4,10 +4,10 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "34b42b08582a77eb94c224f6c1180ac88abaee723b282a8cbe786a829f308f08",
+      "full_sha256": "2bb80776a8d00a66e26b7cdeb504c59472d44e6e48b27746265ef98ba5c50f31",
       "encoded_characters": 805,
-      "ttf_sha256": "2623d9ba9be8d2c2fccb61c9562fb5c9970c50b9b85d8f4321e3e0719d58f4e6",
-      "woff2_sha256": "90f2da9fdf6ab2a822f0726b238c937d522c32aa31bc948840f0f2b4dde3ca90",
+      "ttf_sha256": "6df04931633d640e8bff6ccd96d03163b47f8537fb86da17ec99f233de1de39f",
+      "woff2_sha256": "c260baa74d64ca162e3c9b8f269ca3addd553e6a883cfde579fc70e8bb87c3a2",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -23,21 +23,21 @@
       "component_clearance_units": {
         "U+F460": 54.03,
         "U+F461": 54.03,
-        "U+F462": 46.28,
+        "U+F462": 66.18,
         "U+F463": 76.61,
         "U+F467": 107.12,
         "U+F45E": 45.32,
-        "U+F45F": 76.31,
+        "U+F45F": 75.44,
         "U+F452": 89.09
       }
     },
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "1f53f973cea33cf8460395e7f68727d03e1be01196da31ae97cb15bd6c9e4fa7",
+      "full_sha256": "4c6fe05e1aca78523b7d15c04030b73d3f723112934baf9bbe1ed4148949c461",
       "encoded_characters": 805,
-      "ttf_sha256": "6b271c9565538784bb8883389713fc9a55b5ed1c2bc653e8921438ba72eba941",
-      "woff2_sha256": "367595319606c07db5ed96b9f8364389ded9d783b19ad71be0398669afd4c1fa",
+      "ttf_sha256": "045c4f46c31338bdf6bb62628489e5b8809e0f6c8025cdc81d4bb9ac3776ec13",
+      "woff2_sha256": "cbfb95094b4a11b39331c0fc3ebbd86da9578e9b45517f39e696cbb2e0bae28c",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -53,7 +53,7 @@
       "component_clearance_units": {
         "U+F460": 54.05,
         "U+F461": 54.05,
-        "U+F462": 47.1,
+        "U+F462": 66.87,
         "U+F463": 48.78,
         "U+F467": 61.9,
         "U+F45E": 45.29,
@@ -78,6 +78,20 @@
       "donor": 750,
       "file": "variants/GenZuiSerifOkinawanOptical-Bold.woff2",
       "sha256": "07de1b495b1874b438f2a635e0e8272cfbd302fb53d0f093ac396f984299b65a"
+    },
+    {
+      "family": "GenZui Sans Okinawan HWE B",
+      "style": "Regular",
+      "kind": "HweB",
+      "file": "variants/GenZuiSansOkinawanHweB-Regular.woff2",
+      "sha256": "36ecfe4f0b5f41dab78321b0e243bff0704151cddec74729a926e56c159319ff"
+    },
+    {
+      "family": "GenZui Sans Okinawan HWE B",
+      "style": "Bold",
+      "kind": "HweB",
+      "file": "variants/GenZuiSansOkinawanHweB-Bold.woff2",
+      "sha256": "dd0f2fef7b54590a4b0e2ee940d60f03f49ed1e34512018bd2f6f9d823bde77d"
     }
   ]
 }
