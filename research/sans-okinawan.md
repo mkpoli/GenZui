@@ -12,8 +12,8 @@ The drawings use Noto Sans JP's native Regular and Bold masters at weights
 400 and 700. Reduced components use weights 450–600 and 750–900 for optical
 compensation. The ふ head and body retain their native dimensions and weight.
 TU and WU use continuous strokes through their lower turns, and glottal
-WA/WI use a curved native こ stroke for the upper mark; WE follows the
-native ゑ upper edge with a parallel stroke. New joining strokes follow cubic skeletons with flat Sans
+WA/WI/WE share the same curved native こ upper-mark outline and placement
+rule. New joining strokes follow cubic skeletons with flat Sans
 terminals. Their widths are set separately for each weight. The drawings
 reuse no Serif outlines and apply no blanket outline expansion.
 
@@ -55,17 +55,17 @@ drawing, with a compact Serif row for the same characters. When
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
-HWA/HWI/HWE use separate left dots and right vowel components. HWE uses
-the same 76/116-unit vowel strokes as HWA/HWI, with a downward-facing
-entry, a return into the diagonal, and a foot on the baseline. The family
-comparison shows all three beside native ふ in both weights.
+HWA/HWI/HWE use separate left dots and right vowel components. HWE keeps
+its long え arm, with a gently falling entry after the implied crest of ふ.
+The rounded return continues into the diagonal and baseline foot. Its
+vowel strokes are 76/116 units wide. The family comparison shows all three
+beside native ふ in both weights.
 
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
 slope and alignment with ゆ’s left stroke. YO uses 475/900 donors at heights
-of 480/500 units. Both approved YO drawings are unchanged. WE’s upper mark
-follows the native upper bar with widths of 75/108 units and a 50-unit
-vertical bounds gap. Its ink area per horizontal unit is 73.56/104.76,
-matching WA/WI’s 73.91/105.04. Its reduced body retains the 500/800 donors.
+of 480/500 units. Both approved YO drawings are unchanged. WE shares WA/WI’s actual upper-mark outline, including its length,
+curve and stroke variation, with the same horizontal anchor and 50-unit
+vertical bounds gap. Its reduced body retains the 500/800 donors.
 TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a
 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends

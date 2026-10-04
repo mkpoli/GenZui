@@ -128,11 +128,11 @@ def drawings(weight):
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:('M 702.6222 313.3662 C 735.7517 301.3080 761.0940 274.1007 770.7732 240.1998 C 780.4524 206.2988 773.2956 169.8125 751.5268 142.0801 L 640 0',
-                 'M 718.4958 100 C 768.4958 200 802 200 836 100 C 858.1 35 863 1.387 913 3 L 975 5'),
+        0xF45C:('M 550 415 C 620 403 710 400 745 330 C 766 288 766 264 740 220 L 610 0',
+                 'M 703.3636 158 C 753.3636 288 809 288 841 158 C 857 93 848 6 913 3 L 975 5'),
     }
     for cp,paths in vowels.items():
-        dx=20 if weight==700 else 0
+        dx=(32 if cp==0xF45C else 20) if weight==700 else 0
         out[cp]=fu+[left_dot]+[transform(s(path),(1,0,0,1,dx,0)) for path in paths]
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
@@ -167,17 +167,10 @@ def drawings(weight):
     for cp,ch in ((0xF460,None),(0xF461,'ゐ'),(0xF462,'ゑ')):
         body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=optical)
         mark=native('こ',[0],sx=.55,sy=.72,font=optical)
-        if cp==0xF462:
-            # Follow the corresponding native upper edge, preserving its curve.
-            arc=O.rings(body)[0][2:8]
-            path='M '+ ' '.join(str(v) for v in arc[0][0])
-            path+=''.join(' C '+' '.join(str(v) for point in seg[1:] for v in point) for seg in arc)
-            # Match WA/WI's upper-mark ink per horizontal unit (74/105).
-            mark=s(path,75 if weight==400 else 108)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
-        out[cp]=[body,transform(mark,(1,0,0,1,(mx if cp==0xF462 else 365)-mx,bb.bounds[3]+50-mb.bounds[1]))]
+        out[cp]=[body,transform(mark,(1,0,0,1,365-mx,bb.bounds[3]+50-mb.bounds[1]))]
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)
