@@ -16,7 +16,7 @@ from okinawan_subset import repertoire
 from okinawan_sns import SENTENCES,compose
 from check_okinawan_subset import outline,shaped
 
-def geometry(weight,hwe_variant='A'):
+def geometry(weight):
     def shape(parts):
         result=pathops.Path()
         for part in parts:
@@ -25,7 +25,7 @@ def geometry(weight,hwe_variant='A'):
     def points(parts):
         return np.array([O.point(seg,t) for part in parts for ring in O.rings(part)
                          for seg in ring for t in np.linspace(0,1,31)])
-    recipes=drawings.drawings(weight,hwe_variant=hwe_variant);clearances={}
+    recipes=drawings.drawings(weight);clearances={}
     for cp in DAKUTEN:
         base=recipes[cp]
         marks=drawings.voiced_parts(drawings.source(weight),cp,base,contours,transform)[len(base):]
@@ -140,17 +140,6 @@ def check_variants():
             tn=ttf.getBestCmap()[cp]
             assert outline(web,name)==outline(ttf,tn)
             for tag in ('hmtx','vmtx'):assert web[tag][name]==ttf[tag][tn]
-        if record['kind']=='HweB':
-            base=TTFont(OUT/f'{PREFIX}-{record["style"]}.ttf')
-            assert set(web.getBestCmap())=={ord('ふ'),ord('え'),0xF45C}
-            for cp,name in web.getBestCmap().items():
-                same=outline(web,name)==outline(base,base.getBestCmap()[cp])
-                assert same==(cp!=0xF45C),(record['file'],cp)
-                assert web['hmtx'][name][0]==1000
-            g=web['glyf'][web.getBestCmap()[0xF45C]]
-            assert 0<=g.xMin<g.xMax<=1000
-            geometry(400 if record['style']=='Regular' else 700,hwe_variant='B')
-            continue
         raised=[e for e in ENTRIES if e['system']=='prefecture']
         family='NotoSerifJP' if 'Serif' in record['family'] else 'NotoSansJP'
         donor=instance(family,record['donor'],{int(e['base'],16) for e in raised})

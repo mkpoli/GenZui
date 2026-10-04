@@ -1,4 +1,4 @@
-"""Optical Serif references and HWE alternatives for the Sans proof."""
+"""Selected optical Serif references for the Sans comparison proof."""
 import hashlib
 import json
 import pathops
@@ -8,7 +8,6 @@ from fontTools.pens.recordingPen import RecordingPen
 from serif import instance, contours, transform, glyph
 from kugyol import rename, parent_name
 from okinawan import ENTRIES
-import okinawan_sans
 
 
 def build(out, root, version):
@@ -48,23 +47,6 @@ def build(out, root, version):
         for cp in replacements:
             assert web['hmtx'][web.getBestCmap()[cp]][0]==advance
         records.append(dict(family=face,style=style,kind=kind,donor=donor_weight,file=f'variants/{stem}.woff2',
-                            sha256=hashlib.sha256((dest/f'{stem}.woff2').read_bytes()).hexdigest()))
-    for style,weight in [('Regular',400),('Bold',700)]:
-        font=TTFont(out/f'GenZuiSansOkinawan-{style}.ttf',recalcTimestamp=False)
-        notices=[parent_name(font,n) for n in (0,13,14)]
-        options=subset.Options();options.layout_features=['*'];options.recalc_timestamp=False
-        sub=subset.Subsetter(options=options)
-        sub.populate(unicodes={ord('ふ'),ord('え'),0xF45C});sub.subset(font)
-        merged=pathops.Path()
-        for part in okinawan_sans.drawings(weight,hwe_variant='B')[0xF45C]:
-            p=pathops.Path();part.replay(p.getPen());merged=pathops.op(merged,p,pathops.PathOp.UNION)
-        pen=RecordingPen();merged.draw(pen);g=glyph([pen]);name=font.getBestCmap()[0xF45C]
-        font['glyf'][name]=g;g.recalcBounds(font['glyf'])
-        font['hmtx'][name]=(1000,g.xMin);font['vmtx'][name]=(1000,880-g.yMax)
-        face='GenZui Sans Okinawan HWE B';stem=f'GenZuiSansOkinawanHweB-{style}'
-        rename(font,face,face,style,stem,version,*notices)
-        font.save(dest/f'{stem}.ttf');font.flavor='woff2';font.save(dest/f'{stem}.woff2')
-        records.append(dict(family=face,style=style,kind='HweB',file=f'variants/{stem}.woff2',
                             sha256=hashlib.sha256((dest/f'{stem}.woff2').read_bytes()).hexdigest()))
     (dest/'manifest.json').write_text(json.dumps(records,indent=2)+'\n')
     return records
