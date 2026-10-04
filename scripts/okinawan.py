@@ -67,7 +67,7 @@ def voiced_parts(font, cp, parts, contours, transform, mark_scale=1.0):
 
 
 def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
-                  bold=False):
+                  bold=False, provider=None):
     def unite(parts):
         # Union independently filled components: opposite native/custom winding
         # must not punch holes into a shared join.
@@ -84,34 +84,41 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         pen = contours(font, ord(ch), indices)
         return transform(pen, matrix) if matrix else pen
 
-    from okinawan_bold import drawings as native_drawings
-    recipes = native_drawings(font, contours, style='Bold' if bold else 'Regular')
-    # The glottal letters and SI are Noto's own kana with a Noto stroke merged
-    # into the outline (YA) or set beside it; see okinawan_merge. Bold reads
-    # the same strokes from the wght 700 instance; the width given back to a
-    # narrowed kana grows with Noto's own kana stems (77.8 to 125.3 units on
-    # は's left stroke at wght 400 and 700).
-    def beside(kana, params):
-        if bold:
-            params = dict(params, kana_bold=params['kana_bold'] * 125.3 / 77.8)
-        return okinawan_merge.glottal_beside(font, contours, kana, **params)
-    # Relieve Regular's YA/YO marks and excess sideways compensation.
-    ya_params = okinawan_merge.YA if bold else dict(okinawan_merge.YA, neck_w=.96, head_w=.86)
-    yo_params = okinawan_merge.YO if bold else dict(okinawan_merge.YO, neck_w=1.12, head_w=1.04, kana_bold=6.5)
-    recipes.update({
-        0xF45D: [okinawan_merge.glottal_ya(font, contours, **ya_params)],
-        0xF45E: beside('ゆ', okinawan_merge.YU),
-        0xF45F: beside('よ', yo_params),
-        0xF460: beside('ゐわ', okinawan_merge.WA),
-        0xF461: beside('ゐ', okinawan_merge.WI),
-        0xF462: beside('ゑ', okinawan_merge.WE),
-        0xF463: beside('ん', okinawan_merge.N),
-        0xF467: si_parts(font, contours),
-    })
+    if provider is not None:
+        recipes = provider.drawings(700 if bold else 400)
+    else:
+        from okinawan_bold import drawings as native_drawings
+        recipes = native_drawings(font, contours, style='Bold' if bold else 'Regular')
+        # The glottal letters and SI are Noto's own kana with a Noto stroke merged
+        # into the outline (YA) or set beside it; see okinawan_merge. Bold reads
+        # the same strokes from the wght 700 instance; the width given back to a
+        # narrowed kana grows with Noto's own kana stems (77.8 to 125.3 units on
+        # は's left stroke at wght 400 and 700).
+        def beside(kana, params):
+            if bold:
+                params = dict(params, kana_bold=params['kana_bold'] * 125.3 / 77.8)
+            return okinawan_merge.glottal_beside(font, contours, kana, **params)
+        # Relieve Regular's YA/YO marks and excess sideways compensation.
+        ya_params = okinawan_merge.YA if bold else dict(okinawan_merge.YA, neck_w=.96, head_w=.86)
+        yo_params = okinawan_merge.YO if bold else dict(okinawan_merge.YO, neck_w=1.12, head_w=1.04, kana_bold=6.5)
+        recipes.update({
+            0xF45D: [okinawan_merge.glottal_ya(font, contours, **ya_params)],
+            0xF45E: beside('ゆ', okinawan_merge.YU),
+            0xF45F: beside('よ', yo_params),
+            0xF460: beside('ゐわ', okinawan_merge.WA),
+            0xF461: beside('ゐ', okinawan_merge.WI),
+            0xF462: beside('ゑ', okinawan_merge.WE),
+            0xF463: beside('ん', okinawan_merge.N),
+            0xF467: si_parts(font, contours),
+        })
     for cp, entry in PUA.items():
         if entry['system'] == 'prefecture':
             # Half-em advance, raised into the upper half of a full kana cell.
-            recipes[cp] = [part(chr(int(entry['base'], 16)), matrix=(.48, 0, 0, .48, 10, 410))]
+            char=chr(int(entry['base'],16))
+            if provider is not None and hasattr(provider,'raised_parts'):
+                recipes[cp]=provider.raised_parts(700 if bold else 400,char)
+            else:
+                recipes[cp] = [part(char, matrix=(.48, 0, 0, .48, 10, 410))]
     for cp, parts in recipes.items():
         name = add(font, f'okinawa.u{cp:04X}', unite(parts))
         g = font['glyf'][name]
@@ -133,7 +140,8 @@ def add_okinawan(font, add, make_glyph, contours, transform, add_feature,
         cp = int(e['output'][0], 16)
 
         name = add(font, f"okinawa.{e['id']}",
-                   unite(voiced_parts(font, cp, recipes[cp], contours, transform)))
+                   unite((provider.voiced_parts if provider else voiced_parts)(
+                       font, cp, recipes[cp], contours, transform)))
         font['vmtx'][name] = (1000, 880-font['glyf'][name].yMax)
         font['GDEF'].table.GlyphClassDef.classDefs[name] = 1
         mapping[(cmap[cp], cmap[0x3099])] = name
