@@ -121,12 +121,17 @@ def drawings(weight):
     # changes make space for the vowel without changing their stroke contrast.
     fu=[native('ふ',[0],dx=-100),native('ふ',[1],dx=-100)]
     left_dot=native('ふ',[3],sx=.85,sy=.85,dx=20,dy=10 if weight==400 else 70)
+    # This is the visible end of one virtual arch from the left dot's cap.
+    # Across the gap its tangent flattens continuously into the open hook.
+    hwe_entry=('M 550 416.50 C 585.42 436.06 619.65 452.74 650 465 C 690.26 481.27'
+               if weight==400 else
+               'M 550 439.84 C 586.28 450.33 620.63 458.76 650 465 C 692.48 474.03')
     vowels={
         0xF45A:('M 672 337 L 646 -2',
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:('M 550 415 L 650 465 C 688.84 484.42 735.78 476.55 766.17 445.52 C 796.56 414.49 803.44 367.40 783.21 328.97 L 610 0',
+        0xF45C:(hwe_entry+' 735.78 476.55 766.17 445.52 C 796.56 414.49 803.44 367.40 783.21 328.97 L 610 0',
                  f'M 697 158 C 747 288 809 288 841 158 C 857 93 848 6 913 3 L {963 if weight==700 else 975} 5'),
     }
     for cp,paths in vowels.items():
@@ -152,13 +157,11 @@ def drawings(weight):
     mb=BoundsPen(None);yu_mark.replay(mb)
     yu_mark=transform(yu_mark,(1,0,0,1,0,yu_top-mb.bounds[3]))
     out[0xF45E]=[yu_mark,yu_body]
-    if weight==400:
-        # Reuse the approved YU gesture at YO's shorter height. Keep its width.
-        mb=BoundsPen(None);yu_mark.replay(mb)
-        scale=480/(mb.bounds[3]-mb.bounds[1])
-        yo_mark=transform(yu_mark,(1,0,0,scale,263-(mb.bounds[0]+mb.bounds[2])/2,770-scale*mb.bounds[3]))
-    else:
-        yo_mark=native('は',[2],sx=.85,sy=.60,dx=-20,dy=315,font=optical)
+    # Reuse the approved YU gesture at YO's shorter height. Keep its width.
+    mb=BoundsPen(None);yu_mark.replay(mb)
+    scale=(480 if weight==400 else 500)/(mb.bounds[3]-mb.bounds[1])
+    top=770 if weight==400 else 786
+    yo_mark=transform(yu_mark,(1,0,0,scale,263-(mb.bounds[0]+mb.bounds[2])/2,top-scale*mb.bounds[3]))
     out[0xF45F]=[yo_mark,native('よ',sx=.96,dx=150)]
     wi=rings('ゐ',optical)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
@@ -171,7 +174,7 @@ def drawings(weight):
             arc=O.rings(body)[0][2:8]
             path='M '+ ' '.join(str(v) for v in arc[0][0])
             path+=''.join(' C '+' '.join(str(v) for point in seg[1:] for v in point) for seg in arc)
-            mark=s(path,w*.6)
+            mark=s(path,w*.72)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2

@@ -109,6 +109,7 @@ def proof():
             context=src[0]+text+src[-1] if len(src)>1 else src+text+src
             history=(f'<details><summary>前の字形と比較</summary><div class="previous">{context}</div></details>' if previous else '')
             serif_face='GenZui Serif Okinawan Optical' if e['system']=='prefecture' else 'GenZui Serif Okinawan'
+            label=style+(' · 確認済み' if e['id']=="'yo" and style=='Regular' else '')
             comparisons=''
             related={"'yo":('は / よ / YU / YO','はよ\uf45e\uf45f'),
                      "'we":('こ / え / ゑ / WA / WI / WE','こえゑ\uf460\uf461\uf462')}
@@ -116,7 +117,7 @@ def proof():
                 names,chars=related[e['id']]
                 samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',64),('Serif',30)])
                 comparisons=f'<div class="structure-comparison"><h4>{names}</h4>{samples}</div>'
-            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
+            cards.append(f'<article style="--weight:{weight}"><h3>{label}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
         row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>'
         (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
