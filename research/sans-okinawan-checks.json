@@ -4,10 +4,10 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "dd6e2f209233ad6395c6c406e8adeba1b7ed0322b7d61f297a8ee0667a413eac",
+      "full_sha256": "34b42b08582a77eb94c224f6c1180ac88abaee723b282a8cbe786a829f308f08",
       "encoded_characters": 805,
-      "ttf_sha256": "770c2f354e978d19feab1bd21f034546f49cdf57d1424117714e535f2cf6c7f7",
-      "woff2_sha256": "f4960456c69f1e2a3dcf9ed253e6207d06e94f1876514b8b5fc20becbb333002",
+      "ttf_sha256": "2623d9ba9be8d2c2fccb61c9562fb5c9970c50b9b85d8f4321e3e0719d58f4e6",
+      "woff2_sha256": "90f2da9fdf6ab2a822f0726b238c937d522c32aa31bc948840f0f2b4dde3ca90",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -23,7 +23,7 @@
       "component_clearance_units": {
         "U+F460": 54.03,
         "U+F461": 54.03,
-        "U+F462": 45.79,
+        "U+F462": 46.28,
         "U+F463": 76.61,
         "U+F467": 107.12,
         "U+F45E": 45.32,
@@ -34,10 +34,10 @@
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "f08f1a65d9a60ca29680eb085563cf0167a07bed9ca8f3d4367ed06fbc6d4e94",
+      "full_sha256": "1f53f973cea33cf8460395e7f68727d03e1be01196da31ae97cb15bd6c9e4fa7",
       "encoded_characters": 805,
-      "ttf_sha256": "b1f614fa7e71c5c1475d6e56bd3f3559dd9b5f7896ad2e4b5818d4f052bb86cc",
-      "woff2_sha256": "3010ec961b05f1db5ad8d8d1b2529a1cacbfd42913bf15af9bdd586bc8a7a772",
+      "ttf_sha256": "6b271c9565538784bb8883389713fc9a55b5ed1c2bc653e8921438ba72eba941",
+      "woff2_sha256": "367595319606c07db5ed96b9f8364389ded9d783b19ad71be0398669afd4c1fa",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -53,11 +53,11 @@
       "component_clearance_units": {
         "U+F460": 54.05,
         "U+F461": 54.05,
-        "U+F462": 46.87,
+        "U+F462": 47.1,
         "U+F463": 48.78,
         "U+F467": 61.9,
         "U+F45E": 45.29,
-        "U+F45F": 36.94,
+        "U+F45F": 39.7,
         "U+F452": 58.87
       }
     }

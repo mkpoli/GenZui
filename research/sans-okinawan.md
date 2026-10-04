@@ -49,7 +49,7 @@ each drawing, small-size comparisons and dictionary sentence samples. Each
 card includes a compact comparison in the matching weight of GenZui Serif
 Okinawan 0.118. Those immutable reference webfonts and their notices are
 included in the proof package, with hashes checked against the release.
-YO and WE also show related native and Okinawan forms alongside each
+HWE, YO and WE also show related native and Okinawan forms alongside each
 drawing, with a compact Serif row for the same characters. When
 `previous/Regular.woff2` and `previous/Bold.woff2` are present, each card also
 includes an expandable comparison with that earlier drawing. The package
@@ -57,15 +57,17 @@ includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE retains
 an open upper return of its vowel stroke, with vowel widths of 74/110 units.
-Its detached entry follows a virtual arch from the left dot, flattening
-continuously across the gap into the upper return.
+Its lower, wider upper return follows a virtual arch from the left dot,
+flattening continuously across the gap. The lower branch starts on the
+descending stem so its flat cap stays inside the stroke.
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
-slope and alignment with ゆ’s left stroke. YO reuses that mark at
-480/500 units high, positioned closer to よ above its bowl. Its approved
-Regular drawing is unchanged. WE’s added stroke follows the curve of its
-native upper bar at widths of 54.72/83.52 units, with a 30-unit vertical
-bounds gap. TU uses the native 700 donor
-for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
+slope and alignment with ゆ’s left stroke. YO Regular reuses that mark at
+480 units high. Bold uses a 900 donor at 500 units high to retain sufficient
+weight in the shorter mark. Both are positioned above よ’s bowl; the
+approved Regular drawing is unchanged. WE’s added stroke follows the curve
+of its native upper bar at widths of 65.36/99.76 units, with a 30-unit vertical
+bounds gap. Its reduced body uses the same 500/800 optical donors as WI.
+TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.

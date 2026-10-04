@@ -111,7 +111,8 @@ def proof():
             serif_face='GenZui Serif Okinawan Optical' if e['system']=='prefecture' else 'GenZui Serif Okinawan'
             label=style+(' · 確認済み' if e['id']=="'yo" and style=='Regular' else '')
             comparisons=''
-            related={"'yo":('は / よ / YU / YO','はよ\uf45e\uf45f'),
+            related={'hwe':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
+                     "'yo":('は / よ / YU / YO','はよ\uf45e\uf45f'),
                      "'we":('こ / え / ゑ / WA / WI / WE','こえゑ\uf460\uf461\uf462')}
             if e['id'] in related:
                 names,chars=related[e['id']]
