@@ -7,19 +7,12 @@
   "confirmed": 32,
   "unresolved": 1,
   "raised": 8,
-  "structures": 16,
-  "hwaChoices": 6,
+  "structures": 20,
   "previous": 70,
   "mobile": "passed",
-  "tablet": {
-    "390": "passed",
-    "1024": "passed",
-    "768": "passed",
-    "651": "passed"
-  },
   "raisedDpr2": "passed",
   "version": "Chrome/154.0.8037.93",
   "fonts": {
-    "verified": 268
+    "verified": 242
   }
 }

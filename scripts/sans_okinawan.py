@@ -99,12 +99,16 @@ def proof():
             assert digest(reference/f"GenZuiSerifOkinawan-{face['style']}.woff2")==face['woff2_sha256']
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
-    from sans_hwa_candidates import build as build_hwa, cards as hwa_cards, CSS as hwa_css
-    candidates=build_hwa(OUT,VERSION)
     sections=[];accepted=[];other=[]
     active_ids={'hwa'}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     previous_families={style:TTFont(OUT/'previous'/f'{style}.woff2')['name'].getDebugName(1) for style in ('Regular','Bold')} if previous else {}
+    weight_table=''
+    if previous:
+        from measure_sans_fu import report as weight_report
+        measured=weight_report()['faces']
+        rows=''.join('<tr><th>'+label+'</th>'+''.join(f'<td>{row["before"][label]:.1f} → {row["after"][label]:.1f}</td>' for row in measured)+'</tr>' for label in ('HWA','HWI','HWE'))
+        weight_table='<details><summary>線幅の目安</summary><p>2 × インク面積 ÷ 輪郭長（字形単位）。形状や端点にも左右される比較値です。</p><table class="weight-table"><thead><tr><th></th><th>Regular · 前 → 現在</th><th>Bold · 前 → 現在</th></tr></thead><tbody>'+rows+'</tbody></table></details>'
     for e in ENTRIES:
         text=''.join(chr(int(c,16)) for c in e['output']);src=source_text(e)
         cards=[]
@@ -120,24 +124,22 @@ def proof():
             if e['id'] in related:
                 names,chars=related[e['id']]
                 samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id'] in ('hwa','hwe') else 64),('Serif',30)])
+                if e['id']=='hwa':
+                    samples+='<h4>わ / い / え</h4>'+''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">わいえ</div></div>' for family,size in [('Sans',96),('Serif',30)])
                 comparisons=f'<div class="structure-comparison"><h4>{names}</h4>{samples}</div>'
             cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
-        content='<div class="columns">'+''.join(cards)+'</div>'
-        if e['id']=='hwa':content=hwa_cards()+'<details><summary>現在の字形</summary>'+content+'</details>'
-        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2>{content}</section>'
+        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div>{weight_table if e["id"]=="hwa" else ""}</section>'
         (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
     for style,weight in [('Regular',400),('Bold',700)]:
         sentences.append(f'<article style="--weight:{weight}"><h3>{style}</h3>'+''.join(f'<p class="sentence" contenteditable="true">{html.escape(compose(s["text"]))}</p>' for s in SENTENCES)+'</article>')
     page='''<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GenZui Sans Okinawan</title><link rel="stylesheet" href="genzui-sans-okinawan.css"><style>
-*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence,.previous,.serif,.raised-sample{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.structure-comparison{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}.structure-comparison h4{font-size:12px;font-weight:500;color:#64746b}.structure-row small{font-size:11px;color:#64746b}.structure-sample{font-size:min(var(--sample-size),6vw);font-weight:var(--weight);font-synthesis:none;line-height:1.4;white-space:nowrap}.previous{font-family:'GenZui Sans Okinawan Previous';font-size:clamp(60px,8.9vw,128px);line-height:1.2;white-space:nowrap}details{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}.approved-group>summary,.other-group>summary{font-size:18px;font-weight:600;padding:12px 0}.approved-group,.other-group{margin-top:32px}summary{cursor:pointer;font-size:13px;color:#64746b}.serif-row{display:flex;align-items:center;gap:18px;margin-top:20px}.serif-row small{font-size:12px;color:#64746b}.serif{font-family:'GenZui Serif Okinawan';font-size:30px;line-height:1.5;white-space:nowrap}.raised-sample{line-height:1.8}.raised-sample span{display:inline-block;margin-right:.3em}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context,.previous{font-size:8.5vw}.structure-sample{font-size:min(var(--sample-size),5.8vw)}.serif-row{gap:6px;flex-wrap:wrap}.serif{font-size:24px}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
+.weight-table{border-collapse:collapse;width:100%;font-size:14px}.weight-table th,.weight-table td{text-align:left;padding:8px;border-bottom:1px solid #d5ded8}*{box-sizing:border-box}body{margin:0;background:#f7f8f2;color:#233d34;font-family:system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:40px 24px}h1{font-size:32px;margin-bottom:8px}header p{color:#64746b}section{margin:30px 0}h2{font-size:19px}h3{font-size:15px;margin:0 0 25px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}article{background:white;border:1px solid #d5ded8;border-radius:10px;padding:24px;overflow:hidden}.context,.sizes,.sentence,.previous,.serif,.raised-sample{font-family:'GenZui Sans Okinawan';font-weight:var(--weight);font-synthesis:none}.context{font-size:clamp(60px,8.9vw,128px);line-height:1.2;border-bottom:1px solid #d5ded8;white-space:nowrap}.structure-comparison{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}.structure-comparison h4{font-size:12px;font-weight:500;color:#64746b}.structure-row small{font-size:11px;color:#64746b}.structure-sample{font-size:min(var(--sample-size),6vw);font-weight:var(--weight);font-synthesis:none;line-height:1.4;white-space:nowrap}.previous{font-family:'GenZui Sans Okinawan Previous';font-size:clamp(60px,8.9vw,128px);line-height:1.2;white-space:nowrap}details{margin-top:24px;border-top:1px solid #d5ded8;padding-top:16px}.approved-group>summary,.other-group>summary{font-size:18px;font-weight:600;padding:12px 0}.approved-group,.other-group{margin-top:32px}summary{cursor:pointer;font-size:13px;color:#64746b}.serif-row{display:flex;align-items:center;gap:18px;margin-top:20px}.serif-row small{font-size:12px;color:#64746b}.serif{font-family:'GenZui Serif Okinawan';font-size:30px;line-height:1.5;white-space:nowrap}.raised-sample{line-height:1.8}.raised-sample span{display:inline-block;margin-right:.3em}.sizes{display:flex;gap:25px;align-items:baseline;margin-top:30px}.sentence{font-size:30px;line-height:1.9;overflow-wrap:anywhere}a{color:inherit}footer{font-size:13px;line-height:1.8}@media(max-width:650px){main{padding:24px 12px}article{padding:14px}.columns{gap:10px}.context,.previous{font-size:8.5vw}.structure-sample{font-size:min(var(--sample-size),5.8vw)}.serif-row{gap:6px;flex-wrap:wrap}.serif{font-size:24px}.sizes{flex-direction:column;gap:10px}.sizes span{font-size:20px!important}.sentence{font-size:21px}}
 </style><main><header><h1>GenZui Sans Okinawan</h1><p>Regular / Bold · 船津式沖縄文字 27字・上付きカタカナ 8字</p><p>字形見本：元の仮名 / 沖縄文字 / 元の仮名</p></header>'''
     serif_faces=''.join(f"@font-face{{font-family:'GenZui Serif Okinawan';src:url('serif/GenZuiSerifOkinawan-{style}.woff2');font-weight:{weight};font-display:swap}}" for style,weight in [('Regular',400),('Bold',700)])
     page=page.replace('</style>','</style><style>'+serif_faces+'</style>',1)
     variant_faces=''.join(f"@font-face{{font-family:'{v['family']}';src:url('{v['file']}');font-weight:{400 if v['style']=='Regular' else 700};font-display:swap}}" for v in variants)
     page=page.replace('</style>','</style><style>'+variant_faces+'</style>',1)
-    candidate_faces=''.join(f"@font-face{{font-family:'{v['family']}';src:url('{v['file']}?v={v['sha256'][:12]}');font-weight:{400 if v['style']=='Regular' else 700};font-display:swap}}" for v in candidates)
-    page=page.replace('</style>','</style><style>'+candidate_faces+hwa_css+'</style>',1)
     if previous:
         faces=''.join(f"@font-face{{font-family:'GenZui Sans Okinawan Previous';src:url('previous/{style}.woff2');font-weight:{weight};font-display:swap}}" for style,weight in [('Regular',400),('Bold',700)])
         page=page.replace('</style>','</style><style>'+faces+'</style>',1)
@@ -186,12 +188,6 @@ def package():
     names += [v['file'] for v in variants]+['variants/manifest.json']
     if all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold')):
         names += [f'previous/{style}.woff2' for style in ('Regular','Bold')]
-    candidates=json.loads((OUT/'hwa-candidates/manifest.json').read_text())
-    candidate_checks=json.loads((OUT/'hwa-candidates/checks.json').read_text())
-    assert candidate_checks['status']=='passed'
-    checked={c['file']:c['sha256'] for c in candidate_checks['faces']}
-    for c in candidates:assert digest(OUT/c['file'])==c['sha256']==checked[c['file']]
-    names += [c['file'] for c in candidates]+['hwa-candidates/manifest.json','hwa-candidates/checks.json']
     archive=ROOT/'dist'/f'{PREFIX}-{VERSION}.zip';archive.parent.mkdir(exist_ok=True)
     with ZipFile(archive,'w',compression=ZIP_DEFLATED) as z:
         for name in names:z.write(OUT/name,name)

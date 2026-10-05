@@ -81,6 +81,34 @@ def fit_we_mark(body,ref,donor):
     return [body,mark]
 
 
+def hwa_vowel(weight):
+    # Retain native わ's bowl, upright and rising diagonal. Its second
+    # contour also carries the unwanted crossbar: retain only the lower
+    # diagonal, closing it inside the upright so no cut terminal is visible.
+    donor=source(800 if weight==400 else 900)
+    bowl,diagonal,upright=O.rings(contours(donor,ord('わ')))
+    assert [len(bowl),len(diagonal),len(upright)]==[21,28,25]
+    diagonal=diagonal[15:26]+[line(diagonal[26][0],diagonal[15][0])]
+    sx=.43 if weight==400 else .40
+    sy=.43
+    dx=600 if weight==400 else 612
+    vowel=[transform(O.draw([bowl]),(sx,0,0,sy,dx,10)),
+           transform(O.draw([diagonal,upright]),(sx,0,0,.43,dx,10))]
+    # Add weight around the accepted outline; keep its contour proportions.
+    expansion=8 if weight==400 else 32
+    if expansion:
+        original=pathops.Path()
+        for part in vowel:
+            p=pathops.Path();part.replay(p.getPen())
+            original=pathops.op(original,p,pathops.PathOp.UNION)
+        border=pathops.Path(original)
+        border.stroke(expansion,pathops.LineCap.ROUND_CAP,pathops.LineJoin.ROUND_JOIN,4)
+        border.convertConicsToQuads(.05)
+        expanded=pathops.op(original,border,pathops.PathOp.UNION)
+        pen=RecordingPen();expanded.draw(pen);vowel=[pen]
+    return vowel
+
+
 def drawings(weight):
     f=source(weight); optical=source(min(900,weight+100))
     reduced=source(weight+200)
@@ -165,10 +193,9 @@ def drawings(weight):
     # changes make space for the vowel without changing their stroke contrast.
     fu=[native('ふ',[0],dx=-100),native('ふ',[1],dx=-100)]
     left_dot=native('ふ',[3],sx=.85,sy=.85,dx=20,dy=10 if weight==400 else 70)
+    out[0xF45A]=fu+[left_dot]+hwa_vowel(weight)
     # Selected softened え corner, with separate Regular and Bold skeletons.
     vowels={
-        0xF45A:('M 672 337 L 646 -2',
-                 'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
         0xF45C:(('M635 307 C687 315 758 331 798 321 C816 316 805 298 791 274 L645 0',

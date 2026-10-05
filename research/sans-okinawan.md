@@ -74,24 +74,25 @@ farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
 forms (32, including HWE and WE) are collapsed by default. HWA is at the top
-with three redesigns in each weight; the main drawing remains expandable. Raised Sans
+with the selected shape in both weights and an expandable previous drawing. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.
 
-HWA's proof-only alternatives retain native わ's bowl, upright and rising
-diagonal, with the crossbar removed. The diagonal's cut closes inside the
-upright, leaving its native terminal and curve intact. A uses the native
-bowl proportions; B lowers the bowl, and C raises it. All three keep the
-native ふ components unchanged. The vowel uses 800/900 optical donors,
-43%/40% horizontal scaling, and a 14-unit outline stroke for Bold. Bowl
-height varies independently of the upright and diagonal. Each card shows
-native ふ/わ, accepted HWI/HWE, reading sizes, repeated HWA and a Serif
-reference. The six candidate fonts change only HWA. Their checker verifies
-all other outlines and metrics, TTF/WOFF2 parity, component separation,
-cell bounds and clearance between repeated glyphs. The proof ZIP includes
-these fonts and their validation record. See the
-[HWA comparison](sans-hwa-proof.png) and [candidate checks](sans-hwa-checks.json).
+HWA uses the selected native わ curve with its crossbar removed. The cut
+closes inside the upright. Its 800/900 donors retain the selected 43%/40%
+horizontal scaling and 43% height. Outline strokes of 8/32 units restore
+weight in the reduced vowel. Bold's vowel shifts eight units left to retain
+space between repeated glyphs. The native ふ parts are unchanged. HWI and
+HWE retain their approved drawings after comparison with HWA.
+
+`measure_sans_fu.py` reports `2 × filled area / contour perimeter` for the
+compiled vowel contours and native reference kana. This approximates ink
+breadth; proportions, junctions and terminals also affect the result, so it
+is a comparison aid rather than a perceptual target. The HWA proof includes
+the before/after table alongside the full family and native わ/い/え.
+The [measurement report](sans-fu-weight-measurements.json) records the font
+hashes and readings. Only HWA changes in this weight revision.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.104.zip` after validation.
