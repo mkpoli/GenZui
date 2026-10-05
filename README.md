@@ -23,6 +23,11 @@ Both fonts are free for personal and commercial use under
 Each complete package adds WOFF2, an offline specimen, installation
 instructions and licences. The two fonts install side by side.
 
+For rare kanji, **GenZui Sans Han / 源萃ゴシック漢字** is a separate
+download: two Regular files that add every CJK ideograph, radical and stroke in
+Unicode 18 that GenZui Sans lacks. Install them beside GenZui Sans and list
+GenZui Sans first. See [GenZui Sans Han](#genzui-sans-han) for its sources.
+
 Browser fallback depends on the website and browser settings.
 [Browser setup](browser/README.md) covers historical-kana fallback.
 
@@ -36,6 +41,14 @@ Browser fallback depends on the website and browser settings.
 ```css
 .serif-sample { font-family: "GenZui Serif", serif; }
 .sans-sample  { font-family: "GenZui Sans", sans-serif; }
+```
+
+With GenZui Sans Han, load its `genzui-sans-han.css` after the Sans stylesheet
+and add the family after GenZui Sans. Each file declares its `unicode-range`, so
+a browser fetches it only for pages that use its characters:
+
+```css
+.sans-sample  { font-family: "GenZui Sans", "GenZui Sans Han", sans-serif; }
 ```
 
 ## Character coverage
