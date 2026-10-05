@@ -124,7 +124,7 @@ Page titles, descriptions, Open Graph tags, Twitter cards and `WebSite` /
 `WebPage` structured data are emitted by `scripts/release_site.py` and locked by
 `scripts/check_release.py`. Canonical URLs, the Open Graph URLs and the home
 page's structured data use `https://genzui.mkpo.li/`. `sitemap.xml` lists the
-four HTML routes (`/`, `/sans`, `/gallery`, `/minnan`); section anchors, font
+five HTML routes (`/`, `/sans`, `/compare`, `/gallery`, `/minnan`); section anchors, font
 assets and release folders are not separate pages. `robots.txt` advertises the
 sitemap, and `404.html` is `noindex`.
 

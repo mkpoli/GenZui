@@ -17,6 +17,7 @@ from refinement_proof import build_comparison
 from browser_setup import build as build_browser_setup
 from minnan_proof import build_study
 from design_gallery import build_gallery
+from compare_site import build_compare
 from family_switch import css as switch_css, html as switch_html, label_face
 from weight_switch import css as weight_css
 from sans_site import DOWNLOADS as SANS_DOWNLOADS, OUT as SANS_OUT, build_offline as build_sans_page, checked as sans_checked
@@ -137,6 +138,7 @@ def build():
     (OUT/'refinements.html').write_text(build_comparison())
     (OUT/'minnan.html').write_text(build_study())
     (OUT/'gallery.html').write_text(build_gallery())
+    (OUT/'compare.html').write_text(build_compare())
     (OUT/'sans.html').write_text(build_sans_page())
     shutil.copytree(build_browser_setup(), OUT/'browser', dirs_exist_ok=True)
     downloads = OUT/'downloads'; downloads.mkdir(exist_ok=True)
@@ -165,7 +167,7 @@ def build():
         shutil.copyfile(FONT_OUT/name, downloads/name)
     (OUT/'README.txt').write_text(
         'GenZui specimen site\n\nOpen index.html in a current browser.\n'
-        'serif.html and sans.html are the family specimens; each embeds its font and full character inventory and works offline.\n'
+        'serif.html and sans.html are the family specimens, and compare.html sets them beside other kana fonts; each embeds its font and full character inventory and works offline.\n'
         'Keep the downloads folder beside index.html for the download links.\n'
         'Only deliberate source links navigate to external websites.\n'
         'Font, Unicode data and script licences are included in downloads.\n'

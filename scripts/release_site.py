@@ -12,6 +12,7 @@ from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.ttLib import TTFont
 
 from design_gallery import build_gallery
+from compare_site import build_compare
 from release_copy import FORM_DESCRIPTIONS
 from serif import BOLD_STEM, OUT as FONT_OUT, PACKAGE, STEM, VERSION
 from social_card import build_card
@@ -31,6 +32,8 @@ SITE_NAME = 'GenZui / 源萃'
 TITLE = '源萃 — GenZui Serif / GenZui Sans｜変体仮名・歴史的仮名のフリーフォント'
 SANS_TITLE = '源萃ゴシック — GenZui Sans｜変体仮名・歴史的仮名のフリーフォント'
 GALLERY_TITLE = 'GenZui Serif — Design gallery｜歴史的仮名の作字21字'
+COMPARE_TITLE = 'Font comparison — GenZui Serif / GenZui Sans｜変体仮名フォントの比較'
+COMPARE_DESCRIPTION = '源萃明朝・源萃ゴシックを、すきまゴシック、Noto Serif Hentaigana、源石変体仮名ゴシック、NINJAL変体仮名、字雲と比較。Unicodeブロック別の収録、組版機能、ウェイト、ライセンス、ファイルサイズ、字形の出所。'
 MINNAN_TITLE = 'Minnan kana & archaic WU — GenZui Serif｜閩南語の声調記号'
 SANS_DESCRIPTION = ('Noto Sans JPをもとに、変体仮名286字、Unicode 18.0の仮名追加、仮名合字、閩南語の声調記号を収めた'
                     'ゴシック体の日本語フリーフォント。TTF・WOFF2のダウンロード、試し書き、ウェブフォントの使い方を掲載。')
@@ -57,7 +60,7 @@ def structured_data(route, title, description, site_name=SITE_NAME):
 def metadata(page, route, title, description, image_alt, image='genzui-social-2x.png', site_name=SITE_NAME):
     page = re.sub(r'<meta name="description"[^>]*>', '', page)
     route = route.removesuffix('.html')
-    for name in ('gallery', 'minnan', 'sans', 'serif'):
+    for name in ('compare', 'gallery', 'minnan', 'sans', 'serif'):
         page = page.replace(f'href="{name}.html', f'href="{name}')
     page = page.replace('href="index.html', 'href="./')
     page = re.sub(r'<title>[^<]*</title>', f'<title>{html.escape(title)}</title>', page, count=1)
@@ -95,6 +98,15 @@ def external_fonts(page):
         (OUT/'assets'/name).write_bytes(raw)
         return 'url(assets/'+name+')'
     return re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', save, page)
+
+
+def external_glyphs(page):
+    """Move the comparison page's glyph outlines to a hashed asset the page fetches."""
+    match = re.search(r'<script id="compare-glyphs" type="application/json">(.*?)</script>', page, re.S)
+    raw = json.dumps(json.loads(match[1]), ensure_ascii=False, separators=(',', ':')).encode()
+    name = 'compare-glyphs-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
+    (OUT/'assets'/name).write_bytes(raw)
+    return page[:match.start()]+f'<script id="compare-glyphs" type="application/json" data-src="assets/{name}"></script>'+page[match.end():]
 
 
 def external_data(page, prefix, descriptions=None):
@@ -191,7 +203,7 @@ def build():
     site_text = set()
     for source in (ROOT/'build/site').glob('*.html'):
         site_text.update(ord(c) for c in re.sub(r'<[^>]+>|&[#a-zA-Z0-9]+;', ' ', source.read_text()))
-    for copy in (TITLE, SANS_TITLE, GALLERY_TITLE, MINNAN_TITLE):
+    for copy in (TITLE, SANS_TITLE, GALLERY_TITLE, MINNAN_TITLE, COMPARE_TITLE):
         site_text.update(ord(c) for c in copy)
     serif_css, serif_chunks = build_chunks(FONT_OUT/(STEM+'.ttf'), 'GenZui', STEM, OUT/'assets', site_text)
     bold_css, _ = build_chunks(FONT_OUT/(BOLD_STEM+'.ttf'), 'GenZui', BOLD_STEM, OUT/'assets', site_text, weight=700)
@@ -245,6 +257,8 @@ def build():
     sans_alt = build_sans_card(OUT/'media')
     (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', SANS_TITLE, SANS_DESCRIPTION,
                                           sans_alt, image='genzui-sans-social-2x.png'))
+    (OUT/'compare.html').write_text(metadata(external_glyphs(external_fonts((ROOT/'build/site/compare.html').read_text())),
+                                             '/compare', COMPARE_TITLE, COMPARE_DESCRIPTION, home_alt))
     for route, content, title, description in [
         ('gallery.html', build_gallery(public=True), GALLERY_TITLE, GALLERY_DESCRIPTION),
         ('minnan.html', (ROOT/'build/site/minnan.html').read_text(), MINNAN_TITLE, MINNAN_DESCRIPTION)]:
@@ -254,8 +268,8 @@ def build():
     (OUT/'favicon.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><rect width="1000" height="1000" rx="170" fill="#214e3c"/><path fill="#f7f8f2" transform="translate(80 804) scale(.84 -.84)" d="'+pen.getCommands()+'"/></svg>')
     (OUT/'404.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Page not found — GenZui</title><meta name="robots" content="noindex"><style>body{max-width:36em;margin:15vh auto;padding:24px;background:#f7f8f2;color:#25382e;font:18px/1.6 system-ui}a{color:#214e3c}</style><h1>Page not found.</h1><p><a href="/">Return to GenZui</a></p></html>')
     (OUT/'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: '+URL+'/sitemap.xml\n')
-    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/serif', '/sans', '/gallery', '/minnan'])+'</urlset>')
-    (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/serif\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
+    (OUT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+URL+r+'</loc></url>' for r in ['/', '/serif', '/sans', '/compare', '/gallery', '/minnan'])+'</urlset>')
+    (OUT/'_headers').write_text('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/\n  Cache-Control: public, max-age=300\n/*.html\n  Cache-Control: public, max-age=300\n/serif\n  Cache-Control: public, max-age=300\n/sans\n  Cache-Control: public, max-age=300\n/compare\n  Cache-Control: public, max-age=300\n/gallery\n  Cache-Control: public, max-age=300\n/minnan\n  Cache-Control: public, max-age=300\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/sans-v*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=31536000, immutable\n/downloads/*\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=3600\n/media/*\n  Cache-Control: public, max-age=86400\n/genzui.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n/genzui-sans.css\n  Access-Control-Allow-Origin: *\n  Cache-Control: public, max-age=300\n')
     # Earlier packages carried only Regular and were named for it; their
     # download links resolve to the immutable copy in each version folder.
     # Earlier combined packages keep their links through their version folders.
@@ -270,7 +284,7 @@ def build():
         f'/downloads/{SANS_STEM}-:version.zip /sans-v:version/{SANS_STEM}-:version.zip 301\n' + ''.join(earlier))
     for name in ['announcement-ja', 'announcement-en', 'announcement-sans-ja', 'announcement-sans-en']:
         shutil.copyfile(ROOT/'release'/(name+'.txt'), OUT/(name+'.txt'))
-    for name in ['index.html','serif.html','sans.html','gallery.html','minnan.html']:
+    for name in ['index.html','serif.html','sans.html','compare.html','gallery.html','minnan.html']:
         p=OUT/name
         p.write_text(p.read_text().replace('assets/proof-font.js','assets/'+guard_name))
     hashes = {str(p.relative_to(OUT)):hashlib.sha256(p.read_bytes()).hexdigest()
