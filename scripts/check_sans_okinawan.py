@@ -54,6 +54,15 @@ def geometry(weight):
         assert pathops.op(shape(a),shape(b),pathops.PathOp.INTERSECTION).area<.01,(weight,hex(cp),'detached')
         gap=float(cKDTree(points(a)).query(points(b))[0].min())
         assert gap>=30,(weight,hex(cp),'detached',gap)
+    if weight==700:
+        # HWE's outer diagonal must remain straight through the foot join.
+        # The old branch cap protruded here even though its start was inside.
+        from fontTools.pens.recordingPen import RecordingPen
+        pen=RecordingPen();shape(detached[0xF45C][3:]).draw(pen)
+        rings=O.rings(pen);ys=np.linspace(60,180,25)
+        xs=np.array([min(O.point(r[i],t)[0] for r in rings for i,t in O.crossings(r,1,y)) for y in ys])
+        error=np.abs(xs-np.polyval(np.polyfit(ys,xs,1),ys)).max()
+        assert error<.2,('HWE Bold protruding branch',float(error))
     return clearances,component_gaps
 
 def check():
@@ -127,9 +136,7 @@ def check():
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
     variants=check_variants()
-    from sans_okinawan_candidates import check as check_candidates
-    candidates=check_candidates(OUT)
-    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants,proof_candidates=candidates),indent=2)+'\n')
+    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants),indent=2)+'\n')
 
 def check_variants():
     variants=json.loads((OUT/'variants/manifest.json').read_text())

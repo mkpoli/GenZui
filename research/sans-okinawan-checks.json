@@ -4,10 +4,10 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "4bd2f0675dd154e13d9ccc6598a7764435671c33382d4257cf2b3edab6320c50",
+      "full_sha256": "6eaa5d0c76dbd45df7335fc51d37ee6154333c7f26edc722f8f02d54105c0093",
       "encoded_characters": 805,
-      "ttf_sha256": "2097d24fceca90039e11f28b48b3b1469b211ea210da3e27207729436831726c",
-      "woff2_sha256": "898cecbba0a5a83d8872900d016cbd8d4bca3f9627bc57d18fab8ebcfc1a0543",
+      "ttf_sha256": "957a21a0d518edb20b9a58b3e30c3e4d75b59c65514766a22d5978732a87b258",
+      "woff2_sha256": "c182de6b6d5b3ec0c0d45f4ce42b7894cf7963bc5106a878cfd422fb7edf5f29",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -23,7 +23,7 @@
       "component_clearance_units": {
         "U+F460": 54.03,
         "U+F461": 54.03,
-        "U+F462": 64.57,
+        "U+F462": 53.7,
         "U+F463": 76.61,
         "U+F467": 107.12,
         "U+F45E": 45.32,
@@ -34,10 +34,10 @@
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "b2ad555818bbee07b42f70f9a9ec1f85e5bee97514a17f5392ac8fa95de5d513",
+      "full_sha256": "3c2b3b9035eca0bdf230d4e90535463674f53e2bece5b739e3c2c0e14c55a50f",
       "encoded_characters": 805,
-      "ttf_sha256": "9706ef871cdda2da1a3ad8c50598305805e9e5313eab55aa859fd5674aaf567e",
-      "woff2_sha256": "68c1316492c17534998235bc27cd9edcca5fccb98bb3321f948647c5adabf339",
+      "ttf_sha256": "ed6b20e614be3a469c5b3450ce14556112765c1c74a20d964f3a547dbd9922d9",
+      "woff2_sha256": "30a9c33d39ad7956be6a5e9a46da5aa588513d79988bf09405c468a704e53bca",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -53,7 +53,7 @@
       "component_clearance_units": {
         "U+F460": 54.05,
         "U+F461": 54.05,
-        "U+F462": 66.19,
+        "U+F462": 53.44,
         "U+F463": 48.78,
         "U+F467": 61.9,
         "U+F45E": 45.29,
@@ -78,94 +78,6 @@
       "donor": 750,
       "file": "variants/GenZuiSerifOkinawanOptical-Bold.woff2",
       "sha256": "07de1b495b1874b438f2a635e0e8272cfbd302fb53d0f093ac396f984299b65a"
-    }
-  ],
-  "proof_candidates": [
-    {
-      "family": "GenZui Sans Okinawan Candidate A",
-      "style": "Regular",
-      "letter": "A",
-      "file": "candidates/GenZuiSansOkinawanCandidateA-Regular.woff2",
-      "sha256": "d0d44455f4b864c11f22988dd8f0dea82ab5b58fd8da11b4e95694c93d8b7054",
-      "clearances": {
-        "U+F45C": 81.99,
-        "U+F462": 53.76
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate B",
-      "style": "Regular",
-      "letter": "B",
-      "file": "candidates/GenZuiSansOkinawanCandidateB-Regular.woff2",
-      "sha256": "8e2c910ab526bc267b6e4d6d58d8572c784cc26cad6c801263fd4150d4ec7866",
-      "clearances": {
-        "U+F45C": 75.7,
-        "U+F462": 53.7
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate C",
-      "style": "Regular",
-      "letter": "C",
-      "file": "candidates/GenZuiSansOkinawanCandidateC-Regular.woff2",
-      "sha256": "fc070e6987401147a0c63d00fbeade10dbffd92a124a30bd9288e7a2432dbd6e",
-      "clearances": {
-        "U+F45C": 66.85,
-        "U+F462": 53.67
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate D",
-      "style": "Regular",
-      "letter": "D",
-      "file": "candidates/GenZuiSansOkinawanCandidateD-Regular.woff2",
-      "sha256": "7a78cf9ca30058adbaad61b3714fe6252ece9ccb973a6927dea7a30feddc99e0",
-      "clearances": {
-        "U+F45C": 60.59
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate A",
-      "style": "Bold",
-      "letter": "A",
-      "file": "candidates/GenZuiSansOkinawanCandidateA-Bold.woff2",
-      "sha256": "7fc139fe849c05e6d106124386d216b419687c3faf976412bf392e11875d1016",
-      "clearances": {
-        "U+F45C": 44.75,
-        "U+F462": 53.52
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate B",
-      "style": "Bold",
-      "letter": "B",
-      "file": "candidates/GenZuiSansOkinawanCandidateB-Bold.woff2",
-      "sha256": "2951ede2c8bedde2adce71c88f983553648f8970d9056eaa4ea339040fd51909",
-      "clearances": {
-        "U+F45C": 38.16,
-        "U+F462": 53.44
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate C",
-      "style": "Bold",
-      "letter": "C",
-      "file": "candidates/GenZuiSansOkinawanCandidateC-Bold.woff2",
-      "sha256": "adf5594e624192aacede63ccabbbd9efc0d58c537753b0b6aaabf2f94166de44",
-      "clearances": {
-        "U+F45C": 35.34,
-        "U+F462": 53.38
-      }
-    },
-    {
-      "family": "GenZui Sans Okinawan Candidate D",
-      "style": "Bold",
-      "letter": "D",
-      "file": "candidates/GenZuiSansOkinawanCandidateD-Bold.woff2",
-      "sha256": "9e3d32ee9208c2090ea630ebf49cea4f9de872baaa5f54532055ec1e48eda87c",
-      "clearances": {
-        "U+F45C": 37.52
-      }
     }
   ]
 }

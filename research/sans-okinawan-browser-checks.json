@@ -4,21 +4,15 @@
   "styles": 2,
   "sentences": 4,
   "serif": 70,
-  "confirmed": 31,
-  "unresolved": 2,
+  "confirmed": 32,
+  "unresolved": 1,
   "raised": 8,
   "structures": 12,
-  "candidates": 14,
   "previous": 70,
   "mobile": "passed",
-  "tablet": {
-    "651": "passed",
-    "1024": "passed",
-    "768": "passed"
-  },
   "raisedDpr2": "passed",
   "version": "Chrome/154.0.8037.93",
   "fonts": {
-    "verified": 304
+    "verified": 234
   }
 }

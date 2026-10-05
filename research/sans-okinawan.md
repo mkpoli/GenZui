@@ -9,11 +9,11 @@ characters.
 ## Drawings
 
 The drawings use Noto Sans JP's native Regular and Bold masters at weights
-400 and 700. Reduced components use weights 450–600 and 750–900 for optical
+400 and 700. Reduced components use weights 450–900 for optical
 compensation. The ふ head and body retain their native dimensions and weight.
 TU and WU use continuous strokes through their lower turns, and glottal
-WA/WI/WE share the same curved native こ upper-mark outline and placement
-rule. New joining strokes follow cubic skeletons with flat Sans
+WA/WI/WE use the native こ upper-mark contour. WE fits its mark to the
+longer ゑ head using the accepted WI mark-to-head relationship. New joining strokes follow cubic skeletons with flat Sans
 terminals. Their widths are set separately for each weight. The drawings
 reuse no Serif outlines and apply no blanket outline expansion.
 
@@ -55,38 +55,25 @@ drawing, with a compact Serif row for the same characters. When
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
-The unresolved HWE and WE sections show proof-only candidates before the
-previous drawing. HWE has four turns (A–D): an angular corner, a softened
-corner, a rounded return and a wider arc. Regular and Bold have separate
-skeletons. WE has three upper-mark weights (A–C); all three fit the mark's
-length, slope, offset and visible gap to the relationship in approved WI.
-The WE mark retains the native こ contour, using donors 435/475/500 in
-Regular and 635/725/800 in Bold. Each candidate includes the native kana,
-related accepted forms, 24/48 px samples and a compact Serif comparison.
-The [candidate overview](sans-okinawan-candidates.png) shows all seven choices.
-These choices do not change the main fonts. The candidate checker verifies
-that every other glyph and its metrics are preserved, and that the detached
-components retain their clearances. Candidate webfonts are included in the
-proof ZIP, with content hashes in their URLs to avoid stale browser fonts.
-
-HWA/HWI/HWE use separate left dots and right vowel components. HWE keeps
-its long え arm, with a gently falling entry after the implied crest of ふ.
-The rounded return continues into the diagonal and baseline foot. Its
-vowel strokes are 76/116 units wide. The family comparison shows all three
-beside native ふ in both weights.
+HWA/HWI/HWE use separate left dots and right vowel components. HWE uses
+a softened え corner with a diagonal and a baseline foot, drawn separately
+for Regular and Bold at stroke widths of 76/116 units. The Bold foot branch
+is trimmed to the diagonal's left edge to remove an exposed starting cap.
+The family comparison shows all three beside native ふ in both weights.
 
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
 slope and alignment with ゆ’s left stroke. YO uses 475/900 donors at heights
-of 480/500 units. Both approved YO drawings are unchanged. WE shares WA/WI’s actual upper-mark outline, including its length,
-curve and stroke variation, with the same horizontal anchor and 50-unit
-vertical bounds gap. Its reduced body retains the 500/800 donors.
+of 480/500 units. Both approved YO drawings are unchanged. WE's upper mark uses 475/725 optical donors. Its length, slope,
+left offset and visible midpoint gap follow WI's relationship to its head
+bar, fitted to ゑ's longer head. Its reduced body retains 500/800 donors.
 TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a
 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
-forms are collapsed by default, with unresolved forms at the top. Raised Sans
+forms (32, including WE) are collapsed by default. HWE remains at the top,
+with the selected Regular B beside the corrected Bold drawing. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.
@@ -112,7 +99,8 @@ including TTF/WOFF2 parity. It verifies exact non-intersection of dakuten and
 their bases, an additional sampled clearance margin, and separation of the
 TSI and HWA strokes that should remain distinct. Detached glottal marks and
 vowel strokes have additional minimum-clearance checks in both weights.
-The ふ forms are checked for dot/body separation and cell bounds.
+The ふ forms are checked for dot/body separation and cell bounds. HWE Bold
+also checks that its outer diagonal stays straight through the foot join.
 Raised katakana are checked against each donor’s transformed
 bounds, including its native baseline overshoot.
 

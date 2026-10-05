@@ -37,6 +37,50 @@ def attach(native, path, width, start):
     if score(reverse(arc))<score(arc):arc=reverse(arc)
     return O.draw([join(native,arc)])
 
+def bounds(parts):
+    b=BoundsPen(None)
+    for p in parts:p.replay(b)
+    return b.bounds
+
+def edge_y(segments,x):
+    hits=[O.point(segments[i],t)[1] for i,t in O.crossings(segments,0,x)]
+    assert hits,(x,len(segments))
+    return sum(hits)/len(hits)
+
+def section(part,x):
+    ys=[O.point(r[i],t)[1] for r in O.rings(part) for i,t in O.crossings(r,0,x)]
+    assert len(ys)==2,(x,ys)
+    return min(ys),max(ys)
+
+def fit_we_mark(body,ref,donor):
+    # Measure each mark against its underlying head bar. The accepted WI is
+    # the reference; its outline and metrics are never altered by this study.
+    wi=O.rings(ref[0])[0];we=O.rings(body)[0]
+    wl,wr=wi[0][0][0],wi[7][3][0]
+    el,er=we[0][0][0],we[10][3][0]
+    ratio=(er-el)/(wr-wl)
+    rb=bounds([ref[1]]);length=(rb[2]-rb[0])*ratio
+    left=el+(rb[0]-wl)*ratio
+    mid=(rb[0]+rb[2])/2
+    gap=section(ref[1],mid)[0]-edge_y(wi[:7],mid)
+    def head_slope(r,upper,lower,l,rgt):
+        xs=[l+(rgt-l)*t for t in (.2,.4)]
+        ys=[(edge_y(r[:upper],x)+edge_y(r[lower[0]:lower[1]],x))/2 for x in xs]
+        return (ys[1]-ys[0])/(xs[1]-xs[0])
+    def mark_slope(p):
+        b=bounds([p]);xs=[b[0]+(b[2]-b[0])*t for t in (.25,.75)]
+        ys=[sum(section(p,x))/2 for x in xs]
+        return (ys[1]-ys[0])/(xs[1]-xs[0])
+    angle=np.arctan(mark_slope(ref[1]))+np.arctan(head_slope(we,10,(98,103),el,er))-np.arctan(head_slope(wi,7,(71,75),wl,wr))
+    mark=contours(source(donor),ord('こ'),[0]);b=bounds([mark])
+    mark=transform(mark,(length/(b[2]-b[0]),0,0,.72,0,0))
+    mark=transform(mark,(1,float(np.tan(angle)-mark_slope(mark)),0,1,0,0))
+    b=bounds([mark]);mark=transform(mark,(1,0,0,1,left-b[0],0))
+    x=left+length/2
+    mark=transform(mark,(1,0,0,1,0,edge_y(we[:10],x)+gap-section(mark,x)[0]))
+    return [body,mark]
+
+
 def drawings(weight):
     f=source(weight); optical=source(min(900,weight+100))
     reduced=source(weight+200)
@@ -121,19 +165,33 @@ def drawings(weight):
     # changes make space for the vowel without changing their stroke contrast.
     fu=[native('ふ',[0],dx=-100),native('ふ',[1],dx=-100)]
     left_dot=native('ふ',[3],sx=.85,sy=.85,dx=20,dy=10 if weight==400 else 70)
-    # HWE begins after the implied crest, with the same downward-facing
-    # entry and stroke width as the other detached vowels.
+    # Selected softened え corner, with separate Regular and Bold skeletons.
     vowels={
         0xF45A:('M 672 337 L 646 -2',
                  'M 647 35 C 691 136 711 259 788 285 C 844 316 917 270 923 192 C 935 85 852 24 786 0'),
         0xF45B:('M 665 340 C 651 185 657 80 704 30 C 745 0 776 104 789 160',
                  'M 853 324 C 913 257 949 132 953 20'),
-        0xF45C:('M 550 415 C 620 403 710 400 745 330 C 766 288 766 264 740 220 L 610 0',
-                 'M 703.3636 158 C 753.3636 288 809 288 841 158 C 857 93 848 6 913 3 L 975 5'),
+        0xF45C:(('M635 307 C687 315 758 331 798 321 C816 316 805 298 791 274 L645 0',
+                   'M704 100 C742 169 789 190 819 140 C846 94 844 51 873 24 C893 4 940 0 975 5')
+                  if weight==400 else
+                  ('M657 282 C725 290 814 308 852 295 C873 287 854 263 832 235 L645 0',
+                   'M710 100 C749 167 806 180 834 131 C857 87 863 47 892 24 C914 6 959 0 990 5')),
     }
     for cp,paths in vowels.items():
-        dx=(32 if cp==0xF45C else 20) if weight==700 else 0
-        out[cp]=fu+[left_dot]+[transform(s(path),(1,0,0,1,dx,0)) for path in paths]
+        dx=20 if weight==700 and cp!=0xF45C else 0
+        strokes=[transform(s(path),(1,0,0,1,dx,0)) for path in paths]
+        if cp==0xF45C and weight==700:
+            # The branch's butt cap crosses the diagonal's outer edge. Clip
+            # that spur to the exact left offset of (645,0) -> (832,235).
+            slope=187/235
+            intercept=645-w/2*np.hypot(1,slope)
+            clip=pathops.Path();pen=clip.getPen()
+            pen.moveTo((intercept-500*slope,-500));pen.lineTo((2000,-500))
+            pen.lineTo((2000,1000));pen.lineTo((intercept+1000*slope,1000));pen.closePath()
+            branch=pathops.Path();strokes[1].replay(branch.getPen())
+            trimmed=pathops.op(branch,clip,pathops.PathOp.INTERSECTION)
+            strokes[1]=RecordingPen();trimmed.draw(strokes[1])
+        out[cp]=fu+[left_dot]+strokes
     # Glottal YA joins native は's left stroke to native や's arm.
     arm=move(cut_keep(rings('や')[2],0,180,'high'),dx=120)
     neck=move(cut_keep(rings('は')[2],1,550,'high'),dx=-20 if weight==400 else -60)
@@ -171,6 +229,7 @@ def drawings(weight):
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
         out[cp]=[body,transform(mark,(1,0,0,1,365-mx,bb.bounds[3]+50-mb.bounds[1]))]
+    out[0xF462]=fit_we_mark(out[0xF462][0],out[0xF461],475 if weight==400 else 725)
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)
