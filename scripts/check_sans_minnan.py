@@ -131,21 +131,123 @@ def katakana_stem(base):
     return statistics.median(widths)
 
 
+# The structure of each form as the samples draw it, written independently of
+# the construction tables in sans_minnan. Source: L2/20-209R p. 18, Âng and
+# Ogawa (1992) vol. 1 p. 3, table of signs: plain tones in the 常音 column,
+# nasalized in the 鼻音 column, rows 上平 (1), 上聲 (2), 上去 (3), 上入 (4),
+# 下平 (5), 下去 (7), 下入 (8); 6, 9 and the nasalized 5 and 7 also on p. 20
+# (Hirasawa 1914 p. 147). `slant` is where the stroke's upper end lies against
+# its lower end. `ring` is the ring's side of the stroke's line, seen from its
+# lower end towards its upper end ('axis' when the loop continues the line),
+# and where along the stroke it sits. `joins` is the terminal that runs into
+# the loop.
+SAMPLE_SHAPES = {
+    0x1AFF0: {'slant': 'right'},                       # 上聲 常音: /
+    0x1AFF1: {'slant': 'left'},                        # 上去 常音: \
+    0x1AFF2: {'slant': 'right'},                       # 上入 常音: short, head upper right
+    0x1AFF3: {'bend': 'left'},                         # 下平 常音: <
+    0x1AFF5: {'slant': 'upright'},                     # 下去 常音: |
+    0x1AFF6: {'slant': 'left'},                        # 下入 常音: short, head upper left
+    0x1AFF7: {'slant': 'upright', 'ring': ('right', 'foot')},   # 上平 鼻音: b
+    0x1AFF8: {'slant': 'right', 'ring': ('right', 'foot'), 'joins': 'foot'},  # 上聲 鼻音: 6
+    0x1AFF9: {'slant': 'left', 'ring': ('left', 'head'), 'joins': 'head'},    # 上去 鼻音: 9
+    0x1AFFA: {'slant': 'right', 'ring': ('axis', 'head'), 'joins': 'head'},   # 上入 鼻音: loop upper right
+    0x1AFFB: {'bend': 'left', 'ring': ('left', 'bend')},        # 下平 鼻音: < with a loop at the bend
+    0x1AFFD: {'slant': 'upright', 'ring': ('right', 'middle')},  # 下去 鼻音: þ
+    0x1AFFE: {'slant': 'left', 'ring': ('axis', 'foot'), 'joins': 'foot'},    # 下入 鼻音: loop lower right
+}
+
+
+def path(outline):
+    shape = pathops.Path()
+    outline.replay(shape.getPen())
+    return shape
+
+
+def terminals(outline):
+    """The flat cuts of a stroke contour: its straight segments' end points,
+    as {'head': (a, b), 'foot': (a, b)} by height."""
+    cuts, previous = [], None
+    for op, args in outline.value:
+        if op == 'lineTo':
+            cuts.append((previous, args[0]))
+        if args:
+            previous = args[-1]
+    cuts.sort(key=lambda c: (c[0][1] + c[1][1])/2)
+    return {'foot': cuts[0], 'head': cuts[-1]}
+
+
+def mid(cut):
+    return ((cut[0][0] + cut[1][0])/2, (cut[0][1] + cut[1][1])/2)
+
+
+def structure(font, name, cp):
+    """Assert the sample's slant, ring side and position, the join of a
+    terminal inside the ring's band, and a clear counter, on the outlines."""
+    shape = SAMPLE_SHAPES.get(cp)
+    if not shape:
+        return {}
+    stroke = contour(font, name, 0)
+    found = {}
+    if 'slant' in shape:
+        cuts = terminals(stroke)
+        head, foot = mid(cuts['head']), mid(cuts['foot'])
+        lean = head[0] - foot[0]
+        found['slant'] = 'upright' if abs(lean) < 20 else 'right' if lean > 0 else 'left'
+    if 'bend' in shape:
+        points = [p for _, args in stroke.value for p in args if p]
+        bend = min(points, key=lambda p: p[0])
+        tips = sorted(points, key=lambda p: p[1])
+        found['bend'] = 'left' if bend[0] < tips[0][0] and bend[0] < tips[-1][0] else 'right'
+    if 'ring' in shape:
+        outer, inner = contour(font, name, 1), contour(font, name, 2)
+        x0, y0, x1, y1 = sans_minnan.bounds(outer)
+        centre = ((x0 + x1)/2, (y0 + y1)/2)
+        side, where = shape['ring']
+        if where == 'bend':
+            assert path(outer).contains(bend), (hex(cp), 'bend outside the ring')
+            position = 'bend'
+        else:
+            cuts = terminals(stroke)
+            head, foot = mid(cuts['head']), mid(cuts['foot'])
+            length = math.dist(head, foot)
+            along = ((centre[0] - foot[0])*(head[0] - foot[0]) + (centre[1] - foot[1])*(head[1] - foot[1]))/length**2
+            position = 'foot' if along < .3 else 'head' if along > .7 else 'middle'
+            offset = ((centre[0] - foot[0])*(head[1] - foot[1]) - (centre[1] - foot[1])*(head[0] - foot[0]))/length
+        if where == 'bend':
+            found['ring'] = ('left' if centre[0] < bend[0] else 'right', position)
+        else:
+            found['ring'] = ('axis' if abs(offset) < 10 else 'right' if offset > 0 else 'left', position)
+        # The counter holds no ink from the stroke.
+        ink = pathops.op(path(stroke), path(inner), pathops.PathOp.INTERSECTION)
+        assert ink.area < .5, (hex(cp), 'ink in the counter', ink.area)
+        if 'joins' in shape:
+            cut = terminals(stroke)[shape['joins']]
+            ring_outer, ring_inner = path(outer), path(inner)
+            for i in range(21):
+                t = i/20
+                point = (cut[0][0] + t*(cut[1][0] - cut[0][0]), cut[0][1] + t*(cut[1][1] - cut[0][1]))
+                assert ring_outer.contains(point) and not ring_inner.contains(point), (hex(cp), 'terminal outside the band', point)
+            found['joins'] = shape['joins']
+    assert found == shape, (hex(cp), found, shape)
+    return found
+
+
 def check_minnan_forms(font, base, weight_class, regular=None):
     """Validate the drawn forms; `regular` is the built Regular face for Bold."""
     cmap = font.getBestCmap()
     drawn = sans_minnan.build(base)
     report = {'forms': {}, 'sliver_limits': {'width': SLIVER_WIDTH, 'area': SLIVER_AREA}}
     # Noto's own strokes, measured the way the forms are.
-    to = contours(base, ord('ト'), [0])
+    to = sans_minnan.noto(base, ord('ト'), [0])
     ku, outer, centre, tips = sans_minnan.ku_geometry(base)
     angles = {k: math.degrees(math.atan2(ty, tx)) for k, (tx, ty) in tips.items()}
     source = {'TO stem': across(to, 90), 'TO foot': across(to, 90, 'foot'), 'TO head': across(to, 90, 'head'),
               'KU upper arm': arm(ku, angles[1], centre, math.hypot(*tips[1])),
               'KU lower arm': arm(ku, angles[-1], centre, math.hypot(*tips[-1])),
-              'handakuten ring': ring_weight(contours(base, 0x309C, [0]), contours(base, 0x309C, [1])),
-              'prolonged sound mark': across(contours(base, 0x30FC), 0),
-              'halfwidth middle dot': (lambda b: b[2] - b[0])(sans_minnan.bounds(contours(base, 0xFF65)))}
+              'handakuten ring': ring_weight(sans_minnan.noto(base, 0x309C, [0]), sans_minnan.noto(base, 0x309C, [1])),
+              'prolonged sound mark': across(sans_minnan.noto(base, 0x30FC), 0),
+              'halfwidth middle dot': (lambda b: b[2] - b[0])(sans_minnan.bounds(sans_minnan.noto(base, 0xFF65)))}
     report['noto_strokes'] = {k: round(v, 1) for k, v in source.items()}
     report['katakana_stem_median'] = round(katakana_stem(base), 1)
     for cp in FORMS:
@@ -155,6 +257,7 @@ def check_minnan_forms(font, base, weight_class, regular=None):
         assert list(g.flags) == list(expected.flags) and list(g.endPtsOfContours) == list(expected.endPtsOfContours), hex(cp)
         thin, small = slivers(font, name)
         assert thin >= SLIVER_WIDTH and small >= SLIVER_AREA, (hex(cp), thin, small)
+        shape = structure(font, name, cp)
         widths = {}
         if cp in KU:
             # The bend's outer corner is the drawing's leftmost point; the
@@ -163,7 +266,8 @@ def check_minnan_forms(font, base, weight_class, regular=None):
             corner = min((p for _, args in first.value for p in args if p), key=lambda p: p[0])
             moved = (centre[0] - outer[0] + corner[0], centre[1] - outer[1] + corner[1])
             for k, label in ((1, 'KU upper arm'), (-1, 'KU lower arm')):
-                widths[label] = arm(first, k*sans_minnan.KU_ANGLE, moved, sans_minnan.KU_REACH)
+                angle = sans_minnan.KU_NASAL_ANGLE if cp == 0x1AFFB else sans_minnan.KU_ANGLE
+                widths[label] = arm(first, k*angle, moved, sans_minnan.KU_REACH)
         elif cp == 0x0305:
             widths['prolonged sound mark'] = across(contour(font, name, 0), 0)
         elif cp == 0x0323:
@@ -185,7 +289,7 @@ def check_minnan_forms(font, base, weight_class, regular=None):
             assert abs(value - source[label]) <= 2, (hex(cp), label, value, source[label])
         report['forms'][f'U+{cp:04X}'] = {
             'contours': g.numberOfContours, 'points': len(g.coordinates),
-            'min_contour_width': round(thin, 1), 'min_contour_area': round(small),
+            'min_contour_width': round(thin, 1), 'min_contour_area': round(small), 'structure': shape,
             'stroke_widths': {k: round(v, 1) for k, v in widths.items()}}
     if regular is not None:
         # Bold: the same commands and points as Regular, and a weight gain
@@ -194,7 +298,7 @@ def check_minnan_forms(font, base, weight_class, regular=None):
         # ring the nasalized forms carry.
         letters = [cp for cp in (*range(0x3041, 0x3097), *range(0x30A1, 0x30FB)) if cp in base.getBestCmap()]
         marks = [0x309B, 0x309C]
-        light = instance('NotoSansJP', 400, letters + marks + [0xFF65])
+        light = instance('NotoSansJP', 400, letters + marks + [0xFF65, 0x30FB])
 
         def gain(cp):
             return (weight(lambda pen: base.getGlyphSet()[base.getBestCmap()[cp]].draw(pen)) /
@@ -203,22 +307,36 @@ def check_minnan_forms(font, base, weight_class, regular=None):
         letter_gains = [gain(cp) for cp in letters]
         mark_gains = {f'U+{cp:04X}': round(gain(cp), 3) for cp in marks}
         low, high = min(letter_gains + [gain(cp) for cp in marks]), max(letter_gains)
-        dot_gain = gain(0xFF65)
+        # Noto's two middle dots, the marks nearest the dot below.
+        dot_gains = [gain(0xFF65), gain(0x30FB)]
         report['kana_letter_gain_range'] = [round(min(letter_gains), 3), round(high, 3)]
         report['kana_mark_gains'] = mark_gains
         report['kana_gain_range'] = [round(low, 3), round(high, 3)]
-        report['halfwidth_middle_dot_gain'] = round(dot_gain, 3)
+        report['middle_dot_gains'] = [round(g, 3) for g in dot_gains]
         rcmap = regular.getBestCmap()
         for cp in FORMS:
             g, r = font['glyf'][cmap[cp]], regular['glyf'][rcmap[cp]]
             assert list(g.flags) == list(r.flags) and list(g.endPtsOfContours) == list(r.endPtsOfContours), hex(cp)
-            gain = (weight(lambda pen: font.getGlyphSet()[cmap[cp]].draw(pen)) /
-                    weight(lambda pen: regular.getGlyphSet()[rcmap[cp]].draw(pen)))
-            # The dot below is Noto's halfwidth middle dot, whose own Bold
-            # gains less than any kana; it must keep that mark's gain.
+            ratio = (weight(lambda pen: font.getGlyphSet()[cmap[cp]].draw(pen)) /
+                     weight(lambda pen: regular.getGlyphSet()[rcmap[cp]].draw(pen)))
+            # Noto's dots gain less than any kana; the dot below must gain
+            # within the range of its two middle dots.
             if cp == 0x0323:
-                assert abs(gain - dot_gain) <= .01, gain
+                assert min(dot_gains) - .01 <= ratio <= max(dot_gains) + .01, (ratio, dot_gains)
             else:
-                assert low <= gain <= high, (hex(cp), gain, low, high)
-            report['forms'][f'U+{cp:04X}']['bold_gain'] = round(gain, 3)
+                assert low <= ratio <= high, (hex(cp), ratio, low, high)
+            report['forms'][f'U+{cp:04X}']['bold_gain'] = round(ratio, 3)
     return report
+
+
+if __name__ == '__main__':
+    import json
+
+    from fontTools.ttLib import TTFont
+
+    from sans import OUT, STEM, BOLD_STEM
+    regular = TTFont(OUT/(STEM+'.ttf'))
+    results = {'Regular': check_minnan_forms(regular, instance('NotoSansJP', 400), 400),
+               'Bold': check_minnan_forms(TTFont(OUT/(BOLD_STEM+'.ttf')), instance('NotoSansJP', 700), 700, regular)}
+    print(json.dumps({style: {key: value for key, value in report.items() if key != 'forms'} | {
+        'forms_checked': len(report['forms'])} for style, report in results.items()}, ensure_ascii=False, indent=2))
