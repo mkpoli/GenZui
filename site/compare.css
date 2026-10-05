@@ -16,6 +16,15 @@
 .hero-rows .who{font-size:12px;font-weight:600;line-height:1.35}
 .hero-rows .row.gz .who{color:var(--accent)}
 .hero-rows svg.line{display:block;width:100%;max-width:760px;height:auto;fill:currentColor}
+.hero-rows .line.ras{width:100%;max-width:760px;-webkit-mask-size:100% 100%;mask-size:100% 100%}
+.hero-rows .cr{grid-column:1/-1;margin-top:-2px}
+.ras{display:block;background:currentColor;-webkit-mask-image:var(--img);mask-image:var(--img);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.ras.g{-webkit-mask-size:calc(var(--cols)*var(--s)) calc(var(--rows)*var(--s));mask-size:calc(var(--cols)*var(--s)) calc(var(--rows)*var(--s));-webkit-mask-position:calc(var(--c)*var(--s)*-1) calc(var(--r)*var(--s)*-1);mask-position:calc(var(--c)*var(--s)*-1) calc(var(--r)*var(--s)*-1)}
+.vcol .frame{position:relative}
+.vcol .frame svg{display:block}
+.vcol .frame .ras{position:absolute;inset:0;background:var(--ink);-webkit-mask-size:100% 100%;mask-size:100% 100%}
+.credits{list-style:none;margin:10px 0 0;padding:0}
+.cr{line-height:1.5}
 svg .tofu,svg.tofu rect{fill:none;stroke:var(--muted);stroke-width:26;stroke-dasharray:70 55;opacity:.8}
 svg.tofu path{display:none}
 .credit-line{margin-top:14px}
@@ -87,22 +96,25 @@ td.gz .bar i{background:var(--accent)}
 .cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 4px 8px;display:grid;justify-items:center;gap:2px;position:relative;min-width:0}
 .cell.same{box-shadow:inset 0 0 0 2px var(--accent)}
 .cell .pair{display:flex;gap:0;justify-content:center}
-.cell svg.g{width:46px;height:46px;display:block}
-.cell svg.g.a path{fill:var(--accent)}
-.cell svg.g.b path{fill:var(--b)}
+.cell .g{--s:46px;width:var(--s);height:var(--s);display:block}
+.cell .g.a path{fill:var(--accent)}
+.cell .g.b path{fill:var(--b)}
+.cell .ras.a{background:var(--accent)}
+.cell .ras.b{background:var(--b)}
 .cell svg.g.tofu rect{stroke-width:30}
 .cell code{font-size:9px;color:var(--muted)}
 .cell small{font-size:9px;font-variant-numeric:tabular-nums}
 .chart.overlay .pair{display:grid}
-.chart.overlay svg.g{grid-area:1/1;width:76px;height:76px}
-.chart.overlay svg.g path{opacity:.78}
+.chart.overlay .g{--s:76px;grid-area:1/1}
+.chart.overlay .g path,.chart.overlay .ras{opacity:.78}
 .chart.overlay svg.g.tofu{display:none}
 .credit{max-width:780px;line-height:1.7}
 .credit a{color:var(--accent)}
 /* vertical text */
 .vcols{display:flex;flex-wrap:wrap;gap:18px 34px;margin:22px 0 18px}
 .vcol{margin:0;display:grid;gap:8px;justify-items:start;width:150px}
-.vcol svg{width:150px;height:auto;display:block;background:var(--surface);border:1px solid var(--line)}
+.vcol .frame{width:150px;background:var(--surface);border:1px solid var(--line)}
+.vcol svg{width:100%;height:auto}
 .vcol .guides rect{fill:none;stroke:var(--line);stroke-width:8}
 .vcol .ink path{fill:var(--ink)}
 .vcol.gz figcaption{color:var(--accent)}
@@ -126,7 +138,8 @@ td.gz .bar i{background:var(--accent)}
 .rare code{color:var(--muted);font-size:10px}
 .rgs{display:flex;gap:8px;flex-wrap:wrap}
 .rg{display:grid;justify-items:center;gap:2px;width:56px}
-.rg svg.g{width:52px;height:52px;fill:var(--ink)}
+.rg .g{--s:52px;width:52px;height:52px;fill:var(--ink)}
+.rg .ras{background:var(--ink)}
 .rg small{font-size:8px;text-align:center;line-height:1.25;letter-spacing:0}
 .rare p{margin:0;font-size:12px;color:var(--muted)}
 .method{max-width:860px}
@@ -161,13 +174,13 @@ td.gz .bar i{background:var(--accent)}
   .chart-tools{padding:16px;gap:16px}
   .pick{width:100%}.pick select{width:100%;min-width:0}
   .chart{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
-  .cell svg.g{width:38px;height:38px}
-  .chart.overlay svg.g{width:64px;height:64px}
+  .cell .g{--s:38px}
+  .chart.overlay .g{--s:64px}
   .provs{grid-template-columns:1fr}
   .prov{padding:18px 16px}
   .prow{grid-template-columns:1fr;gap:4px}
   .vcols{gap:18px}
-  .vcol,.vcol svg{width:104px}
+  .vcol,.vcol .frame{width:104px}
   .rt td[data-label]{grid-template-columns:minmax(90px,40%) minmax(0,1fr)}
 }
 @media(max-width:520px){.cmp .site-header nav{display:none}.cmp h1{margin-top:24px}}

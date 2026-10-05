@@ -11,6 +11,7 @@
     @font-face {font-family:GenZui;src:url({{FACE_FONT}}) format('woff2');font-weight:400;font-style:normal;font-display:block}
     {{CSS}}
     {{FAMILY_SWITCH_CSS}}
+    {{IMAGE_CSS}}
     {{COMPARE_CSS}}
   </style>
 </head>
@@ -28,29 +29,29 @@
   <main id="top">
     <section class="hero wrap" aria-labelledby="hero-title">
       <div class="hero-topline"><span>FONT COMPARISON</span><span>CHECKED {{CHECKED}}</span></div>
-      <h1 id="hero-title">Fonts for kana and hentaigana.</h1>
-      <p class="lead">GenZui Serif and GenZui Sans next to {{FONT_COUNT}} fonts that cover kana, hentaigana or both. Counts, sizes and layout tables are read from each font file, and every drawing on this page is an outline taken from the font it is credited to.</p>
+      <h1 id="hero-title">Kana and hentaigana font comparison</h1>
+      <p class="lead">GenZui Serif and GenZui Sans next to {{FONT_COUNT}} other fonts that cover kana, hentaigana or both. Counts, sizes and layout tables are read from each font file. Every drawing on this page comes from the font credited beneath it: GenZui as vector outlines, the other fonts as images rendered from their files.</p>
       <div class="hero-rows" role="group" aria-label="The same line of text in each font">{{HERO_ROWS}}</div>
-      <p class="small-note credit-line">A dashed box marks a character the font does not map. Outlines are shown with the credit and licence of each font under <a href="#files">Weights, files and licences</a>.</p>
+      <p class="small-note credit-line">A dashed box marks a character the font does not map. Credits are repeated under each display; licences are listed under <a href="#files">Weights, files and licences</a>.</p>
     </section>
 
     <section class="section wrap" id="glance" aria-labelledby="glance-title">
       <div class="section-label"><span>01 / AT A GLANCE</span><span lang="ja">一覧</span></div>
-      <div class="section-heading"><h2 id="glance-title">Seven fonts, one table.</h2><p>Sukima Gothic is two files, Main and Sub, and Jigmo is three; their counts combine the files. GenZui fonts have two weights, and the counts are those of Regular.</p></div>
+      <div class="section-heading"><h2 id="glance-title">Comparison table</h2><p>Code points are the union of a font’s files. Glyph counts, file sizes and variation sequences are per file: for GenZui and GenSeki they are Regular’s, and for Sukima Gothic and Jigmo each file is listed.</p></div>
       <div class="table-wrap">{{GLANCE}}</div>
     </section>
 
     <section class="band" id="coverage" aria-labelledby="coverage-title">
       <div class="wrap">
         <div class="section-label"><span>02 / COVERAGE</span><span lang="ja">収録範囲</span></div>
-        <div class="section-heading"><h2 id="coverage-title">Coverage by Unicode block.</h2><p>Each bar is the share of a block’s assigned characters, Unicode 18.0, that the font maps. Private use code points are font-specific and are listed by count.</p></div>
+        <div class="section-heading"><h2 id="coverage-title">Coverage by Unicode block</h2><p>Each bar is the share of a block’s assigned characters, Unicode 18.0, that the font maps. Private use code points are font-specific and are listed by count.</p></div>
         <div class="table-wrap">{{COVERAGE}}</div>
       </div>
     </section>
 
     <section class="section wrap" id="hentaigana" aria-labelledby="hentaigana-title">
       <div class="section-label"><span>03 / HENTAIGANA</span><span lang="ja">変体仮名</span></div>
-      <div class="section-heading"><h2 id="hentaigana-title">The drawings, glyph by glyph.</h2><p>Pick two fonts and a block. Overlay draws the second font over the first; a box with a green outline marks glyphs whose outlines overlap by 90% or more.</p></div>
+      <div class="section-heading"><h2 id="hentaigana-title">Hentaigana charts</h2><p>Pick two fonts and a block. Overlay draws the second font over the first; a box with a green outline marks glyphs whose outlines overlap by 90% or more.</p></div>
       {{CHART_CONTROLS}}
       <div class="legend" aria-hidden="true"><span class="key a"></span><span id="legend-a"></span><span class="key b"></span><span id="legend-b"></span><span class="key same"></span><span>overlap 90% or more</span></div>
       <ul class="chart" id="chart" aria-label="Glyph comparison"></ul>
@@ -72,9 +73,9 @@
         <div class="table-wrap">{{FEATURES}}</div>
 
         <h3 class="sub" id="vertical">Vertical text</h3>
-        <p class="note">Each column is the line 、。「」ー shaped top to bottom by HarfBuzz, the engine of Chromium and Firefox, and drawn from the font’s own outlines. The cells are one em tall.</p>
+        <p class="note">Each column is the line 、。「」ーゃっ shaped top to bottom by HarfBuzz, the engine of Chromium and Firefox, and drawn from the font’s own outlines. The cells are one em tall.</p>
         <div class="vcols">{{VERTICAL}}</div>
-        <p class="note">The GenZui fonts replace all five characters with vertical forms through <code>vert</code> and <code>vrt2</code>. Sukima Gothic has no GSUB or GPOS table; its Apple <code>morx</code> table supplies vertical forms for 、。「」, and ー keeps its horizontal bar. A text engine that ignores <code>morx</code> would show none of these substitutions. This was not tested. Sukima’s readme warns that punctuation positions in vertical text may be off.</p>
+        <p class="note">The GenZui fonts replace all seven characters with vertical forms through <code>vert</code> and <code>vrt2</code>. Sukima Gothic has no GSUB or GPOS table. In Chromium, its Apple <code>morx</code> table places 、。「」 vertically; ー stays horizontal and the small kana ゃ and っ keep their ordinary glyphs. A text engine that ignores <code>morx</code> would show none of these substitutions; this was not tested. Sukima’s readme warns that punctuation positions in vertical text may be off.</p>
       </div>
     </section>
 
@@ -96,6 +97,7 @@
       <div class="section-label"><span>07 / RARE KANJI</span><span lang="ja">稀少漢字</span></div>
       <div class="section-heading"><h2 id="rare-title">Kanji outside the GenZui repertoire.</h2><p>Surnames and a temple name from the example list in Sukima Gothic’s <code>使用例.txt</code>, whose author notes that some names or readings may not exist. A dashed box marks a character the font does not map.</p></div>
       <ul class="rares">{{RARE}}</ul>
+      <ul class="credits small-note">{{RARE_CREDITS}}</ul>
     </section>
 
     <section class="band" id="method" aria-labelledby="method-title">

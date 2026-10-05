@@ -3,13 +3,16 @@ import html
 import json
 import re
 
-from compare_sources import member
+import base64
+
+from compare_sources import MANIFEST, member
 from family_switch import html as switch_html, label_face, LABELS
 from sources import ROOT
-from compare_sources import verify
 
 DATA = ROOT/'research/font-comparison.json'
 GLYPHS = ROOT/'research/font-comparison-glyphs.json'
+IMAGES = ROOT/'research/font-comparison-images'
+VECTOR = {'genzui-serif', 'genzui-sans'}
 OUT = ROOT/'build/site'
 REPO = 'https://github.com/mkpoli/GenZui'
 OTF_REGISTRY = 'https://learn.microsoft.com/en-us/typography/opentype/spec/featurelist'
@@ -24,6 +27,7 @@ FEATURES = {
     'vpal': 'Proportional alternate vertical widths', 'vrt2': 'Vertical alternates and rotation',
 }
 SERIES = ('genzui-serif', 'genzui-sans')
+SPLIT = {'sukima': ('Main', 'Sub'), 'jigmo': ('Jigmo', 'Jigmo2', 'Jigmo3')}
 
 
 def esc(text):
@@ -46,6 +50,19 @@ class Page:
         self.order = [f['id'] for f in self.data['fonts']]
         self.blocks = {b['name']: b for b in self.data['blocks']}
         self.face_text = set('源萃明朝ゴシック')
+        self.images = self.data['images']
+
+    def credit(self, fid):
+        return esc(self.fonts[fid]['credit'])
+
+    def image_css(self):
+        """Raster glyph sheets as data URLs; the release build moves them to hashed assets."""
+        rules = []
+        for fid, kinds in self.images.items():
+            for kind, meta in kinds.items():
+                data = base64.b64encode((IMAGES/meta['file']).read_bytes()).decode()
+                rules.append(f'.{kind[0]}-{fid}{{--img:url(data:image/png;base64,{data})}}')
+        return '\n'.join(rules)
 
     # --- small pieces -----------------------------------------------------------------
 
@@ -73,6 +90,13 @@ class Page:
 
     def path(self, fid, cp, cls='', size=None):
         """An inline SVG outline, or a dashed box where the font has no drawing."""
+        if fid not in VECTOR:
+            atlas = self.images[fid]['atlas']
+            index = atlas['index'].get(f'{cp:X}')
+            if index is None:
+                return f'<svg class="g tofu {cls}" viewBox="0 -880 1000 1000" aria-hidden="true"><rect x="140" y="-700" width="720" height="780"/></svg>'
+            return (f'<span class="g ras a-{fid} {cls}" style="--c:{index % atlas["cols"]};--r:{index // atlas["cols"]};'
+                    f'--cols:{atlas["cols"]};--rows:{atlas["rows"]}" aria-hidden="true"></span>')
         entry = self.glyphs['glyphs'][fid].get(f'{cp:X}')
         if not entry:
             return f'<svg class="g tofu {cls}" viewBox="0 -880 1000 1000" aria-hidden="true"><rect x="140" y="-700" width="720" height="780"/></svg>'
@@ -101,8 +125,15 @@ class Page:
         for fid in self.order:
             font = self.fonts[fid]
             cls = ' gz' if fid in SERIES else ''
+            label = font['name'] + ' ' + self.data['hero']
+            if fid in VECTOR:
+                line = self.text_svg(fid, self.data['hero'], label)
+            else:
+                meta = self.images[fid]['hero']
+                line = (f'<span class="line ras h-{fid}" role="img" aria-label="{esc(label)}" '
+                        f'style="aspect-ratio:{meta["width"]}/{meta["height"]}"></span>')
             rows.append(f'<div class="row{cls}"><span class="who">{esc(font["name"])}<small>{esc(font["version"])}</small></span>'
-                        f'{self.text_svg(fid, self.data["hero"], font["name"] + " " + self.data["hero"])}</div>')
+                        f'{line}<small class="cr">{self.credit(fid)}</small></div>')
         return ''.join(rows)
 
     def glance(self):
@@ -131,21 +162,32 @@ class Page:
         def licence(font):
             return f'<a href="{esc(font["licence_url"])}">{esc(font["licence"])}</a>'
 
-        total = {f['id']: sum(x['size'] for x in f['files'] if x['format'] == 'TrueType') for f in self.data['fonts']}
+        def per_file(font, render):
+            """Regular's figure for weight pairs; one line per file where a font is split across files."""
+            parts = font['parts']
+            sizes = {x['name']: x['size'] for x in font['files']}
+            if font['id'] in SPLIT:
+                lines = [f'{label}: {render(part, sizes)}' for label, part in zip(SPLIT[font['id']], parts)]
+                return '<br>'.join(lines)
+            text = render(parts[0], sizes)
+            return text + ('<small>Regular</small>' if len(parts) > 1 else '')
+
+        def shared(font):
+            return f'<small>{number(font["shared_codepoints"])} code points are mapped in more than one file</small>' if font['id'] in SPLIT else ''
         spec = [
             ('Style', lambda f: esc(f['style'])),
             ('Version', lambda f: esc(f['version']) + ('' if f['version'] == f['date'] else f'<small>{esc(f["date"])}</small>')),
             ('Weights', weights),
             ('Licence', licence),
-            ('Reserved font name', lambda f: esc(f['reserved_name']) if f['reserved_name'] else 'None stated'),
-            ('Installed size', lambda f: f'{mb(total[f["id"]])}<small>{len([x for x in f["files"] if x["format"] == "TrueType"])} TTF</small>'),
-            ('Mapped code points', lambda f: number(f['codepoints'])),
-            ('Glyphs', lambda f: number(f['glyphs'])),
+            ('Reserved font name', lambda f: (esc(f['reserved_name']) + '<small>Adobe’s name, from the copyright string</small>') if f['reserved_name'] else 'None stated'),
+            ('Font file size', lambda f: per_file(f, lambda part, sizes: mb(sizes[part['name']]))),
+            ('Mapped code points', lambda f: number(f['codepoints']) + shared(f)),
+            ('Glyphs', lambda f: per_file(f, lambda part, sizes: number(part['glyphs']))),
             ('Hentaigana', lambda f: f'{f["hentaigana"]} of {self.data["milestones"]["hentaigana"]}'),
             ('Unicode 18 kana', lambda f: f'{f["unicode18_kana"]} of {self.data["milestones"]["unicode18_kana"]}'),
             ('GSUB and GPOS features', features),
             ('Vertical forms', vertical),
-            ('Variation sequences', lambda f: number(f['variation_sequences']) if f['variation_sequences'] else '0'),
+            ('Variation sequences', lambda f: per_file(f, lambda part, sizes: number(part['variation_sequences']))),
             ('Units per em', lambda f: ' · '.join(str(u) for u in f['upm'])),
         ]
         rows = ''.join(f'<tr><th scope="row">{esc(name)}</th>{self.cells(fn)}</tr>' for name, fn in spec)
@@ -174,7 +216,12 @@ class Page:
         for fid in self.order:
             font = self.fonts[fid]
             used[fid] = {'name': font['name'], 'credit': font['credit'], 'licence': font['licence'],
-                         'licence_url': font['licence_url'], 'glyphs': self.glyphs['glyphs'][fid]}
+                         'licence_url': font['licence_url']}
+            if fid in VECTOR:
+                used[fid]['glyphs'] = self.glyphs['glyphs'][fid]
+            else:
+                atlas = self.images[fid]['atlas']
+                used[fid]['raster'] = {'cols': atlas['cols'], 'rows': atlas['rows'], 'index': atlas['index']}
         sets = {k: {'name': v['name'], 'codepoints': v['codepoints']} for k, v in self.data['chart_sets'].items()}
         payload = {'fonts': used, 'order': self.order, 'sets': sets, 'names': self.data['names'],
                    'overlap': self.data['chart_overlap']}
@@ -218,22 +265,23 @@ class Page:
 
     def similarity_notes(self):
         sim = self.data['similarity']['hentaigana']
+
         def pair(a, b):
             return sim.get(f'{a}|{b}') or sim[f'{b}|{a}']
         n = self.data['milestones']['hentaigana']
         nsh, gs, sk, ge = 'noto-serif-hentaigana', 'genzui-serif', 'sukima', 'genseki'
-        serif = pair(gs, nsh)
-        genseki = pair(ge, sk)
-        sans = pair('genzui-sans', sk)
-        mincho = pair('ninjal', 'jigmo')
-        origins = self.data['origins']['genseki']
+        serif, genseki, sans = pair(gs, nsh), pair(ge, sk), pair('genzui-sans', sk)
+        origins = self.data['origins']
+        letters = origins['genseki']
+        extended = origins['sans_genseki_extended_a']
         return (
             f'<li><strong>GenZui Serif and Noto Serif Hentaigana</strong> correlate at {serif["corr_median"]:.3f}; '
             f'{serif["same"]} of {n} outlines overlap by 90% or more. GenZui Serif’s notice names Noto Serif Hentaigana as the source of its hentaigana.</li>'
             f'<li><strong>GenSeki Hentaigana Gothic and Sukima Gothic</strong> correlate at {genseki["corr_median"]:.3f} with a median overlap of {genseki["iou_median"]:.2f}: '
-            f'the shapes agree and the size or position differs. GenSeki’s README marks {origins["Sukima Gothic"]} of its {sum(origins.values())} table entries as derived from Sukima Gothic.</li>'
-            f'<li><strong>GenZui Sans and Sukima Gothic</strong> correlate at {sans["corr_median"]:.2f}, among the lowest values in the matrix. They are separate drawings.</li>'
-            f'<li><strong>NINJAL and Jigmo</strong> correlate at {mincho["corr_median"]:.2f}, the highest value between two fonts without a documented link.</li>')
+            f'the shapes agree and the size or position differs. GenSeki’s README marks {letters["Sukima Gothic"]} of its {sum(letters.values())} table entries as derived from Sukima Gothic.</li>'
+            f'<li><strong>GenZui Sans and Sukima Gothic</strong> correlate at {sans["corr_median"]:.2f} over the {n} hentaigana. GenZui Sans draws them from Noto Sans Hentaigana. '
+            f'It also takes {extended["total"]} Kana Extended-A glyphs from GenSeki Hentaigana Gothic ({extended["sukima_marked"]} of them marked B, Sukima Gothic, in GenSeki’s README), as its package’s sources.json records.</li>'
+            f'<li>These scores show likeness only. Where two fonts are related, the quoted documents under Provenance say so.</li>')
 
     def kana_similarity(self):
         sim = self.data['similarity']['kana']
@@ -260,15 +308,20 @@ class Page:
                 continue
             font = self.fonts[fid]
             info = vertical[fid]
-            cells = ''.join(f'<path d="{d}"/>' for d in glyphs[fid])
-            guides = ''.join(f'<rect x="-500" y="{i*1000}" width="1000" height="1000"/>' for i in range(len(info['advances'])))
-            subs = f'vertical forms: {sum(info["substituted"])} of {len(info["substituted"])}'
+            count = len(info['advances'])
+            guides = ''.join(f'<rect x="-500" y="{i*1000}" width="1000" height="1000"/>' for i in range(count))
+            if fid in VECTOR:
+                ink = f'<g class="ink">{"".join(f"<path d=\"{d}\"/>" for d in glyphs[fid])}</g>'
+                overlay = ''
+            else:
+                ink, overlay = '', f'<span class="ras v-{fid}"></span>'
+            subs = f'vertical forms: {sum(info["substituted"])} of {count}'
             cls = ' gz' if fid in SERIES else ''
             columns.append(
-                f'<figure class="vcol{cls}"><svg viewBox="-540 -20 1080 {len(info["advances"])*1000 + 40}" role="img" '
+                f'<figure class="vcol{cls}"><div class="frame"><svg viewBox="-540 -20 1080 {count*1000 + 40}" role="img" '
                 f'aria-label="{esc(font["name"])}: {esc(self.data["vertical_text"])} set vertically">'
-                f'<g class="guides">{guides}</g><g class="ink">{cells}</g></svg>'
-                f'<figcaption>{esc(font["name"])}<small>{subs}</small></figcaption></figure>')
+                f'<g class="guides">{guides}</g>{ink}</svg>{overlay}</div>'
+                f'<figcaption>{esc(font["name"])}<small>{subs}</small><small class="cr">{self.credit(fid)}</small></figcaption></figure>')
         return ''.join(columns)
 
     def files_table(self):
@@ -291,7 +344,8 @@ class Page:
                 f'<td data-label="Files"><ul class="files">{files}</ul></td>'
                 f'<td data-label="Weight classes">{weights}</td>'
                 f'<td data-label="Licence"><a href="{esc(font["licence_url"])}">{esc(font["licence"])}</a>'
-                f'<small>{esc("Reserved font name “" + font["reserved_name"] + "”") if font["reserved_name"] else "No reserved font name stated"}</small></td>'
+                f'<small>{esc("Reserved font name “" + font["reserved_name"] + "” (Adobe’s, from the copyright string)") if font["reserved_name"] else "No reserved font name stated"}</small>'
+                f'<small>Credit: {self.credit(fid)}</small></td>'
                 f'<td data-label="Source">{access}</td></tr>')
         head = ''.join(f'<th scope="col">{h}</th>' for h in ('Font', 'Files', 'Weights', 'Licence', 'Pinned source'))
         return f'<table class="rt files-table"><caption class="sr-only">Files, weights and licences</caption><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'
@@ -332,7 +386,8 @@ class Page:
             cp = ord(item['char'])
             glyphs = ''.join(f'<span class="rg" title="{esc(self.fonts[i]["name"])}">{self.path(i, cp)}<small>{esc(self.fonts[i]["name"])}</small></span>' for i in shown)
             cards.append(f'<li class="rare"><code>U+{cp:X}</code><div class="rgs">{glyphs}</div><p lang="ja">{esc(item["quoted"])}</p></li>')
-        return ''.join(cards), shown
+        credits = ''.join(f'<li>{self.credit(i)}</li>' for i in shown)
+        return ''.join(cards), shown, credits
 
     def sources_list(self):
         items = []
@@ -347,7 +402,7 @@ class Page:
 
     def render(self):
         template = (ROOT/'templates/compare.html').read_text()
-        rare_html, rare_fonts = self.rare()
+        rare_html, rare_fonts, rare_credits = self.rare()
         tools = self.data['tools']
         milestones = self.data['milestones']
         values = {
@@ -363,11 +418,13 @@ class Page:
             '{{FILES}}': self.files_table(),
             '{{PROVENANCE}}': self.provenance(),
             '{{RARE}}': rare_html,
+            '{{RARE_CREDITS}}': rare_credits,
+            '{{IMAGE_CSS}}': self.image_css(),
             '{{SOURCES}}': self.sources_list(),
             '{{OTF_REGISTRY}}': OTF_REGISTRY,
             '{{REPO}}': REPO,
             '{{CHECKED}}': esc(self.data['checked']),
-            '{{FONT_COUNT}}': str(len(self.order)),
+            '{{FONT_COUNT}}': str(len(self.order) - len(SERIES)),
             '{{HENTAIGANA_COUNT}}': str(milestones['hentaigana']),
             '{{UNICODE18_COUNT}}': str(milestones['unicode18_kana']),
             '{{TOOLS}}': esc(f'fontTools {tools["fonttools"]}, Pillow {tools["pillow"]}, NumPy {tools["numpy"]}, HarfBuzz {tools["harfbuzz"]} (uharfbuzz {tools["uharfbuzz"]}), Unicode {tools["unicode"]}'),
@@ -380,7 +437,7 @@ class Page:
         for token, value in values.items():
             page = page.replace(token, value)
         # The brand and the family switch need small subsets of the GenZui faces.
-        manifest = verify()
+        manifest = json.loads(MANIFEST.read_text())
         serif_woff2 = member(manifest, 'genzui-serif', name='GenZuiSerif-Regular.woff2')[0]
         sans_woff2 = member(manifest, 'genzui-sans', name='GenZuiSans-Regular.woff2')[0]
         faces = {'serif': serif_woff2, 'sans': sans_woff2}

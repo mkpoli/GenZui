@@ -6,7 +6,14 @@
   let data = null;
   const $ = id => document.getElementById(id);
   const svg = (font, cp, cls) => {
-    const entry = data.fonts[font].glyphs[cp];
+    const entry = (data.fonts[font].glyphs || {})[cp];
+    const f = data.fonts[font];
+    if (f.raster) {
+      const i = f.raster.index[cp];
+      if (i !== undefined) {
+        return `<span class="g ras a-${font} ${cls}" style="--c:${i % f.raster.cols};--r:${Math.floor(i / f.raster.cols)};--cols:${f.raster.cols};--rows:${f.raster.rows}" aria-hidden="true"></span>`;
+      }
+    }
     const inner = entry ? `<path d="${entry[1]}"/>` : '<rect x="140" y="-700" width="720" height="780"/>';
     return `<svg class="g ${cls}${entry ? '' : ' tofu'}" viewBox="0 -880 1000 1000" aria-hidden="true">${inner}</svg>`;
   };
@@ -21,7 +28,8 @@
     let hasA = 0, hasB = 0, same = 0;
     chart.classList.toggle('overlay', state.overlay);
     chart.innerHTML = codes.map(cp => {
-      const inA = !!data.fonts[state.a].glyphs[cp], inB = !!data.fonts[state.b].glyphs[cp];
+      const has = (id, c) => { const f = data.fonts[id]; return f.raster ? f.raster.index[c] !== undefined : !!f.glyphs[c]; };
+      const inA = has(state.a, cp), inB = has(state.b, cp);
       hasA += inA; hasB += inB;
       const overlap = pair[cp];
       const isSame = overlap >= 90;
@@ -50,7 +58,6 @@
     toggle.addEventListener('click', () => {
       state.overlay = toggle.getAttribute('aria-pressed') !== 'true';
       toggle.setAttribute('aria-pressed', String(state.overlay));
-      toggle.textContent = state.overlay ? 'Side by side' : 'Overlay';
       render();
     });
     state.a = $('font-a').value; state.b = $('font-b').value;

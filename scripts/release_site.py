@@ -100,8 +100,18 @@ def external_fonts(page):
     return re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', save, page)
 
 
+def external_images(page):
+    """Move the comparison page's raster glyph sheets to hashed assets."""
+    def save(match):
+        raw = base64.b64decode(match[1])
+        name = 'compare-'+hashlib.sha256(raw).hexdigest()[:16]+'.png'
+        (OUT/'assets'/name).write_bytes(raw)
+        return 'url(assets/'+name+')'
+    return re.sub(r'url\(data:image/png;base64,([A-Za-z0-9+/=]+)\)', save, page)
+
+
 def external_glyphs(page):
-    """Move the comparison page's glyph outlines to a hashed asset the page fetches."""
+    """Move the comparison page's GenZui glyph outlines to a hashed asset the page fetches."""
     match = re.search(r'<script id="compare-glyphs" type="application/json">(.*?)</script>', page, re.S)
     raw = json.dumps(json.loads(match[1]), ensure_ascii=False, separators=(',', ':')).encode()
     name = 'compare-glyphs-'+hashlib.sha256(raw).hexdigest()[:16]+'.json'
@@ -257,7 +267,7 @@ def build():
     sans_alt = build_sans_card(OUT/'media')
     (OUT/'sans.html').write_text(metadata(external_fonts(sans_page), '/sans', SANS_TITLE, SANS_DESCRIPTION,
                                           sans_alt, image='genzui-sans-social-2x.png'))
-    (OUT/'compare.html').write_text(metadata(external_glyphs(external_fonts((ROOT/'build/site/compare.html').read_text())),
+    (OUT/'compare.html').write_text(metadata(external_images(external_glyphs(external_fonts((ROOT/'build/site/compare.html').read_text()))),
                                              '/compare', COMPARE_TITLE, COMPARE_DESCRIPTION, home_alt))
     for route, content, title, description in [
         ('gallery.html', build_gallery(public=True), GALLERY_TITLE, GALLERY_DESCRIPTION),
