@@ -1,0 +1,33 @@
+{
+  "files": [
+    {
+      "filename": "PlangothicP1-Regular.ttf",
+      "url": "https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project/releases/download/V2.9.5795/PlangothicP1-Regular.ttf",
+      "sha256": "550b5d0775b15405946b18f4843df439a51e69508d7e6778d94c1f7a53dc5ad6",
+      "size": 20410664,
+      "kind": "file"
+    },
+    {
+      "filename": "PlangothicP2-Regular.ttf",
+      "url": "https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project/releases/download/V2.9.5795/PlangothicP2-Regular.ttf",
+      "sha256": "681933370adfe0fc7253f77735275a82fea09fe4f8adba907bdeb46c110daf8f",
+      "size": 12459248,
+      "kind": "file"
+    },
+    {
+      "filename": "Plangothic-OFL.txt",
+      "url": "https://raw.githubusercontent.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project/V2.9.5795/LICENSE-OFL.txt",
+      "sha256": "e564f06d018e7b95bc3594c96a17f1d41865af4038c375e7aa974dd69df38602",
+      "size": 4302,
+      "kind": "file"
+    },
+    {
+      "filename": "sukima-gothic_ver11.41.zip",
+      "url": "https://booth.pm/ja/items/2117070",
+      "sha256": "1c16c083a8b8f61f545a60f10b186fe922c991a2f7c5ec1312518a83bbf05979",
+      "size": 24544174,
+      "kind": "zip",
+      "manual": "BOOTH requires a signed-in download. Download version 11.41 from the item page and place the archive at build/sans-work/han/sukima-gothic_ver11.41.zip."
+    }
+  ]
+}
