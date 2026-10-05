@@ -62,7 +62,7 @@
         },
         {
           "topic": "Other kana",
-          "text": "Further historical forms are drawn from Noto kana components.",
+          "text": "Twenty-one historical forms use Noto components and original drawing.",
           "member": "GenZuiSerif-0.118.zip!README.txt",
           "quote": "Twenty-one historical forms use Noto components and original drawing."
         }
@@ -123,7 +123,7 @@
         },
         {
           "topic": "Hentaigana",
-          "text": "Hentaigana come from Noto Sans Hentaigana, compiled from its source repository.",
+          "text": "Noto Sans Hentaigana supplies 290 historical forms from instances matched to each weight.",
           "member": "GenZuiSans-0.103.zip!README.txt",
           "quote": "Noto Sans Hentaigana supplies 290 historical forms from instances matched to each weight"
         },
@@ -212,7 +212,7 @@
         },
         {
           "topic": "Hentaigana",
-          "text": "The author began supporting hentaigana in version 8.0 (2021-07-28).",
+          "text": "The update history records the start of hentaigana support in version 8.0, dated 2021.7.28.",
           "member": "readme.txt",
           "quote": "変体がな287字に対応を開始した為"
         },
@@ -224,7 +224,13 @@
         },
         {
           "topic": "Licence",
-          "text": "The font file is under SIL OFL 1.1; the readme adds that it cannot be sold.",
+          "text": "The font file is under SIL OFL 1.1, the licence of Source Han Sans.",
+          "member": "readme.txt",
+          "quote": "すきまゴシックのフォントファイルは、源ノ角ゴシックと同じ SIL Open Font License 1.1 のもとで使用することができます。"
+        },
+        {
+          "topic": "Sale",
+          "text": "Modification is free within the terms of Source Han Sans, but the font cannot be sold.",
           "member": "readme.txt",
           "quote": "（但し有償で配布することはできません。）"
         },
@@ -298,7 +304,7 @@
         },
         {
           "topic": "Scope",
-          "text": "The package description limits the font to the Kana Supplement block.",
+          "text": "The package description says the font contains symbols for the Kana Supplement block.",
           "member": "DESCRIPTION.en_us.html",
           "quote": "Noto Serif Hentaigana is a font that contains symbols for the Kana Supplement Unicode block."
         }
@@ -360,7 +366,7 @@
         },
         {
           "topic": "Hentaigana",
-          "text": "Each hentaigana is marked A (Shokaki), B (Sukima) or C (added by GenSeki); the counts below come from that table.",
+          "text": "The legend credits origin B to Sukima Gothic; the tables mark each glyph A, B or C.",
           "member": "README.md",
           "quote": "B: [すきまゴシック](https://booth.pm/ja/items/2117070)に由来するもの"
         },
@@ -490,9 +496,9 @@
         },
         {
           "topic": "Scope",
-          "text": "The README describes the fonts as kanji fonts and lists non-kanji only as ASCII and CJK-related characters.",
+          "text": "The README's description of Jigmo.ttf lists ASCII and non-kanji characters.",
           "member": "README.txt",
-          "quote": "*** Non-kanji: 13,340 characters ***"
+          "quote": "- ASCII and non-kanji"
         }
       ]
     }
