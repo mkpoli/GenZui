@@ -19,6 +19,7 @@ from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from gugyeol import PUA as GUGYEOL_PUA
 from check_coverage import check_coverage
+from check_sans_minnan import check_minnan_forms
 
 
 def serialized(font):
@@ -245,6 +246,8 @@ def check(weight=400):
                 assert actual == shape(web_engine, text+chr(cp), 'ttb', features)
                 minnan_cases += 1
 
+    minnan_forms = check_minnan_forms(font, base, weight, TTFont(OUT/(STEM+'.ttf')) if bold else None)
+
     for nid in (1, 16):
         assert font['name'].getName(nid, 3, 1, 0x409).toUnicode() == FAMILY
         assert font['name'].getName(nid, 3, 1, 0x411).toUnicode() == FAMILY_JA
@@ -273,7 +276,8 @@ def check(weight=400):
         'unchanged_jp_glyphs_and_metrics': len(base.getGlyphOrder()),
         'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
         'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in refits.items()},
-        'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'kana_coverage': coverage['coverage'],
+        'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'minnan_forms': minnan_forms,
+        'kana_coverage': coverage['coverage'],
         'gugyeol_pua_characters': len(GUGYEOL_PUA),
         'woff2_matches_ttf': True,
     }
