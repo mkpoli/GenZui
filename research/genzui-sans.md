@@ -128,3 +128,24 @@ specimen (`build/site/sans.html`, embedded fonts) and the public site
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
 Version reports live in `research/sans-browser-checks-0.103.json` and
 `research/sans-kana-coverage-0.103.json`.
+
+## Provenance check
+
+GenSeki Hentaigana Gothic's README credits Sukima Gothic for most of its
+hentaigana. Noto Sans Hentaigana names no source font. To check whether its
+drawings derive from Sukima Gothic or Shokaki Hentaigana Gothic, each glyph
+was rendered at 160 px, cropped to its ink, scaled to 96 px, blurred
+(Gaussian radius 4) and compared by Pearson correlation, so that weight and
+placement count less than structure.
+
+| Pair | Characters | Median | Above 0.95 |
+| --- | --- | --- | --- |
+| GenSeki glyphs its README credits to Sukima ↔ Sukima Gothic 11.41 | 175 | 0.999 | 175 |
+| GenSeki glyphs its README credits to Shokaki ↔ Sukima Gothic 11.41 | 72 | 0.598 | 0 |
+| Noto Sans Hentaigana Regular ↔ Sukima Gothic 11.41 | 254 | 0.623 | 0 |
+| Noto Sans Hentaigana Regular ↔ GenSeki glyphs credited to Shokaki | 72 | 0.625 | 0 |
+
+The test separates derived drawings (0.999) from unrelated ones (about
+0.60). Noto Sans Hentaigana scores like the unrelated pairs against both
+fonts. Simple shapes such as small katakana score high in any sans, so the
+test says little about them. Measured on 2026-10-05.
