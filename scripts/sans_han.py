@@ -3,10 +3,11 @@
 Each code point takes the first source that maps it, in this order:
 Noto Sans CJK JP (the design GenZui Sans is built on), Sukima Gothic Main and
 Sub (Japanese forms on the same Source Han Sans base), then Plangothic P1 and
-P2 (Source Han Sans CN forms for the remaining extension ideographs).
+P2 (Source Han Sans CN forms, mostly for the remaining extension ideographs).
 GenZui Sans Han holds the BMP and plane 3; GenZui Sans Han SIP holds plane 2,
 so each file stays under the 65,535-glyph limit.
 """
+import copy
 import hashlib
 import json
 import re
@@ -14,7 +15,9 @@ import shutil
 from zipfile import ZipFile
 
 from fontTools.fontBuilder import FontBuilder
+from fontTools.pens.areaPen import AreaPen
 from fontTools.pens.cu2quPen import Cu2QuPen
+from fontTools.pens.reverseContourPen import ReverseContourPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
@@ -121,7 +124,7 @@ def outline(font, name):
     """A TrueType outline on a 1000-unit em; CFF curves are converted, hints dropped."""
     scale = 1000 / font['head'].unitsPerEm
     pen = TTGlyphPen(None)
-    target_pen = Cu2QuPen(pen, max_err=0.3, reverse_direction=True) if 'CFF ' in font else pen
+    target_pen = Cu2QuPen(pen, max_err=0.3) if 'CFF ' in font else pen
     if scale != 1:
         target_pen = TransformPen(target_pen, (scale, 0, 0, scale, 0, 0))
     advance = round(font['hmtx'][name][0] * scale)
@@ -129,8 +132,21 @@ def outline(font, name):
         # A few Sukima Gothic ideographs carry stray widths (984-1010); set them
         # on the full-width grid with the ink kept centred.
         target_pen = TransformPen(target_pen, (1, 0, 0, 1, (EM - advance) / 2 / scale, 0))
+    # TrueType contours run clockwise. CFF sources run counter-clockwise, and so
+    # do Sukima Gothic's TrueType outlines; reverse any glyph drawn that way.
+    area = AreaPen(font.getGlyphSet())
+    font.getGlyphSet()[name].draw(area)
+    if area.value > 0:
+        target_pen = ReverseContourPen(target_pen)
     font.getGlyphSet()[name].draw(target_pen)
     return pen.glyph(), advance
+
+
+def panose(base):
+    """GenZui Sans's PANOSE with the monospaced proportion."""
+    value = copy.copy(base)
+    value.bProportion = 9
+    return value
 
 
 def runs(cps, labels):
@@ -210,10 +226,12 @@ def build_face(face, choice, fonts, base_font, notice):
     fb.setupOS2(version=4, usWeightClass=400, achVendID='NONE', fsType=0, fsSelection=64,
                 sTypoAscender=os2.sTypoAscender, sTypoDescender=os2.sTypoDescender,
                 sTypoLineGap=os2.sTypoLineGap, usWinAscent=os2.usWinAscent, usWinDescent=os2.usWinDescent,
-                sxHeight=os2.sxHeight, sCapHeight=os2.sCapHeight, panose=os2.panose,
-                # Japanese, Simplified Chinese, Korean Wansung and Traditional Chinese code pages.
-                ulCodePageRange1=(1 << 17) | (1 << 18) | (1 << 19) | (1 << 20), ulCodePageRange2=0)
-    fb.setupPost(keepGlyphNames=False)
+                sxHeight=os2.sxHeight, sCapHeight=os2.sCapHeight, panose=panose(os2.panose),
+                # The JIS code page, as in GenZui Sans; the SIP file's plane-2
+                # characters belong to no legacy code page.
+                ulCodePageRange1=(1 << 17) if 0 in face['planes'] else 0, ulCodePageRange2=0)
+    # Every glyph has the 1000-unit full width.
+    fb.setupPost(keepGlyphNames=False, isFixedPitch=1)
     font = fb.font
     font['gasp'] = TTFont(SANS/(SANS_STEM+'.ttf'), lazy=True)['gasp']
     font['head'].fontRevision = float(VERSION)
@@ -272,12 +290,16 @@ def build():
         'below that has it; sources.json lists the source of every character.\n\n'
         'Noto Sans CJK JP Regular (Adobe and Google, Source Han Sans design).\n'
         'https://github.com/notofonts/noto-cjk\n'
-        'Sukima Gothic 11.41 Main and Sub by きなさ, built on Genshin Gothic\n'
-        '(Source Han Sans 1.002 and M+ OUTLINE FONTS). Outlines scaled from a\n'
+        'Sukima Gothic 11.41 Main and Sub by きなさ, built on Genshin Gothic by\n'
+        '自家製フォント工房, which joins Source Han Sans 1.002 and M+ OUTLINE FONTS;\n'
+        'Sukima\'s readme gives Genshin-derived glyphs to 自家製フォント工房. Outlines scaled from a\n'
         '1024-unit to a 1000-unit em.\n'
         'https://booth.pm/ja/items/2117070\n'
         'Plangothic P1 and P2 2.9.5795 by the Plangothic Project, built on Source Han\n'
-        'Sans CN with Chinese Mainland forms.\n'
+        'Sans CN with Chinese Mainland forms. Its README lists fonts it borrows from or\n'
+        'refers to: Source Han Sans, other Noto fonts, Sukima Gothic, Chiron Hei HK,\n'
+        'Zhudou Sans, Gothic Nguyen, Shokaki Hentaigana Gothic, Shanggu Sans and\n'
+        'Chill Duan Sans.\n'
         'https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project\n\n'
         'Fonts and derived outlines are licensed under SIL OFL 1.1. Plangothic\n'
         'reserves the names "Plangothic" and "遍黑". M+ OUTLINE FONTS glyphs within\n'
