@@ -185,6 +185,14 @@
       : item.provisional ? 'Noto components and original drawing. Joins, proportions and weight remain under review.'
       : item.source === 'jp' ? `Original ${origins.jp} outline, with its Japanese layout behaviour preserved.`
       : `Original ${origins[item.source]} outline, preserved in GenZui.`;
+    if (item.reference && !picture.invisible) {
+      const link = document.createElement('a');
+      link.href = item.reference.url;
+      link.textContent = item.reference.label;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      $('#detail-description').append(' ', link);
+    }
     $('#detail-age').textContent = item.age;
     $('#detail-block').textContent = item.block;
     $('#detail-source').textContent = isBold() && item.bold_source ? item.bold_source : origins[item.source];

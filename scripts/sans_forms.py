@@ -70,13 +70,6 @@ SANS_SYMBOLS = {
 }
 
 
-# Minnan tone letters in Bold: a blend between the FRB outlines and the GenZui
-# Bold masters drawn for Noto Serif JP Bold (data/minnan/bold.json). At 0.76
-# their median weight gain over Regular is 1.53, the median gain of Noto Sans
-# JP's kana; the full Serif masters gain 1.66.
-BOLD_TONE_BLEND = 0.76
-
-
 # Alternate WI, built like GenZui Serif's from the base font's own strokes:
 # WI's bars and right stem, with NA's falling stroke as the left descent.
 # NA's stroke is heavier than WI's stems, so it is thinned about its own

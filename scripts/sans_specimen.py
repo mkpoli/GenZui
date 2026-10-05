@@ -44,7 +44,7 @@ footer{font-size:14px;padding-top:30px;color:#586250}code{font-size:.9em}.small{
 日本語の文字と、むかしの仮名。</div>
 <p class="small">Edit the text above.</p></section>
 SECTIONS
-<footer><p>Based on Noto Sans JP and Noto Sans Hentaigana, with historical forms from GenSeki Hentaigana Gothic, Minnan signs from FRB Taiwanese Kana, and GenZui transcription symbols. <a href="NOTICE.txt">Source credits</a> · <a href="checks.json">Font checks</a></p></footer></main>
+<footer><p>Based on Noto Sans JP and Noto Sans Hentaigana, with historical forms from GenSeki Hentaigana Gothic, and GenZui’s Minnan signs and transcription symbols drawn from Noto Sans JP. <a href="NOTICE.txt">Source credits</a> · <a href="checks.json">Font checks</a></p></footer></main>
 <script>const sample=document.getElementById('sample');document.getElementById('size').addEventListener('input',e=>{sample.style.setProperty('--size',e.target.value+'px');document.getElementById('size-value').textContent=e.target.value+' px'});document.getElementById('direction').addEventListener('click',e=>{const vertical=sample.classList.toggle('vertical');e.currentTarget.setAttribute('aria-pressed',String(vertical));e.currentTarget.textContent=vertical?'Horizontal text':'Vertical text'})</script></html>'''
     (OUT/'index.html').write_text(source.replace('FONT', webfont).replace('VERSION', VERSION).replace('SECTIONS', sections),
                                   encoding='utf-8')

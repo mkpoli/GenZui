@@ -14,8 +14,11 @@ Okinawan forms and historical katakana variants are not part of the Sans family.
 | Noto Sans Hentaigana | Regular instance | instance at axis 780 | Four archaic kana: 𛀀 𛄠 𛄡 𛄢 |
 | GenSeki Hentaigana Gothic 1.201 | Regular | Bold | 20 historical kana, small kana and ligatures |
 | Noto Sans CJK JP | Regular | Bold | U+5344 卄 |
-| FRB Taiwanese Kana | outlines | blend toward GenZui Bold masters | 13 Minnan tone letters and two combining marks |
-| GenZui | Noto Sans JP Regular strokes, drawings | Noto Sans JP Bold strokes, Bold masters | Alternate WI 𛄨, squared PAATU and the transcription symbols |
+| GenZui | Noto Sans JP Regular strokes, drawings | Noto Sans JP Bold strokes, Bold masters | Alternate WI 𛄨, squared PAATU, the transcription symbols, 13 Minnan tone letters and two combining marks |
+
+The Minnan forms keep the advances, mark anchors and overline width of
+[FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana), whose
+outlines GenZui Serif uses.
 
 The Noto Sans Hentaigana instances are compiled from the Glyphs package at
 upstream commit `3aa4d30ee04254d3d0a69c500de7fda494e3b302`. The unencoded
@@ -70,15 +73,93 @@ keeps WI's position; the upper bar drops 22 units and the lower bar rises 30,
 as in Serif. Each weight applies the same moves to its own
 strokes, so the letter keeps WI's height and bar width (`scripts/sans_forms.py`).
 
+## Minnan tone letters
+
+The 13 tone letters of Kana Extended-B and U+0305/U+0323 are drawn from Noto
+Sans JP's strokes (`scripts/sans_minnan.py`). Their structure follows the
+period samples reproduced in Fredrick R. Brennan's proposal
+[L2/20-209R](https://www.unicode.org/L2/L2020/20209r-taiwan-kana.pdf)
+(13 December 2020); page numbers are the proposal's printed pages, which
+match the PDF:
+
+- p. 18: Âng and Ogawa (1992), *Minnan Classic Dictionary Collection*,
+  vol. 1 p. 3, the table of signs (符號), plain and nasalized (鼻音) tones;
+- p. 18: the same work, vol. 1 p. 5, aspirated kana with the dot below;
+- p. 19: vol. 1 p. 3, overlined kana in running text;
+- p. 20: Hirasawa (1914), *Taiwan Proverb Collection*, p. 147, tones in
+  vertical text;
+- p. 21: Ogawa (1938), *New Japanese–Taiwanese Dictionary*, page not
+  identified, reproduced from Liong et al. (1999) p. 16.
+
+The scans are bilevel or JPEG at 150–650 ppi; the table's marks are about 30
+pixels tall. Slants and proportions below are measured on the table and
+agree with Hirasawa's print.
+
+ト's stem is 804 units long in Regular and 835 in Bold; lengths below are
+Regular / Bold.
+
+| Character | Sample | Construction |
+| --- | --- | --- |
+| 𚿰 TONE-2 | `/`, 21° from upright, nine tenths of tone 7 | ト's stem shortened to 724 / 755 units, turned 21° clockwise |
+| 𚿱 TONE-3 | `\`, 15°, nearly as long as tone 7 | ト's stem shortened to 774 / 805 units, turned 15° anticlockwise |
+| 𚿲 TONE-4 | short stroke falling to the left | ト's stem shortened to 334 / 365 units, turned 50° clockwise |
+| 𚿳 TONE-5 | `<`, arms about 58° from the horizontal | く with each arm turned about the bend to 58° and shortened to 400 units |
+| 𚿵 TONE-7 | upright, the longest stroke | ト's stem, 804 / 835 units |
+| 𚿶 TONE-8 | short stroke falling to the right | ト's stem shortened to 334 / 365 units, turned 45° anticlockwise |
+| 𚿷 NASALIZED TONE-1 | stem with a loop at its foot, like b | ト's stem with the ring at its foot on the right |
+| 𚿸 NASALIZED TONE-2 | tone 2 running into a loop, like 6 | ト's stem shortened to 544 / 575 units at the tone-2 slant, its foot ending inside the ring |
+| 𚿹 NASALIZED TONE-3 | tone 3 running out of a loop, like 9 | ト's stem shortened to 584 / 615 units at the tone-3 slant, its head ending inside the ring |
+| 𚿺 NASALIZED TONE-4 | hollow head with a tail to the lower left | a 160 / 191-unit tail of ト's stem ending inside the ring |
+| 𚿻 NASALIZED TONE-5 | `<` with a loop closing the bend; Hirasawa's arms about 65° | く with its arms turned to 65° and shortened to 400 units, the ring across its bend on the left |
+| 𚿽 NASALIZED TONE-7 | stem with a loop on its right, below the middle | ト's stem with the ring centred 42% up its right side |
+| 𚿾 NASALIZED TONE-8 | hollow head with a short tail to the upper left | a 130 / 161-unit tail of ト's stem ending inside the ring |
+| U+0305 | a bar about the width of the kana | ー shortened to FRB's 762 units |
+| U+0323 | a round dot under the kana | the halfwidth middle dot ･ |
+
+Shortening compresses only a stroke's straight middle, so its width and flat
+terminals stay as Noto draws them. The ring is the handakuten's, widened to
+the samples' loop (outer diameter 260 units) by moving both circles outward
+the same distance, which keeps the handakuten's ring weight: 45 units in
+Regular and 60 in Bold. Contours overlap without being merged, as in Noto
+Sans JP's kana, and carry the same overlap flag.
+
+Every join is placed by measuring the outlines. In the samples the stroke
+runs into the loop with no terminal showing, so where a stroke ends at the
+ring (the 6, the 9 and the hollow heads of tones 4 and 8) its whole flat
+terminal lies inside the ring's band, at least 4 units inside both circles:
+its nearest point to the centre lies 4 units outside the inner circle and the
+ring sits as far to the side as the terminal's corners allow inside the outer
+circle. A tail that ends on the ring's own axis is compressed into the band
+with its terminal. Beside a stem that keeps its terminals (b, þ) and across
+the bend of く, the ring moves as close as the outline lets it while its
+counter stays 2 units clear of the stroke. No counter holds any stroke ink.
+
+The checks (`scripts/check_sans_minnan.py`, also run by the font checks)
+rebuild each form from the base instance and compare it with the font,
+reject contours under 15 units thick or 400 square units in area, and test
+the structure on the outlines against a table written from the samples:
+the slant of each stroke, the side of the stroke's line and the place along
+it where the ring sits, that the joining terminal lies inside the ring's
+band, and that the counter holds no ink. They measure every stroke against
+the Noto stroke it comes from: ト's stem 83.3 units (Regular) and 137.0
+(Bold), く's arms 78.3/86.5 and 129.8/142.6, the ring 44.6 and 59.9, ー 88 and
+146, ･ 167 and 195. Each measurement must agree within two units. The median
+vertical stem of Noto Sans JP's katakana is 83.0 units in Regular and 136.1
+in Bold. In vertical text the existing placement applies: the tone letters sit
+beside one to four kana and the marks keep FRB's clearance from the kana.
+
 ## Bold drawings
 
 GenZui's own outlines in Bold, measured by the weight gain over Regular
 against Noto Sans JP's kana (1.47–1.62, median 1.53):
 
-- **Minnan tone letters:** the FRB outlines blended 0.76 toward the Bold
-  masters drawn for GenZui Serif (`data/minnan/bold.json`), which share their
-  points. The blend's median gain is 1.53; the full Serif masters gain 1.66.
-  The overline and dot keep Regular's clearance from the kana.
+- **Minnan tone letters:** drawn from Noto Sans JP Bold's own ト, く, ゜, ー
+  and ･ on the Regular construction, so each Bold outline has the Regular
+  outline's commands and points. Their gains (1.39–1.55) fall within those of
+  Noto's kana letters and voicing marks (1.34–1.62); the forms that are mostly
+  ring gain least, as the handakuten does (1.34). The dot below gains 1.16,
+  within the range of Noto's two middle dots (1.16–1.20), which gain less
+  than any kana.
 - **Transcription symbols:** the marks inside Noto's dashed frames share one
   stroke per face, the half-turn arrow's ring weight: 36 units in Regular and
   43 in Bold (the frames have 31 and 37). The minus and the double arrow are
@@ -113,7 +194,7 @@ archives and the compiled instances are cached under `build/sans-work/`.
 The checks run on each face against the Noto Sans JP instance of its weight.
 They compare every Noto Sans JP outline and metric with the base font,
 exercise Japanese layout in both writing directions, verify historical marks,
-Minnan tone placement, check the refits, and
+Minnan tone placement and the drawn Minnan forms, check the refits, and
 compare TTF with WOFF2. The coverage audit requires all 763 characters in
 Unicode 18's Hiragana/Katakana scripts and script extensions. The browser check
 validates the offline specimen in Chromium and Firefox, compares TTF and WOFF2

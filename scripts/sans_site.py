@@ -12,6 +12,8 @@ from family_switch import css as switch_css, html as switch_html
 from weight_switch import css as weight_css
 from inventory import KANA_GROUPS, character_data
 from gugyeol import FORMS as GUGYEOL_FORMS, PUA as GUGYEOL_PUA
+from repertoire import MINNAN_MARKS, MINNAN_TONES
+import sans_minnan
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
 
@@ -23,7 +25,7 @@ PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかた�
 # family name because the Serif set already occupies the plain names.
 # Short source keys for the inventory, from the build's provenance strings.
 SOURCE_KEYS = {'Noto Sans JP Regular': 'jp', 'Noto Sans Hentaigana': 'hentaigana',
-               'GenSeki Hentaigana Gothic': 'genseki', 'FRB Taiwanese Kana': 'frb',
+               'GenSeki Hentaigana Gothic': 'genseki',
                'Noto Sans CJK JP Regular': 'cjk', '구결자': 'gugyeol'}
 # Reader-facing notes for the characters GenZui reworked in this family.
 DESCRIPTIONS = {
@@ -50,7 +52,7 @@ GENSEKI_ORIGINS = {
 }
 assert len(GENSEKI_ORIGINS) == 20
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
-           'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
+           'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
            'gugyeol': 'Twin ideograph (구결자)'}
 DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
              BOLD_STEM+'.ttf': BOLD_STEM+'.ttf', BOLD_STEM+'.woff2': BOLD_STEM+'.woff2',
@@ -91,12 +93,18 @@ def inventory(font, provenance):
     kinds = {key: source_key(value) for key, value in provenance.items()}
     # A 구결자 carries the build's own note on which glyph it was drawn from.
     notes = {key: value for key, value in provenance.items() if kinds[key] == 'gugyeol'}
+    descriptions = {**DESCRIPTIONS, **{cp: sans_minnan.description(font, cp) for cp in (*MINNAN_TONES, *MINNAN_MARKS)}}
     upstream = {cp: f'Upstream: {text}.' for cp, text in GENSEKI_ORIGINS.items()}
-    described = {cp: ' '.join(filter(None, (DESCRIPTIONS.get(cp), upstream.get(cp)))) for cp in {*DESCRIPTIONS, *upstream}}
-    entries = character_data(font, audit, kinds, {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
+    described = {cp: ' '.join(filter(None, (descriptions.get(cp), upstream.get(cp)))) for cp in {*descriptions, *upstream}}
+    entries = character_data(font, audit, kinds,
+                             {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
+    bold = TTFont(OUT/(BOLD_STEM+'.ttf'))
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
-        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
+        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in descriptions
+        if entry['cp'] in (*MINNAN_TONES, *MINNAN_MARKS):
+            entry['bold_description'] = sans_minnan.description(bold, entry['cp'])
+            entry['reference'] = sans_minnan.REFERENCE
     return entries
 
 
@@ -125,7 +133,7 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     entries = inventory(parent, provenance)
     assert available=={e['cp'] for e in entries if e['source']=='gugyeol'}
     counts = dict(Counter(e['source'] for e in entries))
-    expected={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':genzui}
+    expected={'jp':16732,'hentaigana':290,'genseki':20,'cjk':1,'genzui':genzui}
     if available:expected['gugyeol']=len(available)
     assert counts==expected,counts
     assert len(entries) == checks['encoded_characters']

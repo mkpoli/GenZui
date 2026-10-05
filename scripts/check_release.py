@@ -230,7 +230,7 @@ def check():
     assert sans_gugyeol<=set(GUGYEOL_PUA)
     assert sans_gugyeol==set(TTFont(OUT/'downloads'/f'{SANS_BOLD_STEM}.ttf').getBestCmap()) & registry
     assert sans_gugyeol=={c['cp'] for c in sans_data['characters'] if c['source']=='gugyeol'}
-    expected_sans={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12}
+    expected_sans={'jp':16732,'hentaigana':290,'genseki':20,'cjk':1,'genzui':27}
     if sans_gugyeol:expected_sans['gugyeol']=len(sans_gugyeol)
     assert sans_data['historical']==329 and sans_data['counts']==expected_sans
     assert ('<option value="gugyeol">' in sans)==bool(sans_gugyeol)
