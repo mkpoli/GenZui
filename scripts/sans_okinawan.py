@@ -99,8 +99,10 @@ def proof():
             assert digest(reference/f"GenZuiSerifOkinawan-{face['style']}.woff2")==face['woff2_sha256']
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
+    from sans_hwa_candidates import build as build_hwa, cards as hwa_cards, CSS as hwa_css
+    candidates=build_hwa(OUT,VERSION)
     sections=[];accepted=[];other=[]
-    active_ids={'hwe'}
+    active_ids={'hwa'}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     previous_families={style:TTFont(OUT/'previous'/f'{style}.woff2')['name'].getDebugName(1) for style in ('Regular','Bold')} if previous else {}
     for e in ENTRIES:
@@ -111,15 +113,18 @@ def proof():
             history=(f'<details><summary>前の字形と比較</summary><div class="previous" data-family="{html.escape(previous_families[style],quote=True)}">{context}</div></details>' if previous else '')
             serif_face='GenZui Serif Okinawan Optical' if e['system']=='prefecture' else 'GenZui Serif Okinawan'
             comparisons=''
-            related={'hwe':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
+            related={'hwa':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
+                     'hwe':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
                      "'yo":('は / よ / YU / YO','はよ\uf45e\uf45f'),
                      "'we":('こ / え / ゑ / WA / WI / WE','こえゑ\uf460\uf461\uf462')}
             if e['id'] in related:
                 names,chars=related[e['id']]
-                samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id']=='hwe' else 64),('Serif',30)])
+                samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id'] in ('hwa','hwe') else 64),('Serif',30)])
                 comparisons=f'<div class="structure-comparison"><h4>{names}</h4>{samples}</div>'
             cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
-        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>'
+        content='<div class="columns">'+''.join(cards)+'</div>'
+        if e['id']=='hwa':content=hwa_cards()+'<details><summary>現在の字形</summary>'+content+'</details>'
+        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2>{content}</section>'
         (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
     for style,weight in [('Regular',400),('Bold',700)]:
@@ -131,6 +136,8 @@ def proof():
     page=page.replace('</style>','</style><style>'+serif_faces+'</style>',1)
     variant_faces=''.join(f"@font-face{{font-family:'{v['family']}';src:url('{v['file']}');font-weight:{400 if v['style']=='Regular' else 700};font-display:swap}}" for v in variants)
     page=page.replace('</style>','</style><style>'+variant_faces+'</style>',1)
+    candidate_faces=''.join(f"@font-face{{font-family:'{v['family']}';src:url('{v['file']}?v={v['sha256'][:12]}');font-weight:{400 if v['style']=='Regular' else 700};font-display:swap}}" for v in candidates)
+    page=page.replace('</style>','</style><style>'+candidate_faces+hwa_css+'</style>',1)
     if previous:
         faces=''.join(f"@font-face{{font-family:'GenZui Sans Okinawan Previous';src:url('previous/{style}.woff2');font-weight:{weight};font-display:swap}}" for style,weight in [('Regular',400),('Bold',700)])
         page=page.replace('</style>','</style><style>'+faces+'</style>',1)
@@ -179,6 +186,12 @@ def package():
     names += [v['file'] for v in variants]+['variants/manifest.json']
     if all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold')):
         names += [f'previous/{style}.woff2' for style in ('Regular','Bold')]
+    candidates=json.loads((OUT/'hwa-candidates/manifest.json').read_text())
+    candidate_checks=json.loads((OUT/'hwa-candidates/checks.json').read_text())
+    assert candidate_checks['status']=='passed'
+    checked={c['file']:c['sha256'] for c in candidate_checks['faces']}
+    for c in candidates:assert digest(OUT/c['file'])==c['sha256']==checked[c['file']]
+    names += [c['file'] for c in candidates]+['hwa-candidates/manifest.json','hwa-candidates/checks.json']
     archive=ROOT/'dist'/f'{PREFIX}-{VERSION}.zip';archive.parent.mkdir(exist_ok=True)
     with ZipFile(archive,'w',compression=ZIP_DEFLATED) as z:
         for name in names:z.write(OUT/name,name)

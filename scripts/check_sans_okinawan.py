@@ -135,6 +135,8 @@ def check():
         records.append(dict(record,full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
+    from sans_hwa_candidates import check as check_hwa
+    check_hwa(OUT)
     variants=check_variants()
     (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants),indent=2)+'\n')
 

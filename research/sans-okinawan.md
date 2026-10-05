@@ -49,7 +49,7 @@ each drawing, small-size comparisons and dictionary sentence samples. Each
 card includes a compact comparison in the matching weight of GenZui Serif
 Okinawan 0.118. Those immutable reference webfonts and their notices are
 included in the proof package, with hashes checked against the release.
-HWE, YO and WE also show related native and Okinawan forms alongside each
+HWA, HWE, YO and WE also show related native and Okinawan forms alongside each
 drawing, with a compact Serif row for the same characters. When
 `previous/Regular.woff2` and `previous/Bold.woff2` are present, each card also
 includes an expandable comparison with that earlier drawing. The package
@@ -73,11 +73,25 @@ a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
-forms (32, including WE) are collapsed by default. HWE remains at the top,
-with the B skeleton retained in both weights and a lighter え component. Raised Sans
+forms (32, including HWE and WE) are collapsed by default. HWA is at the top
+with three redesigns in each weight; the main drawing remains expandable. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.
+
+HWA's proof-only alternatives retain native わ's bowl, upright and rising
+diagonal, with the crossbar removed. The diagonal's cut closes inside the
+upright, leaving its native terminal and curve intact. A uses the native
+bowl proportions; B lowers the bowl, and C raises it. All three keep the
+native ふ components unchanged. The vowel uses 800/900 optical donors,
+43%/40% horizontal scaling, and a 14-unit outline stroke for Bold. Bowl
+height varies independently of the upright and diagonal. Each card shows
+native ふ/わ, accepted HWI/HWE, reading sizes, repeated HWA and a Serif
+reference. The six candidate fonts change only HWA. Their checker verifies
+all other outlines and metrics, TTF/WOFF2 parity, component separation,
+cell bounds and clearance between repeated glyphs. The proof ZIP includes
+these fonts and their validation record. See the
+[HWA comparison](sans-hwa-proof.png) and [candidate checks](sans-hwa-checks.json).
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.104.zip` after validation.

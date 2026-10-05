@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "faces": [
+    {
+      "family": "GenZui Sans Okinawan HWA A",
+      "style": "Regular",
+      "letter": "A",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAA-Regular.woff2",
+      "sha256": "e99f6881d9d82ffd004b679f9b9acdca916927bb15ddf24b2c86f7f92767751b",
+      "clearance": 61.22,
+      "repeat_clearance": 57.57
+    },
+    {
+      "family": "GenZui Sans Okinawan HWA B",
+      "style": "Regular",
+      "letter": "B",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAB-Regular.woff2",
+      "sha256": "f4651950807dd1c0c2edf0462cce11833c136b4576a5e6541a68724fbb521066",
+      "clearance": 61.22,
+      "repeat_clearance": 54.16
+    },
+    {
+      "family": "GenZui Sans Okinawan HWA C",
+      "style": "Regular",
+      "letter": "C",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAC-Regular.woff2",
+      "sha256": "7cdfc15ef2d0ac3df65656de4072715ce6588f97ef5d901be215ee7cfe41f50e",
+      "clearance": 61.22,
+      "repeat_clearance": 60.29
+    },
+    {
+      "family": "GenZui Sans Okinawan HWA A",
+      "style": "Bold",
+      "letter": "A",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAA-Bold.woff2",
+      "sha256": "e4cb35911d62b4501ed37cb3a8775d0e37a1c747d7576d249059933ef273b3cd",
+      "clearance": 51.38,
+      "repeat_clearance": 35.41
+    },
+    {
+      "family": "GenZui Sans Okinawan HWA B",
+      "style": "Bold",
+      "letter": "B",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAB-Bold.woff2",
+      "sha256": "a90d47dfff0448adcb92e8fa569743e51f941e5c9360bb55bdd63fe1d76f6d66",
+      "clearance": 51.38,
+      "repeat_clearance": 37.31
+    },
+    {
+      "family": "GenZui Sans Okinawan HWA C",
+      "style": "Bold",
+      "letter": "C",
+      "file": "hwa-candidates/GenZuiSansOkinawanHWAC-Bold.woff2",
+      "sha256": "3c8023939dd45602ef84d1db01568a905001b95f347f5627c3d762d873511f4d",
+      "clearance": 51.38,
+      "repeat_clearance": 35.25
+    }
+  ]
+}
