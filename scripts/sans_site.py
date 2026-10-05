@@ -34,14 +34,19 @@ DESCRIPTIONS = {
 }
 # Upstream of each GenSeki outline, from the table and notes in GenSeki Hentaigana
 # Gothic 1.201's README (A Shokaki, B Sukima, C its own additions).
-SUKIMA_CHAIN = 'Sukima Gothic (きなさ), from Genshin Gothic, from Source Han Sans 1.002 and M+ OUTLINE FONTS'
-GENSEKI_OWN = 'GenSeki Hentaigana Gothic’s own addition, made from GenSeki Gothic, from Source Han Sans'
-GENSEKI_UNSTATED = 'GenSeki Hentaigana Gothic 1.201; its README does not state an origin'
+SUKIMA_OWN = ('Sukima Gothic’s own drawing (きなさ), absent from Source Han Sans 1.002 and M+ OUTLINE FONTS; '
+              'in Sukima Gothic ver11.41 only in the Sub font, moved from its private-use code points')
+SUKIMA_LIGATURE = 'Sukima Gothic (きなさ), as credited by GenSeki Hentaigana Gothic’s README'
+GENSEKI_OWN = ('GenSeki Hentaigana Gothic’s own addition, made from GenSeki Gothic, '
+               'which is based on Genki Gothic (源起黑體), rebuilt on Source Han Sans 2.0')
+GENSEKI_SMALL = ('GenSeki Gothic, as stated by the name record of GenSeki Hentaigana Gothic 1.201 '
+                 '(its other kana glyphs derive from GenSeki Gothic)')
 GENSEKI_ORIGINS = {
-    **{cp: SUKIMA_CHAIN for cp in (0x1B123, 0x1B124, 0x1B125, 0x1B126, 0x2A708, 0x2CEFF, 0x2CF00, 0x2CF02)},
+    **{cp: SUKIMA_OWN for cp in (0x1B123, 0x1B124, 0x1B125, 0x1B126)},
+    **{cp: SUKIMA_LIGATURE for cp in (0x2A708, 0x2CEFF, 0x2CF00, 0x2CF02)},
     **{cp: GENSEKI_OWN for cp in (0x1B11F, 0x1B127)},
-    **{cp: GENSEKI_UNSTATED for cp in (0x1B132, 0x1B150, 0x1B151, 0x1B152, 0x1B155,
-                                       0x1B164, 0x1B165, 0x1B166, 0x1B167, 0x1B168)},
+    **{cp: GENSEKI_SMALL for cp in (0x1B132, 0x1B150, 0x1B151, 0x1B152, 0x1B155,
+                                    0x1B164, 0x1B165, 0x1B166, 0x1B167, 0x1B168)},
 }
 assert len(GENSEKI_ORIGINS) == 20
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
