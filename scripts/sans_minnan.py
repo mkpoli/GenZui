@@ -66,12 +66,12 @@ CONSTRUCTION = {
     0x1AFF5: 'the stem of ト',
     0x1AFF6: 'the stem of ト shortened to 334 units and turned 45° anticlockwise',
     0x1AFF7: 'the stem of ト with the ring of ゜ at its foot on the right',
-    0x1AFF8: 'the tone-2 stroke with the ring of ゜ at its foot on the right, reaching 60 units below it',
-    0x1AFF9: 'the tone-3 stroke with the ring of ゜ at its head on the left, reaching 40 units above it',
-    0x1AFFA: 'a short stem of ト at the tone-4 slant, ending in the ring of ゜',
-    0x1AFFB: 'the tone-5 く with the ring of ゜ closing its bend on the left',
+    0x1AFF8: 'the stem of ト shortened 260 units at the tone-2 slant, its foot ending inside the ring of ゜',
+    0x1AFF9: 'the stem of ト shortened 220 units at the tone-3 slant, its head ending inside the ring of ゜',
+    0x1AFFA: 'a short tail of ト’s stem at the tone-4 slant, ending inside the ring of ゜',
+    0x1AFFB: 'く with its arms turned to 65° and shortened to 400 units, the ring of ゜ closing its bend on the left',
     0x1AFFD: 'the stem of ト with the ring of ゜ on its right, centred 42% up the stem',
-    0x1AFFE: 'a short stem of ト at the tone-8 slant, ending in the ring of ゜',
+    0x1AFFE: 'a short tail of ト’s stem at the tone-8 slant, ending inside the ring of ゜',
     0x0305: 'ー shortened to 762 units',
     0x0323: 'the halfwidth middle dot ･',
 }
@@ -104,31 +104,35 @@ STROKES = {
     0x1AFF5: (0, 0),
     0x1AFF6: (45, 470),
 }
-# Nasalized forms: the plain stroke, its own trim, where the ring sits and on
-# which side of the upright stem before it turns. 'beside-foot' and
-# 'beside-head' set the ring against the stem, as the samples' b, 6, 9 and þ
-# shapes do; 'beside' takes a height along the stem. 'end-foot' and 'end-head'
-# continue the stroke into the ring, as the hollow heads of tones 4 and 8 do;
-# their tails are about half (tone 4) and a third (tone 8) of the loop.
+# Nasalized forms: the plain stroke, its trim, how the stroke meets the ring
+# and on which side of the upright stem the ring lies before the stroke turns.
+# 'beside-foot' and 'beside' set the ring against a stem that keeps both
+# terminals, the samples' b and þ; 'beside' takes the ring's height along the
+# stem. 'into-foot' and 'into-head' end the stroke inside the ring's band, the
+# samples' 6 and 9, where the stroke runs into the loop with no terminal
+# showing. 'end-foot' and 'end-head' end a short tail in the ring on its own
+# axis, the hollow heads of tones 4 and 8; their tails are about half (tone 4)
+# and a third (tone 8) of the loop.
 NASAL = {
     0x1AFF7: (0x1AFF5, 0, 'beside-foot', 1),
-    0x1AFF8: (0x1AFF0, 80, 'beside-foot', 1, None, 36, 60),
-    0x1AFF9: (0x1AFF1, 30, 'beside-head', -1, None, 36, 40),
+    0x1AFF8: (0x1AFF0, 260, 'into-foot', 1),
+    0x1AFF9: (0x1AFF1, 220, 'into-head', -1),
     0x1AFFA: (0x1AFF2, 644, 'end-head', 0),
     0x1AFFD: (0x1AFF5, 0, 'beside', 1, .42),
     0x1AFFE: (0x1AFF6, 674, 'end-foot', 0),
 }
 SHORT = {0x1AFF2, 0x1AFF6, 0x1AFFA, 0x1AFFE}
 KU_ANGLE, KU_REACH = 58, 400
+# Hirasawa's nasalized tone 5 (p. 20) draws steeper arms, about 65°.
+KU_NASAL_ANGLE = 65
 # The bend: the first 150 units of each arm keep their length.
 KU_BEND = 150
-# On the nasalized tone 5 the loop's wall lies across the bend.
-KU_LOOP_SHIFT = 30
 # The loops measure about a third of the tone-7 stroke on the table; the ring
 # widens to that while keeping the handakuten's ring weight.
 LOOP_DIAMETER = 260
-# The ring's counter overlaps a stem it sits beside by this much.
-OVERLAP = 12
+# A ring's counter stays this far from every stroke; a terminal inside the
+# band stays this far inside both circles.
+GAP, MARGIN = 2, 4
 CENTRE_X, CENTRE_Y, SHORT_Y = 250, 400, 380
 OVERLINE = (124, 886, 721)
 DOT = (500, 380)
@@ -224,7 +228,7 @@ def ku_geometry(font):
     return outline, outer, (vx, vy), tips
 
 
-def ku(font):
+def ku(font, angle=KU_ANGLE):
     """KU with each arm turned about the bend to the sample's angle and
     shortened along its own direction; the turn fades out across the bend.
     Returns the outline and the outer corner of its bend."""
@@ -246,7 +250,7 @@ def ku(font):
         if along > KU_BEND:
             cut = (along - KU_BEND)/(length - KU_BEND)*(length - KU_REACH)
             dx, dy = dx - ux*cut, dy - uy*cut
-        a = (math.radians(arm*KU_ANGLE) - math.atan2(ty, tx))*smooth((math.hypot(dx, dy) - 40)/110)
+        a = (math.radians(arm*angle) - math.atan2(ty, tx))*smooth((math.hypot(dx, dy) - 0)/280)
         c, s = math.cos(a), math.sin(a)
         return vx + c*dx - s*dy, vy + s*dx + c*dy
 
@@ -258,32 +262,79 @@ def centred(parts, cy):
     return [move(p, CENTRE_X - (x0 + x1)/2, cy - (y0 + y1)/2) for p in parts]
 
 
-def nasal(font, plain, trim, where, side, height=None, overlap=OVERLAP, reach=0):
-    end = where.split('-')[-1] if where.startswith(('end', 'tangent')) else None
-    outline, width, length = stem(font, trim, end)
+def terminal_half(outline, y):
+    """Half the width of a stem's flat terminal at height y."""
+    xs = [p[0] for _, args in outline.value for p in args if p and abs(p[1] - y) < 1]
+    return max(abs(x) for x in xs)
+
+
+def clear(outline, inner, centre):
+    """Whether a counter at `centre` is free of the outline's ink."""
+    shape, counter = pathops.Path(), pathops.Path()
+    outline.replay(shape.getPen())
+    move(inner, *centre).replay(counter.getPen())
+    return pathops.op(shape, counter, pathops.PathOp.INTERSECTION).area < .5
+
+
+def nearest_clear(outline, inner, y, x_from, x_to):
+    """The x nearest x_to, starting from a clear x_from, where a counter at
+    height y stays GAP units clear of the outline: measured on the outline."""
+    scale = 1 + GAP/inner_radius(inner)
+    grown = reshape(inner, lambda px, py: (px*scale, py*scale))
+    assert clear(outline, grown, (x_from, y))
+    for _ in range(40):
+        mid = (x_from + x_to)/2
+        if clear(outline, grown, (mid, y)):
+            x_from = mid
+        else:
+            x_to = mid
+    return x_from
+
+
+def inner_radius(inner):
+    x0, _, x1, _ = bounds(inner)
+    return (x1 - x0)/2
+
+
+def ring_parts(font):
+    """The ring as outer and inner contours centred on the origin, and radii."""
     loop, outer, inner = ring(font)
+    pieces, current = [], []
+    for op, args in loop.value:
+        current.append((op, args))
+        if op == 'closePath':
+            pieces.append(current)
+            current = []
+    contours_ = []
+    for piece in pieces:
+        pen = RecordingPen()
+        pen.value = piece
+        contours_.append(pen)
+    return loop, contours_[1], outer, inner
+
+
+def nasal(font, plain, trim, where, side, height=None):
+    end = where.split('-')[1] if where.startswith(('end', 'into')) else None
+    outline, width, length = stem(font, trim, None if where.startswith('into') else end)
+    loop, counter, outer, inner = ring_parts(font)
     if where.startswith('beside'):
-        x = side*(width/2 + inner - overlap)
-        y = outer if where == 'beside-foot' else length - outer if where == 'beside-head' else height*length
-    elif where.startswith('tangent'):
-        # The stroke runs along the ring and ends at its equator, its axis on
-        # the middle of the ring's wall, as the 6 and 9 of the samples.
-        x, y = side*(outer + inner)/2, 0 if where == 'tangent-foot' else length
+        # Beside a stem the counter keeps clear of the stem's ink.
+        y = outer if where == 'beside-foot' else height*length
+        x = nearest_clear(outline, counter, y, side*(width + outer), 0)
+    elif where.startswith('into'):
+        # The flat terminal lies across the ring's band: its middle MARGIN
+        # inside the inner circle's radius, its corners MARGIN inside the outer
+        # circle, the ring offset to `side` as far as that allows.
+        half = terminal_half(outline, 0 if end == 'foot' else length)
+        reach = inner + MARGIN
+        x = side*(math.sqrt(outer**2 - reach**2) - half - MARGIN)
+        y = -reach if end == 'foot' else length + reach
     else:
-        # The terminal ends in the middle of the ring's wall.
+        # The terminal ends in the middle of the ring's band.
         x, middle = 0, (outer + inner)/2
-        y = -middle if where == 'end-foot' else length + middle
+        y = -middle if end == 'foot' else length + middle
     angle = STROKES[plain][0]
-    outline, loop = rotate(outline, angle), rotate(move(loop, x, y), angle)
-    if where in ('beside-foot', 'beside-head'):
-        # On a slanted stroke, slide the ring along the stroke until it reaches
-        # as far as the stroke's own end, as the loop of the samples' 6 and 9.
-        index = 1 if where == 'beside-foot' else 3
-        gap = bounds(outline)[index] - bounds(loop)[index] + (-reach if index == 1 else reach)
-        a = math.radians(angle)
-        t = gap/math.cos(a)
-        loop = move(loop, -math.sin(a)*t, math.cos(a)*t)
-    return [outline, loop]
+    return [rotate(outline, angle), rotate(move(loop, x, y), angle)]
 
 
 def parts(font):
@@ -295,9 +346,11 @@ def parts(font):
     forms[0x1AFF3] = centred([shape], CENTRE_Y)
     for cp, spec in NASAL.items():
         forms[cp] = centred(nasal(font, *spec), SHORT_Y if cp in SHORT else CENTRE_Y)
-    # Tone 5's loop closes the vertex on the left.
-    loop, outer, inner = ring(font)
-    forms[0x1AFFB] = centred([shape, move(loop, vx + OVERLAP + KU_LOOP_SHIFT - inner, vy)], CENTRE_Y)
+    # Tone 5's loop closes the bend on the left, its counter clear of KU.
+    shape, (vx, vy) = ku(font, KU_NASAL_ANGLE)
+    loop, counter, outer, inner = ring_parts(font)
+    x = nearest_clear(shape, counter, vy, vx - outer - 100, vx)
+    forms[0x1AFFB] = centred([shape, move(loop, x, vy)], CENTRE_Y)
 
     bar = noto(font, 0x30FC)
     bx0, by0, bx1, _ = bounds(bar)
