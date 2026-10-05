@@ -57,24 +57,34 @@ SAMPLES = {
     0x0323: (ASPIRATED,),
 }
 
-# How each form is built, for the provenance record and the specimen.
+# How each form is built, for the provenance record and the specimen. {L} is
+# the stroke's length in the face being built: ト's stem is 804 units long in
+# Regular and 835 in Bold.
 CONSTRUCTION = {
-    0x1AFF0: 'the stem of ト shortened 80 units and turned 21° clockwise',
-    0x1AFF1: 'the stem of ト shortened 30 units and turned 15° anticlockwise',
-    0x1AFF2: 'the stem of ト shortened to 334 units and turned 50° clockwise',
+    0x1AFF0: 'the stem of ト shortened to {L} units and turned 21° clockwise',
+    0x1AFF1: 'the stem of ト shortened to {L} units and turned 15° anticlockwise',
+    0x1AFF2: 'the stem of ト shortened to {L} units and turned 50° clockwise',
     0x1AFF3: 'く with its arms turned to 58° from the horizontal and shortened to 400 units',
-    0x1AFF5: 'the stem of ト',
-    0x1AFF6: 'the stem of ト shortened to 334 units and turned 45° anticlockwise',
-    0x1AFF7: 'the stem of ト with the ring of ゜ at its foot on the right',
-    0x1AFF8: 'the stem of ト shortened 260 units at the tone-2 slant, its foot ending inside the ring of ゜',
-    0x1AFF9: 'the stem of ト shortened 220 units at the tone-3 slant, its head ending inside the ring of ゜',
-    0x1AFFA: 'a short tail of ト’s stem at the tone-4 slant, ending inside the ring of ゜',
+    0x1AFF5: 'the stem of ト, {L} units long',
+    0x1AFF6: 'the stem of ト shortened to {L} units and turned 45° anticlockwise',
+    0x1AFF7: 'the stem of ト, {L} units long, with the ring of ゜ at its foot on the right',
+    0x1AFF8: 'the stem of ト shortened to {L} units at the tone-2 slant, its foot ending inside the ring of ゜',
+    0x1AFF9: 'the stem of ト shortened to {L} units at the tone-3 slant, its head ending inside the ring of ゜',
+    0x1AFFA: 'a {L}-unit tail of ト’s stem at the tone-4 slant, ending inside the ring of ゜',
     0x1AFFB: 'く with its arms turned to 65° and shortened to 400 units, the ring of ゜ closing its bend on the left',
-    0x1AFFD: 'the stem of ト with the ring of ゜ on its right, centred 42% up the stem',
-    0x1AFFE: 'a short tail of ト’s stem at the tone-8 slant, ending inside the ring of ゜',
+    0x1AFFD: 'the stem of ト, {L} units long, with the ring of ゜ on its right, centred 42% up the stem',
+    0x1AFFE: 'a {L}-unit tail of ト’s stem at the tone-8 slant, ending inside the ring of ゜',
     0x0305: 'ー shortened to 762 units',
     0x0323: 'the halfwidth middle dot ･',
 }
+
+
+def construction(font, cp):
+    """How the form is built in this face, with its stroke length."""
+    length = lengths(font).get(cp)
+    return CONSTRUCTION[cp].replace('{L}', str(round(length)) if length else '')
+
+
 # Reader-facing names of the samples.
 SAMPLE_NAMES = {
     TABLE: 'the table of signs in Âng and Ogawa’s Minnan Classic Dictionary Collection (1992)',
@@ -85,10 +95,10 @@ SAMPLE_NAMES = {
 }
 
 
-def description(cp):
-    """A sentence for the specimen's character detail."""
+def description(font, cp):
+    """A sentence for the specimen's character detail in this face."""
     samples = [SAMPLE_NAMES[s] for s in SAMPLES[cp]]
-    text = CONSTRUCTION[cp]
+    text = construction(font, cp)
     return (f'{text[0].upper()}{text[1:]}, from Noto Sans JP’s own strokes, after {" and ".join(samples)}. '
             'Advances and mark positions follow FRB Taiwanese Kana.')
 
@@ -335,6 +345,13 @@ def nasal(font, plain, trim, where, side, height=None):
         y = -middle if end == 'foot' else length + middle
     angle = STROKES[plain][0]
     return [rotate(outline, angle), rotate(move(loop, x, y), angle)]
+
+
+def lengths(font):
+    """Each straight stroke's length after shortening, for the record."""
+    return {cp: stem(font, spec[1], spec[2].split('-')[1] if spec[2].startswith('end') else None)[2]
+            for cp, spec in NASAL.items()} | \
+        {cp: stem(font, trim)[2] for cp, (_, trim) in STROKES.items()}
 
 
 def parts(font):

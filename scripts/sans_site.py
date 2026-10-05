@@ -33,7 +33,6 @@ DESCRIPTIONS = {
     0x1B127: 'GenSeki’s alternate NE, enlarged to the katakana cap height and thinned back to their stroke width.',
     0x1B168: 'GenSeki’s small archaic YE, lowered onto the small-kana baseline.',
     0x1B128: 'Noto Sans JP’s WI bars and right stem with NA’s falling stroke as the left descent, built like GenZui Serif’s alternate WI.',
-    **{cp: sans_minnan.description(cp) for cp in (*MINNAN_TONES, *MINNAN_MARKS)},
 }
 # Upstream of each GenSeki outline, from the table and notes in GenSeki Hentaigana
 # Gothic 1.201's README (A Shokaki, B Sukima, C its own additions).
@@ -94,12 +93,17 @@ def inventory(font, provenance):
     kinds = {key: source_key(value) for key, value in provenance.items()}
     # A 구결자 carries the build's own note on which glyph it was drawn from.
     notes = {key: value for key, value in provenance.items() if kinds[key] == 'gugyeol'}
+    descriptions = {**DESCRIPTIONS, **{cp: sans_minnan.description(font, cp) for cp in (*MINNAN_TONES, *MINNAN_MARKS)}}
     upstream = {cp: f'Upstream: {text}.' for cp, text in GENSEKI_ORIGINS.items()}
-    described = {cp: ' '.join(filter(None, (DESCRIPTIONS.get(cp), upstream.get(cp)))) for cp in {*DESCRIPTIONS, *upstream}}
-    entries = character_data(font, audit, kinds, {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
+    described = {cp: ' '.join(filter(None, (descriptions.get(cp), upstream.get(cp)))) for cp in {*descriptions, *upstream}}
+    entries = character_data(font, audit, kinds,
+                             {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
+    bold = TTFont(OUT/(BOLD_STEM+'.ttf'))
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
-        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
+        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in descriptions
+        if entry['cp'] in (*MINNAN_TONES, *MINNAN_MARKS):
+            entry['bold_description'] = sans_minnan.description(bold, entry['cp'])
     return entries
 
 
