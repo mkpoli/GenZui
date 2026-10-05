@@ -6,7 +6,9 @@ research/font-comparison-glyphs.json (glyph outlines as SVG path data).
 The page build reads only those two files.
 """
 import argparse
+import hashlib
 import json
+import math
 import re
 import sys
 from collections import Counter, defaultdict
@@ -18,13 +20,17 @@ import uharfbuzz as hb
 from fontTools.pens.basePen import BasePen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.ttLib import TTFont
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 from compare_sources import member, verify
 from sources import ROOT
 
 OUT = ROOT/'research/font-comparison.json'
 GLYPHS = ROOT/'research/font-comparison-glyphs.json'
+IMAGES = ROOT/'research/font-comparison-images'
+# GenZui's own outlines stay vector; every other font is shown as a raster mask.
+VECTOR = {'genzui-serif', 'genzui-sans'}
+CELL = 152
 UNICODE = ROOT/'data/unicode'
 
 # The fonts of the page, in display order. `install` are the files a reader installs;
@@ -69,7 +75,7 @@ HERO = 'いろはにほへと　𛀙𛂦𛁈𛃶𛂁　アイウエオ　永字�
 NAMES = [('𭓽', '𭓽山ささやま'), ('𮌦', '黒𮌦くろはばき'), ('𪶉', '𪶉田はまだ'), ('㐲', '㐲里ふしざと'),
          ('𨓉', '渡𨓉わたなべ'), ('𭘾', '千𭘾原ちとせはら'), ('𫟎', '𫟎木あらき'), ('𩾛', '𩾛山はとやま'),
          ('𠔥', '𠔥平かねひら'), ('㳬', '玉㳬寺')]
-VERTICAL = '、。「」ー'
+VERTICAL = '、。「」ーゃっ'
 KANA_BASE = [*range(0x3041, 0x3097), *range(0x30A1, 0x30FB)]
 
 
@@ -162,6 +168,39 @@ class RelativePen(BasePen):
         return ''.join(self.parts).replace(' -', '-')
 
 
+class FlattenPen(BasePen):
+    """Contours as point lists, curves sampled finely, for rasterising a glyph."""
+
+    def __init__(self):
+        super().__init__(None)
+        self.contours, self.current = [], []
+
+    def _moveTo(self, pt):
+        self.current = [pt]
+
+    def _lineTo(self, pt):
+        self.current.append(pt)
+
+    def _curveToOne(self, a, b, c):
+        p0 = self.current[-1]
+        for i in range(1, 13):
+            t = i/12
+            u = 1 - t
+            self.current.append(tuple(u**3*p0[k] + 3*u*u*t*a[k] + 3*u*t*t*b[k] + t**3*c[k] for k in (0, 1)))
+
+    def _qCurveToOne(self, a, b):
+        p0 = self.current[-1]
+        for i in range(1, 11):
+            t = i/10
+            u = 1 - t
+            self.current.append(tuple(u*u*p0[k] + 2*u*t*a[k] + t*t*b[k] for k in (0, 1)))
+
+    def _closePath(self):
+        if self.current:
+            self.contours.append(self.current)
+        self.current = []
+
+
 def feature_tags(font, table):
     if table not in font:
         return []
@@ -180,20 +219,22 @@ def variation_sequences(font):
 
 def font_facts(spec, entry, paths):
     """File-level facts of the installed files of one font."""
-    files, glsub, ggpos, scripts, weights, uvs = [], set(), set(), set(), [], 0
-    glyph_total, cmaps, upm, morx, vertical_tables = 0, set(), set(), False, set()
-    first = None
+    files, glsub, ggpos, scripts, weights = [], set(), set(), set(), []
+    cmaps, upm, morx, vertical_tables = set(), set(), False, set()
+    parts, first = [], None
     for name, path in paths.items():
         font = TTFont(path, lazy=True)
         first = first or font
-        cmaps |= set(font.getBestCmap())
-        glyph_total += font['maxp'].numGlyphs
+        own = set(font.getBestCmap())
+        cmaps |= own
+        parts.append({'name': name, 'glyphs': font['maxp'].numGlyphs, 'codepoints': len(own),
+                      'variation_sequences': variation_sequences(font) if 'cmap' in font else 0,
+                      'cmap': own})
         upm.add(font['head'].unitsPerEm)
         glsub |= set(feature_tags(font, 'GSUB'))
         ggpos |= set(feature_tags(font, 'GPOS'))
         morx = morx or 'morx' in font
         vertical_tables |= {t for t in ('vmtx', 'VORG') if t in font}
-        uvs += variation_sequences(font) if 'cmap' in font else 0
         if 'fvar' in font:
             axis = font['fvar'].axes[0]
             instances = sorted({int(i.coordinates[axis.axisTag]) for i in font['fvar'].instances})
@@ -214,9 +255,12 @@ def font_facts(spec, entry, paths):
         for table in ('GSUB', 'GPOS'):
             if table in font and font[table].table.ScriptList:
                 scripts |= {r.ScriptTag for r in font[table].table.ScriptList.ScriptRecord}
-    return {'files': files, 'weights': weights, 'glyphs': glyph_total, 'codepoints': len(cmaps),
+    shared = len({cp for cp in cmaps if sum(cp in part['cmap'] for part in parts) > 1})
+    for part in parts:
+        part.pop('cmap')
+    return {'files': files, 'weights': weights, 'parts': parts, 'shared_codepoints': shared, 'codepoints': len(cmaps),
             'upm': sorted(upm), 'gsub': sorted(glsub), 'gpos': sorted(ggpos), 'scripts': sorted(scripts),
-            'morx': morx, 'vertical_tables': sorted(vertical_tables), 'variation_sequences': uvs,
+            'morx': morx, 'vertical_tables': sorted(vertical_tables),
             'version_string': name_record(first, 5), 'copyright': name_record(first, 0),
             'designer': name_record(first, 9), 'licence_field': name_record(first, 13),
             'cmap': cmaps}
@@ -375,10 +419,13 @@ def vertical_column(face_path, text):
     cells, pen_y = [], 0
     for info, pos in zip(buffer.glyph_infos, buffer.glyph_positions):
         name = order[info.codepoint]
-        pen = RelativePen()
+        pen, flat_pen = RelativePen(), FlattenPen()
         shift = (pos.x_offset*scale, -(pen_y + pos.y_offset*scale))
-        face.glyphs[name].draw(TransformPen(pen, (scale, 0, 0, -scale, shift[0], shift[1])))
-        cells.append({'glyph': name, 'path': pen.path(), 'advance': round(-pos.y_advance*scale)})
+        matrix = (scale, 0, 0, -scale, shift[0], shift[1])
+        face.glyphs[name].draw(TransformPen(pen, matrix))
+        face.glyphs[name].draw(TransformPen(flat_pen, matrix))
+        cells.append({'glyph': name, 'path': pen.path(), 'contours': flat_pen.contours,
+                      'advance': round(-pos.y_advance*scale)})
         pen_y += pos.y_advance*scale
     return cells
 
@@ -396,6 +443,110 @@ def vertical_gsub_changes(face_path, text):
         order = face.font.getGlyphOrder()
         out.append([order[i.codepoint] for i in buffer.glyph_infos])
     return out
+
+
+# --- Raster images of third-party glyphs ----------------------------------------------------
+
+_fonts = {}
+
+
+def pil_font(path, size):
+    if (path, size) not in _fonts:
+        _fonts[(path, size)] = ImageFont.truetype(str(path), size)
+    return _fonts[(path, size)]
+
+
+def save_mask(mask, fid, kind):
+    """Write a transparent PNG whose alpha is the ink; the page colours it with a CSS mask."""
+    image = Image.merge('LA', (Image.new('L', mask.size, 0), mask))
+    from io import BytesIO
+    buffer = BytesIO()
+    image.save(buffer, 'PNG', optimize=True)
+    name = f'{fid}-{kind}-{hashlib.sha256(buffer.getvalue()).hexdigest()[:8]}.png'
+    IMAGES.mkdir(exist_ok=True)
+    (IMAGES/name).write_bytes(buffer.getvalue())
+    return {'file': name, 'width': mask.width, 'height': mask.height, 'bytes': len(buffer.getvalue())}
+
+
+def face_for(faces, cp):
+    return next((f for f in faces if cp in f.cmap), None)
+
+
+def draw_cp(canvas, faces, cp, x, y_base, em):
+    face = face_for(faces, cp)
+    ImageDraw.Draw(canvas).text((x, y_base), chr(cp), font=pil_font(face.path, em), fill=255, anchor='ls')
+
+
+def atlas(fid, faces, cps):
+    """A sheet of CELL px cells: one glyph per cell on a 1000-unit em box with the baseline at 880."""
+    cps = [cp for cp in cps if face_for(faces, cp)]
+    cols = 16
+    rows = math.ceil(len(cps)/cols)
+    sheet = Image.new('L', (cols*CELL, rows*CELL), 0)
+    for i, cp in enumerate(cps):
+        cell = Image.new('L', (CELL, CELL), 0)
+        draw_cp(cell, faces, cp, 0, round(.88*CELL), CELL)
+        sheet.paste(cell, ((i % cols)*CELL, (i//cols)*CELL))
+    meta = save_mask(sheet, fid, 'atlas')
+    return {**meta, 'cell': CELL, 'cols': cols, 'rows': rows, 'index': {f'{cp:X}': i for i, cp in enumerate(cps)}}
+
+
+def dashed_box(draw, left, top, right, bottom):
+    for x in range(int(left), int(right), 10):
+        for y in (top, bottom):
+            draw.line([(x, y), (min(x + 6, right), y)], fill=170, width=3)
+    for y in range(int(top), int(bottom), 10):
+        for x in (left, right):
+            draw.line([(x, y), (x, min(y + 6, bottom))], fill=170, width=3)
+
+
+def hero_image(fid, faces, text):
+    """The hero line at 0.1 px per unit, advancing by each glyph's width."""
+    em, x, items = 100, 0, []
+    for char in text:
+        cp = ord(char)
+        face = face_for(faces, cp)
+        items.append((cp, x, face is not None))
+        x += 500 if char == '　' else (face.advance(cp) if face else 1000)
+    canvas = Image.new('L', (round(x*em/1000), em), 0)
+    draw = ImageDraw.Draw(canvas)
+    for cp, at, present in items:
+        px = at*em/1000
+        if chr(cp) == '　':
+            continue
+        if present:
+            draw_cp(canvas, faces, cp, px, round(.88*em), em)
+        else:
+            dashed_box(draw, px + 14, 18, px + 86, 96)
+    return save_mask(canvas, fid, 'hero')
+
+
+def vertical_image(fid, cells):
+    """A vertical column at 0.3 px per unit; contours are filled even-odd on a 4x grid."""
+    scale, grid = 0.3, 4
+    width, height = 1080, len(cells)*1000 + 40
+    size = (round(width*scale*grid), round(height*scale*grid))
+    column = Image.new('L', size, 0)
+    for cell in cells:
+        ink = Image.new('1', size, 0)
+        for contour in cell['contours']:
+            layer = Image.new('1', size, 0)
+            ImageDraw.Draw(layer).polygon([((x + 540)*scale*grid, (y + 20)*scale*grid) for x, y in contour], fill=1)
+            ink = ImageChops.logical_xor(ink, layer)
+        column = ImageChops.lighter(column, ink.convert('L'))
+    mask = column.resize((round(width*scale), round(height*scale)), Image.LANCZOS)
+    return save_mask(mask, fid, 'vertical')
+
+
+def genseki_letters(entry):
+    letters = {}
+    for line in member_path(entry, 'README.md').read_text().splitlines():
+        match = re.match(r'\| U\+(1B[01][0-9A-F])x \|(.*)\|', line)
+        if match:
+            for i, cell in enumerate(match[2].split('|')):
+                if cell.strip() in ('A', 'B', 'C'):
+                    letters[int(match[1], 16)*16 + i] = cell.strip()
+    return letters
 
 
 # --- Main ------------------------------------------------------------------------------
@@ -433,7 +584,8 @@ def build(local=None):
         glyphs[spec['id']] = {}
         for cp in sorted(glyph_cps & union):
             face = next(f for f in outline_faces if cp in f.cmap)
-            glyphs[spec['id']][f'{cp:X}'] = [face.advance(cp), face.draw(cp)]
+            if spec['id'] in VECTOR:
+                glyphs[spec['id']][f'{cp:X}'] = [face.advance(cp), face.draw(cp)]
         paths = {n: by_name[n] for n in spec['install']}
         record = {
             'id': spec['id'], 'name': spec['name'], 'ja': spec['ja'], 'style': spec['style'],
@@ -455,6 +607,12 @@ def build(local=None):
         'genzui-serif': genzui_sources(serif_entry, 'GenZuiSerif-0.118.zip', 'sources.json'),
         'genzui-sans': genzui_sources(sans_entry, 'GenZuiSans-0.103.zip', 'sources.json'),
         'genseki': genseki_origins(entries['genseki'])}
+    letters = genseki_letters(entries['genseki'])
+    with ZipFile(member_path(sans_entry, 'GenZuiSans-0.103.zip')) as package:
+        sans_kinds = json.loads(package.read('sources.json'))['source_kinds']
+    taken = [cp for cp in range(0x1B100, 0x1B130) if sans_kinds.get(f'U+{cp:04X}', '').startswith('GenSeki')]
+    origins['sans_genseki_extended_a'] = {'total': len(taken), 'sukima_marked': sum(letters.get(cp) == 'B' for cp in taken),
+                                          'codepoints': [f'{cp:X}' for cp in taken]}
 
     # Similarity of the drawings, over the 286 hentaigana and over ordinary kana.
     hentaigana_ids = [f['id'] for f in fonts if f['hentaigana']]
@@ -473,6 +631,18 @@ def build(local=None):
             horizontal, upright = vertical_gsub_changes(path, VERTICAL)
             vertical[spec['id']] = {'cells': vertical_column(path, VERTICAL),
                                     'substituted': [h != v for h, v in zip(horizontal, upright)]}
+
+    # Raster images of every non-GenZui font: glyph atlas, hero line and vertical column.
+    for old in IMAGES.glob('*.png') if IMAGES.exists() else []:
+        old.unlink()
+    images = {}
+    for spec in SPECS:
+        fid = spec['id']
+        if fid in VECTOR:
+            continue
+        images[fid] = {'atlas': atlas(fid, faces[fid], sorted(glyph_cps)), 'hero': hero_image(fid, faces[fid], HERO)}
+        if fid in vertical:
+            images[fid]['vertical'] = vertical_image(fid, vertical[fid]['cells'])
 
     # Rare kanji of the usage list in the fonts that cover any of them.
     rare = [{'char': c, 'quoted': q, 'fonts': [f['id'] for f in fonts
@@ -503,10 +673,11 @@ def build(local=None):
         'vertical': {k: {'substituted': v['substituted'], 'advances': [c['advance'] for c in v['cells']],
                          'glyphs': [c['glyph'] for c in v['cells']]} for k, v in vertical.items()},
         'hero': HERO,
+        'images': images,
     }
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=1, default=sorted) + '\n')
     GLYPHS.write_text(json.dumps({'unit': 1000, 'glyphs': glyphs,
-                                  'vertical': {k: [c['path'] for c in v['cells']] for k, v in vertical.items()}},
+                                  'vertical': {k: [c['path'] for c in v['cells']] for k, v in vertical.items() if k in VECTOR}},
                                  ensure_ascii=False, separators=(',', ':')) + '\n')
     print(f'{OUT.relative_to(ROOT)}: {OUT.stat().st_size:,} bytes; {GLYPHS.relative_to(ROOT)}: {GLYPHS.stat().st_size:,} bytes')
 
