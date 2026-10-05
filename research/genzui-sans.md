@@ -95,43 +95,58 @@ The scans are bilevel or JPEG at 150–650 ppi; the table's marks are about 30
 pixels tall. Slants and proportions below are measured on the table and
 agree with Hirasawa's print.
 
+ト's stem is 804 units long in Regular and 835 in Bold; lengths below are
+Regular / Bold.
+
 | Character | Sample | Construction |
 | --- | --- | --- |
-| 𚿰 TONE-2 | `/`, 21° from upright, nine tenths of tone 7 | ト's stem shortened 80 units, turned 21° clockwise |
-| 𚿱 TONE-3 | `\`, 15°, nearly as long as tone 7 | ト's stem shortened 30 units, turned 15° anticlockwise |
-| 𚿲 TONE-4 | short stroke falling to the left | ト's stem shortened to 334 units, turned 50° clockwise |
+| 𚿰 TONE-2 | `/`, 21° from upright, nine tenths of tone 7 | ト's stem shortened to 724 / 755 units, turned 21° clockwise |
+| 𚿱 TONE-3 | `\`, 15°, nearly as long as tone 7 | ト's stem shortened to 774 / 805 units, turned 15° anticlockwise |
+| 𚿲 TONE-4 | short stroke falling to the left | ト's stem shortened to 334 / 365 units, turned 50° clockwise |
 | 𚿳 TONE-5 | `<`, arms about 58° from the horizontal | く with each arm turned about the bend to 58° and shortened to 400 units |
-| 𚿵 TONE-7 | upright, the longest stroke | ト's stem |
-| 𚿶 TONE-8 | short stroke falling to the right | ト's stem shortened to 334 units, turned 45° anticlockwise |
+| 𚿵 TONE-7 | upright, the longest stroke | ト's stem, 804 / 835 units |
+| 𚿶 TONE-8 | short stroke falling to the right | ト's stem shortened to 334 / 365 units, turned 45° anticlockwise |
 | 𚿷 NASALIZED TONE-1 | stem with a loop at its foot, like b | ト's stem with the ring at its foot on the right |
-| 𚿸 NASALIZED TONE-2 | tone 2 ending in a loop, like 6 | tone 2 with the ring at its foot, reaching 60 units below the stroke |
-| 𚿹 NASALIZED TONE-3 | tone 3 starting from a loop, like 9 | tone 3 with the ring at its head on the left, reaching 40 units above |
-| 𚿺 NASALIZED TONE-4 | hollow head with a tail to the lower left | a short tail of ト's stem ending in the ring |
-| 𚿻 NASALIZED TONE-5 | `<` with a loop closing the bend | tone 5 with the ring across its bend on the left |
+| 𚿸 NASALIZED TONE-2 | tone 2 running into a loop, like 6 | ト's stem shortened to 544 / 575 units at the tone-2 slant, its foot ending inside the ring |
+| 𚿹 NASALIZED TONE-3 | tone 3 running out of a loop, like 9 | ト's stem shortened to 584 / 615 units at the tone-3 slant, its head ending inside the ring |
+| 𚿺 NASALIZED TONE-4 | hollow head with a tail to the lower left | a 160 / 191-unit tail of ト's stem ending inside the ring |
+| 𚿻 NASALIZED TONE-5 | `<` with a loop closing the bend; Hirasawa's arms about 65° | く with its arms turned to 65° and shortened to 400 units, the ring across its bend on the left |
 | 𚿽 NASALIZED TONE-7 | stem with a loop on its right, below the middle | ト's stem with the ring centred 42% up its right side |
-| 𚿾 NASALIZED TONE-8 | hollow head with a short tail to the upper left | a short tail of ト's stem ending in the ring |
+| 𚿾 NASALIZED TONE-8 | hollow head with a short tail to the upper left | a 130 / 161-unit tail of ト's stem ending inside the ring |
 | U+0305 | a bar about the width of the kana | ー shortened to FRB's 762 units |
 | U+0323 | a round dot under the kana | the halfwidth middle dot ･ |
 
 Shortening compresses only a stroke's straight middle, so its width and flat
-terminals stay as Noto draws them; a terminal hidden inside a ring is
-compressed with the middle. The ring is the handakuten's, widened to the
-samples' loop (outer diameter 260 units) by moving both circles outward the
-same distance, which keeps the handakuten's ring weight: 45 units in Regular
-and 60 in Bold. A ring set beside a stem overlaps it by 12 units (36 for
-nasalized tones 2 and 3), so the counter meets the stem on a flat side.
-Contours overlap without being merged, as in Noto Sans JP's kana, and carry
-the same overlap flag.
+terminals stay as Noto draws them. The ring is the handakuten's, widened to
+the samples' loop (outer diameter 260 units) by moving both circles outward
+the same distance, which keeps the handakuten's ring weight: 45 units in
+Regular and 60 in Bold. Contours overlap without being merged, as in Noto
+Sans JP's kana, and carry the same overlap flag.
 
-The checks (`scripts/check_sans_minnan.py`) rebuild each form from the base
-instance and compare it with the font, reject contours under 15 units thick
-or 400 square units in area, and measure every stroke against the Noto
-stroke it comes from: ト's stem 83.3 units (Regular) and 137.0 (Bold), く's
-arms 78.3/86.5 and 129.8/142.6, the ring 44.6 and 59.9, ー 88 and 146, ･ 167
-and 195. Each measurement must agree within two units. The median vertical
-stem of Noto Sans JP's katakana is 83.0 units in Regular and 136.0 in Bold.
-In vertical text the existing placement applies: the tone letters sit beside
-one to four kana and the marks keep FRB's clearance from the kana.
+Every join is placed by measuring the outlines. In the samples the stroke
+runs into the loop with no terminal showing, so where a stroke ends at the
+ring (the 6, the 9 and the hollow heads of tones 4 and 8) its whole flat
+terminal lies inside the ring's band, at least 4 units inside both circles:
+its nearest point to the centre lies 4 units outside the inner circle and the
+ring sits as far to the side as the terminal's corners allow inside the outer
+circle. A tail that ends on the ring's own axis is compressed into the band
+with its terminal. Beside a stem that keeps its terminals (b, þ) and across
+the bend of く, the ring moves as close as the outline lets it while its
+counter stays 2 units clear of the stroke. No counter holds any stroke ink.
+
+The checks (`scripts/check_sans_minnan.py`, also run by the font checks)
+rebuild each form from the base instance and compare it with the font,
+reject contours under 15 units thick or 400 square units in area, and test
+the structure on the outlines against a table written from the samples:
+the slant of each stroke, the side of the stroke's line and the place along
+it where the ring sits, that the joining terminal lies inside the ring's
+band, and that the counter holds no ink. They measure every stroke against
+the Noto stroke it comes from: ト's stem 83.3 units (Regular) and 137.0
+(Bold), く's arms 78.3/86.5 and 129.8/142.6, the ring 44.6 and 59.9, ー 88 and
+146, ･ 167 and 195. Each measurement must agree within two units. The median
+vertical stem of Noto Sans JP's katakana is 83.0 units in Regular and 136.1
+in Bold. In vertical text the existing placement applies: the tone letters sit
+beside one to four kana and the marks keep FRB's clearance from the kana.
 
 ## Bold drawings
 
@@ -142,8 +157,9 @@ against Noto Sans JP's kana (1.47–1.62, median 1.53):
   and ･ on the Regular construction, so each Bold outline has the Regular
   outline's commands and points. Their gains (1.39–1.55) fall within those of
   Noto's kana letters and voicing marks (1.34–1.62); the forms that are mostly
-  ring gain least, as the handakuten does (1.34). The dot below keeps the gain
-  of Noto's halfwidth middle dot (1.16).
+  ring gain least, as the handakuten does (1.34). The dot below gains 1.16,
+  within the range of Noto's two middle dots (1.16–1.20), which gain less
+  than any kana.
 - **Transcription symbols:** the marks inside Noto's dashed frames share one
   stroke per face, the half-turn arrow's ring weight: 36 units in Regular and
   43 in Bold (the frames have 31 and 37). The minus and the double arrow are
