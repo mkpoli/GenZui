@@ -91,7 +91,7 @@ def hwa_vowel(weight):
     diagonal=diagonal[15:26]+[line(diagonal[26][0],diagonal[15][0])]
     sx=.43 if weight==400 else .40
     sy=.43
-    dx=600 if weight==400 else 612
+    dx=588 if weight==400 else 608
     vowel=[transform(O.draw([bowl]),(sx,0,0,sy,dx,10)),
            transform(O.draw([diagonal,upright]),(sx,0,0,.43,dx,10))]
     # Add weight around the accepted outline; keep its contour proportions.

@@ -82,8 +82,8 @@ use the selected 500/750 raised forms, generated separately from the immutable
 HWA uses the selected native わ curve with its crossbar removed. The cut
 closes inside the upright. Its 800/900 donors retain the selected 43%/40%
 horizontal scaling and 43% height. Outline strokes of 8/32 units restore
-weight in the reduced vowel. Bold's vowel shifts eight units left to retain
-space between repeated glyphs. The native ふ parts are unchanged. HWI and
+weight in the reduced vowel. The vowel sits 12 units closer to ふ in Regular
+and four units closer in Bold, retaining at least 30 units of whitespace. The native ふ parts are unchanged. HWI and
 HWE retain their approved drawings after comparison with HWA.
 
 `measure_sans_fu.py` reports `2 × filled area / contour perimeter` for the
@@ -92,7 +92,7 @@ breadth; proportions, junctions and terminals also affect the result, so it
 is a comparison aid rather than a perceptual target. The HWA proof includes
 the before/after table alongside the full family and native わ/い/え.
 The [measurement report](sans-fu-weight-measurements.json) records the font
-hashes and readings. Only HWA changes in this weight revision.
+hashes and readings. Only HWA changes in this spacing revision; its vowel shape and weight are preserved.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.104.zip` after validation.

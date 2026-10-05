@@ -4,10 +4,10 @@
     {
       "style": "Regular",
       "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
-      "full_sha256": "7f8ecd9882c6f090e4fd7c66f68fb7a17e9aef2e12b5512eb6c0d3b63023bc0c",
+      "full_sha256": "24bdd23d7b041bf817a1e874df0faa7fc3822dfb47087fa64d898fdd9cc86653",
       "encoded_characters": 805,
-      "ttf_sha256": "8ecbb5feb9bd266e7807d4415736e403bd454611d6f28bced72f268f6930dd7d",
-      "woff2_sha256": "f334f6e7ab947455c9e8b23cfaf7b4a67cc9b63baa74e576d49b3e050655390a",
+      "ttf_sha256": "65ad95690215108251aab9dfe2e2520875b6fafdac47d6c54eb3ff1c184b3ad3",
+      "woff2_sha256": "9e87eaf71c2999bb1545f483214dd353f7a976309b44a2205901849032816ce5",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -29,16 +29,16 @@
         "U+F45E": 45.32,
         "U+F45F": 75.44,
         "U+F452": 89.09,
-        "HWA repeated": 53.57
+        "HWA repeated": 65.01
       }
     },
     {
       "style": "Bold",
       "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
-      "full_sha256": "9d00fa107d9f70c20b89d7d27b6c4c69069330aec7f0767696f89aa768bed049",
+      "full_sha256": "cf5909d04ac4c6b3d6761ba51203b76c5e6cadbd65f62c27fc4f76ddaf10532f",
       "encoded_characters": 805,
-      "ttf_sha256": "bae1088a6995f7edd0c8d1a5d41af5b3d9574ff759262b504bbfc2af051b768d",
-      "woff2_sha256": "c0226319c90f316f68018b078502636112cef74bc137e64cc817b15d3e631b16",
+      "ttf_sha256": "3959bf725c717acabeebf7c64140911aeac8175cdd0be30465482ed01b69e310",
+      "woff2_sha256": "4022b64fecdf4acb69b2864bd7ac62fd695ab3b570f678920767c9d8eaea19d2",
       "full_encoded_characters": 17096,
       "preserved_glyphs": 18342,
       "forms": 35,
@@ -60,7 +60,7 @@
         "U+F45E": 45.29,
         "U+F45F": 39.7,
         "U+F452": 58.87,
-        "HWA repeated": 34.4
+        "HWA repeated": 38.4
       }
     }
   ],
