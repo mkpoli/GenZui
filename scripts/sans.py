@@ -12,7 +12,8 @@ from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from gugyeol import add_gugyeol, PUA as GUGYEOL_PUA
 from minnan import import_forms, layout as minnan_layout
-from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_SYMBOLS, alternate_wi, refit
+from sans_forms import REFITS, SANS_SYMBOLS, alternate_wi, refit
+import sans_minnan
 from sans_sources import (BOLD_ARCHAIC, BOLD_ARCHAIC_AXIS, BOLD_TEXT, BOLD_TEXT_AXIS, CACHE, CJK, CJK_BOLD,
                           DONOR, GENSEKI, NOTO, TEXT, TEXT_AXIS, prepare)
 
@@ -84,7 +85,6 @@ def build(weight=400):
     OUT.mkdir(parents=True, exist_ok=True)
     face = sources(weight)
     style, stem, bold = face['style'], face['stem'], weight == 700
-    tones = BOLD_TONE_BLEND if bold else False
     print(f'Instantiating Noto Sans JP {style}', flush=True)
     font = instance('NotoSansJP', weight)
     donor = TTFont(face['archaic'], recalcTimestamp=False)
@@ -138,9 +138,11 @@ def build(weight=400):
         provenance[f'U+{cp:04X}'] = description
         if source is genseki and name in genseki_vertical:
             vertical[target] = import_glyph(font, source, genseki_vertical[name], prefix)
-    additions.update(import_forms(font, add, tones))
-    provenance.update({f'U+{cp:04X}': (f'FRB Taiwanese Kana outline blended {BOLD_TONE_BLEND} toward its GenZui Bold master' if bold else
-                                       'FRB Taiwanese Kana') + '; GenZui mark and tone positioning'
+    additions.update(import_forms(font, add, drawn=sans_minnan.build(font)))
+    provenance.update({f'U+{cp:04X}': (f'GenZui drawing from Noto Sans JP {style} strokes: '
+                                       f'{sans_minnan.CONSTRUCTION[cp]}; after {" and ".join(sans_minnan.SAMPLES[cp])}; '
+                                       'advances, mark positions and overline width after FRB Taiwanese Kana; '
+                                       'GenZui mark and tone positioning')
                        for cp in (*MINNAN_TONES, *MINNAN_MARKS)})
     update_cmap(font, additions)
 
@@ -148,7 +150,8 @@ def build(weight=400):
     # keep Regular's right edge and clearance above the base.
     layout(font, donor, vertical, historical, **({'mark_anchor_x': 784, 'mark_drop': 610} if bold else
                                                  {'mark_anchor_x': 815}))
-    minnan_layout(font, add, add_feature, tones, edge_anchors=True)
+    minnan_layout(font, add, add_feature, edge_anchors=True,
+                  short_overline=sans_minnan.short_overline(font))
     add_paatu(font, add, glyph, add_feature)
     provenance[f'U+{PAATU:04X}'] = 'Noto Sans JP squared-katakana components'
     add_honkoku(font, add, glyph, contours, transform, source=face['cjk'],
@@ -215,7 +218,8 @@ def build(weight=400):
     }, ensure_ascii=False, indent=2)+'\n')
     (OUT/'NOTICE.txt').write_text(
         'GenZui Sans / 源萃ゴシック\n\n'
-        'Noto Sans JP Regular and Bold: Japanese base, kana components and transcription symbols.\n'
+        'Noto Sans JP Regular and Bold: Japanese base, kana components, transcription symbols\n'
+        'and the strokes of the Minnan forms.\n'
         'https://github.com/google/fonts/tree/main/ofl/notosansjp\n'
         '  from Noto Sans CJK 2.004 (Google) https://github.com/notofonts/noto-cjk\n'
         '    from Source Han Sans (Adobe) https://github.com/adobe-fonts/source-han-sans\n\n'
@@ -254,8 +258,12 @@ def build(weight=400):
         '181 구결자 (Korean gugyeol) at the Hanyang private-use convention (U+F67E-U+F77C),\n'
         "each drawn from the face's own glyph of its twin ideograph, or from Noto Sans CJK\n"
         'JP where the twin is absent from the face; see gugyeol-forms.json.\n\n'
-        'FRB Taiwanese Kana by Fredrick R. Brennan: Minnan tone letters and combining marks.\n'
-        'Bold blends them toward GenZui Bold masters drawn on the same points.\n'
+        'GenZui: 13 Minnan tone letters, U+0305 and U+0323 drawn from Noto Sans JP strokes\n'
+        '(ト, く, ゜, ー, ･) after the period samples in Unicode document L2/20-209R:\n'
+        'Âng and Ogawa (1992), Hirasawa (1914) and Ogawa (1938).\n'
+        'https://www.unicode.org/L2/L2020/20209r-taiwan-kana.pdf\n'
+        'FRB Taiwanese Kana by Fredrick R. Brennan: the Minnan advances, mark positions\n'
+        'and overline width follow its font; GenZui Serif uses its outlines.\n'
         'https://github.com/ctrlcctrlv/FRBTaiwaneseKana\n\n'
         'GenZui: alternate WI, transcription symbols, SQUARE PAATU and layout, drawn from Noto Sans JP components.\n\n'
         'Fonts and derived outlines are licensed under SIL OFL 1.1.\n'

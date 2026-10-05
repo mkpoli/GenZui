@@ -12,6 +12,8 @@ from family_switch import css as switch_css, html as switch_html
 from weight_switch import css as weight_css
 from inventory import KANA_GROUPS, character_data
 from gugyeol import FORMS as GUGYEOL_FORMS, PUA as GUGYEOL_PUA
+from repertoire import MINNAN_MARKS, MINNAN_TONES
+import sans_minnan
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
 
@@ -23,7 +25,7 @@ PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかた�
 # family name because the Serif set already occupies the plain names.
 # Short source keys for the inventory, from the build's provenance strings.
 SOURCE_KEYS = {'Noto Sans JP Regular': 'jp', 'Noto Sans Hentaigana': 'hentaigana',
-               'GenSeki Hentaigana Gothic': 'genseki', 'FRB Taiwanese Kana': 'frb',
+               'GenSeki Hentaigana Gothic': 'genseki',
                'Noto Sans CJK JP Regular': 'cjk', '구결자': 'gugyeol'}
 # Reader-facing notes for the characters GenZui reworked in this family.
 DESCRIPTIONS = {
@@ -31,6 +33,7 @@ DESCRIPTIONS = {
     0x1B127: 'GenSeki’s alternate NE, enlarged to the katakana cap height and thinned back to their stroke width.',
     0x1B168: 'GenSeki’s small archaic YE, lowered onto the small-kana baseline.',
     0x1B128: 'Noto Sans JP’s WI bars and right stem with NA’s falling stroke as the left descent, built like GenZui Serif’s alternate WI.',
+    **{cp: sans_minnan.description(cp) for cp in (*MINNAN_TONES, *MINNAN_MARKS)},
 }
 # Upstream of each GenSeki outline, from the table and notes in GenSeki Hentaigana
 # Gothic 1.201's README (A Shokaki, B Sukima, C its own additions).
@@ -50,7 +53,7 @@ GENSEKI_ORIGINS = {
 }
 assert len(GENSEKI_ORIGINS) == 20
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
-           'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
+           'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
            'gugyeol': 'Twin ideograph (구결자)'}
 DOWNLOADS = {STEM+'.ttf': STEM+'.ttf', STEM+'.woff2': STEM+'.woff2',
              BOLD_STEM+'.ttf': BOLD_STEM+'.ttf', BOLD_STEM+'.woff2': BOLD_STEM+'.woff2',
@@ -125,7 +128,7 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     entries = inventory(parent, provenance)
     assert available=={e['cp'] for e in entries if e['source']=='gugyeol'}
     counts = dict(Counter(e['source'] for e in entries))
-    expected={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':genzui}
+    expected={'jp':16732,'hentaigana':290,'genseki':20,'cjk':1,'genzui':genzui}
     if available:expected['gugyeol']=len(available)
     assert counts==expected,counts
     assert len(entries) == checks['encoded_characters']
