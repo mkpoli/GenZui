@@ -116,8 +116,8 @@ character encoding.
 | Source | Contribution |
 | --- | --- |
 | [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
-| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold) |
-| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures |
+| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold). The unreleased sans companion of Noto Serif Hentaigana, designed by Kazuhiro Yamada (nipponia) and compiled here from source |
+| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures. Its README credits 𛄣 𛄤 𛄥 𛄦 and the ligatures 𪜈 𬻿 𬼀 𬼂 to [Sukima Gothic](https://booth.pm/ja/items/2117070); its name record credits the other kana to [GenSeki Gothic](https://github.com/ButTaiwan/genseki-font) |
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
 | GenZui constructions | Alternate WI 𛄨 from Noto Sans JP strokes, squared PAATU and the transcription symbols |
@@ -126,7 +126,9 @@ The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
 record glyph references and construction details. The [font survey](research/existing-fonts.md)
 covers other hentaigana fonts, including GenSeki Hentaigana Gothic.
-[GenZui Sans](research/genzui-sans.md) records its stem matching and refits.
+[GenZui Sans](research/genzui-sans.md) records its stem matching, refits and a
+provenance check of the hentaigana. The [Sans specimen](https://genzui.mkpo.li/sans#sources)
+traces each source back to the fonts it came from.
 
 Related project: **[Kureedo / クレード](https://kureedo.mkpo.li/)**, a Klee One
 derivative with historical katakana and Ainu kana.
