@@ -32,6 +32,18 @@ DESCRIPTIONS = {
     0x1B168: 'GenSeki’s small archaic YE, lowered onto the small-kana baseline.',
     0x1B128: 'Noto Sans JP’s WI bars and right stem with NA’s falling stroke as the left descent, built like GenZui Serif’s alternate WI.',
 }
+# Upstream of each GenSeki outline, from the table and notes in GenSeki Hentaigana
+# Gothic 1.201's README (A Shokaki, B Sukima, C its own additions).
+SUKIMA_CHAIN = 'Sukima Gothic (きなさ), from Genshin Gothic, from Source Han Sans 1.002 and M+ OUTLINE FONTS'
+GENSEKI_OWN = 'GenSeki Hentaigana Gothic’s own addition, made from GenSeki Gothic, from Source Han Sans'
+GENSEKI_UNSTATED = 'GenSeki Hentaigana Gothic 1.201; its README does not state an origin'
+GENSEKI_ORIGINS = {
+    **{cp: SUKIMA_CHAIN for cp in (0x1B123, 0x1B124, 0x1B125, 0x1B126, 0x2A708, 0x2CEFF, 0x2CF00, 0x2CF02)},
+    **{cp: GENSEKI_OWN for cp in (0x1B11F, 0x1B127)},
+    **{cp: GENSEKI_UNSTATED for cp in (0x1B132, 0x1B150, 0x1B151, 0x1B152, 0x1B155,
+                                       0x1B164, 0x1B165, 0x1B166, 0x1B167, 0x1B168)},
+}
+assert len(GENSEKI_ORIGINS) == 20
 ORIGINS = {'jp': 'Noto Sans JP', 'hentaigana': 'Noto Sans Hentaigana', 'genseki': 'GenSeki Hentaigana Gothic',
            'frb': 'FRB Taiwanese Kana', 'genzui': 'GenZui drawing', 'cjk': 'Noto Sans CJK JP',
            'gugyeol': 'Twin ideograph (구결자)'}
@@ -74,8 +86,9 @@ def inventory(font, provenance):
     kinds = {key: source_key(value) for key, value in provenance.items()}
     # A 구결자 carries the build's own note on which glyph it was drawn from.
     notes = {key: value for key, value in provenance.items() if kinds[key] == 'gugyeol'}
-    entries = character_data(font, audit, kinds,
-                             {**notes, **{f'U+{cp:04X}': text for cp, text in DESCRIPTIONS.items()}})
+    upstream = {cp: f'Upstream: {text}.' for cp, text in GENSEKI_ORIGINS.items()}
+    described = {cp: ' '.join(filter(None, (DESCRIPTIONS.get(cp), upstream.get(cp)))) for cp in {*DESCRIPTIONS, *upstream}}
+    entries = character_data(font, audit, kinds, {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
         entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
