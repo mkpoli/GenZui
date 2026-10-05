@@ -139,9 +139,10 @@ def build(weight=400):
         if source is genseki and name in genseki_vertical:
             vertical[target] = import_glyph(font, source, genseki_vertical[name], prefix)
     additions.update(import_forms(font, add, drawn=sans_minnan.build(font)))
+    follows = {0x0305: 'width and mark position', 0x0323: 'mark position'}
     provenance.update({f'U+{cp:04X}': (f'GenZui drawing from Noto Sans JP {style} strokes: '
                                        f'{sans_minnan.construction(font, cp)}; after {" and ".join(sans_minnan.SAMPLES[cp])}; '
-                                       'advances, mark positions and overline width after FRB Taiwanese Kana; '
+                                       f'{follows.get(cp, "advance")} after FRB Taiwanese Kana; '
                                        'GenZui mark and tone positioning')
                        for cp in (*MINNAN_TONES, *MINNAN_MARKS)})
     update_cmap(font, additions)

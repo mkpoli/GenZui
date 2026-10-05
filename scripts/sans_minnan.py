@@ -96,11 +96,17 @@ SAMPLE_NAMES = {
 
 
 def description(font, cp):
-    """A sentence for the specimen's character detail in this face."""
+    """A sentence for the specimen's character detail, in Regular's terms."""
     samples = [SAMPLE_NAMES[s] for s in SAMPLES[cp]]
     text = construction(font, cp)
-    return (f'{text[0].upper()}{text[1:]}, from Noto Sans JP’s own strokes, after {" and ".join(samples)}. '
-            'Advances and mark positions follow FRB Taiwanese Kana.')
+    followed = 'Its width and mark position follow' if cp == 0x0305 else \
+        'Its mark position follows' if cp == 0x0323 else 'Its advance follows'
+    return (f'{text[0].upper()}{text[1:]}, from Noto Sans JP’s own strokes, after {" and ".join(samples)}, '
+            f'as reproduced in Unicode document L2/20-209R. {followed} FRB Taiwanese Kana.')
+
+
+# The specimen links each Minnan form's description to the proposal.
+REFERENCE = {'label': 'L2/20-209R (PDF) ↗', 'url': PROPOSAL}
 
 
 # Slants and lengths measured on the table of signs (TABLE): tone 7 is upright and the

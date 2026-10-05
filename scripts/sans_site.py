@@ -104,6 +104,7 @@ def inventory(font, provenance):
         entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in descriptions
         if entry['cp'] in (*MINNAN_TONES, *MINNAN_MARKS):
             entry['bold_description'] = sans_minnan.description(bold, entry['cp'])
+            entry['reference'] = sans_minnan.REFERENCE
     return entries
 
 
