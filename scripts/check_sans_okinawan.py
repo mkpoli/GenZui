@@ -127,7 +127,9 @@ def check():
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
     variants=check_variants()
-    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants),indent=2)+'\n')
+    from sans_okinawan_candidates import check as check_candidates
+    candidates=check_candidates(OUT)
+    (OUT/'checks.json').write_text(json.dumps(dict(status='passed',faces=records,proof_variants=variants,proof_candidates=candidates),indent=2)+'\n')
 
 def check_variants():
     variants=json.loads((OUT/'variants/manifest.json').read_text())

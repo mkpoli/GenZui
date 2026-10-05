@@ -55,6 +55,20 @@ drawing, with a compact Serif row for the same characters. When
 includes an expandable comparison with that earlier drawing. The package
 includes these comparison fonts when available.
 
+The unresolved HWE and WE sections show proof-only candidates before the
+previous drawing. HWE has four turns (A–D): an angular corner, a softened
+corner, a rounded return and a wider arc. Regular and Bold have separate
+skeletons. WE has three upper-mark weights (A–C); all three fit the mark's
+length, slope, offset and visible gap to the relationship in approved WI.
+The WE mark retains the native こ contour, using donors 435/475/500 in
+Regular and 635/725/800 in Bold. Each candidate includes the native kana,
+related accepted forms, 24/48 px samples and a compact Serif comparison.
+The [candidate overview](sans-okinawan-candidates.png) shows all seven choices.
+These choices do not change the main fonts. The candidate checker verifies
+that every other glyph and its metrics are preserved, and that the detached
+components retain their clearances. Candidate webfonts are included in the
+proof ZIP, with content hashes in their URLs to avoid stale browser fonts.
+
 HWA/HWI/HWE use separate left dots and right vowel components. HWE keeps
 its long え arm, with a gently falling entry after the implied crest of ふ.
 The rounded return continues into the diagonal and baseline foot. Its
