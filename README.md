@@ -236,8 +236,10 @@ versioned release folders. Edit `site/`, `templates/` and
 
 `/compare` sets GenZui beside other kana and hentaigana fonts. The fonts are
 pinned in `sources/compare-manifest.json`; Sukima Gothic needs a BOOTH login, so
-pass a local copy of its archive. Other fonts are not shipped on the site: the page
-draws their glyphs as SVG outlines read from the pinned files.
+pass a local copy of its archive. Measuring is a separate step; the page build
+reads only the committed results. Other fonts are not shipped on the site: their
+glyphs appear as images rendered from the pinned files, in
+`research/font-comparison-images/`, with each font's credit beside them.
 
 ```sh
 .venv/bin/python scripts/compare_sources.py --sukima PATH/sukima-gothic_ver11.41.zip
