@@ -179,12 +179,15 @@ def drawings(weight):
     }
     for cp,paths in vowels.items():
         dx=20 if weight==700 and cp!=0xF45C else 0
-        strokes=[transform(s(path),(1,0,0,1,dx,0)) for path in paths]
+        # The compact え packs more ink around its turn and branch than
+        # HWA/HWI. Lighten the vowel without shrinking its skeleton.
+        vowel_width=(66 if weight==400 else 98) if cp==0xF45C else w
+        strokes=[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
         if cp==0xF45C and weight==700:
             # The branch's butt cap crosses the diagonal's outer edge. Clip
             # that spur to the exact left offset of (645,0) -> (832,235).
             slope=187/235
-            intercept=645-w/2*np.hypot(1,slope)
+            intercept=645-vowel_width/2*np.hypot(1,slope)
             clip=pathops.Path();pen=clip.getPen()
             pen.moveTo((intercept-500*slope,-500));pen.lineTo((2000,-500))
             pen.lineTo((2000,1000));pen.lineTo((intercept+1000*slope,1000));pen.closePath()

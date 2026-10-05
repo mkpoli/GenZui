@@ -57,7 +57,8 @@ includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE uses
 a softened え corner with a diagonal and a baseline foot, drawn separately
-for Regular and Bold at stroke widths of 76/116 units. The Bold foot branch
+for Regular and Bold at stroke widths of 66/98 units. The lighter strokes
+keep the compact corner and foot from appearing heavier than HWA/HWI. The Bold foot branch
 is trimmed to the diagonal's left edge to remove an exposed starting cap.
 The family comparison shows all three beside native ふ in both weights.
 
@@ -73,7 +74,7 @@ farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
 forms (32, including WE) are collapsed by default. HWE remains at the top,
-with the selected Regular B beside the corrected Bold drawing. Raised Sans
+with the B skeleton retained in both weights and a lighter え component. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.

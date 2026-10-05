@@ -118,8 +118,7 @@ def proof():
                 names,chars=related[e['id']]
                 samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id']=='hwe' else 64),('Serif',30)])
                 comparisons=f'<div class="structure-comparison"><h4>{names}</h4>{samples}</div>'
-            heading=(style+' · '+('B' if weight==400 else '修正')) if e['id']=='hwe' else style
-            cards.append(f'<article style="--weight:{weight}"><h3>{heading}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
+            cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
         row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div></section>'
         (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
