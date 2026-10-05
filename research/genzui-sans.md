@@ -128,3 +128,41 @@ specimen (`build/site/sans.html`, embedded fonts) and the public site
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
 Version reports live in `research/sans-browser-checks-0.103.json` and
 `research/sans-kana-coverage-0.103.json`.
+
+## Provenance check
+
+GenSeki Hentaigana Gothic's README credits Sukima Gothic for most of its
+hentaigana and Shokaki Hentaigana Gothic for the rest. Noto Sans Hentaigana
+names no source font. `scripts/check_provenance.py` compares drawings: each
+glyph is rendered at 160 px on a baseline, cropped to its ink, resized to
+96 x 96, blurred (Gaussian radius 4) and compared by Pearson correlation, so
+that weight and placement count less than structure. GenSeki's README origin
+table (A Shokaki, B Sukima) selects the glyph sets.
+
+```
+scripts/check_provenance.py NotoSansHentaigana-Regular.ttf GenSekiHentaiganaGothic.ttf \
+    "SukimaGothic-Regular ver11.41.ttf" GenSekiHentaiganaGothic/README.md
+```
+
+| Pair | Characters | Median | Above 0.95 |
+| --- | --- | --- | --- |
+| GenSeki glyphs its README credits to Sukima (B) ↔ Sukima Gothic Main | 205 | 0.999 | 205 |
+| GenSeki glyphs its README credits to Shokaki (A) ↔ Sukima Gothic Main | 75 | 0.596 | 0 |
+| Noto Sans Hentaigana Regular ↔ Sukima Gothic Main, U+1B002–1B0FF | 254 | 0.624 | 0 |
+| Noto Sans Hentaigana Regular ↔ GenSeki glyphs credited to Shokaki (A) | 75 | 0.630 | 0 |
+
+Derived drawings score 0.999; unrelated ones about 0.60. Noto Sans
+Hentaigana scores like unrelated drawings against Sukima Gothic and against
+GenSeki's Shokaki-derived glyphs. This does not prove independence: it shows
+no copying of those outlines. Simple shapes such as small katakana score high
+in any sans, so the test says little about them.
+
+Measured on 2026-10-05 with:
+
+- Noto Sans Hentaigana Regular instance compiled from
+  https://github.com/notofonts/hentaigana at commit
+  `3aa4d30ee04254d3d0a69c500de7fda494e3b302`
+- GenSeki Hentaigana Gothic 1.201 Regular and its README,
+  https://github.com/MihailJP/GenSekiHentaiganaGothic/releases/tag/v1.201
+- Sukima Gothic ver11.41 Main, `SukimaGothic-Regular ver11.41.ttf`, from
+  https://booth.pm/ja/items/2117070 (a signed-in BOOTH download)
