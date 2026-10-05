@@ -3,10 +3,11 @@ import hashlib
 import json
 
 import uharfbuzz as hb
+from fontTools.pens.areaPen import AreaPen
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.ttLib import TTFont
 
-from sans_han import FACES, OUT, SANS, SANS_STEM, SOURCES, VERSION, target
+from sans_han import EM, FACES, ORIGIN, OUT, SANS, SANS_STEM, SOURCES, VERSION, target, unicode_range
 
 LIMIT = 65535
 
@@ -41,6 +42,8 @@ def check():
     sources = {text: TTFont(path, lazy=True) for _, path, text in SOURCES}
     source_cmaps = {text: font.getBestCmap() for text, font in sources.items()}
     wanted = target()
+    order = [text for _, _, text in SOURCES]
+    css = (OUT/'genzui-sans-han.css').read_text()
     covered, report = set(base_cmap & wanted), {'family': 'GenZui Sans Han', 'version': VERSION, 'faces': {}}
     for face in FACES:
         path = OUT/(face['stem']+'.ttf')
@@ -61,6 +64,15 @@ def check():
             for cp in range(int(run['first'][2:], 16), int(run['last'][2:], 16)+1):
                 source_of[cp] = run['source']
         assert set(source_of) == set(cmap)
+        # Each character comes from the first source in priority order that maps it.
+        for cp, text in source_of.items():
+            first = next(t for t in order if cp in source_cmaps[t])
+            assert text == first, f'U+{cp:04X} took {text}, priority gives {first}'
+        assert f"unicode-range: {unicode_range(cmap)};" in css, face['stem'] + ' unicode-range differs from cmap'
+        woff2 = TTFont(OUT/(face['stem']+'.woff2'))
+        assert woff2.getBestCmap() == cmap and woff2.getGlyphOrder() == font.getGlyphOrder()
+        assert font['post'].isFixedPitch == 1 and font['OS/2'].panose.bProportion == 9
+        assert font['OS/2'].ulCodePageRange1 == ((1 << 17) if 0 in face['planes'] else 0)
         glyphset, worst, advances = font.getGlyphSet(), 0.0, set()
         for cp, name in cmap.items():
             text = source_of[cp]
@@ -74,6 +86,10 @@ def check():
                 if f'U+{cp:04X}' in record['faces'][face['stem']]['recentred_source_widths'] else 0
             expected = (expected[0]+shift, expected[1], expected[2]+shift, expected[3])
             error = max(abs(a-b) for a, b in zip(expected, pen.bounds))
+            area = AreaPen(glyphset)
+            glyphset[name].draw(area)
+            assert area.value < 0, f'U+{cp:04X} contours run counter-clockwise'
+            assert font['vmtx'][name] == (EM, ORIGIN - round(pen.bounds[3])), f'U+{cp:04X} vertical origin'
             assert error <= 2, f'U+{cp:04X} drifts {error:.1f} units from {text}'
             worst = max(worst, error)
             advances.add(font['hmtx'][name][0])
