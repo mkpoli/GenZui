@@ -70,6 +70,9 @@ def check():
             if expected is None or pen.bounds is None:
                 assert expected is None and pen.bounds is None, f'U+{cp:04X}'
                 continue
+            shift = (1000 - record['faces'][face['stem']]['recentred_source_widths'][f'U+{cp:04X}']) / 2 \
+                if f'U+{cp:04X}' in record['faces'][face['stem']]['recentred_source_widths'] else 0
+            expected = (expected[0]+shift, expected[1], expected[2]+shift, expected[3])
             error = max(abs(a-b) for a, b in zip(expected, pen.bounds))
             assert error <= 2, f'U+{cp:04X} drifts {error:.1f} units from {text}'
             worst = max(worst, error)
@@ -83,6 +86,7 @@ def check():
             assert all(info.codepoint for info in infos), (face['stem'], direction)
             if direction == 'ttb':
                 assert all(p.y_advance == -1000 for p in positions)
+        assert advances == {1000}, (face['stem'], sorted(advances))
         report['faces'][face['stem']] = {
             'family': face['family'], 'encoded_characters': len(cmap), 'glyphs': glyph_count,
             'by_source': record['faces'][face['stem']]['by_source'],

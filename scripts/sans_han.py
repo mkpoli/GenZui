@@ -55,6 +55,7 @@ FACES = (
 BLOCKS = re.compile(r'^(CJK Unified Ideographs.*|CJK Compatibility Ideographs.*|Kangxi Radicals|'
                     r'CJK Radicals Supplement|CJK Strokes|Ideographic Description Characters)$')
 ORIGIN = 880  # Vertical origin of the Source Han Sans em box on a 1000-unit em.
+EM = 1000  # Every target character is full width.
 
 
 def prepare():
@@ -123,8 +124,12 @@ def outline(font, name):
     target_pen = Cu2QuPen(pen, max_err=0.3, reverse_direction=True) if 'CFF ' in font else pen
     if scale != 1:
         target_pen = TransformPen(target_pen, (scale, 0, 0, scale, 0, 0))
-    font.getGlyphSet()[name].draw(target_pen)
     advance = round(font['hmtx'][name][0] * scale)
+    if advance != EM:
+        # A few Sukima Gothic ideographs carry stray widths (984-1010); set them
+        # on the full-width grid with the ink kept centred.
+        target_pen = TransformPen(target_pen, (1, 0, 0, 1, (EM - advance) / 2 / scale, 0))
+    font.getGlyphSet()[name].draw(target_pen)
     return pen.glyph(), advance
 
 
@@ -170,7 +175,9 @@ def build_face(face, choice, fonts, base_font, notice):
             glyph, advance = outline(fonts[key], source_name)
             glyph.recalcBounds(None)
             glyphs[name] = glyph
-            metrics[name] = (advance, getattr(glyph, 'xMin', 0))
+            metrics[name] = (EM, getattr(glyph, 'xMin', 0))
+            if advance != EM:
+                face.setdefault('recentred', {})[f'U+{cp:04X}'] = advance
             names[(key, source_name)] = name
         cmap[cp] = names[(key, source_name)]
     for name, glyph in glyphs.items():
@@ -241,7 +248,8 @@ def build():
         for value in labels.values():
             counts[value] = counts.get(value, 0) + 1
         record['faces'][face['stem']] = {'family': face['family'], 'encoded_characters': len(cmap),
-                                         'by_source': counts, 'runs': runs(cmap, labels)}
+                                         'by_source': counts, 'recentred_source_widths': face.get('recentred', {}),
+                                         'runs': runs(cmap, labels)}
         css.append('@font-face {\n'
                    '  font-family: "GenZui Sans Han";\n'
                    f"  src: url(\"{face['stem']}.woff2\") format(\"woff2\");\n"

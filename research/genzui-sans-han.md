@@ -35,7 +35,9 @@ supplement has no Bold.
 
 Noto Sans CJK JP's CFF curves are converted to quadratic curves (maximum
 error 0.3 units). Sukima Gothic's 1024-unit outlines are scaled to the
-1000-unit em; Plangothic is copied unchanged. Hinting is dropped. Vertical
+1000-unit em; Plangothic is copied unchanged. Hinting is dropped. Ten Sukima
+Gothic ideographs carry stray widths between 984 and 1010 units; they get the
+1000-unit width with the ink kept centred, and `sources.json` lists them. Vertical
 metrics use a 1000-unit advance with the origin at 880, the Source Han Sans
 em box. Line metrics copy GenZui Sans, so mixed lines keep their height.
 
