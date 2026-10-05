@@ -198,6 +198,18 @@ Outputs are in `build/sans/`. The [build guide](research/genzui-sans.md)
 covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
 drawings, the browser check and packaging to `dist/`.
 
+GenZui Sans P / 源萃ゴシックP is derived from the built Sans faces. It applies
+the font's `palt` widths by default for applications that ignore the feature
+and is packaged separately:
+
+```sh
+.venv-sans/bin/python scripts/sans_p.py
+.venv-sans/bin/python scripts/check_sans_p.py
+.venv-sans/bin/python scripts/package_sans_p.py
+```
+
+It writes `build/sans/GenZuiSansP-*` and `dist/GenZuiSansP-0.103.zip`.
+
 ### GenZui Serif Kugyol and GenZui Sans Kugyol
 
 GenZui Serif Kugyol and GenZui Sans Kugyol are cut from the built Serif and

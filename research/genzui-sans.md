@@ -120,6 +120,47 @@ validates the offline specimen in Chromium and Firefox, compares TTF and WOFF2
 rasters for both faces and records their hashes; the packager rejects stale
 hashes and writes `dist/GenZuiSans-0.103.zip`.
 
+## GenZui Sans P
+
+GenZui Sans P / 源萃ゴシックP applies the font's own `palt` adjustments by
+default, for applications such as Word and PowerPoint that ignore the feature.
+`scripts/sans_p.py` reads the lookups that `palt` reaches under the DFLT, kana,
+hani and latn scripts and their JAN language systems. Every one of them reaches
+the same lookups: lookup 6 in Regular, and lookups 6 and 10 in Bold, all
+single adjustments in format 2 (11 subtables in Regular, 30 in Bold). They adjust
+328 glyphs in Regular and 332 in Bold, with XPlacement and XAdvance values only.
+
+Each glyph's outline moves by its XPlacement, its advance takes the XAdvance
+and its left side bearing follows the outline. GPOS mark anchors on moved glyphs
+move with them. The `palt` and `halt` features are removed, with the lookups
+only they used, so that widths are not applied twice. Other glyphs, cmap, GSUB
+and metrics are identical to GenZui Sans.
+
+HarfBuzz centres a vertical glyph on half its horizontal advance. A glyph that
+vertical text does not replace through GSUB `vert` would move, so a GPOS `vert`
+lookup adds the difference to its XPlacement. Vertical ink is identical to
+GenZui Sans; 49 Regular and 58 Bold glyphs depend on this.
+
+`kern` holds 845 kana pair adjustments (format 1, values from -100 to 50), of
+which 806 in Regular and 818 in Bold pair two `palt` glyphs, and a Latin class
+table that touches none. GenZui Sans applies them to fixed-width kana too, so
+they do not assume `palt` widths and P keeps them unchanged. Whether Noto Sans
+JP's designers intended them for proportional kana is uncertain.
+
+`scripts/check_sans_p.py` compares P shaped with default features against Sans
+shaped with `palt` on, in glyph advances and ink boxes, for every affected
+character alone and between kana, each kern pair, marks and running text under
+several script and language tags. Vertical text is compared against Sans
+vertical, and every other glyph, the cmap and GSUB must be identical. It writes
+`build/sans/checks-p.json`. `scripts/package_sans_p.py` writes
+`dist/GenZuiSansP-0.103.zip`, a separate download.
+
+```sh
+.venv-sans/bin/python scripts/sans_p.py
+.venv-sans/bin/python scripts/check_sans_p.py
+.venv-sans/bin/python scripts/package_sans_p.py
+```
+
 ## Site
 
 `scripts/sans_site.py` renders `templates/sans.html` for the development
