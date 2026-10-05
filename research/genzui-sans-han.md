@@ -23,13 +23,13 @@ Noto Sans CJK JP comes first because GenZui Sans is built on its design.
 Sukima Gothic follows because its author drew Japanese forms for the
 ideographs of 文字情報基盤, 戸籍統一文字 and 行政事務情報文字. Its readme
 notes that a few characters sit at the code point its author judged correct
-where IPAmj Mincho uses another. Plangothic fills the remaining extension
-ideographs with Chinese Mainland forms; its README states that some differ
+where IPAmj Mincho uses another. Plangothic fills the rest, mostly extension
+ideographs, with Chinese Mainland forms; its README states that some differ
 from the Unicode code charts. `build/sans-han/sources.json` records the
 source of every character.
 
-All three sources are Regular weights of the Source Han Sans design, so the
-supplement has no Bold.
+Sukima Gothic and Plangothic have one weight, Regular, so the supplement has
+no Bold.
 
 ## Conversion
 

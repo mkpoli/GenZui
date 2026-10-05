@@ -131,7 +131,7 @@ Each character takes the first source that has it.
 | --- | --- |
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular | 16,546 ideographs in the Source Han Sans design, Japanese forms |
 | [Sukima Gothic](https://booth.pm/ja/items/2117070) 11.41 Main and Sub | 37,005 ideographs, Japanese forms on the Genshin Gothic / Source Han Sans 1.002 base |
-| [Plangothic](https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project) P1 and P2 2.9.5795 | 35,703 extension ideographs on Source Han Sans CN, Chinese Mainland forms |
+| [Plangothic](https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project) P1 and P2 2.9.5795 | 35,703 characters, mostly extension ideographs, on Source Han Sans CN, Chinese Mainland forms |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)

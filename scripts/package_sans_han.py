@@ -51,7 +51,7 @@ Sources
 Each character takes the first source that has it:
 Noto Sans CJK JP, Sukima Gothic 11.41 Main and Sub, then Plangothic P1 and P2.
 Noto Sans CJK and Sukima Gothic use Japanese forms. Plangothic, used for
-{sum(f['by_source'].get('Plangothic P1 2.9.5795', 0) + f['by_source'].get('Plangothic P2 2.9.5795', 0) for f in faces.values()):,} rare extension ideographs, follows Chinese Mainland forms.
+{sum(f['by_source'].get('Plangothic P1 2.9.5795', 0) + f['by_source'].get('Plangothic P2 2.9.5795', 0) for f in faces.values()):,} characters, mostly rare extension ideographs, follows Chinese Mainland forms.
 sources.json lists the source of every character; NOTICE.txt credits each
 project. There is no Bold: Sukima Gothic and Plangothic have one weight.
 
