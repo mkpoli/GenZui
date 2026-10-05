@@ -1,0 +1,500 @@
+{
+  "checked": "2026-10-05",
+  "files": [
+    {
+      "id": "genzui-serif",
+      "name": "GenZui Serif",
+      "filename": "GenZuiSerif-0.118.zip",
+      "kind": "repo",
+      "url": "https://github.com/mkpoli/GenZui/tree/main/releases/v0.118",
+      "page": "https://genzui.mkpo.li/serif",
+      "version": "0.118",
+      "date": "2026-09-30",
+      "date_basis": "release package build date",
+      "licence": "SIL OFL 1.1",
+      "licence_url": "https://openfontlicense.org/open-font-license-official-text/",
+      "dir": "releases/v0.118/",
+      "members": [
+        {
+          "path": "GenZuiSerif-Regular.ttf",
+          "role": "font",
+          "sha256": "3f46b65c28fa8ba55d61777dadc03b40f2e972cd9499de9a4fb9b1ae58cb172e",
+          "size": 8328268
+        },
+        {
+          "path": "GenZuiSerif-Bold.ttf",
+          "role": "font",
+          "sha256": "21ceb8c677f81534eac0650c2b5e609cf3576b30023f4887d64bfaf081606f7e",
+          "size": 8323880
+        },
+        {
+          "path": "GenZuiSerif-Regular.woff2",
+          "role": "web",
+          "sha256": "f5b08e00631edf60a1388d13f4b399073ded308172e67029a64eb92f96f4f441",
+          "size": 3193164
+        },
+        {
+          "path": "GenZuiSerif-Bold.woff2",
+          "role": "web",
+          "sha256": "838e57a8b0983dae595ba6771a26f7d30995b24d7c1691a34ebc51e6b22dae9f",
+          "size": 3276932
+        },
+        {
+          "path": "GenZuiSerif-0.118.zip",
+          "role": "package",
+          "sha256": "7d3e81748cfe82155293aa72c9297323b278e67dc4e85f70bd717649f23c0037",
+          "size": 20040424
+        }
+      ],
+      "credit": "GenZui Serif, SIL OFL 1.1; Noto Serif JP and Noto Serif Hentaigana outlines © The Noto Project Authors, Adobe",
+      "provenance": [
+        {
+          "topic": "Base",
+          "text": "The Japanese base is Noto Serif JP.",
+          "member": "GenZuiSerif-0.118.zip!README.txt",
+          "quote": "from the Noto Serif JP base and kana additions"
+        },
+        {
+          "topic": "Hentaigana",
+          "text": "Hentaigana, combining marks and the small archaic YE components come from Noto Serif Hentaigana.",
+          "member": "GenZuiSerif-0.118.zip!NOTICE.txt",
+          "quote": "Noto Serif Hentaigana: 290 historical forms, combining marks and small YE components."
+        },
+        {
+          "topic": "Other kana",
+          "text": "Further historical forms are drawn from Noto kana components.",
+          "member": "GenZuiSerif-0.118.zip!README.txt",
+          "quote": "Twenty-one historical forms use Noto components and original drawing."
+        }
+      ]
+    },
+    {
+      "id": "genzui-sans",
+      "name": "GenZui Sans",
+      "filename": "GenZuiSans-0.103.zip",
+      "kind": "repo",
+      "url": "https://github.com/mkpoli/GenZui/tree/main/releases/sans-v0.103",
+      "page": "https://genzui.mkpo.li/sans",
+      "version": "0.103",
+      "date": "2026-09-25",
+      "date_basis": "release commit date",
+      "licence": "SIL OFL 1.1",
+      "licence_url": "https://openfontlicense.org/open-font-license-official-text/",
+      "dir": "releases/sans-v0.103/",
+      "members": [
+        {
+          "path": "GenZuiSans-Regular.ttf",
+          "role": "font",
+          "sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
+          "size": 5876772
+        },
+        {
+          "path": "GenZuiSans-Bold.ttf",
+          "role": "font",
+          "sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
+          "size": 5869792
+        },
+        {
+          "path": "GenZuiSans-Regular.woff2",
+          "role": "web",
+          "sha256": "1d6c1efce43aee1e625161c412cc509c8345045347d1698731a60837130ed405",
+          "size": 2363832
+        },
+        {
+          "path": "GenZuiSans-Bold.woff2",
+          "role": "web",
+          "sha256": "31adfff8ba140a55c14b1068e153e1fdff40a1eac9c0ff972a76a66b3a772327",
+          "size": 2415464
+        },
+        {
+          "path": "GenZuiSans-0.103.zip",
+          "role": "package",
+          "sha256": "9d3ca727d4f7c487ccc61bcebee143f7c70ec93b2a2f1f90226c505f4a960df4",
+          "size": 14957773
+        }
+      ],
+      "credit": "GenZui Sans, SIL OFL 1.1; Noto Sans JP and Noto Sans Hentaigana outlines © The Noto Project Authors, Adobe",
+      "provenance": [
+        {
+          "topic": "Base",
+          "text": "The Japanese base is Noto Sans JP.",
+          "member": "GenZuiSans-0.103.zip!README.txt",
+          "quote": "Noto Sans JP Regular and Bold supply the Japanese base."
+        },
+        {
+          "topic": "Hentaigana",
+          "text": "Hentaigana come from Noto Sans Hentaigana, compiled from its source repository.",
+          "member": "GenZuiSans-0.103.zip!README.txt",
+          "quote": "Noto Sans Hentaigana supplies 290 historical forms from instances matched to each weight"
+        },
+        {
+          "topic": "Other kana",
+          "text": "GenSeki Hentaigana Gothic supplies further forms.",
+          "member": "GenZuiSans-0.103.zip!README.txt",
+          "quote": "GenSeki Hentaigana Gothic Regular and Bold supply 20 further forms"
+        },
+        {
+          "topic": "Notice",
+          "text": "The package notice names the sources of GenSeki Hentaigana Gothic.",
+          "member": "GenZuiSans-0.103.zip!NOTICE.txt",
+          "quote": "Its source projects include GenSeki Gothic, Sukima Gothic and Shokaki Hentaigana Gothic."
+        },
+        {
+          "topic": "Name table",
+          "text": "The copyright field of the font contains the sentence that GenSeki Hentaigana Gothic also carries.",
+          "member": "name:0",
+          "quote": "Some Hentaigana glyphs are derived from ShokakiHentaiganaGothic and SukimaGothic."
+        }
+      ]
+    },
+    {
+      "id": "sukima",
+      "name": "Sukima Gothic",
+      "filename": "sukima-gothic_ver11.41.zip",
+      "kind": "zip",
+      "local_only": true,
+      "url": "https://booth.pm/ja/items/2117070",
+      "page": "https://booth.pm/ja/items/2117070",
+      "version": "11.41",
+      "date": "2026-10-03",
+      "date_basis": "version string in the readme and name table",
+      "licence": "SIL OFL 1.1 (with the readme's no-sale condition)",
+      "licence_url": "https://openfontlicense.org/open-font-license-official-text/",
+      "sha256": "1c16c083a8b8f61f545a60f10b186fe922c991a2f7c5ec1312518a83bbf05979",
+      "size": 24544174,
+      "access": "The BOOTH download needs a login. The archive is read from a local copy; set GENZUI_SUKIMA_ZIP or pass --sukima to compare_sources.py.",
+      "members": [
+        {
+          "path": "SukimaGothic-Regular ver11.41.ttf",
+          "role": "font",
+          "sha256": "f240577c75ee057e0f0cc31c5f00df4627c8156b0fd584ca02871e2facfb1a55",
+          "size": 20484964
+        },
+        {
+          "path": "SukimaGothicSub-Regular ver11.41.ttf",
+          "role": "font",
+          "sha256": "d607d448ce8010ae0a4650d2736bfda51cff3f40bc30a037430d56db29c9a843",
+          "size": 20296128
+        },
+        {
+          "path": "readme.txt",
+          "role": "readme",
+          "sha256": "aaadbc929d872eea45db0caba1df7afa8b5e2edbbab36611778377c14749e752",
+          "size": 22376
+        },
+        {
+          "path": "すきまゴシック独自の非漢字.txt",
+          "role": "notes",
+          "sha256": "e669a2926827f0db89efa3332161453967a4afb2a3b6539923255ea4f7a98d1a",
+          "size": 3616
+        },
+        {
+          "path": "ライセンス/SIL_Open_Font_License_1.1.txt",
+          "role": "licence",
+          "sha256": "697383c6addd5dd14d7e1ff053aaa44520ce86a58589eef1f9985ab66e08db08",
+          "size": 4301
+        },
+        {
+          "path": "使用例.txt",
+          "role": "notes",
+          "sha256": "61a5f69197c1f52dd5387d45742a739ed927ba4ed84a5108cdfe9a012ed85740",
+          "size": 12683
+        }
+      ],
+      "archive_root": "sukima-gothic ver11.41/",
+      "credit": "Sukima Gothic 11.41 by きなさ, SIL OFL 1.1; contains Source Han Sans (Adobe) and M+ OUTLINE FONTS outlines",
+      "provenance": [
+        {
+          "topic": "Base",
+          "text": "Sukima Gothic is built on Genshin Gothic, a combination of Source Han Sans and M+ OUTLINE FONTS.",
+          "member": "readme.txt",
+          "quote": "「M+ OUTLINE FONTS」を合成してTrueType 形式に変換し、 カスタマイズを施した「源真ゴシック (げんしんゴシック)」のRegular に、"
+        },
+        {
+          "topic": "Hentaigana",
+          "text": "The author began supporting hentaigana in version 8.0 (2021-07-28).",
+          "member": "readme.txt",
+          "quote": "変体がな287字に対応を開始した為"
+        },
+        {
+          "topic": "Unicode 18",
+          "text": "Seven Unicode 18 kana were added to the Sub file in 11.41.",
+          "member": "readme.txt",
+          "quote": "Unicode18.0にてかな合字やカナが増えた為7字を追加しました。 （subのみ）"
+        },
+        {
+          "topic": "Licence",
+          "text": "The font file is under SIL OFL 1.1; the readme adds that it cannot be sold.",
+          "member": "readme.txt",
+          "quote": "（但し有償で配布することはできません。）"
+        },
+        {
+          "topic": "Vertical text",
+          "text": "The readme warns that punctuation may sit in the wrong place in vertical text.",
+          "member": "readme.txt",
+          "quote": "縦書きも対応はしていますが ，、。【】「」『』 等の配置がずれる場合があります。"
+        },
+        {
+          "topic": "Rare kanji",
+          "text": "The author lists example surnames and place names, and notes that some may not exist.",
+          "member": "使用例.txt",
+          "quote": "※以下の例で現存・実在しない・読みが誤っている名字を含む可能性あり"
+        }
+      ]
+    },
+    {
+      "id": "noto-serif-hentaigana",
+      "name": "Noto Serif Hentaigana",
+      "filename": "NotoSerifHentaigana-v1.000.zip",
+      "kind": "zip",
+      "url": "https://github.com/notofonts/hentaigana/releases/download/NotoSerifHentaigana-v1.000/NotoSerifHentaigana-v1.000.zip",
+      "page": "https://github.com/notofonts/hentaigana/releases/tag/NotoSerifHentaigana-v1.000",
+      "version": "1.000",
+      "date": "2024-02-26",
+      "date_basis": "GitHub release date",
+      "licence": "SIL OFL 1.1",
+      "licence_url": "https://openfontlicense.org/open-font-license-official-text/",
+      "sha256": "b72479094ed33f7ab4a2e447cb642b928b6efedfa5fe54b2821868c863b9be50",
+      "size": 6694755,
+      "members": [
+        {
+          "path": "NotoSerifHentaigana/googlefonts/variable/NotoSerifHentaigana[wght].ttf",
+          "role": "font",
+          "sha256": "94d31f3669977a8464d7f4c6597a2c0bacab636e70548e1a3184ffc7e0a5abf1",
+          "size": 454624
+        },
+        {
+          "path": "NotoSerifHentaigana/googlefonts/ttf/NotoSerifHentaigana-Regular.ttf",
+          "role": "font",
+          "sha256": "421f39077f39317962c16a30b5fea190132d6f1f55c0fc3a58dcb4f84b30503a",
+          "size": 265860
+        },
+        {
+          "path": "OFL.txt",
+          "role": "licence",
+          "sha256": "7f6a7ae1130aa5931a54f4a2bcfa63596178353391aaeae143a29d5f7101deaf",
+          "size": 4397
+        },
+        {
+          "path": "DESCRIPTION.en_us.html",
+          "role": "readme",
+          "sha256": "f87060af1894e284daffd1f64189bfa259569ef56bc4df13ce203f413e9fc937",
+          "size": 205
+        },
+        {
+          "path": "AUTHORS.txt",
+          "role": "notes",
+          "sha256": "727ab5b16dd99b3615f6fc2206f75fe78ac8ce54f20818e462b872ec57161d49",
+          "size": 247
+        }
+      ],
+      "credit": "Noto Serif Hentaigana 1.000 by Kazuhiro Yamada (nipponia), © The Noto Project Authors, SIL OFL 1.1",
+      "provenance": [
+        {
+          "topic": "Designer",
+          "text": "The name table credits Kazuhiro Yamada of nipponia.",
+          "member": "name:9",
+          "quote": "Kazuhiro Yamada"
+        },
+        {
+          "topic": "Scope",
+          "text": "The package description limits the font to the Kana Supplement block.",
+          "member": "DESCRIPTION.en_us.html",
+          "quote": "Noto Serif Hentaigana is a font that contains symbols for the Kana Supplement Unicode block."
+        }
+      ]
+    },
+    {
+      "id": "genseki",
+      "name": "GenSeki Hentaigana Gothic",
+      "filename": "GenSekiHentaiganaGothic-1.201.tar.xz",
+      "kind": "tar.xz",
+      "url": "https://github.com/MihailJP/GenSekiHentaiganaGothic/releases/download/v1.201/GenSekiHentaiganaGothic-1.201.tar.xz",
+      "page": "https://github.com/MihailJP/GenSekiHentaiganaGothic/releases/tag/v1.201",
+      "version": "1.201",
+      "date": "2026-03-20",
+      "date_basis": "GitHub release date",
+      "licence": "SIL OFL 1.1",
+      "licence_url": "https://openfontlicense.org/open-font-license-official-text/",
+      "sha256": "9879888197f472ffd8d8e553d35d581f7f8a23751830f374b4684e0c97ff75c2",
+      "size": 287740,
+      "members": [
+        {
+          "path": "GenSekiHentaiganaGothic.ttf",
+          "role": "font",
+          "sha256": "ba847f65476fa4fd975af1a66bab31800d27ab7406503e8d2f63c6d7900cf093",
+          "size": 344436
+        },
+        {
+          "path": "GenSekiHentaiganaGothic-Bold.ttf",
+          "role": "font",
+          "sha256": "c43122a6442511eca476d8e336ba31d60106c0d91c828d5c95997ba0d5cd90df",
+          "size": 310088
+        },
+        {
+          "path": "README.md",
+          "role": "readme",
+          "sha256": "98a0998ae78fa68998eda78e445cc062f29ed0b42830ad888d4d30c91e8bb9cd",
+          "size": 5261
+        },
+        {
+          "path": "OFL.txt",
+          "role": "licence",
+          "sha256": "e224588fa417165a76f25449eab646810749af8c63b3fcb1d71f6374bcd3dba6",
+          "size": 4559
+        },
+        {
+          "path": "ChangeLog",
+          "role": "notes",
+          "sha256": "246ef5bce0328fff53c0e4dd4e4c3f5b1ae11ce0062e7b0e360bd79b4b3cbde7",
+          "size": 2479
+        }
+      ],
+      "credit": "GenSeki Hentaigana Gothic 1.201 by MihailJP, SIL OFL 1.1; contains Source Han Sans (Adobe) outlines via GenSeki Gothic",
+      "provenance": [
+        {
+          "topic": "Base",
+          "text": "GenSeki Hentaigana Gothic adds hentaigana and ligature glyphs to GenSeki Gothic.",
+          "member": "README.md",
+          "quote": "日本語フォント [源石ゴシック](https://github.com/ButTaiwan/genseki-font) を元に、 変体仮名や合略仮名のグリフ（出所は後述）を追加したものです。"
+        },
+        {
+          "topic": "Hentaigana",
+          "text": "Each hentaigana is marked A (Shokaki), B (Sukima) or C (added by GenSeki); the counts below come from that table.",
+          "member": "README.md",
+          "quote": "B: [すきまゴシック](https://booth.pm/ja/items/2117070)に由来するもの"
+        },
+        {
+          "topic": "Ligatures",
+          "text": "Kana ligatures other than より and コト come from Sukima Gothic.",
+          "member": "README.md",
+          "quote": "それ以外は、すきまゴシックに由来するグリフを使用しています。"
+        },
+        {
+          "topic": "Name table",
+          "text": "The copyright field repeats the origin note.",
+          "member": "name:0",
+          "quote": "Some Hentaigana glyphs are derived from ShokakiHentaiganaGothic and SukimaGothic."
+        }
+      ]
+    },
+    {
+      "id": "ninjal",
+      "name": "NINJAL Hentaigana",
+      "filename": "ninjal_hentaigana.zip",
+      "kind": "zip",
+      "url": "https://cid.ninjal.ac.jp/kana/ninjal_hentaigana.zip",
+      "page": "https://cid.ninjal.ac.jp/kana/font/",
+      "version": "1.01",
+      "date": "2018-12",
+      "date_basis": "publication month stated on the download page",
+      "licence": "Apache License 2.0",
+      "licence_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "sha256": "62b01c19cb40dc4b64b1e1da776fca483e19e21c2772cc3f9db9a067bedbc84d",
+      "size": 872804,
+      "members": [
+        {
+          "path": "ninjal_hentaigana.ttf",
+          "role": "font",
+          "sha256": "e1301406c49dffed801bc12f0bb6a148f90215d4cf7d3a7bb0831cd798f6345e",
+          "size": 506732
+        },
+        {
+          "path": "ninjal_hentaigana.woff2",
+          "role": "web",
+          "sha256": "2b5f7292404d312c9856d7b0ee7d599c59131c143e31aa21af4adc1ab2d6750c",
+          "size": 220396
+        },
+        {
+          "path": "readme.md",
+          "role": "readme",
+          "sha256": "b3a14f46ff7d2d687c96c351bcd168c3177bffec92de1fae7f96791726d827a0",
+          "size": 1639
+        }
+      ],
+      "credit": "NINJAL Hentaigana 1.01 by MASUDA Hiroyuki, © National Institute for Japanese Language and Linguistics, Apache License 2.0",
+      "provenance": [
+        {
+          "topic": "Scope",
+          "text": "The font follows Unicode 10.0 hentaigana.",
+          "member": "readme.md",
+          "quote": "NINJAL変体仮名フォントは、Unicode 10.0.0に準拠した変体仮名フォントです。"
+        },
+        {
+          "topic": "Base",
+          "text": "NINJAL recommends IPAmj Mincho, a superset of this font, for ordinary text.",
+          "member": "readme.md",
+          "quote": "NINJAL変体仮名フォントのスーパーセットである[IPAmj明朝フォント][ipamjm](Ver.005.01以降)のご利用を推奨いたします。"
+        },
+        {
+          "topic": "Licence",
+          "text": "The font files are provided under Apache License 2.0.",
+          "member": "readme.md",
+          "quote": "フォントファイルは、[Apache License v2.0][apachelicense]により提供されます。"
+        }
+      ]
+    },
+    {
+      "id": "jigmo",
+      "name": "Jigmo",
+      "filename": "Jigmo-20250912.zip",
+      "kind": "zip",
+      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
+      "page": "https://kamichikoichi.github.io/jigmo/",
+      "version": "2025-09-12",
+      "date": "2025-09-12",
+      "date_basis": "release date in the archive and name table",
+      "licence": "CC0 1.0",
+      "licence_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
+      "size": 35559738,
+      "members": [
+        {
+          "path": "Jigmo.ttf",
+          "role": "font",
+          "sha256": "c8f295b9bd8f9f117a76b3a454aaaa1bb5b4babc18e254978c6deb88464e40cf",
+          "size": 30048112
+        },
+        {
+          "path": "Jigmo2.ttf",
+          "role": "font",
+          "sha256": "5da3582efe77e22073b86b3b86b556d7111148a76b957cfb53318a91da2efff0",
+          "size": 35661996
+        },
+        {
+          "path": "Jigmo3.ttf",
+          "role": "font",
+          "sha256": "815b18c1c670103723fe743090559208fdea47dc587ecb057a5a4721ee8dfeff",
+          "size": 7491948
+        },
+        {
+          "path": "README.txt",
+          "role": "readme",
+          "sha256": "9e21785d64d317da46f270c33f464be36ef20d1bfa30f07f5de27a1d1567162f",
+          "size": 6885
+        },
+        {
+          "path": "LICENSE.txt",
+          "role": "licence",
+          "sha256": "437ca31a127c9f1b191ff9a42bb563e5f7e414ae819006dca4635d9fb34aeb94",
+          "size": 7171
+        }
+      ],
+      "credit": "Jigmo 2025-09-12 by Koichi Kamichi and GlyphWiki contributors, CC0 1.0",
+      "provenance": [
+        {
+          "topic": "Glyph source",
+          "text": "Every glyph comes from GlyphWiki and is built with the KAGE system.",
+          "member": "README.txt",
+          "quote": "All glyphs in these fonts are from GlyphWiki[5]."
+        },
+        {
+          "topic": "Scope",
+          "text": "The README describes the fonts as kanji fonts and lists non-kanji only as ASCII and CJK-related characters.",
+          "member": "README.txt",
+          "quote": "*** Non-kanji: 13,340 characters ***"
+        }
+      ]
+    }
+  ]
+}
