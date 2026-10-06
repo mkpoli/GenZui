@@ -24,6 +24,11 @@ Both fonts are free for personal and commercial use under
 Each complete package adds WOFF2, an offline specimen, installation
 instructions and licences. The two fonts install side by side.
 
+For rare kanji, **GenZui Sans Han / 源萃ゴシック漢字** is a separate
+download: two Regular files that add every CJK ideograph, radical and stroke in
+Unicode 18 that GenZui Sans lacks. Install them beside GenZui Sans and list
+GenZui Sans first. See [GenZui Sans Han](#genzui-sans-han) for its sources.
+
 Browser fallback depends on the website and browser settings.
 [Browser setup](browser/README.md) covers historical-kana fallback.
 
@@ -37,6 +42,14 @@ Browser fallback depends on the website and browser settings.
 ```css
 .serif-sample { font-family: "GenZui Serif", serif; }
 .sans-sample  { font-family: "GenZui Sans", sans-serif; }
+```
+
+With GenZui Sans Han, load its `genzui-sans-han.css` after the Sans stylesheet
+and add the family after GenZui Sans. Each file declares its `unicode-range`, so
+a browser fetches it only for pages that use its characters:
+
+```css
+.sans-sample  { font-family: "GenZui Sans", "GenZui Sans Han", sans-serif; }
 ```
 
 ## Character coverage
@@ -122,6 +135,17 @@ character encoding.
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
 | GenZui constructions | Alternate WI 𛄨 from Noto Sans JP strokes, squared PAATU and the transcription symbols |
+
+### GenZui Sans Han
+
+A separate download that fills in every CJK ideograph GenZui Sans lacks.
+Each character takes the first source that has it.
+
+| Source | Contribution |
+| --- | --- |
+| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular | 16,546 ideographs in the Source Han Sans design, Japanese forms |
+| [Sukima Gothic](https://booth.pm/ja/items/2117070) 11.41 Main and Sub | 37,005 ideographs, Japanese forms on the Genshin Gothic / Source Han Sans 1.002 base |
+| [Plangothic](https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project) P1 and P2 2.9.5795 | 35,703 characters, mostly extension ideographs, on Source Han Sans CN, Chinese Mainland forms |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
@@ -210,6 +234,22 @@ and is packaged separately:
 ```
 
 It writes `build/sans/GenZuiSansP-*` and `dist/GenZuiSansP-0.103.zip`.
+
+### GenZui Sans Han
+
+Build GenZui Sans Regular first. Sukima Gothic is downloaded from BOOTH with a
+signed-in account; place `sukima-gothic_ver11.41.zip` in `build/sans-work/han/`.
+The other sources are fetched and checked against `sources/han-manifest.json`.
+
+```sh
+.venv-sans/bin/python scripts/sans_han.py
+.venv-sans/bin/python scripts/check_sans_han.py
+.venv-sans/bin/python scripts/package_sans_han.py
+```
+
+Outputs are in `build/sans-han/`; the package is `dist/GenZuiSansHan-0.100.zip`.
+The [Han notes](research/genzui-sans-han.md) describe the source order and the
+file split.
 
 ### GenZui Serif Kugyol and GenZui Sans Kugyol
 
