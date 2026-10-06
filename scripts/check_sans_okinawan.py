@@ -138,7 +138,7 @@ def check():
         assert record['full_sha256']==digest(full_path)
         for ext in ('ttf','woff2'):assert record[ext+'_sha256']==digest(OUT/f'{PREFIX}-{style}.{ext}')
         dakuten_gaps,component_gaps=geometry(400 if style=='Regular' else 700)
-        records.append(dict(record,full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
+        records.append(dict(record,full_woff2_sha256=digest(full_path.with_suffix('.woff2')),full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
     variants=check_variants()

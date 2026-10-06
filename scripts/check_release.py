@@ -136,17 +136,25 @@ def check():
     sans_version,sans_checks,_=sans_checked()
     assert manifest['sans_version']==sans_version and manifest['sans_font_sha256']==sans_checks['ttf_sha256']
     sans=(OUT/'sans.html').read_text()
+    from sans_okinawan_release import checked_assets as sans_okinawan_assets
+    for source in sans_okinawan_assets():
+        for folder in ('downloads','sans-v'+sans_version):
+            assert (OUT/folder/source.name).read_bytes()==source.read_bytes(),source.name
+    assert 'id="okinawan-source"' in sans and 'id="okinawan-data"' in sans
+    assert 'data-filter="okinawan"' in sans
+    assert f'GenZuiSansOkinawan-{sans_version}.zip' in sans
+    assert f'GenZuiSerifOkinawan-{sans_version}.zip' not in sans
     # Chunked faces: each page names its chunks, every chunk's characters are
     # exactly its declared ranges, and the chunks together cover the font.
     from fontTools.ttLib import TTFont
     chunk_cases=0
     for page_text,family,stem,font_path in ((home,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (home,'GenZui',BOLD_STEM,ROOT/'build/serif'/(BOLD_STEM+'.ttf')),
-                                            (sans,'GenZui',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf')),
-                                            (sans,'GenZui',SANS_BOLD_STEM,ROOT/'build/sans'/(SANS_BOLD_STEM+'.ttf')),
+                                            (sans,'GenZui',SANS_STEM,SANS_OUT/(SANS_STEM+'.ttf')),
+                                            (sans,'GenZui',SANS_BOLD_STEM,SANS_OUT/(SANS_BOLD_STEM+'.ttf')),
                                             (sans,'GenZuiSerif',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
                                             (landing,'GenZui',STEM,ROOT/'build/serif'/(STEM+'.ttf')),
-                                            (landing,'GenZuiSans',SANS_STEM,ROOT/'build/sans'/(SANS_STEM+'.ttf'))):
+                                            (landing,'GenZuiSans',SANS_STEM,SANS_OUT/(SANS_STEM+'.ttf'))):
         source_font=TTFont(font_path)
         source_cmap=set(source_font.getBestCmap())
         faces=re.findall(rf'@font-face\{{font-family:{family};src:url\(assets/({re.escape(stem)}-[a-z0-9]+-[0-9a-f]{{16}}\.woff2)\)[^}}]*unicode-range:([^}}]+)\}}',page_text)
@@ -230,7 +238,7 @@ def check():
     assert sans_gugyeol<=set(GUGYEOL_PUA)
     assert sans_gugyeol==set(TTFont(OUT/'downloads'/f'{SANS_BOLD_STEM}.ttf').getBestCmap()) & registry
     assert sans_gugyeol=={c['cp'] for c in sans_data['characters'] if c['source']=='gugyeol'}
-    expected_sans={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12}
+    expected_sans={'jp':16732,'hentaigana':290,'genseki':20,'frb':15,'cjk':1,'genzui':12+len(OKINAWAN_PUA)}
     if sans_gugyeol:expected_sans['gugyeol']=len(sans_gugyeol)
     assert sans_data['historical']==329 and sans_data['counts']==expected_sans
     assert ('<option value="gugyeol">' in sans)==bool(sans_gugyeol)

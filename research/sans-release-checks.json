@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "version": "0.104",
+  "archives": {
+    "GenZuiSans": 30,
+    "GenZuiSansOkinawan": 19
+  },
+  "public_assets": 6,
+  "rejected": [
+    "unexpected file",
+    "changed full webfont"
+  ]
+}

@@ -1,0 +1,6 @@
+GenZui Sans now supports Okinawan kana.
+
+27 forms from Yoshiaki Funatsu’s New Okinawan Kana, drawn from Noto Sans JP in Regular and Bold. Includes ligatures and letters that distinguish word-initial sounds.
+
+Full family and kana-text subset:
+https://genzui.mkpo.li/sans

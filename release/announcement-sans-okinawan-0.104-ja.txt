@@ -1,0 +1,4 @@
+源萃ゴシックに、船津好明氏の「新沖縄文字」27字を収録しました。とぅ・てぃ・くゎなどの合字をNoto Sans JPから作字。
+
+Regular・Boldの2ウェイト。軽量版GenZui Sans Okinawanも公開しました。
+https://genzui.mkpo.li/sans

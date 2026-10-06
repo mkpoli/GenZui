@@ -157,6 +157,8 @@ def build():
         if old.name != sans_package.name:
             old.unlink()
     shutil.copyfile(sans_package, downloads/sans_package.name)
+    from sans_okinawan_release import checked_assets as sans_okinawan_assets
+    for source in sans_okinawan_assets():shutil.copyfile(source,downloads/source.name)
     for source, name in SANS_DOWNLOADS.items():
         shutil.copyfile(SANS_OUT/source, downloads/name)
     for name in (STEM+'.ttf', STEM+'.woff2', BOLD_STEM+'.ttf', BOLD_STEM+'.woff2', 'OFL.txt', 'NOTICE.txt',

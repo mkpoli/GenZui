@@ -8,7 +8,7 @@ from fontTools.ttLib import TTFont
 from sources import ROOT
 
 LABELS = {'serif': ('源萃明朝', 'SERIF', 'serif.html', ROOT/'build/serif/GenZuiSerif-Regular.woff2'),
-          'sans': ('源萃ゴシック', 'SANS', 'sans.html', ROOT/'build/sans/GenZuiSans-Regular.woff2')}
+          'sans': ('源萃ゴシック', 'SANS', 'sans.html', ROOT/'build/sans-release/GenZuiSans-Regular.woff2')}
 
 
 def label_face(path, text):

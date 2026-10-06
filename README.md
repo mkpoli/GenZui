@@ -6,10 +6,10 @@ kana and Unicode 18.0 additions.
 | | 源萃明朝 GenZui Serif | 源萃ゴシック GenZui Sans |
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
-| Release | Regular and Bold 0.118 · 17,271 characters | Regular and Bold 0.103 · 17,251 characters |
+| Release | Regular and Bold 0.118 · 17,271 characters | Regular and Bold 0.104 · 17,096 characters |
 | Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) · [GenZuiSerif-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Bold.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) · [GenZuiSans-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Bold.ttf) |
-| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.118.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.103.zip) |
+| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.118.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.104.zip) |
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -36,7 +36,7 @@ Browser fallback depends on the website and browser settings.
 
 ```html
 <link rel="stylesheet" href="https://genzui.mkpo.li/v0.118/genzui.css">
-<link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.103/genzui-sans.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.104/genzui-sans.css">
 ```
 
 ```css
@@ -97,7 +97,7 @@ Both families have Regular and Bold.
 
 181 of the 255 구결자 that 한/글 places at U+F67E–U+F77C are drawn from each
 Serif face's own glyph of the ideograph they reproduce; the other 74 are not yet
-drawn. Published Sans 0.103 does not include these forms. PUA assignments need a matching font on the reading side. The
+drawn. Sans 0.104 includes the Okinawan forms. PUA assignments need a matching font on the reading side. The
 registry is [data/gugyeol/forms.json](data/gugyeol/forms.json).
 
 ### Hooked WU
@@ -221,12 +221,15 @@ PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node scripts/check_sans_brows
 .venv-sans/bin/python scripts/package_sans.py
 ```
 
-Outputs are in `build/sans/`. The [build guide](research/genzui-sans.md)
+The general source build writes `build/sans/` and includes unshipped 구결자 work.
+The 0.104 release extends immutable Sans 0.103 with the approved Okinawan
+drawings; use the [release procedure](research/sans-okinawan.md#release).
+The [build guide](research/genzui-sans.md)
 covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
 drawings, the browser check and packaging to `dist/`.
 
-The Sans Okinawan candidate build provides matching Regular/Bold sentence-ready
-subsets and extends the published full Sans repertoire. See its
+GenZui Sans Okinawan provides Regular/Bold sentence-ready subsets with 805
+encoded characters. Sans 0.104 includes the same forms in the full family. See its
 [build and proof guide](research/sans-okinawan.md).
 
 GenZui Sans P / 源萃ゴシックP is derived from the built Sans faces. It applies

@@ -49,7 +49,7 @@ each drawing, small-size comparisons and dictionary sentence samples. Each
 card includes a compact comparison in the matching weight of GenZui Serif
 Okinawan 0.118. Those immutable reference webfonts and their notices are
 included in the proof package, with hashes checked against the release.
-HWA, HWE, YO and WE also show related native and Okinawan forms alongside each
+HWI, HWE, YO and WE also show related native and Okinawan forms alongside each
 drawing, with a compact Serif row for the same characters. When
 `previous/Regular.woff2` and `previous/Bold.woff2` are present, each card also
 includes an expandable comparison with that earlier drawing. The package
@@ -104,8 +104,7 @@ against the release's validation records and verifies the Noto source files
 against the pinned manifest. It preserves the published Sans repertoire
 while adding the 26 encoded private-use bases; voiced forms are composition
 glyphs. Unreleased gugyeol changes in the general Sans source builder are
-outside this extension. The published site and immutable 0.103 files remain
-the source for the current release until the new drawings are approved.
+outside this extension. The versioned 0.103 assets remain immutable.
 
 ## Verification
 
@@ -129,3 +128,41 @@ approving new font drawings.
 ## Character proof
 
 ![Regular and Bold beside native kana](sans-okinawan-proof.png)
+
+## Release
+
+The public full-family files are staged separately in `build/sans-release/`.
+The public subset is in `build/sans-okinawan-release/`; both specimens show
+all 35 forms and editable sentences. Design alternatives and previous drawings
+stay in the development proof. Source notices and baseline validation records
+accompany the full package.
+
+```sh
+.venv/bin/python scripts/sans_okinawan.py
+.venv/bin/python scripts/check_sans_okinawan.py
+.venv/bin/python scripts/sans_okinawan_release.py
+show build/sans-release --name genzui-sans-release
+show build/sans-okinawan-release --name genzui-sans-okinawan-release
+.venv/bin/python scripts/check_sans_okinawan_release_browser.py
+.venv/bin/python scripts/sans_okinawan_release.py --package
+.venv/bin/python scripts/check_sans_okinawan_release.py
+.venv/bin/python scripts/sans_okinawan_sns.py
+bun run release:build
+.venv/bin/python scripts/check_release.py
+```
+
+The staging step verifies the reviewed full TTF/WOFF2 hashes, copies the
+subset, and records every staged asset. Packaging checks those hashes and
+rejects unexpected files. The browser check renders all forms in both full
+and subset fonts at desktop and mobile widths. ZIP names are
+`GenZuiSans-0.104.zip` and `GenZuiSansOkinawan-0.104.zip`.
+
+The SNS cards are 2400×1260 PNGs with Regular and Bold in two columns.
+The Funatsu card includes all 27 forms and two dictionary sentences;
+the follow-up includes all eight raised signs with notation examples.
+Japanese posts, an English Funatsu post, alt text and source records accompany
+the images in `build/sans-okinawan-social/`.
+
+The production branch is `main`. Release assets and site deployment must be
+built from its clean merged commit. The immutable `sans-v0.104` directory
+contains the full and subset TTF/WOFF2 files, both CSS files and both ZIPs.

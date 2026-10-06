@@ -14,8 +14,9 @@ from inventory import KANA_GROUPS, character_data
 from gugyeol import FORMS as GUGYEOL_FORMS, PUA as GUGYEOL_PUA
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
+from okinawan import PUA as OKINAWAN_PUA
 
-OUT = ROOT/'build/sans'
+OUT = ROOT/'build/sans-release'
 STEM = 'GenZuiSans-Regular'
 BOLD_STEM = 'GenZuiSans-Bold'
 PAIRING_TEXT = '春はあけぼの。𛀂𛀆𛀋 𛄣𛄤𛄥 かなのかたちを読む。'
@@ -96,7 +97,7 @@ def inventory(font, provenance):
     entries = character_data(font, audit, kinds, {**notes, **{f'U+{cp:04X}': text for cp, text in described.items()}})
     for entry in entries:
         # Refitted GenSeki outlines are GenZui work; the inventory marks them provisional.
-        entry['provisional'] = entry['source'] == 'genzui' or entry['cp'] in DESCRIPTIONS
+        entry['provisional'] = (entry['source'] == 'genzui' and entry['cp'] not in OKINAWAN_PUA) or entry['cp'] in DESCRIPTIONS
     return entries
 
 
@@ -109,6 +110,13 @@ def gugyeol_coverage(font, provenance):
     tagged={int(k.removeprefix('U+'),16) for k,v in provenance.items() if source_key(v)=='gugyeol'}
     assert actual==tagged and actual<=set(GUGYEOL_PUA)
     return actual
+
+
+def okinawan_composer():
+    source=(ROOT/'site/serif.html').read_text()
+    start=source.index('      <section class="specimen-part" id="okinawan"')
+    end=source.index('</section>',start)+len('</section>')
+    return source[start:end].replace('class="specimen-part"','class="section wrap"').replace('GenZui Serif','GenZui Sans').replace('GenZuiSerifOkinawan','GenZuiSansOkinawan')
 
 
 def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
@@ -135,6 +143,9 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     hentaigana = ''.join(chr(cp) for cp in range(0x1B001, 0x1B11F)) + ' 𛀀𛄠𛄡𛄢 𛄣𛄤𛄥𛄦𛄧𛄨𛅨'
     page = (ROOT/'templates/sans.html').read_text()
     replacement = {
+        '{{OKINAWAN_COMPOSER}}': okinawan_composer(),
+        '{{OKINAWAN_DATA}}': (ROOT/'data/okinawan/mappings.json').read_text().replace('<','\\u003c'),
+        '{{OKINAWAN_JS}}': (ROOT/'site/okinawan.js').read_text()+'\n'+(ROOT/'site/okinawan-ui.js').read_text(),
         '{{GUGYEOL_FILTER}}': '<option value="gugyeol">구결자 twin ideographs</option>' if available else '',
         '{{SANS_FONT}}': sans_font, '{{SERIF_FONT}}': serif_font,
         '{{SANS_BOLD_FONT}}': sans_bold_font or data_uri(OUT/(BOLD_STEM+'.woff2')),
