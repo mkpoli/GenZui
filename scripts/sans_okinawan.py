@@ -100,7 +100,7 @@ def proof():
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
     sections=[];accepted=[];other=[]
-    active_ids={'hwa'}
+    active_ids={'hwi'}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     previous_families={style:TTFont(OUT/'previous'/f'{style}.woff2')['name'].getDebugName(1) for style in ('Regular','Bold')} if previous else {}
     weight_table=''
@@ -117,18 +117,18 @@ def proof():
             history=(f'<details><summary>前の字形と比較</summary><div class="previous" data-family="{html.escape(previous_families[style],quote=True)}">{context}</div></details>' if previous else '')
             serif_face='GenZui Serif Okinawan Optical' if e['system']=='prefecture' else 'GenZui Serif Okinawan'
             comparisons=''
-            related={'hwa':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
+            related={'hwi':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
                      'hwe':('ふ / HWA / HWI / HWE','ふ\uf45a\uf45b\uf45c'),
                      "'yo":('は / よ / YU / YO','はよ\uf45e\uf45f'),
                      "'we":('こ / え / ゑ / WA / WI / WE','こえゑ\uf460\uf461\uf462')}
             if e['id'] in related:
                 names,chars=related[e['id']]
-                samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id'] in ('hwa','hwe') else 64),('Serif',30)])
-                if e['id']=='hwa':
+                samples=''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">{chars}</div></div>' for family,size in [('Sans',96 if e['id'] in ('hwi','hwe') else 64),('Serif',30)])
+                if e['id']=='hwi':
                     samples+='<h4>わ / い / え</h4>'+''.join(f'<div class="structure-row"><small>{family}</small><div class="structure-sample" data-family="GenZui {family} Okinawan" style="font-family:GenZui {family} Okinawan;--sample-size:{size}px">わいえ</div></div>' for family,size in [('Sans',96),('Serif',30)])
                 comparisons=f'<div class="structure-comparison"><h4>{names}</h4>{samples}</div>'
             cards.append(f'<article style="--weight:{weight}"><h3>{style}</h3><div class="context">{context}</div><div class="sizes"><span style="font-size:24px">{context}</span><span style="font-size:48px">{context}</span></div><div class="serif-row"><small>Serif</small><span class="serif" data-family="{serif_face}" style="font-family:{serif_face}">{context}</span></div>{comparisons}{history}</article>')
-        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div>{weight_table if e["id"]=="hwa" else ""}</section>'
+        row=f'<section data-form="{html.escape(e["id"],quote=True)}"><h2>{html.escape(e["label"])}</h2><div class="columns">{"".join(cards)}</div>{weight_table if e["id"]=="hwi" else ""}</section>'
         (sections if e['id'] in active_ids else other if e['id'] in ('yi','ye') else accepted).append(row)
     sentences=[]
     for style,weight in [('Regular',400),('Bold',700)]:

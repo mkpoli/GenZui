@@ -206,9 +206,10 @@ def drawings(weight):
     }
     for cp,paths in vowels.items():
         dx=20 if weight==700 and cp!=0xF45C else 0
-        # The compact え packs more ink around its turn and branch than
-        # HWA/HWI. Lighten the vowel without shrinking its skeleton.
-        vowel_width=(66 if weight==400 else 98) if cp==0xF45C else w
+        # Balance the compact vowels independently of the full-size kana
+        # stem width, preserving their accepted skeletons.
+        vowel_width=((66 if weight==400 else 98) if cp==0xF45C
+                     else (72 if weight==400 else 110))
         strokes=[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
         if cp==0xF45C and weight==700:
             # The branch's butt cap crosses the diagonal's outer edge. Clip

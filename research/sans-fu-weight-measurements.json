@@ -4,8 +4,8 @@
   "faces": [
     {
       "style": "Regular",
-      "current_sha256": "65ad95690215108251aab9dfe2e2520875b6fafdac47d6c54eb3ff1c184b3ad3",
-      "previous_sha256": "8ecbb5feb9bd266e7807d4415736e403bd454611d6f28bced72f268f6930dd7d",
+      "current_sha256": "87e7ba32d30ac962216ab9790172bcdde40549705ce451f96528effbc954f46a",
+      "previous_sha256": "65ad95690215108251aab9dfe2e2520875b6fafdac47d6c54eb3ff1c184b3ad3",
       "before": {
         "HWA": 63.89,
         "HWI": 64.38,
@@ -16,7 +16,7 @@
       },
       "after": {
         "HWA": 63.89,
-        "HWI": 64.38,
+        "HWI": 61.48,
         "HWE": 62.65,
         "native_い": 74.22,
         "native_え_body": 72.94,
@@ -25,8 +25,8 @@
     },
     {
       "style": "Bold",
-      "current_sha256": "3959bf725c717acabeebf7c64140911aeac8175cdd0be30465482ed01b69e310",
-      "previous_sha256": "bae1088a6995f7edd0c8d1a5d41af5b3d9574ff759262b504bbfc2af051b768d",
+      "current_sha256": "d2618dbdc67bddcd1769e6bc858bac2c6c246b2968c1ac31e8f396b1843a388a",
+      "previous_sha256": "3959bf725c717acabeebf7c64140911aeac8175cdd0be30465482ed01b69e310",
       "before": {
         "HWA": 90.66,
         "HWI": 93.1,
@@ -37,7 +37,7 @@
       },
       "after": {
         "HWA": 90.66,
-        "HWI": 93.1,
+        "HWI": 88.72,
         "HWE": 89.35,
         "native_い": 114.67,
         "native_え_body": 116.11,

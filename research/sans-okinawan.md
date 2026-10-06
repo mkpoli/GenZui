@@ -73,7 +73,7 @@ a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
-forms (32, including HWE and WE) are collapsed by default. HWA is at the top
+forms (32, including HWA, HWE and WE) are collapsed by default. HWI is at the top
 with the selected shape in both weights and an expandable previous drawing. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
@@ -83,16 +83,18 @@ HWA uses the selected native わ curve with its crossbar removed. The cut
 closes inside the upright. Its 800/900 donors retain the selected 43%/40%
 horizontal scaling and 43% height. Outline strokes of 8/32 units restore
 weight in the reduced vowel. The vowel sits 12 units closer to ふ in Regular
-and four units closer in Bold, retaining at least 30 units of whitespace. The native ふ parts are unchanged. HWI and
-HWE retain their approved drawings after comparison with HWA.
+and four units closer in Bold, retaining at least 30 units of whitespace.
+The native ふ outlines are unchanged. HWI uses 72/110-unit vowel strokes,
+a roughly 5% reduction from 76/116, preserving the accepted skeleton and
+component placement. HWE retains its approved drawing.
 
 `measure_sans_fu.py` reports `2 × filled area / contour perimeter` for the
 compiled vowel contours and native reference kana. This approximates ink
 breadth; proportions, junctions and terminals also affect the result, so it
-is a comparison aid rather than a perceptual target. The HWA proof includes
+is a comparison aid rather than a perceptual target. The HWI proof includes
 the before/after table alongside the full family and native わ/い/え.
 The [measurement report](sans-fu-weight-measurements.json) records the font
-hashes and readings. Only HWA changes in this spacing revision; its vowel shape and weight are preserved.
+hashes and readings. Only HWI changes in this weight revision; HWA and HWE remain unchanged.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.104.zip` after validation.
