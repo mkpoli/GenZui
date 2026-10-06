@@ -35,7 +35,7 @@
     <a class="brand" href="./" aria-label="GenZui, both families"><span class="brand-kanji face" lang="ja">源萃</span><span>GenZui<span class="brand-kind">SANS</span></span></a>
     {{FAMILY_SWITCH}}
     <nav aria-label="Main navigation">
-      <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#characters">Characters</a><a href="#sources">Sources</a>
+      <a href="#specimen">Specimen</a><a href="#hentaigana">Hentaigana</a><a href="#characters">Characters</a><a href="#sources">Sources</a><a href="compare.html">Compare fonts</a>
     </nav>
     <div class="weight-control header-weight" role="group" aria-label="Weight for every sample on this page"><button type="button" data-weight="400" aria-pressed="true" title="Regular"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Regular</span></button><button type="button" data-weight="700" aria-pressed="false" title="Bold"><span class="swatch" lang="ja" aria-hidden="true">源</span><span class="sr-only">Bold</span></button></div>
     <a class="header-download" href="downloads/GenZuiSans-Regular.ttf" download>Download TTF <span aria-hidden="true">↓</span></a>
@@ -169,15 +169,44 @@
     <section class="sources-section" id="sources" aria-labelledby="sources-title">
       <div class="wrap">
         <div class="section-label"><span>06 / SOURCES & COVERAGE</span><span lang="ja">書体の構成</span></div>
-        <div class="section-heading"><h2 id="sources-title">Built on established type.</h2><p>Most of GenZui Sans comes directly from existing fonts.<br>Counts show each source’s contribution.</p></div>
-        <div class="source-rows">
-          <div class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notosansjp" target="_blank" rel="noopener noreferrer">Noto Sans JP <span aria-hidden="true">↗</span></a></h3><p>The Japanese subset of Noto Sans CJK at weights 400 and 700, with its character repertoire, outlines and Japanese layout preserved.</p></div><strong>{{JP_COUNT}}<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">02</span><div><h3><a href="https://github.com/notofonts/hentaigana" target="_blank" rel="noopener noreferrer">Noto Sans Hentaigana <span aria-hidden="true">↗</span></a></h3><p>All 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold), compiled from the upstream Glyphs sources.</p></div><strong>290<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/MihailJP/GenSekiHentaiganaGothic" target="_blank" rel="noopener noreferrer">GenSeki Hentaigana Gothic <span aria-hidden="true">↗</span></a></h3><p>Six of the seven Unicode 18 additions, kana ligatures and small kana. Three outlines are refitted to their kana neighbours.</p></div><strong>{{GENSEKI_COUNT}}<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">04</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with kana attachment and vertical placement.</p></div><strong>15<span>characters · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">05</span><div><h3><a href="https://github.com/notofonts/noto-cjk/tree/main/Sans" target="_blank" rel="noopener noreferrer">Noto Sans CJK JP <span aria-hidden="true">↗</span></a></h3><p>卄 (twenty), absent from the JP subset above, comes from the same family’s full CJK font with Japanese default forms.</p></div><strong>1<span>character · OFL 1.1</span></strong></div>
-          <div class="source-row"><span class="source-number">06</span><div><h3><a href="?source=genzui#characters" id="browse-constructions">GenZui drawings <span aria-hidden="true">↗</span></a></h3><p><span class="face" lang="ja">𛄨 ㌬</span> The alternate WI, SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components.</p></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></div>
-        </div>
+        <div class="section-heading"><h2 id="sources-title">Built on established type.</h2><p>Most of GenZui Sans comes directly from existing fonts.<br>Counts show each source’s contribution; indented lines trace where each source came from.</p></div>
+        <ol class="source-rows">
+          <li class="source-row"><span class="source-number">01</span><div><h3><a href="https://github.com/google/fonts/tree/main/ofl/notosansjp" target="_blank" rel="noopener noreferrer">Noto Sans JP <span aria-hidden="true">↗</span></a></h3><p>The Japanese subset of Noto Sans CJK at weights 400 and 700, with its character repertoire, outlines and Japanese layout preserved. Ordinary kana, kanji and Latin.</p>
+            <ul class="lineage" aria-label="Upstream of Noto Sans JP">
+              <li><a href="https://github.com/notofonts/noto-cjk" target="_blank" rel="noopener noreferrer">Noto Sans CJK 2.004</a> <span class="by">Google · OFL 1.1</span>
+                <ul><li><a href="https://github.com/adobe-fonts/source-han-sans" target="_blank" rel="noopener noreferrer">Source Han Sans</a> <span class="by">Adobe · OFL 1.1</span></li></ul></li>
+            </ul></div><strong>{{JP_COUNT}}<span>characters · OFL 1.1</span></strong></li>
+          <li class="source-row"><span class="source-number">02</span><div><h3><a href="https://github.com/notofonts/hentaigana" target="_blank" rel="noopener noreferrer">Noto Sans Hentaigana <span aria-hidden="true">↗</span></a></h3><p>All 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold), compiled from the upstream Glyphs sources.</p>
+            <ul class="lineage" aria-label="Upstream of Noto Sans Hentaigana">
+              <li>Unreleased sans companion of Noto Serif Hentaigana, built from commit <code>3aa4d30</code> of the notofonts/hentaigana repository <span class="by">commits 31 Jan to 5 Jun 2025 · OFL 1.1</span></li>
+              <li>Designer Kazuhiro Yamada · <a href="https://www.nipponia.in" target="_blank" rel="noopener noreferrer">nipponia</a> <span class="by">named in the font’s metadata</span></li>
+              <li>Names no source font. A <a href="https://github.com/mkpoli/GenZui/blob/main/research/genzui-sans.md#provenance-check" target="_blank" rel="noopener noreferrer">shape-correlation test</a> scores its drawings like unrelated drawings against Sukima Gothic and against GenSeki’s Shokaki-derived glyphs.</li>
+            </ul></div><strong>290<span>characters · OFL 1.1</span></strong></li>
+          <li class="source-row"><span class="source-number">03</span><div><h3><a href="https://github.com/MihailJP/GenSekiHentaiganaGothic" target="_blank" rel="noopener noreferrer">GenSeki Hentaigana Gothic 1.201 <span aria-hidden="true">↗</span></a></h3><p>Six of the seven Unicode 18 additions, kana ligatures and small kana, by MihailJP. Three outlines are refitted to their kana neighbours. The twenty outlines used here trace as follows.</p>
+            <ul class="lineage" aria-label="Upstream of GenSeki Hentaigana Gothic">
+              <li><a href="https://github.com/ButTaiwan/genseki-font" target="_blank" rel="noopener noreferrer">GenSeki Gothic</a> <span class="by">ButTaiwan · OFL 1.1</span>
+                <p class="chars"><span class="face" lang="ja">𛄟 𛄧</span> are GenSeki Hentaigana Gothic’s own additions, made from GenSeki Gothic. The font’s name record says its other kana glyphs derive from GenSeki Gothic, which covers the small kana <span class="face" lang="ja">𛄲 𛅐 𛅑 𛅒 𛅕 𛅤 𛅥 𛅦 𛅧 𛅨</span>.</p>
+                <ul><li>Genki Gothic <span lang="ja">源起黑體</span> <span class="by">ButTaiwan · named as its base in GenSeki Gothic’s README</span>
+                  <ul><li><a href="https://github.com/adobe-fonts/source-han-sans" target="_blank" rel="noopener noreferrer">Source Han Sans 2.0</a> <span class="by">Adobe · OFL 1.1 · GenSeki Gothic 2.000 (2024-07-25) was rebuilt on it</span></li></ul></li></ul></li>
+              <li><a href="https://booth.pm/ja/items/2117070" target="_blank" rel="noopener noreferrer">Sukima Gothic <span lang="ja">すきまゴシック</span></a> <span class="by">きなさ · OFL 1.1</span>
+                <p class="chars"><span class="face" lang="ja">𛄣 𛄤 𛄥 𛄦</span> are Sukima Gothic’s own drawings. They are absent from Source Han Sans 1.002 and M+; ver11.41 carries them only in its Sub font, moved from private-use code points. The ligatures <span class="face" lang="ja">𪜈 𬻿 𬼀 𬼂</span> are credited to Sukima by GenSeki’s README. Font ancestry:</p>
+                <ul><li><a href="http://jikasei.me/font/genshin/" target="_blank" rel="noopener noreferrer">Genshin Gothic <span lang="ja">源真ゴシック</span></a> <span class="by">自家製フォント工房 · OFL 1.1</span>
+                  <ul><li><a href="https://github.com/adobe-fonts/source-han-sans" target="_blank" rel="noopener noreferrer">Source Han Sans 1.002</a> <span class="by">Adobe · OFL 1.1</span></li>
+                  <li><a href="https://mplusfonts.github.io/" target="_blank" rel="noopener noreferrer">M+ OUTLINE FONTS</a> <span class="by">M+ FONTS PROJECT · M+ FONTS LICENSE</span></li></ul></li></ul></li>
+              <li><a href="https://booth.pm/ja/items/5633978" target="_blank" rel="noopener noreferrer">Shokaki Hentaigana Gothic <span lang="ja">しょかき変体仮名ゴチック</span></a> <span class="by">ぼんのう堂 · OFL 1.1</span>
+                <p class="chars">None of the twenty. Font ancestry:</p>
+                <ul><li><a href="https://github.com/adobe-fonts/source-han-sans" target="_blank" rel="noopener noreferrer">Source Han Sans JP Regular</a> <span class="by">Adobe · OFL 1.1</span></li></ul></li>
+            </ul></div><strong>{{GENSEKI_COUNT}}<span>characters · OFL 1.1</span></strong></li>
+          <li class="source-row"><span class="source-number">04</span><div><h3><a href="https://github.com/ctrlcctrlv/FRBTaiwaneseKana" target="_blank" rel="noopener noreferrer">FRB Taiwanese Kana <span aria-hidden="true">↗</span></a></h3><p>Minnan tone letters, overline and dot below, with kana attachment and vertical placement. By Fredrick R. Brennan.</p></div><strong>15<span>characters · OFL 1.1</span></strong></li>
+          <li class="source-row"><span class="source-number">05</span><div><h3><a href="https://github.com/notofonts/noto-cjk/tree/main/Sans" target="_blank" rel="noopener noreferrer">Noto Sans CJK JP <span aria-hidden="true">↗</span></a></h3><p>卄 (twenty), absent from the JP subset above, comes from the same family’s full CJK font with Japanese default forms.</p>
+            <ul class="lineage" aria-label="Upstream of Noto Sans CJK JP">
+              <li><a href="https://github.com/adobe-fonts/source-han-sans" target="_blank" rel="noopener noreferrer">Source Han Sans</a> <span class="by">Adobe · OFL 1.1</span></li>
+            </ul></div><strong>1<span>character · OFL 1.1</span></strong></li>
+          <li class="source-row"><span class="source-number">06</span><div><h3><a href="?source=genzui#characters" id="browse-constructions">GenZui drawings <span aria-hidden="true">↗</span></a></h3><p><span class="face" lang="ja">𛄨 ㌬</span> The alternate WI, SQUARE PAATU, five tally marks and five ideographic description symbols, drawn from Noto Sans JP components. The refits of KOTO, alternate NE and small archaic YE are listed under GenSeki.</p>
+            <ul class="lineage" aria-label="Upstream of GenZui drawings">
+              <li>Strokes and components of Noto Sans JP (01), from Noto Sans CJK and Source Han Sans</li>
+            </ul></div><strong>{{GENZUI_COUNT}}<span>characters · provisional</span></strong></li>
+        </ol>
         <div class="scope-notes"><div><h3>Japanese regional forms</h3><p>GenZui Sans retains Noto Sans JP’s character repertoire and Japanese forms of shared ideographs. Other Chinese and Korean coverage is limited to the Japanese base.</p></div><div><h3>Coverage</h3><p>All 763 characters identified by Unicode 18’s Hiragana/Katakana script properties are covered, including halfwidth, enclosed and squared kana. <a href="downloads/GenZuiSans-kana-coverage.json">Coverage audit</a> · <a href="downloads/GenZuiSans-checks.json">Font checks</a>.</p></div></div>
       </div>
     </section>
@@ -197,7 +226,7 @@
     </section>
   </main>
 
-  <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="serif.html">GenZui Serif</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="downloads/GenZuiSans-NOTICE.txt">Source credits</a><a href="#top">Back to top ↑</a></div></footer>
+  <footer class="site-footer wrap"><a class="footer-brand" href="#top">GenZui <span lang="ja">源萃</span></a><p>By <a href="https://mkpo.li/" rel="author">まくぽり / mkpoli</a></p><div><a href="https://github.com/mkpoli/GenZui">GitHub</a><a href="serif.html">GenZui Serif</a><a href="compare.html">Compare fonts</a><a href="https://kureedo.mkpo.li/">Related typeface: Kureedo</a><a href="downloads/GenZuiSans-NOTICE.txt">Source credits</a><a href="#top">Back to top ↑</a></div></footer>
   <noscript><p class="no-script">Enable JavaScript for the interactive specimen and character browser. The font downloads work without JavaScript.</p></noscript>
   <script id="font-data" type="application/json" data-family="GenZui Sans">{{DATA}}</script>
   <script>{{JS}}</script>

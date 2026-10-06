@@ -51,7 +51,7 @@ def check():
             elif not target.is_file() and not target.suffix:target=target.with_suffix('.html')
             assert target.is_file(),(name,link)
             count+=1
-    for route in ('index.html','serif.html','gallery.html','minnan.html','sans.html'):
+    for route in ('index.html','serif.html','gallery.html','minnan.html','sans.html','compare.html'):
         text=(OUT/route).read_text()
         assert 'name="twitter:card" content="summary_large_image"' in text
         title=re.search(r'<title>([^<]*)</title>', text)[1]
@@ -92,7 +92,7 @@ def check():
     assert 'noindex' in (OUT/'404.html').read_text()
     assert (OUT/'robots.txt').read_text().endswith(URL+'/sitemap.xml\n')
     sitemap=(OUT/'sitemap.xml').read_text()
-    for route in ('/', '/serif', '/sans', '/gallery', '/minnan'):
+    for route in ('/', '/serif', '/sans', '/compare', '/gallery', '/minnan'):
         assert f'{URL}{route}</loc>' in sitemap, route
     visible_gallery=re.sub(r'<(script|style)\b[^>]*>.*?</\1>', '', gallery, flags=re.S)
     for review in ('Swap to','>Accepted<','KOTO E:','0.107','0.108','class="sample before"'):

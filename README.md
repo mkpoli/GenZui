@@ -13,6 +13,7 @@ kana and Unicode 18.0 additions.
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
+[Font comparison](https://genzui.mkpo.li/compare) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
 ## Download and use
@@ -22,6 +23,11 @@ Both fonts are free for personal and commercial use under
 **GenZui Serif / 源萃明朝** or **GenZui Sans / 源萃ゴシック** in your app.
 Each complete package adds WOFF2, an offline specimen, installation
 instructions and licences. The two fonts install side by side.
+
+For rare kanji, **GenZui Sans Han / 源萃ゴシック漢字** is a separate
+download: two Regular files that add every CJK ideograph, radical and stroke in
+Unicode 18 that GenZui Sans lacks. Install them beside GenZui Sans and list
+GenZui Sans first. See [GenZui Sans Han](#genzui-sans-han) for its sources.
 
 Browser fallback depends on the website and browser settings.
 [Browser setup](browser/README.md) covers historical-kana fallback.
@@ -36,6 +42,14 @@ Browser fallback depends on the website and browser settings.
 ```css
 .serif-sample { font-family: "GenZui Serif", serif; }
 .sans-sample  { font-family: "GenZui Sans", sans-serif; }
+```
+
+With GenZui Sans Han, load its `genzui-sans-han.css` after the Sans stylesheet
+and add the family after GenZui Sans. Each file declares its `unicode-range`, so
+a browser fetches it only for pages that use its characters:
+
+```css
+.sans-sample  { font-family: "GenZui Sans", "GenZui Sans Han", sans-serif; }
 ```
 
 ## Character coverage
@@ -116,17 +130,30 @@ character encoding.
 | Source | Contribution |
 | --- | --- |
 | [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
-| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold) |
-| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures |
+| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold). The unreleased sans companion of Noto Serif Hentaigana, designed by Kazuhiro Yamada (nipponia) and compiled here from source |
+| [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures. Its README credits 𛄣 𛄤 𛄥 𛄦 and the ligatures 𪜈 𬻿 𬼀 𬼂 to [Sukima Gothic](https://booth.pm/ja/items/2117070); its name record credits the other kana to [GenSeki Gothic](https://github.com/ButTaiwan/genseki-font) |
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
 | GenZui constructions | Alternate WI 𛄨 from Noto Sans JP strokes, squared PAATU and the transcription symbols |
+
+### GenZui Sans Han
+
+A separate download that fills in every CJK ideograph GenZui Sans lacks.
+Each character takes the first source that has it.
+
+| Source | Contribution |
+| --- | --- |
+| [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular | 16,546 ideographs in the Source Han Sans design, Japanese forms |
+| [Sukima Gothic](https://booth.pm/ja/items/2117070) 11.41 Main and Sub | 37,005 ideographs, Japanese forms on the Genshin Gothic / Source Han Sans 1.002 base |
+| [Plangothic](https://github.com/Fitzgerald-Porthmouth-Koenigsegg/Plangothic_Project) P1 and P2 2.9.5795 | 35,703 characters, mostly extension ideographs, on Source Han Sans CN, Chinese Mainland forms |
 
 The [design gallery](https://genzui.mkpo.li/gallery) shows GenZui’s own
 constructions in horizontal and vertical text. [Research notes](research/refinements-0.111.md)
 record glyph references and construction details. The [font survey](research/existing-fonts.md)
 covers other hentaigana fonts, including GenSeki Hentaigana Gothic.
-[GenZui Sans](research/genzui-sans.md) records its stem matching and refits.
+[GenZui Sans](research/genzui-sans.md) records its stem matching, refits and a
+provenance check of the hentaigana. The [Sans specimen](https://genzui.mkpo.li/sans#sources)
+traces each source back to the fonts it came from.
 
 Related project: **[Kureedo / クレード](https://kureedo.mkpo.li/)**, a Klee One
 derivative with historical katakana and Ainu kana.
@@ -202,6 +229,34 @@ The Sans Okinawan candidate build provides matching Regular/Bold sentence-ready
 subsets and extends the published full Sans repertoire. See its
 [build and proof guide](research/sans-okinawan.md).
 
+GenZui Sans P / 源萃ゴシックP is derived from the built Sans faces. It applies
+the font's `palt` widths by default for applications that ignore the feature
+and is packaged separately:
+
+```sh
+.venv-sans/bin/python scripts/sans_p.py
+.venv-sans/bin/python scripts/check_sans_p.py
+.venv-sans/bin/python scripts/package_sans_p.py
+```
+
+It writes `build/sans/GenZuiSansP-*` and `dist/GenZuiSansP-0.103.zip`.
+
+### GenZui Sans Han
+
+Build GenZui Sans Regular first. Sukima Gothic is downloaded from BOOTH with a
+signed-in account; place `sukima-gothic_ver11.41.zip` in `build/sans-work/han/`.
+The other sources are fetched and checked against `sources/han-manifest.json`.
+
+```sh
+.venv-sans/bin/python scripts/sans_han.py
+.venv-sans/bin/python scripts/check_sans_han.py
+.venv-sans/bin/python scripts/package_sans_han.py
+```
+
+Outputs are in `build/sans-han/`; the package is `dist/GenZuiSansHan-0.100.zip`.
+The [Han notes](research/genzui-sans-han.md) describe the source order and the
+file split.
+
 ### GenZui Serif Kugyol and GenZui Sans Kugyol
 
 GenZui Serif Kugyol and GenZui Sans Kugyol are cut from the built Serif and
@@ -234,6 +289,21 @@ versioned release folders. Edit `site/`, `templates/` and
 `scripts/release_site.py` / `scripts/sans_site.py`.
 `build/site/` holds the offline development specimen with glyph comparisons.
 [Deployment notes](release/README.md) describe the Cloudflare configuration.
+
+### Font comparison page
+
+`/compare` sets GenZui beside other kana and hentaigana fonts. The fonts are
+pinned in `sources/compare-manifest.json`; Sukima Gothic needs a BOOTH login, so
+pass a local copy of its archive. Measuring is a separate step; the page build
+reads only the committed results. Other fonts are not shipped on the site: their
+glyphs appear as images rendered from the pinned files, in
+`research/font-comparison-images/`, with each font's credit beside them.
+
+```sh
+.venv/bin/python scripts/compare_sources.py --sukima PATH/sukima-gothic_ver11.41.zip
+.venv/bin/python scripts/compare_fonts.py   # writes research/font-comparison*.json
+.venv/bin/python scripts/compare_site.py    # writes build/site/compare.html
+```
 
 ## Licences and credits
 

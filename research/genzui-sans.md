@@ -120,6 +120,47 @@ validates the offline specimen in Chromium and Firefox, compares TTF and WOFF2
 rasters for both faces and records their hashes; the packager rejects stale
 hashes and writes `dist/GenZuiSans-0.103.zip`.
 
+## GenZui Sans P
+
+GenZui Sans P / 源萃ゴシックP applies the font's own `palt` adjustments by
+default, for applications such as Word and PowerPoint that ignore the feature.
+`scripts/sans_p.py` reads the lookups that `palt` reaches under the DFLT, kana,
+hani and latn scripts and their JAN language systems. Every one of them reaches
+the same lookups: lookup 6 in Regular, and lookups 6 and 10 in Bold, all
+single adjustments in format 2 (11 subtables in Regular, 30 in Bold). They adjust
+328 glyphs in Regular and 332 in Bold, with XPlacement and XAdvance values only.
+
+Each glyph's outline moves by its XPlacement, its advance takes the XAdvance
+and its left side bearing follows the outline. GPOS mark anchors on moved glyphs
+move with them. The `palt` and `halt` features are removed, with the lookups
+only they used, so that widths are not applied twice. Other glyphs, cmap, GSUB
+and metrics are identical to GenZui Sans.
+
+HarfBuzz centres a vertical glyph on half its horizontal advance. A glyph that
+vertical text does not replace through GSUB `vert` would move, so a GPOS `vert`
+lookup adds the difference to its XPlacement. Vertical ink is identical to
+GenZui Sans; 49 Regular and 58 Bold glyphs depend on this.
+
+`kern` holds 845 kana pair adjustments (format 1, values from -100 to 50), of
+which 806 in Regular and 818 in Bold pair two `palt` glyphs, and a Latin class
+table that touches none. GenZui Sans applies them to fixed-width kana too, so
+they do not assume `palt` widths and P keeps them unchanged. Whether Noto Sans
+JP's designers intended them for proportional kana is uncertain.
+
+`scripts/check_sans_p.py` compares P shaped with default features against Sans
+shaped with `palt` on, in glyph advances and ink boxes, for every affected
+character alone and between kana, each kern pair, marks and running text under
+several script and language tags. Vertical text is compared against Sans
+vertical, and every other glyph, the cmap and GSUB must be identical. It writes
+`build/sans/checks-p.json`. `scripts/package_sans_p.py` writes
+`dist/GenZuiSansP-0.103.zip`, a separate download.
+
+```sh
+.venv-sans/bin/python scripts/sans_p.py
+.venv-sans/bin/python scripts/check_sans_p.py
+.venv-sans/bin/python scripts/package_sans_p.py
+```
+
 ## Site
 
 `scripts/sans_site.py` renders `templates/sans.html` for the development
@@ -128,3 +169,41 @@ specimen (`build/site/sans.html`, embedded fonts) and the public site
 downloads, `/genzui-sans.css`, the social card and the announcement texts.
 Version reports live in `research/sans-browser-checks-0.103.json` and
 `research/sans-kana-coverage-0.103.json`.
+
+## Provenance check
+
+GenSeki Hentaigana Gothic's README credits Sukima Gothic for most of its
+hentaigana and Shokaki Hentaigana Gothic for the rest. Noto Sans Hentaigana
+names no source font. `scripts/check_provenance.py` compares drawings: each
+glyph is rendered at 160 px on a baseline, cropped to its ink, resized to
+96 x 96, blurred (Gaussian radius 4) and compared by Pearson correlation, so
+that weight and placement count less than structure. GenSeki's README origin
+table (A Shokaki, B Sukima) selects the glyph sets.
+
+```
+scripts/check_provenance.py NotoSansHentaigana-Regular.ttf GenSekiHentaiganaGothic.ttf \
+    "SukimaGothic-Regular ver11.41.ttf" GenSekiHentaiganaGothic/README.md
+```
+
+| Pair | Characters | Median | Above 0.95 |
+| --- | --- | --- | --- |
+| GenSeki glyphs its README credits to Sukima (B) ↔ Sukima Gothic Main | 205 | 0.999 | 205 |
+| GenSeki glyphs its README credits to Shokaki (A) ↔ Sukima Gothic Main | 75 | 0.596 | 0 |
+| Noto Sans Hentaigana Regular ↔ Sukima Gothic Main, U+1B002–1B0FF | 254 | 0.624 | 0 |
+| Noto Sans Hentaigana Regular ↔ GenSeki glyphs credited to Shokaki (A) | 75 | 0.630 | 0 |
+
+Derived drawings score 0.999; unrelated ones about 0.60. Noto Sans
+Hentaigana scores like unrelated drawings against Sukima Gothic and against
+GenSeki's Shokaki-derived glyphs. This does not prove independence: it shows
+no copying of those outlines. Simple shapes such as small katakana score high
+in any sans, so the test says little about them.
+
+Measured on 2026-10-05 with:
+
+- Noto Sans Hentaigana Regular instance compiled from
+  https://github.com/notofonts/hentaigana at commit
+  `3aa4d30ee04254d3d0a69c500de7fda494e3b302`
+- GenSeki Hentaigana Gothic 1.201 Regular and its README,
+  https://github.com/MihailJP/GenSekiHentaiganaGothic/releases/tag/v1.201
+- Sukima Gothic ver11.41 Main, `SukimaGothic-Regular ver11.41.ttf`, from
+  https://booth.pm/ja/items/2117070 (a signed-in BOOTH download)
