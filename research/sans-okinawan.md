@@ -57,47 +57,49 @@ includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE uses
 a softened え corner with a diagonal and a baseline foot, drawn separately
-for Regular and Bold at stroke widths of 66/98 units. The lighter strokes
-keep the compact corner and foot from appearing heavier than HWA/HWI. The Bold foot branch
+for Regular and Bold at stroke widths of 70/106 units. The 0.105 calibration adds weight to
+the compact vowel while retaining its accepted shape. The Bold foot branch
 is trimmed to the diagonal's left edge to remove an exposed starting cap.
 The family comparison shows all three beside native ふ in both weights.
 
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
 slope and alignment with ゆ’s left stroke. YO uses 475/900 donors at heights
-of 480/500 units. Both approved YO drawings are unchanged. WE's upper mark uses 475/725 optical donors. Its length, slope,
+of 480/500 units. Both approved YO drawings are unchanged. WE's upper mark uses 475/850 optical donors. Its length, slope,
 left offset and visible midpoint gap follow WI's relationship to its head
-bar, fitted to ゑ's longer head. Its reduced body retains 500/800 donors.
+bar, fitted to ゑ's longer head. Its reduced body retains 500/900 donors.
 TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a
 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
-forms (32, including HWA, HWE and WE) are collapsed by default. HWI is at the top
-with the selected shape in both weights and an expandable previous drawing. Raised Sans
+forms (24, including HWI) are collapsed by default. The nine corrected forms
+are at the top, with both weights and expandable previous drawings. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.
 
 HWA uses the selected native わ curve with its crossbar removed. The cut
 closes inside the upright. Its 800/900 donors retain the selected 43%/40%
-horizontal scaling and 43% height. Outline strokes of 8/32 units restore
-weight in the reduced vowel. The vowel sits 12 units closer to ふ in Regular
-and four units closer in Bold, retaining at least 30 units of whitespace.
+horizontal scaling and 43% height. Outline strokes of 12/40 units restore
+weight in the reduced vowel. Its placement retains at least 30 units of
+whitespace from ふ.
 The native ふ outlines are unchanged. HWI uses 72/110-unit vowel strokes,
 a roughly 5% reduction from 76/116, preserving the accepted skeleton and
-component placement. HWE retains its approved drawing.
+component placement. HWI is unchanged in 0.105.
 
 `measure_sans_fu.py` reports `2 × filled area / contour perimeter` for the
 compiled vowel contours and native reference kana. This approximates ink
 breadth; proportions, junctions and terminals also affect the result, so it
 is a comparison aid rather than a perceptual target. The HWI proof includes
 the before/after table alongside the full family and native わ/い/え.
-The [measurement report](sans-fu-weight-measurements.json) records the font
-hashes and readings. Only HWI changes in this weight revision; HWA and HWE remain unchanged.
+The [earlier measurement report](sans-fu-weight-measurements.json) records the
+HWI adjustment included in 0.104. The [0.105 correction report](sans-weight-correction.md)
+uses local stroke measurements for the current HWA/HWE changes and the other
+recalibrated forms.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
-`dist/GenZuiSansOkinawan-0.104.zip` after validation.
+`dist/GenZuiSansOkinawan-0.105.zip` after validation.
 
 This build extends the immutable Sans 0.103 fonts. It checks their hashes
 against the release's validation records and verifies the Noto source files
@@ -108,8 +110,10 @@ outside this extension. The versioned 0.103 assets remain immutable.
 
 ## Verification
 
-The checker compares every existing glyph's compiled outline and horizontal
-and vertical metrics with Sans 0.103. Every previously encoded character is
+The checker compares every unchanged glyph’s compiled outline and horizontal
+and vertical metrics with Sans 0.103 and 0.104. The 286 reweighted hentaigana
+match their pinned-source donors exactly; their advances and shaping placements
+remain unchanged. An explicit per-weight whitelist covers the corrected Okinawan forms. Every previously encoded character is
 also shaped in both directions. It checks the subset repertoire, family
 metadata, all 35 forms, native combining sequences and sentence samples,
 including TTF/WOFF2 parity. It verifies exact non-intersection of dakuten and
@@ -130,6 +134,11 @@ approving new font drawings.
 ![Regular and Bold beside native kana](sans-okinawan-proof.png)
 
 ## Release
+
+Version 0.105 calibrates selected Okinawan strokes and uses hentaigana donor
+axes 410/770. The donor compiler runs automatically before the font build;
+install `requirements-sans.lock` in `.venv-sans` first.
+The [weight correction report](sans-weight-correction.md) records the changes.
 
 The public full-family files are staged separately in `build/sans-release/`.
 The public subset is in `build/sans-okinawan-release/`; both specimens show
@@ -155,7 +164,7 @@ The staging step verifies the reviewed full TTF/WOFF2 hashes, copies the
 subset, and records every staged asset. Packaging checks those hashes and
 rejects unexpected files. The browser check renders all forms in both full
 and subset fonts at desktop and mobile widths. ZIP names are
-`GenZuiSans-0.104.zip` and `GenZuiSansOkinawan-0.104.zip`.
+`GenZuiSans-0.105.zip` and `GenZuiSansOkinawan-0.105.zip`.
 
 The SNS cards are 2400×1260 PNGs with Regular and Bold in two columns.
 The Funatsu card includes all 27 forms and two dictionary sentences;
@@ -164,5 +173,5 @@ Japanese posts, an English Funatsu post, alt text and source records accompany
 the images in `build/sans-okinawan-social/`.
 
 The production branch is `main`. Release assets and site deployment must be
-built from its clean merged commit. The immutable `sans-v0.104` directory
+built from its clean merged commit. The immutable `sans-v0.105` directory
 contains the full and subset TTF/WOFF2 files, both CSS files and both ZIPs.

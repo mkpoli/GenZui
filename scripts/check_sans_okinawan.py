@@ -15,6 +15,36 @@ from okinawan import ENTRIES,PUA
 from okinawan_subset import repertoire
 from okinawan_sns import SENTENCES,compose
 from check_okinawan_subset import outline,shaped
+from sans_weight_correction import POINTS as WEIGHT_POINTS, donor_path, AXES
+from sources import ROOT
+
+WEIGHT_CHANGES={
+    'Regular':{'KWE','GWE','SI','ZI','HWA','HWE'},
+    'Bold':{'HWA','HWE','Glottal WA','Glottal WI','Glottal WE'},
+}
+
+def check_previous_release(full,style):
+    """Keep every 0.104 glyph outside the explicit correction set exact."""
+    previous=TTFont(ROOT/'releases/sans-v0.104'/f'GenZuiSans-{style}.ttf')
+    assert previous.getGlyphOrder()==full.getGlyphOrder()
+    assert previous.getBestCmap()==full.getBestCmap()
+    allowed={full.getBestCmap()[cp] for cp in WEIGHT_POINTS}
+    face=hb.Font(hb.Face((ROOT/'releases/sans-v0.104'/f'GenZuiSans-{style}.ttf').read_bytes()))
+    for e in ENTRIES:
+        if e['label'] not in WEIGHT_CHANGES[style]:continue
+        buffer=hb.Buffer();buffer.add_str(''.join(chr(int(c,16)) for c in e['output']));buffer.guess_segment_properties();hb.shape(face,buffer)
+        assert len(buffer.glyph_infos)==1
+        allowed.add(previous.getGlyphName(buffer.glyph_infos[0].codepoint))
+    changed=set()
+    for name in previous.getGlyphOrder():
+        if previous['glyf'][name].compile(previous['glyf'])!=full['glyf'][name].compile(full['glyf']):changed.add(name)
+        if name not in allowed:
+            assert name not in changed,(style,name,'unexpected 0.104 outline change')
+            for tag in ('hmtx','vmtx'):assert previous[tag][name]==full[tag][name],(style,name,tag)
+        else:
+            for tag in ('hmtx','vmtx'):assert previous[tag][name][0]==full[tag][name][0],(style,name,'advance changed')
+    assert changed==allowed,(style,'correction scope',changed^allowed)
+    return len(changed)
 
 def geometry(weight):
     def shape(parts):
@@ -79,6 +109,7 @@ def check():
         original=TTFont(BASE/f'GenZuiSans-{style}.ttf',recalcTimestamp=False)
         full_path=OUT/'full'/f'GenZuiSans-{style}.ttf'
         full=TTFont(full_path,recalcTimestamp=False)
+        changed_glyphs=check_previous_release(full,style)
         web_full=TTFont(full_path.with_suffix('.woff2'),recalcTimestamp=False)
         sub=TTFont(OUT/f'{PREFIX}-{style}.ttf',recalcTimestamp=False)
         web=TTFont(OUT/f'{PREFIX}-{style}.woff2',recalcTimestamp=False)
@@ -87,7 +118,12 @@ def check():
         assert len(fc)==17096 and sc.keys()==repertoire(full)==web.getBestCmap().keys()
         old_order=original.getGlyphOrder()
         assert full.getGlyphOrder()[:len(old_order)]==old_order
+        revised_names={oc[cp] for cp in WEIGHT_POINTS}
+        donor=TTFont(donor_path(style));donor_map=donor.getBestCmap()
+        for cp in WEIGHT_POINTS:
+            assert outline(full,fc[cp])==outline(donor,donor_map[cp]),(style,hex(cp),'hentaigana donor')
         for name in old_order:
+            if name in revised_names:continue
             assert original['glyf'][name].compile(original['glyf'])==full['glyf'][name].compile(full['glyf']),name
             for tag in ('hmtx','vmtx'):assert original[tag][name]==full[tag][name],(tag,name)
         for cp in sc:
@@ -106,10 +142,14 @@ def check():
             for n in (0,13,14):assert font['name'].getDebugName(n)==original['name'].getDebugName(n)
             for tag in ('hhea','vhea'):
                 for attr in ('ascent','descent','lineGap'):assert getattr(font[tag],attr)==getattr(original[tag],attr)
-        # Every previously encoded character still shapes identically in both directions.
+        # Reweighted hentaigana retain placement; all other baseline glyphs
+        # retain both their outlines and placement in either direction.
         for cp in oc:
             for direction in ('ltr','ttb'):
-                assert shaped(original,chr(cp),direction)==shaped(full,chr(cp),direction),(style,hex(cp),direction)
+                old,new=shaped(original,chr(cp),direction),shaped(full,chr(cp),direction)
+                if cp in WEIGHT_POINTS:
+                    assert [p for _,p in old]==[p for _,p in new],(style,hex(cp),direction)
+                else:assert old==new,(style,hex(cp),direction)
         examples=[chr(cp) for cp in sc]+['a\u0301','カ\u3099','ﾊﾟ','「しまくとぅば。」']
         examples+=[''.join(chr(int(cp,16)) for cp in e['output']) for e in ENTRIES]+[compose(s['text']) for s in SENTENCES]
         for text in examples:
@@ -138,7 +178,7 @@ def check():
         assert record['full_sha256']==digest(full_path)
         for ext in ('ttf','woff2'):assert record[ext+'_sha256']==digest(OUT/f'{PREFIX}-{style}.{ext}')
         dakuten_gaps,component_gaps=geometry(400 if style=='Regular' else 700)
-        records.append(dict(record,full_woff2_sha256=digest(full_path.with_suffix('.woff2')),full_encoded_characters=len(fc),preserved_glyphs=len(old_order),forms=35,
+        records.append(dict(record,full_woff2_sha256=digest(full_path.with_suffix('.woff2')),full_encoded_characters=len(fc),preserved_glyphs=len(old_order)-len(revised_names),reweighted_hentaigana=len(revised_names),changed_glyphs_from_0104=changed_glyphs,forms=35,
                             dakuten_clearance_units=dakuten_gaps,component_clearance_units=component_gaps))
         print(style,'passed: baseline, full font, subset and horizontal/vertical shaping',flush=True)
     variants=check_variants()

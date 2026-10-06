@@ -6,10 +6,10 @@ kana and Unicode 18.0 additions.
 | | 源萃明朝 GenZui Serif | 源萃ゴシック GenZui Sans |
 | --- | --- | --- |
 | Style | Japanese serif on Noto Serif JP | Japanese sans-serif on Noto Sans JP |
-| Release | Regular and Bold 0.118 · 17,271 characters | Regular and Bold 0.104 · 17,096 characters |
+| Release | Regular and Bold 0.118 · 17,271 characters | Regular and Bold 0.105 · 17,096 characters |
 | Specimen | [genzui.mkpo.li/serif](https://genzui.mkpo.li/serif) | [genzui.mkpo.li/sans](https://genzui.mkpo.li/sans) |
 | TTF | [GenZuiSerif-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Regular.ttf) · [GenZuiSerif-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSerif-Bold.ttf) | [GenZuiSans-Regular.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Regular.ttf) · [GenZuiSans-Bold.ttf](https://genzui.mkpo.li/downloads/GenZuiSans-Bold.ttf) |
-| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.118.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.104.zip) |
+| Package | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSerif-0.118.zip) | [ZIP](https://genzui.mkpo.li/downloads/GenZuiSans-0.105.zip) |
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
@@ -36,7 +36,7 @@ Browser fallback depends on the website and browser settings.
 
 ```html
 <link rel="stylesheet" href="https://genzui.mkpo.li/v0.118/genzui.css">
-<link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.104/genzui-sans.css">
+<link rel="stylesheet" href="https://genzui.mkpo.li/sans-v0.105/genzui-sans.css">
 ```
 
 ```css
@@ -97,7 +97,7 @@ Both families have Regular and Bold.
 
 181 of the 255 구결자 that 한/글 places at U+F67E–U+F77C are drawn from each
 Serif face's own glyph of the ideograph they reproduce; the other 74 are not yet
-drawn. Sans 0.104 includes the Okinawan forms. PUA assignments need a matching font on the reading side. The
+drawn. PUA assignments need a matching font on the reading side. The
 registry is [data/gugyeol/forms.json](data/gugyeol/forms.json).
 
 ### Hooked WU
@@ -130,7 +130,7 @@ character encoding.
 | Source | Contribution |
 | --- | --- |
 | [Noto Sans JP](https://github.com/google/fonts/tree/main/ofl/notosansjp), weights 400 and 700 | 16,732 encoded characters, with the original outlines, metrics and Japanese layout |
-| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from stem-matched instances at weight axis 380 (Regular) and 720 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold). The unreleased sans companion of Noto Serif Hentaigana, designed by Kazuhiro Yamada (nipponia) and compiled here from source |
+| [Noto Sans Hentaigana](https://github.com/notofonts/hentaigana) | 286 hentaigana from calibrated instances at weight axis 410 (Regular) and 770 (Bold), and four archaic kana from the Regular instance and axis 780 (Bold). The unreleased sans companion of Noto Serif Hentaigana, designed by Kazuhiro Yamada (nipponia) and compiled here from source |
 | [GenSeki Hentaigana Gothic](https://github.com/MihailJP/GenSekiHentaiganaGothic) 1.201 Regular and Bold | 20 historical kana, small kana and ligatures. Its README credits 𛄣 𛄤 𛄥 𛄦 and the ligatures 𪜈 𬻿 𬼀 𬼂 to [Sukima Gothic](https://booth.pm/ja/items/2117070); its name record credits the other kana to [GenSeki Gothic](https://github.com/ButTaiwan/genseki-font) |
 | [Noto Sans CJK JP](https://github.com/notofonts/noto-cjk/tree/main/Sans) Regular and Bold | U+5344 卄 |
 | [FRB Taiwanese Kana](https://github.com/ctrlcctrlv/FRBTaiwaneseKana) | 13 Minnan tone letters and two combining marks; Bold blends them toward GenZui’s Bold masters |
@@ -222,14 +222,15 @@ PLAYWRIGHT_MODULE=/path/to/node_modules/playwright node scripts/check_sans_brows
 ```
 
 The general source build writes `build/sans/` and includes unshipped 구결자 work.
-The 0.104 release extends immutable Sans 0.103 with the approved Okinawan
-drawings; use the [release procedure](research/sans-okinawan.md#release).
+The 0.105 release balances selected Okinawan forms and the 286 hentaigana
+against native Sans kana. It builds on immutable Sans 0.103; use the
+[release procedure](research/sans-okinawan.md#release).
 The [build guide](research/genzui-sans.md)
 covers the stem-matched hentaigana instances, the GenSeki refits, the Bold
 drawings, the browser check and packaging to `dist/`.
 
 GenZui Sans Okinawan provides Regular/Bold sentence-ready subsets with 805
-encoded characters. Sans 0.104 includes the same forms in the full family. See its
+encoded characters. Sans 0.105 includes the same forms in the full family. See its
 [build and proof guide](research/sans-okinawan.md).
 
 GenZui Sans P / 源萃ゴシックP is derived from the built Sans faces. It applies

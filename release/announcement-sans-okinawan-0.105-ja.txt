@@ -1,0 +1,4 @@
+源萃ゴシック0.105を公開しました。沖縄文字の線の太さを調整し、変体仮名286字も通常の仮名と組み合わせやすい太さに改めました。
+
+Regular・Boldと、文章用の軽量版GenZui Sans Okinawanを配布しています。
+https://genzui.mkpo.li/sans

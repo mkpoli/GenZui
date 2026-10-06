@@ -15,6 +15,7 @@ from gugyeol import FORMS as GUGYEOL_FORMS, PUA as GUGYEOL_PUA
 from serif import OUT as SERIF_OUT, STEM as SERIF_STEM, VERSION as SERIF_VERSION
 from sources import ROOT
 from okinawan import PUA as OKINAWAN_PUA
+from sans_weight_correction import AXES
 
 OUT = ROOT/'build/sans-release'
 STEM = 'GenZuiSans-Regular'
@@ -125,7 +126,7 @@ def build_page(sans_font, serif_font, webfont_usage='', sans_bold_font=None):
     provenance = json.loads((OUT/'sources.json').read_text())['source_kinds']
     kinds = Counter(value.split(';')[0] for value in provenance.values())
     genzui = sum(count for kind, count in kinds.items() if 'GenZui' in kind or 'squared-katakana' in kind)
-    assert kinds['Noto Sans Hentaigana instance at weight axis 380'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 20
+    assert kinds[f'Noto Sans Hentaigana instance at weight axis {AXES["Regular"]}'] == 286 and kinds['GenSeki Hentaigana Gothic 1.201 Regular'] == 20
     parent=TTFont(OUT/(STEM+'.ttf'))
     available=gugyeol_coverage(parent,provenance)
     bold_provenance=json.loads((OUT/'sources-bold.json').read_text())['source_kinds']

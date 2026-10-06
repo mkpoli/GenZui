@@ -91,11 +91,11 @@ def hwa_vowel(weight):
     diagonal=diagonal[15:26]+[line(diagonal[26][0],diagonal[15][0])]
     sx=.43 if weight==400 else .40
     sy=.43
-    dx=588 if weight==400 else 608
+    dx=588 if weight==400 else 614
     vowel=[transform(O.draw([bowl]),(sx,0,0,sy,dx,10)),
            transform(O.draw([diagonal,upright]),(sx,0,0,.43,dx,10))]
     # Add weight around the accepted outline; keep its contour proportions.
-    expansion=8 if weight==400 else 32
+    expansion=12 if weight==400 else 40
     if expansion:
         original=pathops.Path()
         for part in vowel:
@@ -135,8 +135,9 @@ def drawings(weight):
     kw=w*1.12
     out[0xF456]=[attach(ku,'M 375 260 C 419 224 456 228 465 165 C 474 102 480 28 555 28 C 615 28 639 103 661 168',w,(375,260)),
                  s('M 735 260 C 813 210 844 98 849 20')]
-    out[0xF458]=[attach(ku,'M 375 260 C 419 224 465 210 500 195 L 208 -18',kw,(375,260)),
-        s('M 330 71 C 415 133 520 210 553 109 C 579 19 563 -8 670 -8 L 851 -8',kw)]
+    kwe_width=w*1.04 if weight==400 else kw
+    out[0xF458]=[attach(ku,'M 375 260 C 419 224 465 210 500 195 L 208 -18',kwe_width,(375,260)),
+        s('M 330 71 C 415 133 520 210 553 109 C 579 19 563 -8 670 -8 L 851 -8',kwe_width)]
     # One uninterrupted diagonal/bowl stroke, with a separate upright.
     out[0xF454]=[attach(ku,'M 375 260 C 419 224 517 245 500 198 C 494 155 488 50 500 -20',kw,(375,260)),
         s('M 205 18 C 302 110 392 217 506 307 C 630 399 790 429 842 316 C 907 172 793 51 633 7')]
@@ -208,7 +209,7 @@ def drawings(weight):
         dx=20 if weight==700 and cp!=0xF45C else 0
         # Balance the compact vowels independently of the full-size kana
         # stem width, preserving their accepted skeletons.
-        vowel_width=((66 if weight==400 else 98) if cp==0xF45C
+        vowel_width=((70 if weight==400 else 106) if cp==0xF45C
                      else (72 if weight==400 else 110))
         strokes=[transform(s(path,vowel_width),(1,0,0,1,dx,0)) for path in paths]
         if cp==0xF45C and weight==700:
@@ -250,25 +251,28 @@ def drawings(weight):
     top=770 if weight==400 else 786
     yo_mark=transform(yo_source,(1,0,0,scale,(263 if weight==400 else 250)-(mb.bounds[0]+mb.bounds[2])/2,top-scale*mb.bounds[3]))
     out[0xF45F]=[yo_mark,native('よ',sx=.96,dx=150)]
-    wi=rings('ゐ',optical)[0]
+    # Compensate for the 82% body reduction more strongly in Bold.
+    wa_source=source(900) if weight==700 else optical
+    wi=rings('ゐ',wa_source)[0]
     wa=wi[:33]+[line(wi[33][0],wi[49][0])]+wi[49:]
     body_sy=.82
     for cp,ch in ((0xF460,None),(0xF461,'ゐ'),(0xF462,'ゑ')):
-        body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=optical)
-        mark=native('こ',[0],sx=.55,sy=.72,font=optical)
+        body=O.draw([move(wa,sx=.82,sy=body_sy,dx=20)]) if ch is None else native(ch,sx=.82,sy=body_sy,dx=20,font=wa_source)
+        mark=native('こ',[0],sx=.55,sy=.72,font=wa_source)
         bb=BoundsPen(None);body.replay(bb)
         mb=BoundsPen(None);mark.replay(mb)
         mx=(mb.bounds[0]+mb.bounds[2])/2
         out[cp]=[body,transform(mark,(1,0,0,1,365-mx,bb.bounds[3]+50-mb.bounds[1]))]
-    out[0xF462]=fit_we_mark(out[0xF462][0],out[0xF461],475 if weight==400 else 725)
+    out[0xF462]=fit_we_mark(out[0xF462][0],out[0xF461],475 if weight==400 else 850)
     # Native small-i has its own terminal and curvature. Uniform reduction
     # preserves that shape, using an optical donor to keep the mark legible.
     dot=native('ぃ',[1],sx=.65,sy=.65,font=reduced)
     db=BoundsPen(None);dot.replay(db);x0,y0,x1,y1=db.bounds
     out[0xF463]=[native('ん'),transform(dot,(1,0,0,1,870-x1,(650 if weight==400 else 675)-y1))]
-    si_dot=native('ぃ',[1],sx=.8,sy=1,font=optical)
+    si_source=source(450) if weight==400 else optical
+    si_dot=native('ぃ',[1],sx=.8,sy=1,font=si_source)
     sb=BoundsPen(None);si_dot.replay(sb)
-    out[0xF467]=[native('す',sx=.86,dx=15,font=optical),transform(si_dot,(1,0,0,1,905-sb.bounds[2],10-sb.bounds[1]))]
+    out[0xF467]=[native('す',sx=.86,dx=15,font=si_source),transform(si_dot,(1,0,0,1,905-sb.bounds[2],10-sb.bounds[1]))]
     # Optical centering applies to base forms; voiced pairs retain native spacing.
     for cp,parts in out.items():
         b=BoundsPen(None)

@@ -58,13 +58,13 @@ Build it from the checked full fonts with:
 The Japanese captions are `announcement-0.118-ja.txt` and
 `announcement-raised-0.118-ja.txt`.
 
-## GenZui Sans 0.104
+## GenZui Sans 0.105
 
 GenZui Sans / 源萃ゴシック is the gothic family, derived from Noto Sans JP,
 Noto Sans Hentaigana, GenSeki Hentaigana Gothic, Noto Sans CJK JP and FRB
 Taiwanese Kana. It contains 17,096 encoded characters with the Serif family's
 historical repertoire, in Regular and Bold. The hentaigana are compiled at
-weight axis 380 (Regular) and 720 (Bold), where their stems match Noto Sans
+weight axis 410 (Regular) and 770 (Bold), calibrated against Noto Sans
 JP's hiragana; KOTO, the alternate NE and the small archaic YE are refitted to
 their kana neighbours. Bold takes every source at its Bold weight; the Minnan
 tone letters and the drawn transcription symbols have Bold versions of
@@ -76,14 +76,14 @@ and NA strokes in both weights.
 
 Version 0.104 supplies 27 Funatsu Okinawan forms and eight raised katakana,
 in Regular and Bold. GenZui Sans Okinawan is the sentence-ready 805-character
-subset. Both derive from the approved extension of immutable Sans 0.103.
+subset. Version 0.105 recalibrates selected Okinawan forms and the 286 hentaigana.
 The [release procedure](../research/sans-okinawan.md#release) builds and checks
 both packages and the two SNS cards. Captions are
-`announcement-sans-okinawan-0.104-ja.txt` and
-`announcement-raised-sans-okinawan-0.104-ja.txt`.
+`announcement-sans-okinawan-0.105-ja.txt` and
+`announcement-raised-sans-okinawan-0.105-ja.txt`.
 
-The page is https://genzui.mkpo.li/sans. `releases/sans-v0.104/` holds the
-immutable font assets; the site exposes `/sans-v0.104/genzui-sans.css`, which
+The page is https://genzui.mkpo.li/sans. `releases/sans-v0.105/` holds the
+immutable font assets; the site exposes `/sans-v0.105/genzui-sans.css`, which
 declares both weights, and the current alias `/genzui-sans.css`. The release
 image's text alternative is:
 “源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU
@@ -114,7 +114,7 @@ and `build/sans-okinawan-release/`.
 branch is `main`. After the release PR is merged, fetch and verify its commit,
 then build and deploy from that clean committed tree with `bun run deploy`.
 
-`releases/v0.118/` and `releases/sans-v0.104/` contain the immutable font assets;
+`releases/v0.118/` and `releases/sans-v0.105/` contain the immutable font assets;
 each holds its family's Regular and Bold faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.118/genzui.css`, with Regular at weight 400 and Bold at 700) and a current

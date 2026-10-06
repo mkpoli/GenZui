@@ -7,6 +7,8 @@ import hashlib
 import html
 import json
 import shutil
+import subprocess
+from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 from fontTools import subset
 from fontTools.ttLib import TTFont
@@ -21,7 +23,7 @@ from okinawan_sns import SENTENCES, compose
 
 OUT=ROOT/'build/sans-okinawan'
 BASE=ROOT/'releases/sans-v0.103'
-VERSION='0.104'
+VERSION='0.105'
 FAMILY='GenZui Sans Okinawan'
 PREFIX='GenZuiSansOkinawan'
 SERIF_ARCHIVE=ROOT/'releases/v0.118/GenZuiSerifOkinawan-0.118.zip'
@@ -32,6 +34,12 @@ SERIF_FILES=[f'GenZuiSerifOkinawan-{style}.woff2' for style in ('Regular','Bold'
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def build():
+    compiler=ROOT/'.venv-sans/bin/python'
+    assert compiler.exists(),'Install requirements-sans.lock in .venv-sans before building Sans.'
+    prepared=subprocess.run([str(compiler),str(ROOT/'scripts/sans_weight_correction.py')],capture_output=True,text=True,cwd=ROOT)
+    if prepared.returncode:
+        print((prepared.stdout+prepared.stderr).replace(str(Path.home()),'~'))
+        raise RuntimeError('Hentaigana donor preparation failed.')
     OUT.mkdir(parents=True,exist_ok=True);(OUT/'full').mkdir(exist_ok=True)
     (OUT/'checks.json').unlink(missing_ok=True)
     source_manifest=json.loads((ROOT/'sources/manifest.json').read_text())
@@ -46,7 +54,9 @@ def build():
                      'NotoSansCJK-OFL.txt','FRB-OFL.txt','FRB-README.md','Unicode-LICENSE.txt',
                      'source-manifest.json','sans-source-manifest.json'):
             (OUT/name).write_bytes(archive.read(name))
-        (OUT/'full'/'NOTICE.txt').write_bytes(archive.read('NOTICE.txt')+b'\nOkinawan forms: GenZui drawings from Noto Sans JP masters.\n')
+        notice=archive.read('NOTICE.txt').decode().replace('weight axis 380 (Regular)\nand 720 (Bold), whose stems match Noto Sans JP;',
+            'weight axis 410 (Regular)\nand 770 (Bold), calibrated against Noto Sans JP;')
+        (OUT/'full'/'NOTICE.txt').write_text(notice+'\nOkinawan forms: GenZui drawings from Noto Sans JP masters.\n')
     (OUT/'NOTICE.txt').write_text('GenZui Sans Okinawan / 源萃ゴシック 沖縄文字\n\n'
         'Kana, Latin, punctuation and new Okinawan drawings derive from Noto Sans JP.\n'
         'Retained combining marks derive from FRB Taiwanese Kana.\n'
@@ -63,6 +73,8 @@ def build():
         assert baseline_checks[style]['status']=='passed'
         assert digest(path)==baseline_checks[style]['ttf_sha256'],style
         font=TTFont(path,recalcTimestamp=False)
+        from sans_weight_correction import apply as correct_hentaigana
+        weight_sources=correct_hentaigana(font,style)
         add_okinawan(font,add,glyph,contours,transform,add_feature,bold=style=='Bold',provider=okinawan_sans)
         notice,license_text,license_url=[parent_name(font,n) for n in (0,13,14)]
         rename(font,'GenZui Sans','源萃ゴシック',style,f'GenZuiSans-{style}',VERSION,notice,license_text,license_url)
@@ -76,9 +88,12 @@ def build():
         rename(font,FAMILY,'源萃ゴシック 沖縄文字',style,stem,VERSION,notice,license_text,license_url)
         font.save(OUT/f'{stem}.ttf');font.flavor='woff2';font.save(OUT/f'{stem}.woff2')
         records.append(dict(style=style,base_sha256=digest(path),full_sha256=digest(full),encoded_characters=len(points),
+                            hentaigana_weight_axis=weight_sources['inputs']['axes'][style],
+                            hentaigana_donor_sha256=weight_sources['fonts'][style],
                             **{ext+'_sha256':digest(OUT/f'{stem}.{ext}') for ext in ('ttf','woff2')}))
         print(style,len(points),flush=True)
     (OUT/'sources.json').write_text(json.dumps(dict(family=FAMILY,version=VERSION,baseline='GenZui Sans 0.103',faces=records),indent=2)+'\n')
+    (OUT/'hentaigana-weight-sources.json').write_text(json.dumps(weight_sources,indent=2)+'\n')
     (OUT/'genzui-sans-okinawan.css').write_text('\n'.join(f"@font-face {{ font-family: '{FAMILY}'; src: url('./{PREFIX}-{style}.woff2') format('woff2'); font-weight: {weight}; font-style: normal; font-display: swap; }}" for style,weight in [('Regular',400),('Bold',700)])+'\n')
     shutil.copyfile(ROOT/'data/okinawan/mappings.json',OUT/'okinawan-mappings.json')
     (OUT/'README.txt').write_text((ROOT/'templates/sans-okinawan-README.txt').read_text().replace('{{VERSION}}',VERSION))
@@ -100,7 +115,7 @@ def proof():
     from sans_okinawan_variants import build as proof_variants
     variants=proof_variants(OUT,ROOT,VERSION)
     sections=[];accepted=[];other=[]
-    active_ids={'hwi'}
+    active_ids={'kwe','gwe','si','zi','hwa','hwe',"'wa","'wi","'we"}
     previous=all((OUT/'previous'/f'{style}.woff2').exists() for style in ('Regular','Bold'))
     previous_families={style:TTFont(OUT/'previous'/f'{style}.woff2')['name'].getDebugName(1) for style in ('Regular','Bold')} if previous else {}
     weight_table=''
@@ -156,7 +171,7 @@ def proof():
     optical_section='<section id="raised-comparison"><h2>上付きカタカナ · 24 / 32 px</h2><div class="columns">'+''.join(optical_cards)+'</div></section>'
     page+=''.join(sections)
     page+='<section><h2>組見本</h2><div class="columns">'+''.join(sentences)+'</div></section>'
-    page+='<details class="approved-group"><summary>確認済み · 32字</summary>'+optical_section+''.join(accepted)+'</details>'
+    page+=f'<details class="approved-group"><summary>確認済み · {len(accepted)}字</summary>'+optical_section+''.join(accepted)+'</details>'
     page+='<details class="other-group"><summary>YI / YE</summary>'+''.join(other)+'</details>'
     page+='<footer>組見本の出典：<a href="https://repository.ninjal.ac.jp/record/3226/files/20210312Uchinaaguchi_e.pdf">沖縄語辞典</a>、121・123頁。<br>私用領域の文字を含みます。対応フォントと入力方法が必要です。</footer></main></html>'
     (OUT/'index.html').write_text(page)
