@@ -57,44 +57,46 @@ includes these comparison fonts when available.
 
 HWA/HWI/HWE use separate left dots and right vowel components. HWE uses
 a softened え corner with a diagonal and a baseline foot, drawn separately
-for Regular and Bold at stroke widths of 66/98 units. The lighter strokes
-keep the compact corner and foot from appearing heavier than HWA/HWI. The Bold foot branch
+for Regular and Bold at stroke widths of 70/106 units. The 0.105 calibration adds weight to
+the compact vowel while retaining its accepted shape. The Bold foot branch
 is trimmed to the diagonal's left edge to remove an exposed starting cap.
 The family comparison shows all three beside native ふ in both weights.
 
 YU’s glottal mark uses lighter 450/700 donors while retaining its height,
 slope and alignment with ゆ’s left stroke. YO uses 475/900 donors at heights
-of 480/500 units. Both approved YO drawings are unchanged. WE's upper mark uses 475/725 optical donors. Its length, slope,
+of 480/500 units. Both approved YO drawings are unchanged. WE's upper mark uses 475/850 optical donors. Its length, slope,
 left offset and visible midpoint gap follow WI's relationship to its head
-bar, fitted to ゑ's longer head. Its reduced body retains 500/800 donors.
+bar, fitted to ゑ's longer head. Its reduced body retains 500/900 donors.
 TU uses the native 700 donor for its Bold upper stroke. WU Regular uses a
 450 donor for the upper body and
 a 70-unit return, while Bold retains its 116-unit return. Its upright extends
 farther below the crossing. A local correction restores weight lost from
 the upper arch during vertical compression, preserving the native tangents.
 Bold’s top bar is raised slightly to retain space above the arch. Confirmed
-forms (32, including HWA, HWE and WE) are collapsed by default. HWI is at the top
-with the selected shape in both weights and an expandable previous drawing. Raised Sans
+forms (24, including HWI) are collapsed by default. The nine corrected forms
+are at the top, with both weights and expandable previous drawings. Raised Sans
 Regular katakana use the approved 450 donor; Bold retains 700. Serif references
 use the selected 500/750 raised forms, generated separately from the immutable
 0.118 release. Published Serif files are unchanged.
 
 HWA uses the selected native わ curve with its crossbar removed. The cut
 closes inside the upright. Its 800/900 donors retain the selected 43%/40%
-horizontal scaling and 43% height. Outline strokes of 8/32 units restore
-weight in the reduced vowel. The vowel sits 12 units closer to ふ in Regular
-and four units closer in Bold, retaining at least 30 units of whitespace.
+horizontal scaling and 43% height. Outline strokes of 12/40 units restore
+weight in the reduced vowel. Its placement retains at least 30 units of
+whitespace from ふ.
 The native ふ outlines are unchanged. HWI uses 72/110-unit vowel strokes,
 a roughly 5% reduction from 76/116, preserving the accepted skeleton and
-component placement. HWE retains its approved drawing.
+component placement. HWI is unchanged in 0.105.
 
 `measure_sans_fu.py` reports `2 × filled area / contour perimeter` for the
 compiled vowel contours and native reference kana. This approximates ink
 breadth; proportions, junctions and terminals also affect the result, so it
 is a comparison aid rather than a perceptual target. The HWI proof includes
 the before/after table alongside the full family and native わ/い/え.
-The [measurement report](sans-fu-weight-measurements.json) records the font
-hashes and readings. Only HWI changes in this weight revision; HWA and HWE remain unchanged.
+The [earlier measurement report](sans-fu-weight-measurements.json) records the
+HWI adjustment included in 0.104. The [0.105 correction report](sans-weight-correction.md)
+uses local stroke measurements for the current HWA/HWE changes and the other
+recalibrated forms.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
 `dist/GenZuiSansOkinawan-0.105.zip` after validation.
@@ -137,7 +139,6 @@ Version 0.105 calibrates selected Okinawan strokes and uses hentaigana donor
 axes 410/770. The donor compiler runs automatically before the font build;
 install `requirements-sans.lock` in `.venv-sans` first.
 The [weight correction report](sans-weight-correction.md) records the changes.
-
 
 The public full-family files are staged separately in `build/sans-release/`.
 The public subset is in `build/sans-okinawan-release/`; both specimens show

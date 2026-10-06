@@ -8,9 +8,9 @@ from check_sans_okinawan import WEIGHT_CHANGES
 
 def check():
     before=analyze(OUT);after=analyze(OUT/'revision')
-    vectors=json.loads((OUT/'revision/vectors.json').read_text())
+    vectors=json.loads((OUT/'revision/vectors.json').read_text(encoding='utf-8'))
     vmap={(r['style'],r['origin'],r['text']):r for r in vectors}
-    rows=json.loads((OUT/'revision/strokes.json').read_text())
+    rows=json.loads((OUT/'revision/strokes.json').read_text(encoding='utf-8'))
     assert len(rows)==len({(r['style'],r['origin'],r['text'],r['pixels']) for r in rows})==2268
     details=[];worst=0
     for style in ('Regular','Bold'):
@@ -42,8 +42,8 @@ def check():
                  groups_before=[r for r in before['groups'] if r['group'] in ('funatsu','hentaigana')],
                  groups_after=[r for r in after['groups'] if r['group'] in ('funatsu','hentaigana')])
     raw=json.dumps(summary,ensure_ascii=False,indent=2)+'\n'
-    (ROOT/'research/sans-weight-correction.json').write_text(raw)
-    (OUT/'weight-correction-checks.json').write_text(raw)
+    (ROOT/'research/sans-weight-correction.json').write_text(raw, encoding='utf-8')
+    (OUT/'weight-correction-checks.json').write_text(raw, encoding='utf-8')
     print(json.dumps({k:v for k,v in summary.items() if k not in ('groups_before','groups_after','changes')}))
 
 

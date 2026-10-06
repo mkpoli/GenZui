@@ -18,22 +18,22 @@ RELEASE = ROOT / 'releases/v0.118'
 
 
 def dump(name, value):
-    (OUT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':'))+'\n')
+    (OUT/name).write_text(json.dumps(value,ensure_ascii=False,separators=(',',':'))+'\n', encoding='utf-8')
 
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     start = time.monotonic()
     source = font_path('NotoSerifJP')
-    manifest = json.loads((ROOT/'sources/manifest.json').read_text())
+    manifest = json.loads((ROOT/'sources/manifest.json').read_text(encoding='utf-8'))
     pin = next(x['sha256'] for x in manifest['files'] if x['path']==str(source.relative_to(ROOT)))
     assert digest(source)==pin
     native = TTFont(source); ncmap = native.getBestCmap()
-    sans_vectors = json.loads((SANS_OUT/'vectors.json').read_text())
+    sans_vectors = json.loads((SANS_OUT/'vectors.json').read_text(encoding='utf-8'))
     entries = [{k:r[k] for k in ('text','label','cp','group','donors')}
                for r in sans_vectors if r['origin']=='GenZui' and r['style']=='Regular']
     assert len(entries)==375
-    sans_strokes = json.loads((SANS_OUT/'strokes.json').read_text())
+    sans_strokes = json.loads((SANS_OUT/'strokes.json').read_text(encoding='utf-8'))
     refs = [{k:r[k] for k in ('text','label','cp','group','donors')}
             for r in sans_strokes if r['origin']=='Noto' and r['style']=='Regular' and r['pixels']==1024]
     assert all(ord(r['text']) in ncmap for r in refs)
@@ -73,9 +73,9 @@ def main():
             print(style,'complete',round(time.monotonic()-start),'seconds',flush=True)
     dump('vectors.json',vectors)
     fields=['style','origin','group','cp','text','label','glyph','area','perimeter','effective_width','bbox_density','ink_em_fraction']
-    with (OUT/'vectors.csv').open('w') as stream:
+    with (OUT/'vectors.csv').open('w', encoding='utf-8', newline='') as stream:
         writer=csv.DictWriter(stream,fields,extrasaction='ignore');writer.writeheader();writer.writerows(vectors)
-    environment=json.loads((SANS_OUT/'provenance.json').read_text())
+    environment=json.loads((SANS_OUT/'provenance.json').read_text(encoding='utf-8'))
     dump('provenance.json',dict(release='v0.118',source_sha256=pin,faces=faces,native_encoded=len(ncmap),
         resolutions=RESOLUTIONS,matched_forms=375,environment=environment['environment'],
         calibration=environment['calibration'],scope='All encoded native glyphs; the 375 Sans comparison forms. Serif-only repertoire is excluded.'))

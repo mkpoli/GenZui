@@ -5,14 +5,14 @@ from sans_weight_audit import OUT, ROOT, digest
 
 
 def check():
-    parallel=json.loads((OUT/'parallel.json').read_text())
+    parallel=json.loads((OUT/'parallel.json').read_text(encoding='utf-8'))
     results={}
     for family,folder,release,encoded in [('Sans',OUT,'sans-v0.104',16732),('Serif',OUT/'serif','v0.118',16726)]:
         revised=family=='Sans' and parallel[family]['release']!='sans-v0.104'
         if revised:folder=OUT/'revision'
-        vectors=json.loads((folder/'vectors.json').read_text())
-        strokes=json.loads((folder/'strokes.json').read_text())
-        provenance=json.loads((folder/'provenance.json').read_text())
+        vectors=json.loads((folder/'vectors.json').read_text(encoding='utf-8'))
+        strokes=json.loads((folder/'strokes.json').read_text(encoding='utf-8'))
+        provenance=json.loads((folder/'provenance.json').read_text(encoding='utf-8'))
         index={(r['style'],r['origin'],r['text']):r for r in vectors}
         lookup={(r['style'],r['origin'],r['text'],r['pixels']):r for r in strokes}
         assert len(lookup)==len(strokes)==2268
@@ -41,7 +41,7 @@ def check():
         results[family]=dict(native_encoded=encoded,comparison_forms=375,stroke_records=len(strokes),max_ink_area_error_em2=worst)
     assert {(r['style'],r['text']) for r in parallel['Sans']['forms']}=={(r['style'],r['text']) for r in parallel['Serif']['forms']}
     result=dict(status='passed',families=results)
-    (OUT/'parallel-checks.json').write_text(json.dumps(result,indent=2)+'\n')
+    (OUT/'parallel-checks.json').write_text(json.dumps(result,indent=2)+'\n', encoding='utf-8')
     print(json.dumps(result))
 
 

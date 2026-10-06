@@ -12,7 +12,7 @@ OUT = Path('build/sans-weight-audit')
 def check():
     win, stage = stage_dir('genzui-sans-weight-audit')
     registry = json.loads((Path.home()/'.config/genzui/windows-browsers.json').read_text(encoding='utf-8-sig'))
-    template = Path('scripts/browser/serif-chromium.ps1').read_text()
+    template = Path('scripts/browser/serif-chromium.ps1').read_text(encoding='utf-8')
     template = template.replace('__ROOT__',q(win)).replace('__BINARY__',q(registry['chrome.exe']['path'])).replace('__EXTRA__','').replace('__PAGE__',q('http://localhost:8790/genzui-sans-weight-audit/'))
     a,b = template.index(' $report=@{}'),template.index(' $report.version=')
     checks = r'''
@@ -42,12 +42,12 @@ def check():
         if result.returncode:
             clean = re.sub(r'/home/[^/\s]+','~',result.stdout+result.stderr)
             clean = re.sub(r'(?i)[A-Z]:[\\/]Users[\\/][^\\/\s]+','~',clean)
-            (OUT/'browser-error.txt').write_text(clean)
+            (OUT/'browser-error.txt').write_text(clean, encoding='utf-8')
             raise RuntimeError('Browser verification failed; inspect build/sans-weight-audit/browser-error.txt')
         remaining(win)
         shutil.copyfile(stage/'proof.png',OUT/'browser-proof.png')
         report = json.loads((stage/'report.json').read_text(encoding='utf-8-sig'))
-        (OUT/'browser-checks.json').write_text(json.dumps(report,indent=2)+'\n')
+        (OUT/'browser-checks.json').write_text(json.dumps(report,indent=2)+'\n', encoding='utf-8')
         print(json.dumps(report))
     finally:
         shutil.rmtree(stage)

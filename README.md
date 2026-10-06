@@ -97,7 +97,7 @@ Both families have Regular and Bold.
 
 181 of the 255 구결자 that 한/글 places at U+F67E–U+F77C are drawn from each
 Serif face's own glyph of the ideograph they reproduce; the other 74 are not yet
-drawn. Sans 0.105 includes the Okinawan forms. PUA assignments need a matching font on the reading side. The
+drawn. PUA assignments need a matching font on the reading side. The
 registry is [data/gugyeol/forms.json](data/gugyeol/forms.json).
 
 ### Hooked WU

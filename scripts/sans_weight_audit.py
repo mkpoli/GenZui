@@ -37,7 +37,7 @@ def digest(path):
 
 
 def dump(name, value):
-    (OUT / name).write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n')
+    (OUT / name).write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
 
 
 def quantiles(values, weights=None):
@@ -140,7 +140,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     source = font_path('NotoSansJP')
-    manifest = json.loads((ROOT/'sources/manifest.json').read_text())
+    manifest = json.loads((ROOT/'sources/manifest.json').read_text(encoding='utf-8'))
     pin = next(x['sha256'] for x in manifest['files'] if x['path'] == str(source.relative_to(ROOT)))
     assert digest(source) == pin
     native = TTFont(source)
@@ -205,7 +205,7 @@ def main():
             print(style, 'complete', round(time.monotonic()-started), 'seconds', flush=True)
     dump('vectors.json', vectors)
     fields = ['style','origin','group','cp','text','label','glyph','area','perimeter','effective_width','bbox_density','ink_em_fraction']
-    with (OUT/'vectors.csv').open('w') as stream:
+    with (OUT/'vectors.csv').open('w', encoding='utf-8', newline='') as stream:
         writer = csv.DictWriter(stream, fields, extrasaction='ignore'); writer.writeheader(); writer.writerows(vectors)
     dump('provenance.json', dict(release='sans-v0.104', source_sha256=pin, native_encoded=len(ncmap),
          resolutions=RESOLUTIONS, faces=provenance, calibration=calibration(),

@@ -14,9 +14,9 @@ KATAKANA = ''.join(chr(ord(c)+0x60) for c in HIRAGANA)
 
 
 def build():
-    vectors = json.loads((OUT/'vectors.json').read_text())
-    strokes = json.loads((OUT/'strokes.json').read_text())
-    provenance = json.loads((OUT/'provenance.json').read_text())
+    vectors = json.loads((OUT/'vectors.json').read_text(encoding='utf-8'))
+    strokes = json.loads((OUT/'strokes.json').read_text(encoding='utf-8'))
+    provenance = json.loads((OUT/'provenance.json').read_text(encoding='utf-8'))
     lookup = {(r['style'], r['origin'], r['text'], r['pixels']): r for r in strokes}
     for r in strokes:
         if r['pixels'] != 1024:
@@ -85,14 +85,14 @@ def build():
     record['funatsu'] = [r for r in summary['forms'] if r['group']=='funatsu']
     record['font_sha256'] = {k:v['font_sha256'] for k,v in provenance['faces'].items()}
     record['native_sha256'] = provenance['source_sha256']
-    (ROOT/'research/sans-weight-audit.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+    (ROOT/'research/sans-weight-audit.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     for style in ('Regular','Bold'):
         shutil.copyfile(RELEASE/f'GenZuiSans-{style}.woff2',OUT/f'{style}.woff2')
     shutil.copyfile(font_path('NotoSansJP'),OUT/'NotoSansJP.ttf')
     with ZipFile(ROOT/'releases/v0.118/GenZuiSerifOkinawan-0.118.zip') as archive:
         for style in ('Regular','Bold'):
             (OUT/f'Serif-{style}.woff2').write_bytes(archive.read(f'GenZuiSerifOkinawan-{style}.woff2'))
-    (OUT/'index.html').write_text(PAGE)
+    (OUT/'index.html').write_text(PAGE, encoding='utf-8')
     if (OUT/'serif/provenance.json').exists():
         from parallel_weight_report import build as build_parallel
         build_parallel()

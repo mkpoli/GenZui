@@ -11,9 +11,9 @@ from serif import font_path
 
 
 def analyze(folder):
-    strokes=json.loads((folder/'strokes.json').read_text())
-    vectors=json.loads((folder/'vectors.json').read_text())
-    provenance=json.loads((folder/'provenance.json').read_text())
+    strokes=json.loads((folder/'strokes.json').read_text(encoding='utf-8'))
+    vectors=json.loads((folder/'vectors.json').read_text(encoding='utf-8'))
+    provenance=json.loads((folder/'provenance.json').read_text(encoding='utf-8'))
     lookup={(r['style'],r['origin'],r['text'],r['pixels']):r for r in strokes}
     vlookup={(r['style'],r['origin'],r['text']):r for r in vectors}
     output=dict(release=provenance['release'],native={},forms=[],groups=[],font_sha256={k:v['font_sha256'] for k,v in provenance['faces'].items()},native_sha256=provenance['source_sha256'])
@@ -64,7 +64,7 @@ def build():
     shutil.copyfile(font_path('NotoSerifJP'),OUT/'NotoSerifJP.ttf')
     record={name:{k:v for k,v in family.items() if k!='forms'} for name,family in data.items()}
     for name in record:record[name]['funatsu']=[r for r in data[name]['forms'] if r['group']=='funatsu']
-    (ROOT/'research/parallel-weight-audit.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+    (ROOT/'research/parallel-weight-audit.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n', encoding='utf-8')
     if (OUT/'revision/provenance.json').exists():
         from sans_weight_audit import digest
         revised=analyze(OUT/'revision')
@@ -72,8 +72,8 @@ def build():
             path=ROOT/'build/sans-okinawan/full'/f'GenZuiSans-{style}.ttf'
             assert digest(path)==revised['font_sha256'][style],'Revision measurements are stale'
         data['SansPrevious']=data['Sans'];data['Sans']=revised
-    (OUT/'parallel.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n')
-    (OUT/'index.html').write_text(PAGE)
+    (OUT/'parallel.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n', encoding='utf-8')
+    (OUT/'index.html').write_text(PAGE, encoding='utf-8')
     for name,family in data.items():
         for group in family['groups']:
             if group['group'] in ('funatsu','hentaigana'):print(name,json.dumps(group))

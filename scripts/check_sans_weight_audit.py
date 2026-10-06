@@ -4,10 +4,10 @@ from sans_weight_audit import OUT, RELEASE, digest
 
 
 def check():
-    vectors = json.loads((OUT/'vectors.json').read_text())
-    strokes = json.loads((OUT/'strokes.json').read_text())
-    provenance = json.loads((OUT/'provenance.json').read_text())
-    summary = json.loads((OUT/'summary.json').read_text())
+    vectors = json.loads((OUT/'vectors.json').read_text(encoding='utf-8'))
+    strokes = json.loads((OUT/'strokes.json').read_text(encoding='utf-8'))
+    provenance = json.loads((OUT/'provenance.json').read_text(encoding='utf-8'))
+    summary = json.loads((OUT/'summary.json').read_text(encoding='utf-8'))
     index = {(r['style'],r['origin'],r['text']):r for r in vectors}
     worst = 0
     for style in ('Regular','Bold'):
@@ -32,7 +32,7 @@ def check():
     result = dict(status='passed', native_encoded_per_style=16732, comparison_forms_per_style=375,
                   stroke_records=len(strokes), resolutions=[512,1024], max_ink_area_error_em2=worst,
                   calibration_max_error_units=max(r['error'] for r in provenance['calibration']))
-    (OUT/'checks.json').write_text(json.dumps(result,indent=2)+'\n')
+    (OUT/'checks.json').write_text(json.dumps(result,indent=2)+'\n', encoding='utf-8')
     print(json.dumps(result))
 
 

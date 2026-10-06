@@ -14,11 +14,11 @@ OUT=AUDIT/'revision'
 
 def measure():
     OUT.mkdir(parents=True,exist_ok=True)
-    original=json.loads((AUDIT/'vectors.json').read_text())
+    original=json.loads((AUDIT/'vectors.json').read_text(encoding='utf-8'))
     entries=[{k:r[k] for k in ('text','label','cp','group','donors')} for r in original if r['origin']=='GenZui' and r['style']=='Regular']
     vectors=[r for r in original if r['origin']=='Noto']
-    strokes=[r for r in json.loads((AUDIT/'strokes.json').read_text()) if r['origin']=='Noto']
-    provenance=json.loads((AUDIT/'provenance.json').read_text());provenance['release']='sans-v'+VERSION
+    strokes=[r for r in json.loads((AUDIT/'strokes.json').read_text(encoding='utf-8')) if r['origin']=='Noto']
+    provenance=json.loads((AUDIT/'provenance.json').read_text(encoding='utf-8'));provenance['release']='sans-v'+VERSION
     for style in ('Regular','Bold'):
         path=PROOF/'full'/f'GenZuiSans-{style}.ttf'
         provenance['faces'][style]['font_sha256']=digest(path)
@@ -41,10 +41,10 @@ def measure():
     for style in ('Regular','Bold'):
         provenance['faces'][style]['source_kinds'].update({f'U+{cp:04X}':f'Noto Sans Hentaigana instance at weight axis {AXES[style]}' for cp in POINTS})
     for name,value in [('vectors',vectors),('strokes',strokes),('provenance',provenance)]:
-        (OUT/f'{name}.json').write_text(json.dumps(value,ensure_ascii=False,separators=(',',':'))+'\n')
+        (OUT/f'{name}.json').write_text(json.dumps(value,ensure_ascii=False,separators=(',',':'))+'\n', encoding='utf-8')
     from parallel_weight_report import analyze
     result=analyze(OUT)
-    (AUDIT/'revision.json').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'))+'\n')
+    (AUDIT/'revision.json').write_text(json.dumps(result,ensure_ascii=False,separators=(',',':'))+'\n', encoding='utf-8')
     print('Measured staged Sans',VERSION,flush=True)
 
 
