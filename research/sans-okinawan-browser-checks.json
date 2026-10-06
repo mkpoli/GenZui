@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "forms": 35,
+  "styles": 2,
+  "sentences": 4,
+  "serif": 70,
+  "confirmed": 32,
+  "unresolved": 1,
+  "raised": 8,
+  "structures": 20,
+  "previous": 70,
+  "mobile": "passed",
+  "raisedDpr2": "passed",
+  "version": "Chrome/154.0.8037.98",
+  "fonts": {
+    "verified": 242
+  }
+}

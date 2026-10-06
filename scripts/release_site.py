@@ -35,7 +35,7 @@ GALLERY_TITLE = 'GenZui Serif — Design gallery｜歴史的仮名の作字21字
 COMPARE_TITLE = 'Font comparison — GenZui Serif / GenZui Sans｜変体仮名フォントの比較'
 COMPARE_DESCRIPTION = '源萃明朝・源萃ゴシックを、すきまゴシック、Noto Serif Hentaigana、源石変体仮名ゴシック、NINJAL変体仮名、字雲と比較。Unicodeブロック別の収録、組版機能、ウェイト、ライセンス、ファイルサイズ、字形の出所。'
 MINNAN_TITLE = 'Minnan kana & archaic WU — GenZui Serif｜閩南語の声調記号'
-SANS_DESCRIPTION = ('Noto Sans JPをもとに、変体仮名286字、Unicode 18.0の仮名追加、仮名合字、閩南語の声調記号を収めた'
+SANS_DESCRIPTION = ('沖縄語の合字・上付きカタカナに対応。Noto Sans JPをもとに、変体仮名286字、Unicode 18.0の仮名追加、仮名合字、閩南語の声調記号を収めた'
                     'ゴシック体の日本語フリーフォント。TTF・WOFF2のダウンロード、試し書き、ウェブフォントの使い方を掲載。')
 GALLERY_DESCRIPTION = 'GenZuiが作字した歴史的仮名21字。横組み・縦組みの見本、筆画参照、WUの2字形を掲載。'
 MINNAN_DESCRIPTION = '源萃明朝の閩南語声調記号、結合記号、古形WUの2字形の見本。'
@@ -191,6 +191,11 @@ def build():
         assert sans_css_path.read_text() == sans_css, 'Versioned CSS is immutable.'
     else:
         sans_css_path.write_text(sans_css)
+    from sans_okinawan_release import checked_assets as sans_okinawan_assets
+    for source in sans_okinawan_assets():
+        target=sans_versioned/source.name
+        if target.exists():assert target.read_bytes()==source.read_bytes(), 'Versioned Sans subset is immutable.'
+        else:target.write_bytes(source.read_bytes())
     runpy.run_path(str(ROOT/'scripts/site.py'))['build']()
     if OUT.exists():
         shutil.rmtree(OUT)

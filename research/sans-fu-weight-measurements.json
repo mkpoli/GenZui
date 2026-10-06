@@ -1,0 +1,48 @@
+{
+  "method": "2 × filled area / contour perimeter; font units; compiled vowel contours only",
+  "limitation": "A comparison aid, sensitive to shape and terminals; verify visually at reading sizes.",
+  "faces": [
+    {
+      "style": "Regular",
+      "current_sha256": "87e7ba32d30ac962216ab9790172bcdde40549705ce451f96528effbc954f46a",
+      "previous_sha256": "65ad95690215108251aab9dfe2e2520875b6fafdac47d6c54eb3ff1c184b3ad3",
+      "before": {
+        "HWA": 63.89,
+        "HWI": 64.38,
+        "HWE": 62.65,
+        "native_い": 74.22,
+        "native_え_body": 72.94,
+        "native_わ": 74.0
+      },
+      "after": {
+        "HWA": 63.89,
+        "HWI": 61.48,
+        "HWE": 62.65,
+        "native_い": 74.22,
+        "native_え_body": 72.94,
+        "native_わ": 74.0
+      }
+    },
+    {
+      "style": "Bold",
+      "current_sha256": "d2618dbdc67bddcd1769e6bc858bac2c6c246b2968c1ac31e8f396b1843a388a",
+      "previous_sha256": "3959bf725c717acabeebf7c64140911aeac8175cdd0be30465482ed01b69e310",
+      "before": {
+        "HWA": 90.66,
+        "HWI": 93.1,
+        "HWE": 89.35,
+        "native_い": 114.67,
+        "native_え_body": 116.11,
+        "native_わ": 118.4
+      },
+      "after": {
+        "HWA": 90.66,
+        "HWI": 88.72,
+        "HWE": 89.35,
+        "native_い": 114.67,
+        "native_え_body": 116.11,
+        "native_わ": 118.4
+      }
+    }
+  ]
+}

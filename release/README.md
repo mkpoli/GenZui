@@ -58,11 +58,11 @@ Build it from the checked full fonts with:
 The Japanese captions are `announcement-0.118-ja.txt` and
 `announcement-raised-0.118-ja.txt`.
 
-## GenZui Sans 0.103
+## GenZui Sans 0.104
 
 GenZui Sans / 源萃ゴシック is the gothic family, derived from Noto Sans JP,
 Noto Sans Hentaigana, GenSeki Hentaigana Gothic, Noto Sans CJK JP and FRB
-Taiwanese Kana. It contains 17,070 encoded characters with the Serif family's
+Taiwanese Kana. It contains 17,096 encoded characters with the Serif family's
 historical repertoire, in Regular and Bold. The hentaigana are compiled at
 weight axis 380 (Regular) and 720 (Bold), where their stems match Noto Sans
 JP's hiragana; KOTO, the alternate NE and the small archaic YE are refitted to
@@ -70,17 +70,25 @@ their kana neighbours. Bold takes every source at its Bold weight; the Minnan
 tone letters and the drawn transcription symbols have Bold versions of
 matching weight.
 
-Version 0.103 replaces GenSeki's alternate WI 𛄨, which was narrower and lower
+Version 0.103 replaced GenSeki's alternate WI 𛄨, which was narrower and lower
 than the katakana around it, with a GenZui drawing from Noto Sans JP's own WI
 and NA strokes in both weights.
 
-The page is https://genzui.mkpo.li/sans. `releases/sans-v0.103/` holds the
-immutable font assets; the site exposes `/sans-v0.103/genzui-sans.css`, which
+Version 0.104 supplies 27 Funatsu Okinawan forms and eight raised katakana,
+in Regular and Bold. GenZui Sans Okinawan is the sentence-ready 805-character
+subset. Both derive from the approved extension of immutable Sans 0.103.
+The [release procedure](../research/sans-okinawan.md#release) builds and checks
+both packages and the two SNS cards. Captions are
+`announcement-sans-okinawan-0.104-ja.txt` and
+`announcement-raised-sans-okinawan-0.104-ja.txt`.
+
+The page is https://genzui.mkpo.li/sans. `releases/sans-v0.104/` holds the
+immutable font assets; the site exposes `/sans-v0.104/genzui-sans.css`, which
 declares both weights, and the current alias `/genzui-sans.css`. The release
 image's text alternative is:
 “源萃ゴシック / GenZui Sans, Regular and Bold. The name is set in Bold. Archaic WU
 in Bold, then GenZui drawings: refitted KOTO, alternate NE and small archaic YE,
-SQUARE PAATU and a tally mark, all in Bold. 17,070 characters; 286 hentaigana.
+SQUARE PAATU and a tally mark, all in Bold. 17,096 characters; 286 hentaigana.
 Based on Noto Sans JP, Noto Sans Hentaigana and GenSeki Hentaigana
 Gothic. genzui.mkpo.li/sans.”
 
@@ -100,12 +108,13 @@ genzui.mkpo.li; 286 hentaigana, Unicode 18.0, free under SIL OFL 1.1.”
 
 `bun install --frozen-lockfile`, then `bun run release:build`. The build requires
 the checked font packages in `dist/` and their matching checks in `build/serif/`
-and `build/sans/`, plus the checked Okinawan subset in `build/okinawan/`.
+and `build/sans-release/`, plus checked Okinawan subsets in `build/okinawan/`
+and `build/sans-okinawan-release/`.
 `bun run deploy:check` validates the Cloudflare configuration. The production
 branch is `main`. After the release PR is merged, fetch and verify its commit,
 then build and deploy from that clean committed tree with `bun run deploy`.
 
-`releases/v0.118/` and `releases/sans-v0.103/` contain the immutable font assets;
+`releases/v0.118/` and `releases/sans-v0.104/` contain the immutable font assets;
 each holds its family's Regular and Bold faces.
 Preserve all versioned directories when building subsequent releases. The site exposes both pinned
 CSS (`/v0.118/genzui.css`, with Regular at weight 400 and Bold at 700) and a current
@@ -113,7 +122,7 @@ alias (`/genzui.css`).
 
 The home page's share image shows both families from the distributed fonts'
 glyphs. Its text alternative is: “源萃 / GenZui: GenZui Serif 源萃明朝 and GenZui
-Sans 源萃ゴシック. Archaic WU, KOTO and alternate NE in both families. 17,271 and 17,070
+Sans 源萃ゴシック. Archaic WU, KOTO and alternate NE in both families. 17,271 and 17,096
 characters; 286 hentaigana; Unicode 18.0. Based on Noto Serif JP, Noto Sans JP
 and Noto Hentaigana. genzui.mkpo.li.” The Sans page has its own card,
 described under GenZui Sans below.

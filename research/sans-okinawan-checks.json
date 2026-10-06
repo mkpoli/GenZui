@@ -1,0 +1,87 @@
+{
+  "status": "passed",
+  "faces": [
+    {
+      "style": "Regular",
+      "base_sha256": "cba129c9c7584c0632335f8cb98ec486d37353d5cfcf38bfbf9ea93f593a03e8",
+      "full_sha256": "ec4455ff898cbbf604585fc638bbb808bd53d3118bb360d16ecc711e4969f354",
+      "encoded_characters": 805,
+      "ttf_sha256": "87e7ba32d30ac962216ab9790172bcdde40549705ce451f96528effbc954f46a",
+      "woff2_sha256": "1f45cc154f2c81210f6feca69ff863398f00dae76c8a252e8c58284e57c64129",
+      "full_woff2_sha256": "5bf0f234575b2b3400101ea206ce718cd9e1b19bc98b03c1a5f80e3ede6f6dfa",
+      "full_encoded_characters": 17096,
+      "preserved_glyphs": 18342,
+      "forms": 35,
+      "dakuten_clearance_units": {
+        "U+F450": 122.95,
+        "U+F452": 62.97,
+        "U+F454": 53.07,
+        "U+F456": 100.86,
+        "U+F458": 87.44,
+        "U+F467": 30.29,
+        "U+F469": 32.21
+      },
+      "component_clearance_units": {
+        "U+F460": 54.03,
+        "U+F461": 54.03,
+        "U+F462": 53.7,
+        "U+F463": 76.61,
+        "U+F467": 107.12,
+        "U+F45E": 45.32,
+        "U+F45F": 75.44,
+        "U+F452": 89.09,
+        "HWA repeated": 65.01
+      }
+    },
+    {
+      "style": "Bold",
+      "base_sha256": "fd254e1ae0f1d670f68ad39233789a5ab73314d1059935420d2b1b4129074d80",
+      "full_sha256": "fd5dfa1e5e41faf036ef7fce396daaffe98001e2f0dac1c2050c75808a7130f3",
+      "encoded_characters": 805,
+      "ttf_sha256": "d2618dbdc67bddcd1769e6bc858bac2c6c246b2968c1ac31e8f396b1843a388a",
+      "woff2_sha256": "16413ea7a45ce1b5c4bbb69df3514cebcc509bca23b047e8ee6261f566752943",
+      "full_woff2_sha256": "0795f8725179218fb5f453989adcf28b1ccd5146c28b714c27696bb7ecb0fe84",
+      "full_encoded_characters": 17096,
+      "preserved_glyphs": 18342,
+      "forms": 35,
+      "dakuten_clearance_units": {
+        "U+F450": 114.26,
+        "U+F452": 53.46,
+        "U+F454": 26.89,
+        "U+F456": 65.34,
+        "U+F458": 51.2,
+        "U+F467": 21.02,
+        "U+F469": 22.06
+      },
+      "component_clearance_units": {
+        "U+F460": 54.05,
+        "U+F461": 54.05,
+        "U+F462": 53.44,
+        "U+F463": 48.78,
+        "U+F467": 61.9,
+        "U+F45E": 45.29,
+        "U+F45F": 39.7,
+        "U+F452": 58.87,
+        "HWA repeated": 38.4
+      }
+    }
+  ],
+  "proof_variants": [
+    {
+      "family": "GenZui Serif Okinawan Optical",
+      "style": "Regular",
+      "kind": "Optical",
+      "donor": 500,
+      "file": "variants/GenZuiSerifOkinawanOptical-Regular.woff2",
+      "sha256": "2888a617911210829841369890c5fe53ae96af5666e80b6523f7497ffa32466a"
+    },
+    {
+      "family": "GenZui Serif Okinawan Optical",
+      "style": "Bold",
+      "kind": "Optical",
+      "donor": 750,
+      "file": "variants/GenZuiSerifOkinawanOptical-Bold.woff2",
+      "sha256": "07de1b495b1874b438f2a635e0e8272cfbd302fb53d0f093ac396f984299b65a"
+    }
+  ]
+}

@@ -51,10 +51,14 @@ def compose(value):
     return value
 
 
-def build():
+def build(*, family='Serif', version=VERSION, font_out=FONT_OUT, output=OUT):
+    VERSION, FONT_OUT, OUT = version, font_out, output
+    jp = '源萃明朝' if family == 'Serif' else '源萃ゴシック'
+    release_key = VERSION if family == 'Serif' else 'sans-okinawan-'+VERSION
+    image_key = VERSION if family == 'Serif' else 'sans-'+VERSION
     assert features.check('raqm'), 'Sentence rendering needs HarfBuzz/RAQM shaping.'
     OUT.mkdir(parents=True, exist_ok=True)
-    fonts = {style: FONT_OUT / f'GenZuiSerif-{style}.ttf' for style in ('Regular', 'Bold')}
+    fonts = {style: FONT_OUT / f'GenZui{family}-{style}.ttf' for style in ('Regular', 'Bold')}
     for style, path in fonts.items():
         cmap = TTFont(path).getBestCmap()
         for sample in SENTENCES + CHARACTERS:
@@ -84,7 +88,7 @@ def build():
             draw.line((x*scale,y*scale,(x+16*dx)*scale,y*scale),fill=accent,width=scale*2)
             draw.line((x*scale,y*scale,x*scale,(y+16*dy)*scale),fill=accent,width=scale*2)
 
-    text(60, 63, '源萃明朝', 34, 'Bold')
+    text(60, 63, jp, 34, 'Bold')
     text(1140, 60, VERSION, 14, colour=mint, latin=True, anchor='rs')
     top, bottom, panel_width = 96, 570, 525
     for style, left, fill, ink, muted in [
@@ -109,14 +113,14 @@ def build():
             assert previous_bottom < bounds[1] < bounds[3] < (bottom-8)*scale, line
             previous_bottom = bounds[3]
     text(60, 610, 'genzui.mkpo.li', 16, colour=mint, latin=True)
-    name = f'genzui-{VERSION}-okinawan.png'
+    name = f'genzui-{image_key}-okinawan.png'
     image.save(OUT/name, optimize=True)
     # Replace the former four-image set with the single composition.
     for suffix in ('characters-regular', 'characters-bold', 'sentences', 'weights'):
-        (OUT/f'genzui-{VERSION}-okinawan-{suffix}.png').unlink(missing_ok=True)
-    cards = [(name, '源萃明朝の新沖縄文字27字。左がRegular、右がBold。下段は沖縄語の例文で、左は干しイカのおいしさ、右は食い運について述べている。')]
+        (OUT/f'genzui-{image_key}-okinawan-{suffix}.png').unlink(missing_ok=True)
+    cards = [(name, f'{jp}の新沖縄文字27字。左がRegular、右がBold。下段は沖縄語の例文で、左は干しイカのおいしさ、右は食い運について述べている。')]
     for lang in ('ja', 'en'):
-        shutil.copyfile(ROOT/'release'/f'announcement-{VERSION}-{lang}.txt', OUT/f'announcement-{lang}.txt')
+        shutil.copyfile(ROOT/'release'/f'announcement-{release_key}-{lang}.txt', OUT/f'announcement-{lang}.txt')
     manifest = {'version': VERSION, 'source': SOURCE_URL,
                 'source_title': '宮良信詳『うちなーぐち活用辞典』(2021)',
                 'character_source': CHARACTER_SOURCE_URL, 'pages': [121, 123],
@@ -138,6 +142,8 @@ def build():
     page += ' '.join(f'{s["style"]}：<a href="{SOURCE_URL}#page={s["pdf_page"]}">{s["page"]}頁「{s["headword"]}」</a>。{s["meaning"]}' for s in SENTENCES)
     page += '</p><p>原文の語句と句読点を保ち、字間と改行を調整。「とぅ・てぃ・でぃ・くゎ・くぃ・くぇ・ふぁ・ふぇ」を合字に置換。「ふぁ」は船津式のHWA字形で表記しています。</p>'
     page += f'<p>文字の由来：<a href="{CHARACTER_SOURCE_URL}">新沖縄文字の符号化提案</a></p><p><a href="alt-ja.txt">画像の代替テキスト</a></p><span id="status" role="status"></span></main><script>document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=async()=>{{const t=document.getElementById(b.dataset.copy);try{{await navigator.clipboard.writeText(t.value);document.getElementById("status").textContent="Copied."}}catch{{t.focus();t.select();document.getElementById("status").textContent="Select and copy the text."}}}})</script></html>'
+    page=page.replace('源萃明朝',jp).replace('0.118',VERSION)
+    if family=='Sans':page=page.replace('/genzui-okinawan/','/genzui-sans-okinawan-release/')
     (OUT/'index.html').write_text(page, encoding='utf-8')
     print('SNS: one 2400px character and sentence image, JA/EN copy, alt text and source record.')
 
