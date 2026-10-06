@@ -13,6 +13,7 @@ kana and Unicode 18.0 additions.
 
 [Home](https://genzui.mkpo.li/) ·
 [Design gallery](https://genzui.mkpo.li/gallery) ·
+[Font comparison](https://genzui.mkpo.li/compare) ·
 [Releases](https://github.com/mkpoli/GenZui/releases)
 
 ## Download and use
@@ -242,6 +243,21 @@ versioned release folders. Edit `site/`, `templates/` and
 `scripts/release_site.py` / `scripts/sans_site.py`.
 `build/site/` holds the offline development specimen with glyph comparisons.
 [Deployment notes](release/README.md) describe the Cloudflare configuration.
+
+### Font comparison page
+
+`/compare` sets GenZui beside other kana and hentaigana fonts. The fonts are
+pinned in `sources/compare-manifest.json`; Sukima Gothic needs a BOOTH login, so
+pass a local copy of its archive. Measuring is a separate step; the page build
+reads only the committed results. Other fonts are not shipped on the site: their
+glyphs appear as images rendered from the pinned files, in
+`research/font-comparison-images/`, with each font's credit beside them.
+
+```sh
+.venv/bin/python scripts/compare_sources.py --sukima PATH/sukima-gothic_ver11.41.zip
+.venv/bin/python scripts/compare_fonts.py   # writes research/font-comparison*.json
+.venv/bin/python scripts/compare_site.py    # writes build/site/compare.html
+```
 
 ## Licences and credits
 
