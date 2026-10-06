@@ -97,7 +97,7 @@ The [measurement report](sans-fu-weight-measurements.json) records the font
 hashes and readings. Only HWI changes in this weight revision; HWA and HWE remain unchanged.
 
 `full/` contains the extended full-family faces. The subset ZIP is written to
-`dist/GenZuiSansOkinawan-0.104.zip` after validation.
+`dist/GenZuiSansOkinawan-0.105.zip` after validation.
 
 This build extends the immutable Sans 0.103 fonts. It checks their hashes
 against the release's validation records and verifies the Noto source files
@@ -108,8 +108,10 @@ outside this extension. The versioned 0.103 assets remain immutable.
 
 ## Verification
 
-The checker compares every existing glyph's compiled outline and horizontal
-and vertical metrics with Sans 0.103. Every previously encoded character is
+The checker compares every unchanged glyph’s compiled outline and horizontal
+and vertical metrics with Sans 0.103 and 0.104. The 286 reweighted hentaigana
+match their pinned-source donors exactly; their advances and shaping placements
+remain unchanged. An explicit per-weight whitelist covers the corrected Okinawan forms. Every previously encoded character is
 also shaped in both directions. It checks the subset repertoire, family
 metadata, all 35 forms, native combining sequences and sentence samples,
 including TTF/WOFF2 parity. It verifies exact non-intersection of dakuten and
@@ -130,6 +132,12 @@ approving new font drawings.
 ![Regular and Bold beside native kana](sans-okinawan-proof.png)
 
 ## Release
+
+Version 0.105 calibrates selected Okinawan strokes and uses hentaigana donor
+axes 410/770. The donor compiler runs automatically before the font build;
+install `requirements-sans.lock` in `.venv-sans` first.
+The [weight correction report](sans-weight-correction.md) records the changes.
+
 
 The public full-family files are staged separately in `build/sans-release/`.
 The public subset is in `build/sans-okinawan-release/`; both specimens show
@@ -155,7 +163,7 @@ The staging step verifies the reviewed full TTF/WOFF2 hashes, copies the
 subset, and records every staged asset. Packaging checks those hashes and
 rejects unexpected files. The browser check renders all forms in both full
 and subset fonts at desktop and mobile widths. ZIP names are
-`GenZuiSans-0.104.zip` and `GenZuiSansOkinawan-0.104.zip`.
+`GenZuiSans-0.105.zip` and `GenZuiSansOkinawan-0.105.zip`.
 
 The SNS cards are 2400×1260 PNGs with Regular and Bold in two columns.
 The Funatsu card includes all 27 forms and two dictionary sentences;
@@ -164,5 +172,5 @@ Japanese posts, an English Funatsu post, alt text and source records accompany
 the images in `build/sans-okinawan-social/`.
 
 The production branch is `main`. Release assets and site deployment must be
-built from its clean merged commit. The immutable `sans-v0.104` directory
+built from its clean merged commit. The immutable `sans-v0.105` directory
 contains the full and subset TTF/WOFF2 files, both CSS files and both ZIPs.

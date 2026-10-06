@@ -1,4 +1,4 @@
-"""Stage the approved Sans 0.104 extension and its public Okinawan subset."""
+"""Stage the calibrated Sans release and its public Okinawan subset."""
 import html
 import json
 import shutil
@@ -8,6 +8,7 @@ from sans_okinawan import OUT as PROOF, BASE, VERSION, PREFIX, digest
 from sources import ROOT
 from okinawan import ENTRIES, DESCRIPTIONS
 from okinawan_sns import SENTENCES, compose
+from sans_weight_correction import AXES, POINTS as WEIGHT_POINTS
 
 FULL=ROOT/'build/sans-release'
 SUB=ROOT/'build/sans-okinawan-release'
@@ -52,6 +53,7 @@ def stage():
             provenance=json.loads(archive.read(f'sources{suffix}.json'))
             provenance.update(version=VERSION,encoded_characters=17096)
             provenance['source_kinds'].update({f'U+{cp:04X}':'GenZui Okinawan drawing: '+desc for cp,desc in DESCRIPTIONS.items()})
+            provenance['source_kinds'].update({f'U+{cp:04X}':f'Noto Sans Hentaigana instance at weight axis {AXES[style]}' for cp in WEIGHT_POINTS})
             write_json(FULL/f'sources{suffix}.json',provenance)
             (FULL/f'baseline-0.103-checks{suffix}.json').write_bytes(archive.read(f'checks{suffix}.json'))
         coverage=json.loads(archive.read('kana-coverage.json'));coverage.update(font_version=VERSION,font_sha256=checks['faces'][0]['full_sha256'])
@@ -63,7 +65,7 @@ def stage():
             shutil.copy2(PROOF/f'{PREFIX}-{style}.{ext}',SUB)
         record=dict(status='passed',family='GenZui Sans',style=style,version=VERSION,encoded_characters=17096,
                     ttf_sha256=digest(FULL/f'GenZuiSans-{style}.ttf'),woff2_sha256=digest(FULL/f'GenZuiSans-{style}.woff2'),
-                    baseline='0.103',preserved_glyphs=face['preserved_glyphs'],extension_validation='okinawan-checks.json')
+                    baseline='0.103',preserved_glyphs=face['preserved_glyphs'],reweighted_hentaigana=face['reweighted_hentaigana'],extension_validation='okinawan-checks.json')
         write_json(FULL/f'checks{suffix}.json',record)
     for folder,prefix,family in [(FULL,'GenZuiSans','GenZui Sans'),(SUB,PREFIX,'GenZui Sans Okinawan')]:
         (folder/'okinawan-checks.json').write_bytes((PROOF/'checks.json').read_bytes())
@@ -76,15 +78,16 @@ def stage():
     for name in ('OFL.txt','FRB-OFL.txt','FRB-README.md','Unicode-LICENSE.txt','source-manifest.json','sources.json'):
         shutil.copy2(PROOF/name,SUB/name)
     (FULL/'NOTICE.txt').write_bytes((PROOF/'full/NOTICE.txt').read_bytes())
+    shutil.copy2(PROOF/'hentaigana-weight-sources.json',FULL)
     (SUB/'NOTICE.txt').write_text((PROOF/'NOTICE.txt').read_text().split('Proof references')[0]+'Licensed under SIL Open Font License 1.1. Original notices are retained.\n')
     (SUB/'README.txt').write_text((ROOT/'templates/sans-okinawan-README.txt').read_text().replace('{{VERSION}}',VERSION).replace('beside native kana ',''))
-    (FULL/'README.txt').write_text(f'''GenZui Sans / 源萃ゴシック {VERSION}\nRegular and Bold · 17,096 encoded characters\n\nInstall the two TTF files, or load genzui-sans.css beside the WOFF2 files.\nOpen index.html for editable Okinawan samples.\n\nThis release preserves Sans 0.103 and adds 27 Funatsu forms and eight raised\nkatakana. Kana, kanji, hentaigana and historical forms remain available.\nThe separate GenZui Sans Okinawan subset contains 805 encoded characters\nfor kana sentences. It does not include kanji.\n\nPrivate-use characters require a compatible font: see okinawan-mappings.json.\nThe extension audit is in okinawan-checks.json; baseline-0.103-checks files\nrecord the original release's checks. Source notices accompany these OFL fonts.\n''')
+    (FULL/'README.txt').write_text(f'''GenZui Sans / 源萃ゴシック {VERSION}\nRegular and Bold · 17,096 encoded characters\n\nInstall the two TTF files, or load genzui-sans.css beside the WOFF2 files.\nOpen index.html for editable Okinawan samples.\n\nThis release balances the strokes of selected Okinawan forms and the 286\nhentaigana. It includes 27 Funatsu forms and eight raised katakana.\nKana, kanji and historical forms remain available.\nThe separate GenZui Sans Okinawan subset contains 805 encoded characters\nfor kana sentences. It does not include kanji.\n\nPrivate-use characters require a compatible font: see okinawan-mappings.json.\nThe extension audit is in okinawan-checks.json; baseline-0.103-checks files\nrecord the original release's checks. Source notices accompany these OFL fonts.\n''')
     # Remove stale packages' browser status before checking this staged tree.
     (FULL/'browser-checks.json').unlink(missing_ok=True)
     (SUB/'browser-checks.json').unlink(missing_ok=True)
     for folder in (FULL,SUB):
         write_json(folder/'staged-assets.json',{p.name:digest(p) for p in sorted(folder.iterdir()) if p.is_file()})
-    print('Staged full Sans 0.104 and sentence-ready subset from validated fonts.')
+    print(f'Staged full Sans {VERSION} and sentence-ready subset from validated fonts.')
 
 
 def package():

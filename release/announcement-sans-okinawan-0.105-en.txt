@@ -1,0 +1,4 @@
+GenZui Sans 0.105 refines stroke weight across the Okinawan forms and 286 hentaigana, with measurements against native Noto Sans kana.
+
+Regular and Bold, available as the full family or a kana-text subset:
+https://genzui.mkpo.li/sans
