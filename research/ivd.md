@@ -83,9 +83,16 @@ and rewrites `data/ivd/aliases.tsv`. Builds read only the committed table.
   `Jigmo2.ttf`, `Jigmo3.ttf`), CC0 1.0. Its unifications are GlyphWiki's
   community decisions. For Hanyo-Denshi-only, CAAPH, MSARG and KRName sequences
   they are the only evidence used.
+- [GlyphWiki](https://glyphwiki.org/), the community-edited glyph database behind
+  Jigmo. Each sequence has a page named after it, for example
+  [u8fbb-ue0102](https://glyphwiki.org/wiki/u8fbb-ue0102) for 辻 E0102.
 - Information-technology Promotion Agency (IPA), IPAmj Mincho 006.01
   (`ipamjm00601.zip`, 2019-05-30), IPA Font License v1.0, distributed for the
   [Moji Joho Kiban](https://moji.or.jp/mojikiban/font/) through
   [窓の杜](https://forest.watch.impress.co.jp/library/software/ipamjfont/).
   It is used only to check aliases. GenZui contains none of its outlines. The
   check covers Moji_Joho sequences only.
+- 文字情報技術促進協議会, [MJ文字情報検索システム](https://moji.or.jp/mojikibansearch/basic).
+  Its record for each MJ glyph name, for example
+  [MJ025760](https://moji.or.jp/mojikibansearch/info?MJ%E6%96%87%E5%AD%97%E5%9B%B3%E5%BD%A2%E5%90%8D=MJ025760),
+  gives the Moji_Joho reference glyph and its IVS.
