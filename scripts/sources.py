@@ -9,8 +9,8 @@ from zipfile import ZipFile
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def verify(fetch=False):
-    manifest = json.loads((ROOT / "sources/manifest.json").read_text())
+def verify(fetch=False, manifest="manifest.json"):
+    manifest = json.loads((ROOT / "sources" / manifest).read_text())
     archives = {}
     for item in manifest["files"]:
         path = ROOT / item["path"]
