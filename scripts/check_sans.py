@@ -18,6 +18,7 @@ import pathops
 from repertoire import repertoire, MINNAN_MARKS, MINNAN_TONES
 from honkoku import HONKOKU
 from gugyeol import PUA as GUGYEOL_PUA
+from ivd import check_ivd
 from check_coverage import check_coverage
 
 
@@ -94,8 +95,7 @@ def check(weight=400):
         assert font['glyf'][name].getCoordinates(font['glyf']) == web['glyf'][name].getCoordinates(web['glyf']), name
         for table in ('hmtx', 'vmtx'):
             assert font[table][name] == web[table][name], (name, table)
-    assert [t.uvsDict for t in font['cmap'].tables if t.format == 14] == [
-        t.uvsDict for t in base['cmap'].tables if t.format == 14]
+    ivd = check_ivd(font, base, engine, shape)
     for field in ('ascent', 'descent', 'lineGap'):
         assert getattr(font['hhea'], field) == getattr(base['hhea'], field), field
     for field in ('sTypoAscender', 'sTypoDescender', 'sTypoLineGap'):
@@ -271,7 +271,7 @@ def check(weight=400):
         'woff2_sha256': hashlib.sha256((OUT/(stem_name+'.woff2')).read_bytes()).hexdigest(),
         'encoded_characters': len(cmap), 'unchanged_jp_characters': len(base_cmap),
         'unchanged_jp_glyphs_and_metrics': len(base.getGlyphOrder()),
-        'jp_shaping_cases': base_cases, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
+        'jp_shaping_cases': base_cases, 'ivd_aliases': ivd, 'noto_hentaigana_outlines': retained, 'median_stems': stems,
         'refits': {f'U+{cp:04X}': spec['reason'] for cp, spec in refits.items()},
         'mark_cases': mark_cases, 'minnan_cases': minnan_cases, 'kana_coverage': coverage['coverage'],
         'gugyeol_pua_characters': len(GUGYEOL_PUA),
