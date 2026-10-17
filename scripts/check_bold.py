@@ -206,12 +206,18 @@ def main():
         # Cubic-to-quadratic conversion can move a bound by a fraction of a unit.
         assert all(abs(a - b) <= 1 for a, b in zip(bounds(font, 0x5344), bounds(cjk, 0x5344)))
 
+    # Bold carries Noto Serif JP Bold's sequences plus the IVD aliases, in TTF and WOFF2.
+    from check_serif import shape as shape_text, shaper
+    from ivd import check_ivd, uvs
+    ivd = check_ivd(font, instance('NotoSerifJP', 700), shaper(BOLD.read_bytes()), shape_text)
+    assert uvs(web) == uvs(font)
+
     digest = hashlib.sha256(BOLD.read_bytes()).hexdigest()
     (OUT/'checks-bold.json').write_text(json.dumps({
         'family': FAMILY, 'style': 'Bold', 'font_version': 'Version ' + VERSION,
         'ttf_sha256': digest,
         'woff2_sha256': hashlib.sha256((OUT/(BOLD_STEM + '.woff2')).read_bytes()).hexdigest(),
-        'outline_ligatures': len(LIGATURE_POINTS),
+        'outline_ligatures': len(LIGATURE_POINTS), 'ivd_aliases': ivd,
         'native_ligature_donors': {'body': 700, 'reduced_vowels': 750, 'KWI_KWE': {'body': 850, 'vowel': 900}, 'HWA_loop': 900, 'KWA_vowel': 900, 'KWA_loop': 900, 'HWE_diagonal': 800, 'HWE_terminal': 650, 'TSI': [900, 900], 'TU_WU': {'entry': 850, 'bowl': 900, 'WU_return': 700}, 'verified': True},
         'native_ligature_gains': {k: gains[k] for k in sorted(native_labels)},
         'compatible_masters': len(pairs) + 2, 'drawings': len(gains),
