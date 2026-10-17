@@ -30,6 +30,11 @@ outlines retain their CC0 status; the bundled dedication records those terms.
 Source attribution in `NOTICE.txt` records their use in the comparison fonts.
 The current GenZui NARI is a new drawing.
 
+The IVD alias table `data/ivd/aliases.tsv` records which sequences share a
+shape. It is derived from Jigmo (CC0 1.0) and checked against IPAmj Mincho 006.01
+(IPA Font License v1.0). No outline from either font enters GenZui, and IPAmj is
+not distributed. See [IVD notes](ivd.md).
+
 ## Modification and distribution
 
 [OFL 1.1](https://openfontlicense.org/open-font-license-official-text/) permits
