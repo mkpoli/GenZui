@@ -1,0 +1,14 @@
+Brotli==1.1.0
+fonttools==4.60.1
+ImageIO==2.37.4
+lazy-loader==0.5
+networkx==3.6.1
+numpy==2.5.3
+packaging==26.3
+pillow==12.3.0
+scikit-image==0.26.0
+scipy==1.18.1
+skia-pathops==0.9.2
+tifffile==2026.9.15
+uharfbuzz==0.56.1
+zopfli==0.4.3

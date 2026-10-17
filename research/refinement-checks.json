@@ -1,0 +1,133 @@
+{
+  "date": "2026-09-21",
+  "version": "0.101",
+  "status": "passed",
+  "previous_ttf_sha256": "e9f24a80161744d5d3a50b5437c4469a4ef0a779f89e2e238bf7258c12e68cb8",
+  "ttf_sha256": "3f1373a1f9c86c88d2039b7296268cd73a2159bed5119074969d9b25e48ad321",
+  "changed_outlines": [
+    "U+1B123",
+    "U+1B124",
+    "U+1B125",
+    "U+1B126",
+    "U+1B127",
+    "U+1B128",
+    "U+2A708",
+    "U+2CEFF",
+    "U+2CF00",
+    "U+2CF02"
+  ],
+  "unchanged_encoded_outlines": 17027,
+  "outline_checks": {
+    "connectivity_checks": [
+      {
+        "codepoint": "U+1B123",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B126",
+        "size_px": 48,
+        "components": 3
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B124",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B125",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+1B126",
+        "size_px": 128,
+        "components": 3
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 128,
+        "components": 1
+      }
+    ],
+    "ri_stems_native_units": [
+      61,
+      65
+    ],
+    "ri_stems_revised_units": [
+      61,
+      69
+    ],
+    "nari_baseline_y_min": -32
+  }
+}

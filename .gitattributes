@@ -1,0 +1,3 @@
+# Preserve pinned upstream bytes, including original line endings.
+sources/upstream/** -text -whitespace
+research/baselines/Jigmo-CC0.txt -text -whitespace

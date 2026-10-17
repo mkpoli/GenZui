@@ -1,0 +1,938 @@
+{
+  "url": "http://localhost:4179/",
+  "results": [
+    {
+      "version": "Chrome/153.0.8010.53",
+      "pages": {
+        "minnan": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "13 tone letters",
+            "hooked feature",
+            "curved feature",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        },
+        "gallery": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "11 drawn forms",
+            "21 constructions",
+            "10 small forms",
+            "released forms shown once",
+            "both reading directions",
+            "vertical setting",
+            "hooked outline",
+            "hooked h/v contexts",
+            "curved outline",
+            "curved h/v contexts",
+            "Kureedo link",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "fallback preserves gallery contexts",
+            "no horizontal overflow"
+          ]
+        },
+        "index": {
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "inventory loaded",
+            "Kureedo link",
+            "versioned CSS",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ],
+          "ime": {
+            "status": "passed",
+            "native_composition": true,
+            "palette_click": true,
+            "subsequent_input": true
+          },
+          "interactions": [
+            "initial historical count",
+            "initial page bounded",
+            "seven Unicode 18 cards",
+            "Unicode 18 filtering",
+            "code point lookup",
+            "construction status",
+            "all hentaigana",
+            "pagination",
+            "all ten ligatures",
+            "all ten small kana",
+            "15 Minnan forms",
+            "overline context",
+            "full font count",
+            "PAATU included",
+            "complete kana audit",
+            "literal multi-character lookup",
+            "ASCII character lookup",
+            "CJK ligature source",
+            "redrawn NARI source",
+            "58 constructions",
+            "full JP base",
+            "empty search",
+            "copy selected character",
+            "Minnan preset",
+            "typesetter preset",
+            "size control",
+            "spacing control",
+            "vertical writing",
+            "missing character indication",
+            "reset specimen",
+            "no horizontal page overflow",
+            "local download links"
+          ],
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "okinawan": [
+            "27 Funatsu palette keys",
+            "kana and canonical combining output",
+            "palette replaces selection",
+            "editor focus restored",
+            "composition waits for commit",
+            "composition disables palette and copy",
+            "composition commit updates result",
+            "distinct romaji syllables",
+            "8 raised palette keys",
+            "raised-vowel example",
+            "^a plain input",
+            "^i plain input",
+            "^u plain input",
+            "^e plain input",
+            "^o plain input",
+            "^tsu plain input",
+            "^fu plain input",
+            "^n plain input",
+            "wrong-system shortcuts retained",
+            "system draft restored",
+            "legacy PUA normalized",
+            "visible output code points",
+            "copy fallback selects exact plain text",
+            "clear updates result and codepoints",
+            "26 visible PUA inventory entries",
+            "PUA identified as private use"
+          ],
+          "collections": {
+            "numerals": [
+              "numerals permalink selects sample",
+              "numerals permalink selects collection",
+              "numerals permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ],
+            "ideographic-description": [
+              "ideographic-description permalink selects sample",
+              "ideographic-description permalink selects collection",
+              "ideographic-description permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ],
+            "tallies": [
+              "tallies permalink selects sample",
+              "tallies permalink selects collection",
+              "tallies permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ]
+          }
+        }
+      },
+      "browser": "chrome",
+      "status": "passed",
+      "owned_processes_stopped": true
+    },
+    {
+      "version": "Chrome/8.2.4133.68",
+      "pages": {
+        "minnan": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "13 tone letters",
+            "hooked feature",
+            "curved feature",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        },
+        "gallery": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "11 drawn forms",
+            "21 constructions",
+            "10 small forms",
+            "released forms shown once",
+            "both reading directions",
+            "vertical setting",
+            "hooked outline",
+            "hooked h/v contexts",
+            "curved outline",
+            "curved h/v contexts",
+            "Kureedo link",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "fallback preserves gallery contexts",
+            "no horizontal overflow"
+          ]
+        },
+        "index": {
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "inventory loaded",
+            "Kureedo link",
+            "versioned CSS",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ],
+          "ime": {
+            "status": "passed",
+            "native_composition": true,
+            "palette_click": true,
+            "subsequent_input": true
+          },
+          "interactions": [
+            "initial historical count",
+            "initial page bounded",
+            "seven Unicode 18 cards",
+            "Unicode 18 filtering",
+            "code point lookup",
+            "construction status",
+            "all hentaigana",
+            "pagination",
+            "all ten ligatures",
+            "all ten small kana",
+            "15 Minnan forms",
+            "overline context",
+            "full font count",
+            "PAATU included",
+            "complete kana audit",
+            "literal multi-character lookup",
+            "ASCII character lookup",
+            "CJK ligature source",
+            "redrawn NARI source",
+            "58 constructions",
+            "full JP base",
+            "empty search",
+            "copy selected character",
+            "Minnan preset",
+            "typesetter preset",
+            "size control",
+            "spacing control",
+            "vertical writing",
+            "missing character indication",
+            "reset specimen",
+            "no horizontal page overflow",
+            "local download links"
+          ],
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "okinawan": [
+            "27 Funatsu palette keys",
+            "kana and canonical combining output",
+            "palette replaces selection",
+            "editor focus restored",
+            "composition waits for commit",
+            "composition disables palette and copy",
+            "composition commit updates result",
+            "distinct romaji syllables",
+            "8 raised palette keys",
+            "raised-vowel example",
+            "^a plain input",
+            "^i plain input",
+            "^u plain input",
+            "^e plain input",
+            "^o plain input",
+            "^tsu plain input",
+            "^fu plain input",
+            "^n plain input",
+            "wrong-system shortcuts retained",
+            "system draft restored",
+            "legacy PUA normalized",
+            "visible output code points",
+            "copy fallback selects exact plain text",
+            "clear updates result and codepoints",
+            "26 visible PUA inventory entries",
+            "PUA identified as private use"
+          ],
+          "collections": {
+            "numerals": [
+              "numerals permalink selects sample",
+              "numerals permalink selects collection",
+              "numerals permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ],
+            "ideographic-description": [
+              "ideographic-description permalink selects sample",
+              "ideographic-description permalink selects collection",
+              "ideographic-description permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ],
+            "tallies": [
+              "tallies permalink selects sample",
+              "tallies permalink selects collection",
+              "tallies permalink count",
+              "no release-batch collection",
+              "numerals count",
+              "numerals includes existing related characters",
+              "numerals pagination is complete",
+              "numerals sample has full coverage",
+              "numerals sample has relevant characters",
+              "numerals vertical sample",
+              "numerals horizontal sample",
+              "numerals constructed outlines",
+              "numerals native Noto outlines",
+              "tallies count",
+              "tallies includes existing related characters",
+              "tallies pagination is complete",
+              "tallies exact repertoire",
+              "tallies sample has full coverage",
+              "tallies sample has relevant characters",
+              "tallies vertical sample",
+              "tallies horizontal sample",
+              "tallies constructed outlines",
+              "tallies native Noto outlines",
+              "ideographic-description count",
+              "ideographic-description includes existing related characters",
+              "ideographic-description pagination is complete",
+              "ideographic-description exact repertoire",
+              "ideographic-description sample has full coverage",
+              "ideographic-description sample has relevant characters",
+              "ideographic-description vertical sample",
+              "ideographic-description horizontal sample",
+              "ideographic-description constructed outlines",
+              "ideographic-description native Noto outlines",
+              "imported twenty is a numeral",
+              "extended kana has its own scope",
+              "full font count unchanged",
+              "all description characters covered",
+              "all ideographic tally marks covered",
+              "CJK numeral twenty covered",
+              "audit has no batch category",
+              "no horizontal page overflow"
+            ]
+          }
+        }
+      },
+      "browser": "vivaldi",
+      "status": "passed",
+      "owned_processes_stopped": true
+    },
+    {
+      "browser": "firefox",
+      "pages": {
+        "minnan": {
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "13 tone letters",
+            "hooked feature",
+            "curved feature",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            }
+          ]
+        },
+        "gallery": {
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "11 drawn forms",
+            "21 constructions",
+            "10 small forms",
+            "released forms shown once",
+            "both reading directions",
+            "vertical setting",
+            "hooked outline",
+            "hooked h/v contexts",
+            "curved outline",
+            "curved h/v contexts",
+            "Kureedo link",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "fallback preserves gallery contexts",
+            "no horizontal overflow"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            }
+          ]
+        },
+        "index": {
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "inventory loaded",
+            "Kureedo link",
+            "versioned CSS",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow",
+            "initial historical count",
+            "initial page bounded",
+            "seven Unicode 18 cards",
+            "Unicode 18 filtering",
+            "code point lookup",
+            "construction status",
+            "all hentaigana",
+            "pagination",
+            "all ten ligatures",
+            "all ten small kana",
+            "15 Minnan forms",
+            "overline context",
+            "full font count",
+            "PAATU included",
+            "complete kana audit",
+            "literal multi-character lookup",
+            "ASCII character lookup",
+            "CJK ligature source",
+            "redrawn NARI source",
+            "58 constructions",
+            "full JP base",
+            "empty search",
+            "copy selected character",
+            "Minnan preset",
+            "typesetter preset",
+            "size control",
+            "spacing control",
+            "vertical writing",
+            "missing character indication",
+            "reset specimen",
+            "no horizontal page overflow",
+            "local download links",
+            "27 Funatsu palette keys",
+            "kana and canonical combining output",
+            "palette replaces selection",
+            "editor focus restored",
+            "composition waits for commit",
+            "composition disables palette and copy",
+            "composition commit updates result",
+            "distinct romaji syllables",
+            "8 raised palette keys",
+            "raised-vowel example",
+            "^a plain input",
+            "^i plain input",
+            "^u plain input",
+            "^e plain input",
+            "^o plain input",
+            "^tsu plain input",
+            "^fu plain input",
+            "^n plain input",
+            "wrong-system shortcuts retained",
+            "system draft restored",
+            "legacy PUA normalized",
+            "visible output code points",
+            "copy fallback selects exact plain text",
+            "clear updates result and codepoints",
+            "26 visible PUA inventory entries",
+            "PUA identified as private use"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            },
+            {
+              "family": "\"Historical Kana Local Fallback\"",
+              "status": "unloaded"
+            }
+          ]
+        }
+      },
+      "collections": {
+        "numerals": {
+          "checks": [
+            "numerals permalink selects sample",
+            "numerals permalink selects collection",
+            "numerals permalink count",
+            "no release-batch collection",
+            "numerals count",
+            "numerals includes existing related characters",
+            "numerals pagination is complete",
+            "numerals sample has full coverage",
+            "numerals sample has relevant characters",
+            "numerals vertical sample",
+            "numerals horizontal sample",
+            "numerals constructed outlines",
+            "numerals native Noto outlines",
+            "tallies count",
+            "tallies includes existing related characters",
+            "tallies pagination is complete",
+            "tallies exact repertoire",
+            "tallies sample has full coverage",
+            "tallies sample has relevant characters",
+            "tallies vertical sample",
+            "tallies horizontal sample",
+            "tallies constructed outlines",
+            "tallies native Noto outlines",
+            "ideographic-description count",
+            "ideographic-description includes existing related characters",
+            "ideographic-description pagination is complete",
+            "ideographic-description exact repertoire",
+            "ideographic-description sample has full coverage",
+            "ideographic-description sample has relevant characters",
+            "ideographic-description vertical sample",
+            "ideographic-description horizontal sample",
+            "ideographic-description constructed outlines",
+            "ideographic-description native Noto outlines",
+            "imported twenty is a numeral",
+            "extended kana has its own scope",
+            "full font count unchanged",
+            "all description characters covered",
+            "all ideographic tally marks covered",
+            "CJK numeral twenty covered",
+            "audit has no batch category",
+            "no horizontal page overflow"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            }
+          ]
+        },
+        "ideographic-description": {
+          "checks": [
+            "ideographic-description permalink selects sample",
+            "ideographic-description permalink selects collection",
+            "ideographic-description permalink count",
+            "no release-batch collection",
+            "numerals count",
+            "numerals includes existing related characters",
+            "numerals pagination is complete",
+            "numerals sample has full coverage",
+            "numerals sample has relevant characters",
+            "numerals vertical sample",
+            "numerals horizontal sample",
+            "numerals constructed outlines",
+            "numerals native Noto outlines",
+            "tallies count",
+            "tallies includes existing related characters",
+            "tallies pagination is complete",
+            "tallies exact repertoire",
+            "tallies sample has full coverage",
+            "tallies sample has relevant characters",
+            "tallies vertical sample",
+            "tallies horizontal sample",
+            "tallies constructed outlines",
+            "tallies native Noto outlines",
+            "ideographic-description count",
+            "ideographic-description includes existing related characters",
+            "ideographic-description pagination is complete",
+            "ideographic-description exact repertoire",
+            "ideographic-description sample has full coverage",
+            "ideographic-description sample has relevant characters",
+            "ideographic-description vertical sample",
+            "ideographic-description horizontal sample",
+            "ideographic-description constructed outlines",
+            "ideographic-description native Noto outlines",
+            "imported twenty is a numeral",
+            "extended kana has its own scope",
+            "full font count unchanged",
+            "all description characters covered",
+            "all ideographic tally marks covered",
+            "CJK numeral twenty covered",
+            "audit has no batch category",
+            "no horizontal page overflow"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            }
+          ]
+        },
+        "tallies": {
+          "checks": [
+            "tallies permalink selects sample",
+            "tallies permalink selects collection",
+            "tallies permalink count",
+            "no release-batch collection",
+            "numerals count",
+            "numerals includes existing related characters",
+            "numerals pagination is complete",
+            "numerals sample has full coverage",
+            "numerals sample has relevant characters",
+            "numerals vertical sample",
+            "numerals horizontal sample",
+            "numerals constructed outlines",
+            "numerals native Noto outlines",
+            "tallies count",
+            "tallies includes existing related characters",
+            "tallies pagination is complete",
+            "tallies exact repertoire",
+            "tallies sample has full coverage",
+            "tallies sample has relevant characters",
+            "tallies vertical sample",
+            "tallies horizontal sample",
+            "tallies constructed outlines",
+            "tallies native Noto outlines",
+            "ideographic-description count",
+            "ideographic-description includes existing related characters",
+            "ideographic-description pagination is complete",
+            "ideographic-description exact repertoire",
+            "ideographic-description sample has full coverage",
+            "ideographic-description sample has relevant characters",
+            "ideographic-description vertical sample",
+            "ideographic-description horizontal sample",
+            "ideographic-description constructed outlines",
+            "ideographic-description native Noto outlines",
+            "imported twenty is a numeral",
+            "extended kana has its own scope",
+            "full font count unchanged",
+            "all description characters covered",
+            "all ideographic tally marks covered",
+            "CJK numeral twenty covered",
+            "audit has no batch category",
+            "no horizontal page overflow"
+          ],
+          "fonts": [
+            {
+              "family": "GenZui",
+              "status": "loaded"
+            }
+          ]
+        }
+      },
+      "version": "156.0",
+      "status": "passed",
+      "owned_processes_stopped": true
+    }
+  ],
+  "version": "0.114",
+  "ttf_sha256": "b104e98d7adb448ca6b834b0e7e7ba59093c17dba2d90dc4cf422fbe3927cd4c",
+  "home_sha256": "731daf6443c71b948a490e196d5a8f28dce3ae259cfe15ed46936f47f51666c8",
+  "method": "Windows isolated-profile Chrome/Vivaldi CDP and Firefox Marionette; public pages, input interactions, four Chromium viewport widths; native IME regression in Chrome and Vivaldi."
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.103",
+  "compared_to": "0.102",
+  "changed_encoded_outlines": [
+    "U+1B11F",
+    "U+1B123",
+    "U+1B124",
+    "U+2A708",
+    "U+2CEFF",
+    "U+2CF00",
+    "U+2CF02"
+  ],
+  "unchanged_encoded_outlines": 17045,
+  "new_unencoded_alternates": [
+    "hist.u1B11F.ss01"
+  ],
+  "status": "passed"
+}

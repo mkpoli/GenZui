@@ -1,0 +1,49 @@
+{
+  "checked": "2026-09-20",
+  "criterion": "Encoded cmap entry with a nonempty outline in the inspected binary",
+  "fonts": [
+    {
+      "name": "Noto Serif",
+      "input_sha256": "94d31f3669977a8464d7f4c6597a2c0bacab636e70548e1a3184ffc7e0a5abf1",
+      "hentaigana": 286,
+      "unicode18": [],
+      "target_total": 290
+    },
+    {
+      "name": "Study B",
+      "input_sha256": "f307f86afca64dac355cdf12b400c442d6c7fc2b9a178e34877b22e3a2b83283",
+      "hentaigana": 16,
+      "unicode18": [],
+      "target_total": 16
+    },
+    {
+      "name": "Noto Sans",
+      "input_sha256": "3c5055101b0bdbe63b216c488665853bfafc312267a899b45cd76be3e125727a",
+      "hentaigana": 285,
+      "unicode18": [],
+      "target_total": 288
+    },
+    {
+      "name": "Sukima",
+      "input_sha256": "446ff08d7c728f87b9d70d6f8a2c297cf2f4efff8fcbe1e0aa251b1416694719",
+      "hentaigana": 286,
+      "unicode18": [],
+      "target_total": 300
+    },
+    {
+      "name": "GenSeki",
+      "input_sha256": "ba847f65476fa4fd975af1a66bab31800d27ab7406503e8d2f63c6d7900cf093",
+      "hentaigana": 286,
+      "unicode18": [
+        "U+1B123",
+        "U+1B124",
+        "U+1B125",
+        "U+1B126",
+        "U+1B127",
+        "U+1B128",
+        "U+1B168"
+      ],
+      "target_total": 309
+    }
+  ]
+}

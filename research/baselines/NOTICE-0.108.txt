@@ -1,0 +1,4 @@
+GenZui Serif 0.108 comparison subset.
+Derived from Noto Serif JP, Noto Serif Hentaigana and GenZui drawings.
+Distributed under SIL Open Font License 1.1; see OFL.txt.
+The subset retains the original copyright and naming records.

@@ -1,0 +1,36 @@
+{
+  "before": [
+    "GenZui, serif",
+    "GenZui, serif",
+    "GenZui, serif",
+    "GenZui, serif",
+    "GenZui, serif",
+    "GenZui, serif"
+  ],
+  "after": [
+    "Previous, serif",
+    "Previous, serif",
+    "Previous, serif",
+    "Previous, serif",
+    "Previous, serif",
+    "Previous, serif"
+  ],
+  "horizontal_pixel_difference_box": [
+    77,
+    31,
+    192,
+    84
+  ],
+  "vertical_pixel_difference_box": [
+    28,
+    104,
+    49,
+    220
+  ],
+  "status": "passed",
+  "comparison": "TOKI and TOTE context 0.112 / 0.111",
+  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c",
+  "gallery_sha256": "3efb39e212735541d2caac7641f8a471d8cf11f016f735e697ae94c9ae55cc8d",
+  "browser": "vivaldi",
+  "owned_processes_stopped": true
+}

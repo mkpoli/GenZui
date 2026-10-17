@@ -1,0 +1,402 @@
+{
+  "date": "2026-09-21",
+  "userscript_version": "0.2.0",
+  "userscript_sha256": "7469246463222e6404a828dfea6926a2df9f6a05c47af6c0ba69767b2c96cdaa",
+  "browser": "vivaldi",
+  "browser_version": "Chrome/8.2.4133.68",
+  "status": "passed",
+  "method": "Live Japanese and Chinese Wikipedia in Windows Vivaldi with an isolated profile; userscript injected with a GM_addStyle shim; actual glyph fonts inspected using CSS.getPlatformFontsForNode. Tampermonkey installation requires updating the existing script.",
+  "japanese_chart_before": [
+    {
+      "id": "kana-probe-0",
+      "text": "𛄲",
+      "title": "U+1B132: HIRAGANA LETTER SMALL KO",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-1",
+      "text": "𛅐",
+      "title": "U+1B150: HIRAGANA LETTER SMALL WI",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-2",
+      "text": "𛅑",
+      "title": "U+1B151: HIRAGANA LETTER SMALL WE",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-3",
+      "text": "𛅒",
+      "title": "U+1B152: HIRAGANA LETTER SMALL WO",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-4",
+      "text": "𛅕",
+      "title": "U+1B155: KATAKANA LETTER SMALL KO",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-5",
+      "text": "𛅤",
+      "title": "U+1B164: KATAKANA LETTER SMALL WI",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-6",
+      "text": "𛅥",
+      "title": "U+1B165: KATAKANA LETTER SMALL WE",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-7",
+      "text": "𛅦",
+      "title": "U+1B166: KATAKANA LETTER SMALL WO",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-8",
+      "text": "𛅧",
+      "title": "U+1B167: KATAKANA LETTER SMALL N",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-9",
+      "text": "𛅨",
+      "title": "U+1B168: KATAKANA LETTER SMALL ARCHAIC YE",
+      "fontFamily": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "inline": "\"Noto Sans JP\", sans-serif, \"Historical Kana Local Fallback\"",
+      "fonts": [
+        {
+          "familyName": "Noto Sans JP",
+          "postScriptName": "Noto-Sans-JP",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    }
+  ],
+  "japanese_chart_after": [
+    {
+      "id": "kana-probe-0",
+      "text": "𛄲",
+      "title": "U+1B132: HIRAGANA LETTER SMALL KO",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-1",
+      "text": "𛅐",
+      "title": "U+1B150: HIRAGANA LETTER SMALL WI",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-2",
+      "text": "𛅑",
+      "title": "U+1B151: HIRAGANA LETTER SMALL WE",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-3",
+      "text": "𛅒",
+      "title": "U+1B152: HIRAGANA LETTER SMALL WO",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-4",
+      "text": "𛅕",
+      "title": "U+1B155: KATAKANA LETTER SMALL KO",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-5",
+      "text": "𛅤",
+      "title": "U+1B164: KATAKANA LETTER SMALL WI",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-6",
+      "text": "𛅥",
+      "title": "U+1B165: KATAKANA LETTER SMALL WE",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-7",
+      "text": "𛅦",
+      "title": "U+1B166: KATAKANA LETTER SMALL WO",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-8",
+      "text": "𛅧",
+      "title": "U+1B167: KATAKANA LETTER SMALL N",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    },
+    {
+      "id": "kana-probe-9",
+      "text": "𛅨",
+      "title": "U+1B168: KATAKANA LETTER SMALL ARCHAIC YE",
+      "fontFamily": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "inline": "\"Historical Kana Local Fallback\", \"Noto Sans JP\", sans-serif",
+      "fonts": [
+        {
+          "familyName": "GenSeki Hentaigana Gothic",
+          "postScriptName": "GenSekiHentaiganaGothic",
+          "isCustomFont": false,
+          "glyphCount": 1
+        }
+      ]
+    }
+  ],
+  "range_limited_historical_glyphs": 311,
+  "bmp_digraphs_retaining_page_font": [
+    "U+309F",
+    "U+30FF"
+  ],
+  "ordinary_fonts_before": {
+    "familyName": "Noto Sans JP",
+    "postScriptName": "Noto-Sans-JP",
+    "isCustomFont": false,
+    "glyphCount": 17
+  },
+  "ordinary_fonts_after": {
+    "familyName": "Noto Sans JP",
+    "postScriptName": "Noto-Sans-JP",
+    "isCustomFont": false,
+    "glyphCount": 17
+  },
+  "bold": {
+    "familyName": "GenSeki Hentaigana Gothic",
+    "postScriptName": "GenSekiHentaiganaGothic-Bold",
+    "isCustomFont": false,
+    "glyphCount": 10
+  },
+  "combining_marks": {
+    "familyName": "GenSeki Hentaigana Gothic",
+    "postScriptName": "GenSekiHentaiganaGothic",
+    "isCustomFont": false,
+    "glyphCount": 2
+  },
+  "dynamic_text": {
+    "familyName": "GenSeki Hentaigana Gothic",
+    "postScriptName": "GenSekiHentaiganaGothic",
+    "isCustomFont": false,
+    "glyphCount": 1
+  },
+  "inserted_text": {
+    "familyName": "GenSeki Hentaigana Gothic",
+    "postScriptName": "GenSekiHentaiganaGothic",
+    "isCustomFont": false,
+    "glyphCount": 1
+  },
+  "input_font_stack": "\"Historical Kana Local Fallback\", Arial",
+  "password_untouched": true,
+  "text_unchanged": true,
+  "chinese_chart_characters_verified": 10,
+  "setup_preview": {
+    "familyName": "GenSeki Hentaigana Gothic",
+    "postScriptName": "GenSekiHentaiganaGothic",
+    "isCustomFont": false,
+    "glyphCount": 10
+  },
+  "owned_browser_processes_stopped": true,
+  "served_pages": {
+    "setup_sha256": "c37588342236c7fd279dde3bc879d82d1506e8213d7cff27e6df448197bf316a",
+    "specimen_sha256": "0bfddf12a081bc60f3216cfc25725b27a8cfb98e044b83002fe5fc6af7114303",
+    "layout_checks": [
+      {
+        "url": "http://localhost:4173/browser/browser-setup.html",
+        "width": 1440,
+        "scrollWidth": 1425
+      },
+      {
+        "url": "http://localhost:4173/browser/browser-setup.html",
+        "width": 390,
+        "scrollWidth": 375
+      },
+      {
+        "url": "http://localhost:4173/browser/browser-setup.html",
+        "width": 320,
+        "scrollWidth": 305
+      },
+      {
+        "url": "http://localhost:4173/",
+        "width": 1440,
+        "scrollWidth": 1425
+      },
+      {
+        "url": "http://localhost:4173/",
+        "width": 390,
+        "scrollWidth": 375
+      },
+      {
+        "url": "http://localhost:4173/",
+        "width": 320,
+        "scrollWidth": 305
+      }
+    ],
+    "windows_http_verified": true
+  }
+}

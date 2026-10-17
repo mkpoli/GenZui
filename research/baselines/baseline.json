@@ -1,0 +1,6 @@
+{
+  "version": "0.100",
+  "source_ttf_sha256": "e9f24a80161744d5d3a50b5437c4469a4ef0a779f89e2e238bf7258c12e68cb8",
+  "subset_woff2_sha256": "2066909f1d39d1b0bd67905f5f16e2adc0913d1236cf3841f1aa23cdbdf9f967",
+  "purpose": "Before/after comparison of ten historical kana; includes ordinary kana for reading context."
+}

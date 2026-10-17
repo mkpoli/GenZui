@@ -1,0 +1,19 @@
+{
+  "version": "0.104",
+  "compared_to": "0.103",
+  "changed_encoded_outlines": [
+    "U+1B11F",
+    "U+1B123",
+    "U+1B127",
+    "U+1B128",
+    "U+2A708",
+    "U+2CEFF",
+    "U+2CF00",
+    "U+2CF02"
+  ],
+  "unchanged_encoded_outlines": 17044,
+  "toki_unchanged": true,
+  "curved_wu_unchanged": true,
+  "status": "passed",
+  "ttf_sha256": "cdc737c25b3e4183221b26c5e001ab23e9b5215cc4831a19df9c52022ff4108c"
+}

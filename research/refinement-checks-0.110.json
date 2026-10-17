@@ -1,0 +1,314 @@
+{
+  "version": "0.110",
+  "ttf_sha256": "4114dff195aeb98e4135ab2f17334b09256521aeed69d7be1e78a05f2e63a2d7",
+  "iteration": {
+    "baseline": "0.109",
+    "changed_outlines": [],
+    "only_hooked_wu_alternate_changed": true,
+    "all_encoded_outlines_unchanged": true,
+    "koto_matches_accepted_E": true,
+    "curved_wu_default_unchanged": true,
+    "hooked_wu_stem_units": 62,
+    "hooked_wu_y_min": -58,
+    "stem_centres_high_to_low": {
+      "heights": [
+        610,
+        580,
+        550,
+        380,
+        350,
+        320,
+        290,
+        260,
+        230,
+        200
+      ],
+      "before": [
+        698.0,
+        705.5,
+        712.5,
+        733.5,
+        734.0,
+        733.5,
+        731.5,
+        728.5,
+        724.5,
+        718.5
+      ],
+      "after": [
+        698.0,
+        705.5,
+        712.5,
+        733.5,
+        734.5,
+        733.5,
+        731.5,
+        728.5,
+        724.5,
+        718.5
+      ]
+    },
+    "upper_bow_max_deviation_units": 0.5,
+    "native_ka_heel_samples": 11,
+    "native_ka_heel_max_deviation_units": 0,
+    "katakana_nari_lower_ink_ratio": 1.0,
+    "tomo_top_envelope_samples": 52,
+    "tomo_max_top_deviation_units": 1,
+    "reading_size_connectivity": [
+      {
+        "codepoint": "U+2A708",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2A708",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF00",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B123",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 24,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 32,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 40,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 48,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 64,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CEFF",
+        "size_px": 128,
+        "components": 2
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+2CF02",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B127",
+        "size_px": 128,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 24,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 32,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 40,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 48,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 64,
+        "components": 1
+      },
+      {
+        "codepoint": "U+1B128",
+        "size_px": 128,
+        "components": 1
+      }
+    ],
+    "status": "passed"
+  },
+  "wu_stylistic_set": {
+    "feature": "ss01",
+    "ui_name": "Hooked WU",
+    "default": "curved",
+    "alternate": "hooked",
+    "right_contour_top_units": 729,
+    "mark_cases": 40,
+    "only_wu_changes_in_full_repertoire": true,
+    "raster_connectivity": [
+      {
+        "size_px": 32,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 32,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 48,
+        "ss01": true,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": false,
+        "components": 2
+      },
+      {
+        "size_px": 128,
+        "ss01": true,
+        "components": 2
+      }
+    ],
+    "status": "passed"
+  },
+  "status": "passed"
+}

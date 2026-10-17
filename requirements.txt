@@ -1,0 +1,8 @@
+fonttools[woff]==4.60.1
+brotli==1.1.0
+uharfbuzz==0.56.1
+skia-pathops==0.9.2
+Pillow>=11,<13
+numpy>=2,<3
+scipy>=1.15,<2
+scikit-image>=0.25,<0.27

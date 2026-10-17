@@ -1,0 +1,196 @@
+{
+  "method": "Windows headless browsers with isolated profiles; CSS.getPlatformFontsForNode for mixed text, vertical text, marks, all historical targets and TTF; screenshots",
+  "results": [
+    {
+      "browser": "chrome",
+      "version": "153.0.8010.37",
+      "font_faces": [
+        {
+          "family": "Proof",
+          "status": "loaded"
+        },
+        {
+          "family": "ProofTTF",
+          "status": "loaded"
+        }
+      ],
+      "actual_fonts": {
+        "#historical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 286
+          }
+        ],
+        "#minnan-vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#mixed": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 105
+          }
+        ],
+        "#minnan": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
+          }
+        ],
+        "#all-targets": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 330
+          }
+        ],
+        "#ttf-targets": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 338
+          }
+        ],
+        "#marks": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 16
+          }
+        ],
+        "#vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
+          }
+        ]
+      },
+      "ots_error": false,
+      "owned_processes_stopped": true,
+      "status": "passed"
+    },
+    {
+      "browser": "vivaldi",
+      "version": "8.2.4133.68",
+      "font_faces": [
+        {
+          "family": "Proof",
+          "status": "loaded"
+        },
+        {
+          "family": "ProofTTF",
+          "status": "loaded"
+        }
+      ],
+      "actual_fonts": {
+        "#historical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 286
+          }
+        ],
+        "#minnan-vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 10
+          }
+        ],
+        "#mixed": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 105
+          }
+        ],
+        "#minnan": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
+          }
+        ],
+        "#all-targets": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 330
+          }
+        ],
+        "#ttf-targets": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 338
+          }
+        ],
+        "#marks": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 16
+          }
+        ],
+        "#vertical": [
+          {
+            "familyName": "GenZui Serif",
+            "postScriptName": "GenZuiSerif-Regular",
+            "isCustomFont": true,
+            "glyphCount": 28
+          }
+        ]
+      },
+      "ots_error": false,
+      "owned_processes_stopped": true,
+      "status": "passed"
+    },
+    {
+      "browser": "firefox",
+      "status": "passed",
+      "result": {
+        "status": "passed",
+        "target_count": 328,
+        "fonts": [
+          {
+            "family": "ProbeTTF",
+            "status": "loaded"
+          },
+          {
+            "family": "ProbeWOFF2",
+            "status": "loaded"
+          }
+        ],
+        "raster_equivalence": true
+      },
+      "version": "156.0",
+      "owned_processes_stopped": true,
+      "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+      "woff2_sha256": "fade95809d5da44b18d2ecfa6fa105ff3c2205bd79e646bb78cc48faff998406"
+    }
+  ],
+  "ttf_sha256": "8e97efcf604f1e0f0045c21425a7a14402003db985e6783169e74e70f2c0177e",
+  "woff2_sha256": "fade95809d5da44b18d2ecfa6fa105ff3c2205bd79e646bb78cc48faff998406"
+}

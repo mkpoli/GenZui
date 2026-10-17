@@ -1,0 +1,295 @@
+{
+  "url": "http://localhost:4173/release/",
+  "results": [
+    {
+      "version": "Chrome/153.0.8010.48",
+      "pages": {
+        "minnan": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "13 tone letters",
+            "hooked feature",
+            "curved feature",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        },
+        "gallery": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "11 drawn forms",
+            "21 constructions",
+            "10 small forms",
+            "released forms shown once",
+            "both reading directions",
+            "vertical setting",
+            "hooked outline",
+            "hooked h/v contexts",
+            "curved outline",
+            "curved h/v contexts",
+            "Kureedo link",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "fallback preserves gallery contexts",
+            "no horizontal overflow"
+          ]
+        },
+        "index": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "interactions": [
+            "initial historical count",
+            "initial page bounded",
+            "seven Unicode 18 cards",
+            "Unicode 18 filtering",
+            "code point lookup",
+            "construction status",
+            "all hentaigana",
+            "pagination",
+            "all ten ligatures",
+            "all ten small kana",
+            "15 Minnan forms",
+            "overline context",
+            "full font count",
+            "PAATU included",
+            "complete kana audit",
+            "literal multi-character lookup",
+            "ASCII character lookup",
+            "CJK ligature source",
+            "redrawn NARI source",
+            "22 constructions",
+            "full JP base",
+            "empty search",
+            "copy selected character",
+            "Minnan preset",
+            "typesetter preset",
+            "size control",
+            "spacing control",
+            "vertical writing",
+            "missing character indication",
+            "reset specimen",
+            "no horizontal page overflow",
+            "local download links"
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "inventory loaded",
+            "Kureedo link",
+            "versioned CSS",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        }
+      },
+      "browser": "chrome",
+      "status": "passed",
+      "owned_processes_stopped": true
+    },
+    {
+      "version": "Chrome/8.2.4133.68",
+      "pages": {
+        "minnan": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "13 tone letters",
+            "hooked feature",
+            "curved feature",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        },
+        "gallery": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "11 drawn forms",
+            "21 constructions",
+            "10 small forms",
+            "released forms shown once",
+            "both reading directions",
+            "vertical setting",
+            "hooked outline",
+            "hooked h/v contexts",
+            "curved outline",
+            "curved h/v contexts",
+            "Kureedo link",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "fallback preserves gallery contexts",
+            "no horizontal overflow"
+          ]
+        },
+        "index": {
+          "layouts": [
+            {
+              "width": 1440,
+              "scrollWidth": 1425
+            },
+            {
+              "width": 768,
+              "scrollWidth": 753
+            },
+            {
+              "width": 390,
+              "scrollWidth": 375
+            },
+            {
+              "width": 320,
+              "scrollWidth": 305
+            }
+          ],
+          "interactions": [
+            "initial historical count",
+            "initial page bounded",
+            "seven Unicode 18 cards",
+            "Unicode 18 filtering",
+            "code point lookup",
+            "construction status",
+            "all hentaigana",
+            "pagination",
+            "all ten ligatures",
+            "all ten small kana",
+            "15 Minnan forms",
+            "overline context",
+            "full font count",
+            "PAATU included",
+            "complete kana audit",
+            "literal multi-character lookup",
+            "ASCII character lookup",
+            "CJK ligature source",
+            "redrawn NARI source",
+            "22 constructions",
+            "full JP base",
+            "empty search",
+            "copy selected character",
+            "Minnan preset",
+            "typesetter preset",
+            "size control",
+            "spacing control",
+            "vertical writing",
+            "missing character indication",
+            "reset specimen",
+            "no horizontal page overflow",
+            "local download links"
+          ],
+          "checks": [
+            "one released face",
+            "canonical domain",
+            "share image",
+            "inventory loaded",
+            "Kureedo link",
+            "versioned CSS",
+            "fallback preserves specimen roots",
+            "fallback preserves specimen glyphs",
+            "no horizontal overflow"
+          ]
+        }
+      },
+      "browser": "vivaldi",
+      "status": "passed",
+      "owned_processes_stopped": true
+    }
+  ],
+  "font_version": "0.112",
+  "ttf_sha256": "66da0b1d794412593fcd62bcbb977085cf8db843b77b2ec199f1d3495ba2621c"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "genzui-site",
+  "private": true,
+  "scripts": {
+    "release:build": ".venv/bin/python scripts/release_site.py",
+    "deploy:check": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.135.0"
+  }
+}
