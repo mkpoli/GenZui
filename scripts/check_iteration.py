@@ -9,6 +9,7 @@ from okinawan import PUA as OKINAWAN_PUA
 from gugyeol import PUA as GUGYEOL_PUA
 from serif_forms import REVISION_0115, REVISION_0117
 from sources import ROOT
+from ivd import expected, uvs
 
 
 def check_iteration(path, font):
@@ -75,8 +76,8 @@ def check_iteration(path, font):
             indices.remove(old_count)
             record.Feature.LookupCount = len(indices)
     assert gsub.compile(font) == before['GSUB'].compile(before), 'previous GSUB rules'
-    assert [t.uvsDict for t in font['cmap'].tables if t.format == 14] == [
-        t.uvsDict for t in before['cmap'].tables if t.format == 14]
+    # Released sequences stay; the only additions are IVD aliases of them.
+    assert uvs(font) == expected(uvs(before))
     for cp in HONKOKU:
         name = cmap[cp]
         glyph = font['glyf'][name]

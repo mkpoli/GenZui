@@ -19,6 +19,7 @@ from check_coverage import check_coverage
 from honkoku import HONKOKU, SOURCE as CJK_SOURCE
 from gugyeol import PUA as GUGYEOL_PUA
 from sources import ROOT
+from ivd import check_ivd
 
 
 def serialized(font):
@@ -83,8 +84,7 @@ def check():
                 jp['glyf'][name].getCoordinates(jp['glyf'])), name
         assert font['hmtx'][name] == jp['hmtx'][name], name
         assert font['vmtx'][name] == jp['vmtx'][name], name
-    assert [t.uvsDict for t in font['cmap'].tables if t.format == 14] == [
-        t.uvsDict for t in jp['cmap'].tables if t.format == 14]
+    ivd = check_ivd(font, jp, engine, shape)
     for field in ('sTypoAscender', 'sTypoDescender', 'sTypoLineGap',
                   'usWinAscent', 'usWinDescent', 'fsSelection'):
         assert getattr(font['OS/2'], field) == getattr(jp['OS/2'], field), field
@@ -211,6 +211,7 @@ def check():
         'encoded_characters': len(cmap), 'unchanged_jp_characters': len(jp_cmap),
         'unchanged_jp_glyphs_and_metrics': len(jp.getGlyphOrder()),
         'jp_shaping_regression_cases': jp_cases, 'jp_variation_sequences_preserved': True,
+        'ivd_aliases': ivd,
         'target_characters': len(chars), 'unchanged_historical_outlines': retained,
         'unicode_named_hiragana_katakana_covered': len(named_kana),
         'okinawan': check_okinawan(font, engine, web_engine, shape, boxes),

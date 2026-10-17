@@ -25,6 +25,7 @@ from compatibility import PAATU, DESCRIPTION as PAATU_DESCRIPTION, add_paatu
 from honkoku import HONKOKU, TALLIES, DESCRIPTIONS as HONKOKU_DESCRIPTIONS, SOURCE as CJK_SOURCE, add_honkoku
 from okinawan import add_okinawan, PUA as OKINAWAN_PUA, DESCRIPTIONS as OKINAWAN_DESCRIPTIONS, ENTRIES as OKINAWAN_ENTRIES
 from gugyeol import add_gugyeol, PUA as GUGYEOL_PUA
+from ivd import add_ivd
 
 CJK_BOLD = CJK_SOURCE.with_name('NotoSerifCJKjp-Bold.otf')
 
@@ -327,6 +328,7 @@ def build(weight=400):
     gugyeol_descriptions = add_gugyeol(font, add, glyph,
         CJK_SOURCE if weight == 400 else CJK_BOLD, 'Noto Serif CJK JP')
     PROVENANCE.update({f'U+{cp:04X}': value for cp, value in gugyeol_descriptions.items()})
+    print(f'Aliased {add_ivd(font):,} IVD sequences to Adobe-Japan1 glyphs', flush=True)
     notices = []
     for family, source in (('NotoSerifJP', jp), ('NotoSerifHentaigana', donor)):
         notice = (ROOT/'sources/upstream'/family/'OFL.txt').read_text().split('\n\n')[0]

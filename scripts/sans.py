@@ -11,6 +11,7 @@ from repertoire import MINNAN_MARKS, MINNAN_TONES, repertoire
 from compatibility import PAATU, add_paatu
 from honkoku import HONKOKU, add_honkoku
 from gugyeol import add_gugyeol, PUA as GUGYEOL_PUA
+from ivd import add_ivd
 from minnan import import_forms, layout as minnan_layout
 from sans_forms import BOLD_TONE_BLEND, REFITS, SANS_SYMBOLS, alternate_wi, refit
 from sans_sources import (BOLD_ARCHAIC, BOLD_ARCHAIC_AXIS, BOLD_TEXT, BOLD_TEXT_AXIS, CACHE, CJK, CJK_BOLD,
@@ -143,6 +144,7 @@ def build(weight=400):
                                        'FRB Taiwanese Kana') + '; GenZui mark and tone positioning'
                        for cp in (*MINNAN_TONES, *MINNAN_MARKS)})
     update_cmap(font, additions)
+    print(f'Aliased {add_ivd(font):,} IVD sequences to Adobe-Japan1 glyphs', flush=True)
 
     # Bold's handakuten is 31 units wider and reaches 16 units lower; its marks
     # keep Regular's right edge and clearance above the base.
