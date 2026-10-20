@@ -47,8 +47,9 @@ split radicals, so cross-font image matching is not used.
 Sixty mapped Moji_Joho sequences were rendered beside IPAmj's glyph for the same
 sequence and IPAmj's other variants of the base character. Thirty were drawn at
 random and thirty from characters with four or more Moji_Joho variants. All
-sixty selected the IPAmj shape. `check_serif.py` and `check_sans.py` require
-every font's variation sequences to equal Noto's plus the aliases. They also
+sixty selected the IPAmj shape. `check_serif.py`, `check_bold.py`,
+`check_sans.py` and `check_sans_bold.py` require every face's variation
+sequences to equal Noto's plus the aliases. They also
 require each alias to shape, horizontally and vertically, to the glyph of its
 Adobe-Japan1 sequence.
 
