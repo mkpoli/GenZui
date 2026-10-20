@@ -68,13 +68,14 @@ def derive():
         jigmo.update(outlines(path))
     assert set(ivd) <= set(jigmo), len(set(ivd) - set(jigmo))
     ipamj = outlines(IPAMJ)
-    adobe = collections.defaultdict(dict)
+    adobe = collections.defaultdict(lambda: collections.defaultdict(list))
     for key, entries in sorted(ivd.items()):
         if any(collection == AJ1 for collection, _ in entries):
-            adobe[key[0]].setdefault(jigmo[key], key)
-    aliases = {key: adobe[key[0]][jigmo[key]] for key, entries in ivd.items()
+            adobe[key[0]][jigmo[key]].append(key)
+    # An outline shared by two Adobe-Japan1 sequences does not say which one is meant.
+    aliases = {key: adobe[key[0]][jigmo[key]][0] for key, entries in ivd.items()
                if all(collection != AJ1 for collection, _ in entries)
-               and jigmo[key] in adobe[key[0]]}
+               and len(adobe[key[0]].get(jigmo[key], ())) == 1}
     # IPAmj must draw every Moji_Joho sequence of one alias target alike, and
     # must not draw two targets' Moji_Joho sequences alike.
     targets, drawings = collections.defaultdict(set), collections.defaultdict(set)

@@ -10,13 +10,13 @@ sequences to the glyph of the Adobe-Japan1 sequence. No outlines are added.
 | Collection | Registered | Mapped in GenZui |
 | --- | ---: | ---: |
 | Adobe-Japan1 | 14,684 | 14,682 (from Noto) |
-| Moji_Joho | 11,384 | 4,586 |
-| Hanyo-Denshi | 13,045 | 4,647 |
+| Moji_Joho | 11,384 | 4,585 |
+| Hanyo-Denshi | 13,045 | 4,646 |
 | KRName | 36 | 28 |
 | CAAPH | 198 | 19 |
 | MSARG | 154 | 6 |
 
-Hanyo-Denshi and Moji_Joho share 9,866 sequences, so the 5,138 mapped
+Hanyo-Denshi and Moji_Joho share 9,866 sequences, so the 5,137 mapped
 sequences count under both where they are shared. The table is
 `data/ivd/aliases.tsv`; each row gives the sequence, its collections and
 identifiers, and the Adobe-Japan1 sequence and CID whose glyph it selects.
@@ -27,11 +27,14 @@ identifiers, and the Adobe-Japan1 sequence and CID whose glyph it selects.
    IVD sequence with [GlyphWiki](https://glyphwiki.org/) glyphs. When GlyphWiki
    unifies two sequences' shapes, Jigmo maps both to one glyph. A non-Adobe
    sequence whose Jigmo outline is identical to an Adobe-Japan1 sequence's on the
-   same base character becomes an alias of that sequence: 5,142 sequences.
+   same base character becomes an alias of that sequence. 5,142 sequences have
+   such an outline. Three of them match two Adobe-Japan1 sequences on the base,
+   which does not say which is meant, so they are dropped: U+59DA 姚 E0102 and
+   E0103, U+6E23 渣 E0103.
 2. IPAmj Mincho 006.01 is the reference font of the Moji_Joho collection. An
    alias is dropped when IPAmj draws the Moji_Joho sequences of one target with
-   different outlines, or draws two targets' sequences alike. This removed four
-   sequences: U+59DA 姚 E0102 and E0103, U+80AD 肭 E0101 and E0103.
+   different outlines, or draws two targets' sequences alike. This removed
+   U+80AD 肭 E0101 and E0103.
 3. The build copies each font's own Adobe-Japan1 mapping to the alias, so Serif
    and Sans, Regular and Bold, each select their own glyph.
 
@@ -57,14 +60,15 @@ Adobe-Japan1 sequence.
 
 | Collection | Unmapped | On characters GenZui lacks |
 | --- | ---: | ---: |
-| Moji_Joho | 6,798 | 2,469 |
-| Hanyo-Denshi | 8,398 | 3,618 |
+| Moji_Joho | 6,799 | 2,469 |
+| Hanyo-Denshi | 8,399 | 3,618 |
 | CAAPH | 179 | 29 |
 | MSARG | 148 | 68 |
 | KRName | 8 | 0 |
 
-These sequences select shapes that Noto's Japanese glyph set does not attest
-under any Adobe-Japan1 sequence. Supporting them requires new glyphs.
+Jigmo does not draw these sequences with the outline of exactly one
+Adobe-Japan1 sequence on the same base, apart from the two IPAmj vetoed above.
+Supporting them needs other evidence or new glyphs.
 
 ## Regenerating the table
 
