@@ -31,9 +31,11 @@ Source attribution in `NOTICE.txt` records their use in the comparison fonts.
 The current GenZui NARI is a new drawing.
 
 The IVD alias table `data/ivd/aliases.tsv` records which sequences share a
-shape. It is derived from Jigmo (CC0 1.0) and checked against IPAmj Mincho 006.01
-(IPA Font License v1.0). No outline from either font enters GenZui, and IPAmj is
-not distributed. See [IVD notes](ivd.md).
+shape. It is derived from GlyphWiki data, whose licence allows use and redistribution
+with or without modification, and checked against IPAmj Mincho 006.01 (IPA Font
+License v1.0). `data/ivd/glyphwiki.tsv` holds one digest per sequence and no
+glyph data. No outline from GlyphWiki or IPAmj enters GenZui, and IPAmj is not
+distributed. See [IVD notes](ivd.md).
 
 ## Modification and distribution
 

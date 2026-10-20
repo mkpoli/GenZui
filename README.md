@@ -83,7 +83,7 @@ separate typographic assessment.
 Shared ideographs keep Japanese regional forms. Chinese and Korean coverage
 follows each face’s Noto base, with 卄 from the matching Noto CJK font.
 Releases carry Noto's 14,682 Adobe-Japan1 variation sequences. Source builds
-of both faces add 5,137 Moji_Joho, Hanyo-Denshi, KRName, CAAPH and MSARG
+of both faces add 5,199 Moji_Joho, Hanyo-Denshi, KRName, CAAPH and MSARG
 sequences that select one of those glyphs; [IVD notes](research/ivd.md).
 Both families have Regular and Bold.
 
@@ -165,8 +165,9 @@ derivative with historical katakana and Ainu kana.
 
 Python 3.12 is supported. Source fonts and Unicode data are pinned by URL and
 SHA-256 in `sources/manifest.json` and `sources/sans-manifest.json`.
-The variation-sequence table `data/ivd/aliases.tsv` is derived from the files
-in `sources/ivd-manifest.json` by `scripts/ivd.py derive`.
+The variation-sequence table `data/ivd/aliases.tsv` is derived by
+`scripts/ivd.py derive` from a GlyphWiki extract, a review list and the files in
+`sources/ivd-manifest.json`.
 Each face has its own virtual environment; the Sans instance compiler needs a
 newer fontTools than the Serif environment.
 
