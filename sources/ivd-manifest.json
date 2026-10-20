@@ -7,30 +7,6 @@
       "size": 1346150
     },
     {
-      "path": "sources/upstream/Jigmo/Jigmo.ttf",
-      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
-      "archive_member": "Jigmo.ttf",
-      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
-      "sha256": "c8f295b9bd8f9f117a76b3a454aaaa1bb5b4babc18e254978c6deb88464e40cf",
-      "size": 30048112
-    },
-    {
-      "path": "sources/upstream/Jigmo/Jigmo2.ttf",
-      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
-      "archive_member": "Jigmo2.ttf",
-      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
-      "sha256": "5da3582efe77e22073b86b3b86b556d7111148a76b957cfb53318a91da2efff0",
-      "size": 35661996
-    },
-    {
-      "path": "sources/upstream/Jigmo/Jigmo3.ttf",
-      "url": "https://raw.githubusercontent.com/kamichikoichi/jigmo/a6893b2278e39747fc3476465f7fcacf0126bca8/docs/Jigmo-20250912.zip",
-      "archive_member": "Jigmo3.ttf",
-      "archive_sha256": "5744c7386d129475d87607ca66d043c8793c65448adeaedc921b6931890e5d0b",
-      "sha256": "815b18c1c670103723fe743090559208fdea47dc587ecb057a5a4721ee8dfeff",
-      "size": 7491948
-    },
-    {
       "path": "sources/upstream/IPAmj/ipamjm.ttf",
       "url": "https://dforest.watch.impress.co.jp/library/i/ipamjfont/10750/ipamjm00601.zip",
       "archive_member": "ipamjm.ttf",

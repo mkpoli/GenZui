@@ -1,0 +1,7 @@
+# Aliases whose GlyphWiki drawings differ only in how a stroke joins another or where a
+# component sits; every stroke and every contact is the same. Read by scripts/ivd.py derive.
+# GlyphWiki differences are measured in its 200-unit em.
+# sequence	adobe_japan1	difference
+865E E0103	865E E0101	The left-falling stroke of 吳 starts with its own head on the horizontal above it in one drawing and grows from it in the other.
+904F E0101	904F E0100	The left-falling stroke of 勹 in 曷 starts with its own head under 日 in one drawing and grows from 日 in the other.
+2710D E0101	2710D E0100	羽 sits about 3.5 units further right and 0.7 units wider, and the left-falling stroke of 兀 starts with its own head in one drawing and grows from the horizontal above in the other.
