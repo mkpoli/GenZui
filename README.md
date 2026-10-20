@@ -83,7 +83,7 @@ separate typographic assessment.
 Shared ideographs keep Japanese regional forms. Chinese and Korean coverage
 follows each face’s Noto base, with 卄 from the matching Noto CJK font.
 Releases carry Noto's 14,682 Adobe-Japan1 variation sequences. Source builds
-of both faces add 5,138 Moji_Joho, Hanyo-Denshi, KRName, CAAPH and MSARG
+of both faces add 5,137 Moji_Joho, Hanyo-Denshi, KRName, CAAPH and MSARG
 sequences that select one of those glyphs; [IVD notes](research/ivd.md).
 Both families have Regular and Bold.
 
