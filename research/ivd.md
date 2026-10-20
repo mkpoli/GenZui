@@ -47,7 +47,14 @@ split radicals, so cross-font image matching is not used.
 Sixty mapped Moji_Joho sequences were rendered beside IPAmj's glyph for the same
 sequence and IPAmj's other variants of the base character. Thirty were drawn at
 random and thirty from characters with four or more Moji_Joho variants. All
-sixty selected the IPAmj shape. `check_serif.py`, `check_bold.py`,
+sixty selected the IPAmj shape.
+
+The 999 aliases that change Serif Regular's glyph were also reviewed by eye,
+each beside the plain and variant forms of GenZui, IPAmj and Jigmo. The first
+402 of them, the three outside the Basic Multilingual Plane and every sequence
+through U+6F64 潤 E0104, have no wrong mapping.
+
+`check_serif.py`, `check_bold.py`,
 `check_sans.py` and `check_sans_bold.py` require every face's variation
 sequences to equal Noto's plus the aliases. They also
 require each alias to shape, horizontally and vertically, to the glyph of its
