@@ -80,7 +80,7 @@ uv pip sync --python .venv-tangut/bin/python requirements.lock
 .venv-tangut/bin/python scripts/tangut_specimen.py
 bun install --frozen-lockfile
 bunx playwright-core install chromium firefox
-devrun bun scripts/check_tangut_browser.mjs
+devrun node scripts/check_tangut_browser.mjs
 .venv-tangut/bin/python scripts/package_tangut_sans.py
 ```
 
@@ -94,7 +94,7 @@ font downloads work without external assets.
 The browser check starts a temporary local server and closes it after checking
 Chromium and Firefox. `CHROMIUM_EXECUTABLE_PATH` and `FIREFOX_EXECUTABLE_PATH`
 can select installed browser binaries. Its screenshots use 2× pixel density,
-in light and dark themes. On systems without `devrun`, run the same Bun script
+in light and dark themes. On systems without `devrun`, run the same Node script
 inside the local resource-management wrapper.
 
 Font checks cover exact source coverage, nonempty outlines, winding, metrics,
