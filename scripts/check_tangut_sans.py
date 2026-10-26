@@ -5,13 +5,26 @@ import json
 import numpy as np
 import pathops
 import uharfbuzz as hb
-from PIL import Image, ImageDraw, ImageFont
 from fontTools.pens.areaPen import AreaPen
 from fontTools.ttLib import TTFont
+from PIL import Image, ImageDraw, ImageFont
+from scipy.ndimage import label
+from tangut_geometry import groups_for, initialize
+from tangut_sans import (
+    FAMILY,
+    OUT,
+    ROOT,
+    SANS,
+    SERIF,
+    STEM,
+    VERSION,
+    build_hashes,
+    digest,
+    target,
+    unicode_ranges,
+)
 
 from sources import verify
-from tangut_geometry import groups_for, initialize
-from tangut_sans import FAMILY, OUT, ROOT, SANS, SERIF, STEM, VERSION, digest, target
 
 
 def audit_structure(source, result, cps):
@@ -56,21 +69,21 @@ def audit_structure(source, result, cps):
 
 
 def check():
-    verify(manifest="tangut-manifest.json")
+    manifest = verify(manifest="tangut-manifest.json")
     data = json.loads((OUT / "sources.json").read_text())
     assert data["version"] == VERSION and not data["sample"], (
         "A full build is required."
     )
-    assert data["geometry_sha256"] == digest(ROOT / "scripts/tangut_geometry.py"), (
-        "Rebuild after geometry changes."
+    assert data["scripts_sha256"] == build_hashes(), (
+        "Rebuild after construction changes."
     )
-    assert data["builder_sha256"] == digest(ROOT / "scripts/tangut_sans.py"), (
-        "Rebuild after builder changes."
-    )
+    assert data["source_manifest"] == manifest, "Rebuild after source changes."
     source = TTFont(SERIF)
     cps = target(source)
     source.close()
     expected = set(cps) | {0x20, 0xA0}
+    assert data["tangut_characters"] == len(cps) == len(data["glyphs"])
+    assert unicode_ranges(expected) in (OUT / "genzui-sans-tangut.css").read_text()
     fonts = {ext: TTFont(OUT / (STEM + "." + ext)) for ext in ("ttf", "woff2")}
     binaries = {}
     for ext, font in fonts.items():
@@ -81,6 +94,10 @@ def check():
         assert font["name"].getDebugName(6) == STEM
         assert "Open Font License" in font["name"].getDebugName(13)
         assert font["OS/2"].fsType == 0 and font["OS/2"].usWeightClass == 400
+        assert font["OS/2"].panose.bProportion == 0
+        assert font["name"].getName(2, 3, 1, 0x411).toUnicode() == "Regular"
+        assert font["name"].getName(17, 3, 1, 0x411).toUnicode() == "Regular"
+        assert "Copyright 2022 The Noto Project Authors" in font["name"].getDebugName(0)
         glyphset = font.getGlyphSet()
         for name in font.getGlyphOrder():
             outline = font["glyf"][name]
@@ -129,6 +146,36 @@ def check():
     )
     row = np.asarray(image)[920 - 780, 40:840] > 127
     assert int((np.diff(np.r_[False, row, False].astype(int)) == 1).sum()) == 3
+    # Separate dots and stacked components must remain separate. Count actual
+    # rendered ink, because checking only holes misses accidental joins.
+    for cp, ink_count, counter_count in (
+        (0x17002, 4, 0),
+        (0x17006, 4, 0),
+        (0x17007, 3, 2),
+        (0x17011, 5, 0),
+        (0x17012, 5, 0),
+        (0x17017, 6, 0),
+        (0x17010, 5, 1),
+        (0x1701E, 4, 3),
+    ):
+        raster = Image.new("L", (720, 720))
+        preview = ImageFont.truetype(str(OUT / (STEM + ".ttf")), 640)
+        ImageDraw.Draw(raster).text(
+            (40, 603), chr(cp), font=preview, fill=255, anchor="ls"
+        )
+        ink = np.asarray(raster) > 127
+        regions, n = label(ink)
+        substantial = sum(
+            np.count_nonzero(regions == i) > 1000 * 0.64**2 for i in range(1, n + 1)
+        )
+        assert substantial == ink_count, f"Joined or lost source region: U+{cp:X}"
+        regions, n = label(~ink)
+        counters = sum(
+            np.count_nonzero(regions == i) > 2000 * 0.64**2
+            for i in range(1, n + 1)
+            if i != regions[0, 0]
+        )
+        assert counters == counter_count, f"Changed counter topology: U+{cp:X}"
     initialize(SERIF, SANS)
     for cp in (0x173AC, 0x17CB6, 0x17EEB, 0x1807A):
         for records, _ in groups_for(cp):
@@ -193,6 +240,8 @@ def check():
         "encoded_characters": len(expected),
         "ttf_sha256": digest(OUT / (STEM + ".ttf")),
         "woff2_sha256": digest(OUT / (STEM + ".woff2")),
+        "sources_sha256": digest(OUT / "sources.json"),
+        "checker_sha256": digest(ROOT / "scripts/check_tangut_sans.py"),
         "checks": [
             "exact source repertoire",
             "nonempty outlines and clockwise winding",
@@ -205,6 +254,9 @@ def check():
             "three-stem header",
             "offset-stem grid counters",
             "whole-repertoire substantial ink and counter retention",
+            "separate dots and stacked components",
+            "new counter regressions",
+            "source licences, localized names and CSS repertoire",
         ],
     }
     (OUT / "checks.json").write_text(json.dumps(report, indent=2) + "\n")

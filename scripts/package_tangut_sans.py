@@ -4,7 +4,9 @@ import json
 import time
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
-from tangut_sans import EPOCH, OUT, ROOT, STEM, VERSION, digest
+from tangut_sans import EPOCH, OUT, ROOT, STEM, VERSION, build_hashes, digest
+
+from sources import verify
 
 
 def package():
@@ -13,6 +15,14 @@ def package():
         report = json.loads((OUT / filename).read_text())
         reports[filename] = report
         assert report["status"] == "passed", f"Validation failed: {filename}"
+        checker = (
+            "check_tangut_sans.py"
+            if filename == "checks.json"
+            else "check_tangut_browser.mjs"
+        )
+        assert report["checker_sha256"] == digest(ROOT / "scripts" / checker), (
+            f"Rerun changed checker: {checker}"
+        )
         for ext in ("ttf", "woff2"):
             assert report[ext + "_sha256"] == digest(OUT / (STEM + "." + ext)), (
                 f"Stale {filename}; rerun validation."
@@ -22,11 +32,9 @@ def package():
     ), "Rerun browser checks after specimen changes."
     sources = json.loads((OUT / "sources.json").read_text())
     assert not sources["sample"] and sources["version"] == VERSION
-    for key, script in (
-        ("geometry", "tangut_geometry.py"),
-        ("builder", "tangut_sans.py"),
-    ):
-        assert sources[key + "_sha256"] == digest(ROOT / "scripts" / script)
+    assert sources["scripts_sha256"] == build_hashes()
+    assert sources["source_manifest"] == verify(manifest="tangut-manifest.json")
+    assert reports["checks.json"]["sources_sha256"] == digest(OUT / "sources.json")
     (OUT / "README.txt").write_text(
         f"GenZui Sans Tangut Regular {VERSION}\n"
         "源萃ゴシック西夏文字\n\n"

@@ -8,24 +8,31 @@ import os
 import shutil
 from concurrent.futures import ProcessPoolExecutor
 from importlib.metadata import version
-from pathlib import Path
 
 from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.cu2quPen import Cu2QuPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
+from tangut_geometry import draw_glyph, initialize
 
 from sources import ROOT, verify
-from tangut_geometry import draw_glyph, initialize
 
 OUT = ROOT / "build/tangut-sans"
 SERIF = ROOT / "sources/upstream/NotoSerifTangut/NotoSerifTangut-Regular.ttf"
 SANS = ROOT / "sources/upstream/NotoSansCJKjp/NotoSansCJKjp-Regular.otf"
-VERSION = "0.001"
+VERSION = "0.002"
 FAMILY = "GenZui Sans Tangut"
 FAMILY_JA = "源萃ゴシック西夏文字"
 STEM = "GenZuiSansTangut-Regular"
-EPOCH = 1792972800  # 2026-10-26, UTC.
+EPOCH = 1793059200  # 2026-10-27, UTC.
+BUILD_SCRIPTS = (
+    "tangut_sans.py",
+    "tangut_geometry.py",
+    "tangut_stems.py",
+    "tangut_spacing.py",
+    "tangut_design.py",
+    "tangut_folds.py",
+)
 SAMPLES = [
     0x17000,
     0x17134,
@@ -49,11 +56,40 @@ SAMPLES = [
     0x1888C,
     0x18929,
     0x16FE0,
+    0x17001,
+    0x17002,
+    0x17006,
+    0x17007,
+    0x17010,
+    0x17011,
+    0x17017,
+    0x1701E,
+    0x17837,
+    0x18A46,
+    0x188BB,
+    0x18943,
+    0x185AD,
+    0x18A1E,
+    0x18AEF,
 ]
 
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def build_hashes():
+    return {name: digest(ROOT / "scripts" / name) for name in BUILD_SCRIPTS}
+
+
+def unicode_ranges(cps):
+    spans = []
+    for cp in sorted(cps):
+        if spans and cp == spans[-1][1] + 1:
+            spans[-1][1] = cp
+        else:
+            spans.append([cp, cp])
+    return ", ".join(f"U+{a:X}" + (f"-{b:X}" if a != b else "") for a, b in spans)
 
 
 def target(font):
@@ -66,17 +102,20 @@ def target(font):
 
 def build(workers=1, sample=False):
     manifest = verify(fetch=True, manifest="tangut-manifest.json")
+    inputs = build_hashes()
     os.environ["SOURCE_DATE_EPOCH"] = str(EPOCH)
     OUT.mkdir(parents=True, exist_ok=True)
     serif, sans = TTFont(SERIF), TTFont(SANS)
     assert serif["head"].unitsPerEm == sans["head"].unitsPerEm == 1000
+    assert serif["name"].getDebugName(5).startswith("Version 2.168")
+    assert sans["name"].getDebugName(5).startswith("Version 2.004")
     cps = sorted(SAMPLES) if sample else target(serif)
     pen = TTGlyphPen(None)
     sans.getGlyphSet()[".notdef"].draw(
         Cu2QuPen(pen, max_err=0.4, reverse_direction=True)
     )
     glyphs = {".notdef": pen.glyph(), "space": TTGlyphPen(None).glyph()}
-    metrics = {".notdef": (1000, 100), "space": (250, 0)}
+    metrics = {".notdef": (1000, 100), "space": sans["hmtx"][sans.getBestCmap()[0x20]]}
     cmap = {0x20: "space", 0xA0: "space"}
     provenance = {}
     print(
@@ -107,6 +146,14 @@ def build(workers=1, sample=False):
             if record.nameID == 0
         )
     )
+    for family in ("NotoSerifTangut", "NotoSansCJKjp"):
+        header = (
+            (ROOT / "sources/upstream" / family / "OFL.txt")
+            .read_text()
+            .split("\n\n")[0]
+        )
+        if header not in notices:
+            notices += "\n" + header
     notices += "\nCopyright 2026 GenZui project authors."
     fb = FontBuilder(1000, isTTF=True)
     fb.setupGlyphOrder(list(glyphs))
@@ -136,12 +183,13 @@ def build(workers=1, sample=False):
     )
     for name_id, text in {
         1: FAMILY_JA,
+        2: "Regular",
         4: FAMILY_JA + " Regular",
         16: FAMILY_JA,
+        17: "Regular",
     }.items():
         fb.font["name"].setName(text, name_id, 3, 1, 0x411)
     panose = copy.copy(sans["OS/2"].panose)
-    panose.bProportion = 9
     fb.setupOS2(
         version=4,
         usWeightClass=400,
@@ -162,6 +210,9 @@ def build(workers=1, sample=False):
     fb.font.save(OUT / (STEM + ".ttf"))
     fb.font.flavor = "woff2"
     fb.font.save(OUT / (STEM + ".woff2"))
+    assert build_hashes() == inputs, (
+        "Construction code changed during the build; rerun it."
+    )
     methods = {
         "family": FAMILY,
         "version": VERSION,
@@ -169,8 +220,7 @@ def build(workers=1, sample=False):
         "sample": sample,
         "tangut_characters": len(cps),
         "source_manifest": manifest,
-        "geometry_sha256": digest(ROOT / "scripts/tangut_geometry.py"),
-        "builder_sha256": digest(Path(__file__)),
+        "scripts_sha256": inputs,
         "environment": {
             name: version(name)
             for name in (
@@ -201,6 +251,8 @@ def build(workers=1, sample=False):
         + "\n\n"
         + "Noto Serif Tangut 2.168: character geometry and repertoire.\n"
         + "https://github.com/notofonts/tangut\n"
+        + "Pinned Noto Tangut Glyphs sources: stem zones and straight-edge coordinates.\n"
+        + "https://github.com/notofonts/tangut/tree/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d\n"
         + "Noto Sans CJK JP Regular 2.004: horizontal and vertical stroke outlines.\n"
         + "https://github.com/notofonts/noto-cjk/tree/main/Sans\n"
         + "GenZui: square-terminal curve reconstruction, stroke fitting and spacing.\n"
@@ -212,11 +264,16 @@ def build(workers=1, sample=False):
         '@font-face {\n  font-family: "GenZui Sans Tangut";\n'
         + f'  src: url("{STEM}.woff2") format("woff2");\n'
         + "  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n"
-        + "  unicode-range: U+16FE0, U+17000-18AFF, U+18D00-18DFF;\n}\n"
+        + "  unicode-range: "
+        + unicode_ranges(cmap)
+        + ";\n}\n"
     )
     serif.close()
     sans.close()
-    print("Wrote build/tangut-sans/" + STEM + ".ttf and .woff2", flush=True)
+    print(
+        "Wrote " + str(OUT.resolve().relative_to(ROOT) / STEM) + ".ttf and .woff2",
+        flush=True,
+    )
 
 
 if __name__ == "__main__":
@@ -225,7 +282,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--sample",
         action="store_true",
-        help="Build the 22-character design specimen only.",
+        help="Build the design specimen characters only.",
     )
     args = parser.parse_args()
     build(args.workers, args.sample)

@@ -23,6 +23,12 @@
       "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/LICENSE",
       "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
       "size": 4301
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/tangut-source.tar.gz",
+      "url": "https://codeload.github.com/notofonts/tangut/tar.gz/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d",
+      "sha256": "431ebe3846f3661f4ba58cf3420d1186a385d02813828e7f4e75b29490ce76d7",
+      "size": 7134461
     }
   ]
 }

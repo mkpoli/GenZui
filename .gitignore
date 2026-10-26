@@ -9,3 +9,4 @@ build/
 dist/
 node_modules/
 .wrangler/
+sources/upstream/*/*.tar.gz

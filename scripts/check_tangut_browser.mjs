@@ -109,7 +109,7 @@ try {
       assert.equal(await page.locator('.row').count(), 0);
       assert.match(await page.locator('.empty').innerText(), /No matching/);
       await page.locator('textarea').fill('𗀀𗟕𘢌');
-      await page.locator('#search').fill(String.fromCodePoint(0x17000, 0x177D5, 0x17837, 0x17DD6, 0x1888C, 0x18A46));
+      await page.locator('#search').fill(String.fromCodePoint(0x16FE0, 0x17000, 0x17002, 0x17017, 0x177D5, 0x17DD6, 0x188BB, 0x18943, 0x18A46));
       if (engine === chromium) {
         for (const theme of ['light', 'dark']) {
           await page.evaluate(theme => document.documentElement.dataset.theme = theme, theme);
@@ -143,5 +143,5 @@ try {
       console.log(engine.name() + ': passed');
     } finally { await browser.close(); }
   }
-  fs.writeFileSync(path.join(out, 'browser-checks.json'), JSON.stringify({ status: 'passed', family: 'GenZui Sans Tangut', ...hashes, specimen_sha256: hash(path.join(out, 'index.html')), browsers: results }, null, 2) + '\n');
+  fs.writeFileSync(path.join(out, 'browser-checks.json'), JSON.stringify({ status: 'passed', family: 'GenZui Sans Tangut', ...hashes, specimen_sha256: hash(path.join(out, 'index.html')), checker_sha256: hash(import.meta.filename), browsers: results }, null, 2) + '\n');
 } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }

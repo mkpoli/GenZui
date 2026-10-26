@@ -164,7 +164,7 @@ derivative with historical katakana and Ainu kana.
 ### GenZui Sans Tangut
 
 **GenZui Sans Tangut / 源萃ゴシック西夏文字** is a separate Regular face in
-development (0.001), with square Gothic terminals. Its 6,914 Tangut characters
+development (0.002), with square Gothic terminals. Its 6,914 Tangut characters
 follow Noto Serif Tangut 2.168: 6,145 ideographs, 768 components and the iteration
 mark. Noto Sans CJK JP supplies straight stroke outlines. Dense joins and small
 counters need further proofreading; later Tangut additions and Components

@@ -1,26 +1,26 @@
 # GenZui Sans Tangut
 
-**GenZui Sans Tangut Regular / 源萃ゴシック西夏文字**, version 0.001, is a
+**GenZui Sans Tangut Regular / 源萃ゴシック西夏文字**, version 0.002, is a
 development companion to GenZui Sans. It uses Noto Serif Tangut's character
 structures, with square Gothic terminals and strokes from Noto Sans CJK JP.
 
 The font contains the Tangut repertoire of Noto Serif Tangut 2.168: **6,145
 ideographs, 768 components and U+16FE0 TANGUT ITERATION MARK**. Space and NBSP
 bring the encoded total to 6,916. Later Tangut additions and Components
-Supplement are absent. This is source-font coverage, not complete Unicode 18
-Tangut coverage.
+Supplement are absent. Coverage is limited to the source font’s repertoire.
 
 ## Sources
 
 | Source | Role | Pinned input |
 | --- | --- | --- |
 | [Noto Serif Tangut](https://github.com/notofonts/tangut), 2.168 | Character structures and repertoire | [Regular TTF](https://github.com/notofonts/noto-fonts/blob/526169d273a5d9b22035d72ec509932fb7abd59a/unhinted/ttf/NotoSerifTangut/NotoSerifTangut-Regular.ttf) |
+| [Noto Tangut Glyphs sources](https://github.com/notofonts/tangut/tree/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d) | Stem positions; straight-edge verification; coordinates for three redrawn forms | [Source archive](https://codeload.github.com/notofonts/tangut/tar.gz/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d) |
 | [Noto Sans CJK](https://github.com/notofonts/noto-cjk), JP Regular 2.004 | Horizontal 一 and vertical 丨 stroke outlines; missing-glyph box | [Regular OTF](https://github.com/notofonts/noto-cjk/blob/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf) |
 
 Both source fonts use SIL OFL 1.1. Their unmodified licence texts are kept in
 `sources/upstream/` and included in the package. The new family has its own
 name and carries both source copyright notices. The
-[source manifest](../sources/tangut-manifest.json) pins all four input files,
+[source manifest](../sources/tangut-manifest.json) pins all five input files,
 including licences, by URL, byte size and SHA-256. Generated `sources.json`
 adds script hashes, library versions and construction records for every glyph.
 
@@ -39,28 +39,47 @@ The builder works in the source fonts' 1,000-unit em square:
    [skeletonize](https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.skeletonize).
    Prune short terminal branches while checking whether they continue through
    a crossing. Distances use Euclidean arc length.
-3. Fit the Sans donor outlines to nearly horizontal and vertical segments.
-   Smooth other segments into cubic paths and stroke them with square terminals
-   and miter joins through [Skia PathOps](https://github.com/fonttools/skia-pathops).
-4. Recover long vertical stems from the original ink when pruning shortened
-   them. Check the original stroke direction to avoid placing vertical pegs on
-   diagonal terminals. A recovered centreline must follow original ink on at
-   least 95% of its rows, so offset uprights cannot bridge a counter.
-5. Union the outlines and convert curves to quadratic TrueType contours with
-   FontTools. Keep 1,000-unit horizontal and vertical advances for Tangut.
+3. Fit straight stems to the source’s stem zones where the centreline or
+   parallel contour edges support a straight stroke. Keep curved stems curved.
+   Fit the Sans donor outlines to horizontal and vertical segments.
+4. Preserve angular corners while smoothing gradual curves. Recover tight
+   angular reversals by intersecting the adjacent straight runs, requiring the
+   fitted corner to stay inside source ink. Cap curve handles
+   to prevent overshoot, then stroke with square terminals and miter joins through
+   [Skia PathOps](https://github.com/fonttools/skia-pathops).
+5. Fit each source region separately. Shorten free terminals where widening
+   would join neighbouring regions, keeping each region’s initial placement fixed.
+   Recover long source-supported vertical stems
+   when pruning shortened them.
+6. Use signed contour areas to detect substantial new counters. Reopen a local
+   route through the source’s white space where widening closes a gap. Preserve
+   substantial original counters when less than 35% of their white area survives;
+   ignore tiny serif gaps below 2,000 square units.
+7. Draw U+16FE0, U+188BB and U+18943 from explicit source-derived centrelines.
+   Their folds or closely spaced bars need individual treatment. Coordinates
+   follow the pinned Glyphs sources; stroke weight and terminals are editorial
+   sans adjustments, recorded per glyph in `sources.json`.
+8. Union the outlines and convert curves to quadratic TrueType contours with
+   FontTools. Keep 1,000-unit horizontal and vertical advances for Tangut, with
+   the Sans source’s space width.
 
-Stroke width is `64 × min(1, √(3600 / L))`, where `L` is the glyph's total
-centre-line length in font units. Dense forms receive thinner strokes. Curved
-strokes are reconstructed; the source supplies their placement, and the Sans
-font supplies the straight stroke shapes.
+Stroke width is `68 × min(1, (4200 / L)^0.4)`, where `L` is the glyph’s total
+centre-line length in font units. Dense forms receive thinner strokes. The
+source supplies the placement of reconstructed curves, and the Sans font
+supplies the straight stroke shapes.
 
 ## Limits
 
 This method preserves character placement but changes contour details. It
-needs further proofreading at dense joins, hooks and small counters. Some
-very small gaps close; U+188BB is a known example. Automated coverage and
+needs further proofreading at dense joins, hooks and small counters. Closely spaced parts can
+still touch, and some folded strokes remain too rounded. These need individual
+design work beyond the generic reconstruction. Automated coverage and
 outline checks do not establish that every character is typographically
 correct. The repertoire has not been proofread in full.
+
+Known finishing cases include nearly invisible gaps in U+174B9 and U+17346,
+a dogleg in U+17423’s curved stem, and rounded folds in U+17419. These forms
+are included in the comparison examples.
 
 The face is Regular only, unhinted, with no Latin, kana or general punctuation.
 Install it beside GenZui Sans, or add it after GenZui Sans in a CSS font stack.
@@ -84,25 +103,30 @@ devrun node scripts/check_tangut_browser.mjs
 .venv-tangut/bin/python scripts/package_tangut_sans.py
 ```
 
-The builder fetches and verifies missing sources. `--sample` builds 22 design
+The builder fetches and verifies missing sources. `--sample` builds 37 design
 samples; packaging requires the full build. Output is in `build/tangut-sans/`:
 TTF, WOFF2, CSS, an offline comparison specimen and a ZIP with licences and
 validation reports. Open `index.html` to compare the source and new face,
-browse components, search code points and type sample text. The specimen and
+browse dense forms and all 768 components, search code points and type sample
+text. The comparison uses a shared baseline and em size, with grid, overlay and
+baseline-guide controls. The specimen and
 font downloads work without external assets.
 
 The browser check starts a temporary local server and closes it after checking
 Chromium and Firefox. `CHROMIUM_EXECUTABLE_PATH` and `FIREFOX_EXECUTABLE_PATH`
-can select installed browser binaries. Its screenshots use 2× pixel density,
+can select compatible browser binaries; Firefox requires Playwright’s patched
+build. Its screenshots use 2× pixel density,
 in light and dark themes. On systems without `devrun`, run the same Node script
 inside the local resource-management wrapper.
 
 Font checks cover exact source coverage, nonempty outlines, winding, metrics,
 TTF/WOFF2 parity, horizontal and vertical HarfBuzz shaping, counter containment,
-crossing continuation and recovered stems. A whole-repertoire screen requires
+crossing continuation, recovered stems, separate dots and new-counter
+regressions. They also verify source notices, localized names and CSS coverage. A whole-repertoire screen requires
 at least 10% overlap for source ink regions of 1,000 square units or more and
 at least 10% retained white area for counters of 2,000 square units or more.
 These thresholds catch whole lost regions; they do not rate visual quality.
 Browser checks cover font loading,
 raster parity at four sizes, specimen controls and mobile layout. Packaging
-rejects stale font or specimen reports and verifies every ZIP member.
+rejects stale font, source, construction-script or checker reports and verifies
+every ZIP member.
