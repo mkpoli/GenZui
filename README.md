@@ -161,10 +161,24 @@ traces each source back to the fonts it came from.
 Related project: **[Kureedo / クレード](https://kureedo.mkpo.li/)**, a Klee One
 derivative with historical katakana and Ainu kana.
 
+### GenZui Sans Tangut
+
+**GenZui Sans Tangut / 源萃ゴシック西夏文字** is a separate Regular face in
+development (0.001), with square Gothic terminals. Its 6,914 Tangut characters
+follow Noto Serif Tangut 2.168: 6,145 ideographs, 768 components and the iteration
+mark. Noto Sans CJK JP supplies straight stroke outlines. Dense joins and small
+counters need further proofreading; later Tangut additions and Components
+Supplement are absent.
+
+Build the TTF, WOFF2 and offline comparison specimen with the
+[Tangut build instructions](research/tangut-sans.md#build-and-inspect).
+That document covers the method, source citations, licences and known limits.
+
 ## Build the fonts
 
 Python 3.12 is supported. Source fonts and Unicode data are pinned by URL and
-SHA-256 in `sources/manifest.json` and `sources/sans-manifest.json`.
+SHA-256 in `sources/manifest.json`, `sources/sans-manifest.json` and
+`sources/tangut-manifest.json`.
 The variation-sequence table `data/ivd/aliases.tsv` is derived by
 `scripts/ivd.py derive` from a GlyphWiki extract, a review list and the files in
 `sources/ivd-manifest.json`.
