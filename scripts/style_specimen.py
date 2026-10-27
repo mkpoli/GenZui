@@ -36,6 +36,26 @@ def build():
             != structure["prediction_manifests"][name]
         ):
             raise ValueError("Tangut screen belongs to different predictions")
+    cleanup = json.loads((OUT / "cleanup/report.json").read_text())
+    verify_binding(cleanup)
+    for name in MODELS:
+        if cleanup["prediction_manifests"][name] != digest(
+            OUT / name / "inference.json"
+        ):
+            raise ValueError("Cleanup belongs to different predictions")
+    for name, expected in cleanup["scripts"].items():
+        if digest(ROOT / "scripts" / name) != expected:
+            raise ValueError("Cleanup implementation changed")
+    cleanup_by_cp = {}
+    for row in cleanup["records"]:
+        if digest(OUT / "cleanup" / row["svg"]) != row["sha256"]:
+            raise ValueError("Fitted outline changed")
+        if (
+            digest(OUT / "cleanup" / row["svg"].replace(".svg", ".png"))
+            != row["raster_sha256"]
+        ):
+            raise ValueError("Fitted raster changed")
+        cleanup_by_cp.setdefault(row["cp"], {})[row["model"]] = row
     directory = OUT / "proof"
     directory.mkdir(exist_ok=True)
     assets = directory / "glyphs"
@@ -81,6 +101,7 @@ def build():
     structure_by_cp = {row["cp"]: row["methods"] for row in structure["records"]}
     raster_checks = []
     font_checks = []
+    cleanup_checks = []
     for script in ("cjk", "tangut"):
         fields = {
             name: np.load(OUT / name / f"{script}-field.npy", mmap_mode="r")
@@ -140,17 +161,38 @@ def build():
                     font_checks.append(
                         {"svg": glyphs[name], "mask": f"glyphs/{reference_name}"}
                     )
+            for name in MODELS:
+                fitted = cleanup_by_cp[cp][name]
+                filename = fitted["svg"]
+                shutil.copyfile(OUT / "cleanup" / filename, assets / filename)
+                glyphs[name + "-fitted"] = f"glyphs/{filename}"
+                if len(cleanup_checks) < (24 if script == "cjk" else 48):
+                    pixels = Image.open(
+                        OUT / "cleanup" / filename.replace(".svg", ".png")
+                    )
+                    reference = Image.new("RGBA", pixels.size, (0, 0, 0, 0))
+                    reference.putalpha(pixels)
+                    reference_name = filename.replace(".svg", "-mask.png")
+                    reference.save(assets / reference_name)
+                    cleanup_checks.append(
+                        {
+                            "svg": glyphs[name + "-fitted"],
+                            "mask": f"glyphs/{reference_name}",
+                        }
+                    )
             records.append(
                 {
                     **metrics_by_cp.get(cp, row),
                     "glyphs": glyphs,
                     "structure": structure_by_cp.get(cp),
+                    "cleanup": cleanup_by_cp[cp],
                 }
             )
     for font in fonts.values():
         font.close()
     experiment = {
         "summary": metrics["summary"],
+        "cleanup_summary": cleanup["summary"],
         "structure_summary": structure["summary"],
         "records": records,
         "training": {
@@ -167,6 +209,8 @@ def build():
         template.replace("__DATA__", json.dumps(experiment))
     )
     (directory / "vector-checks.json").write_text(json.dumps(raster_checks) + "\n")
+    (directory / "cleanup-checks.json").write_text(json.dumps(cleanup_checks) + "\n")
+    shutil.copyfile(OUT / "cleanup/report.json", directory / "cleanup-report.json")
     (directory / "font-checks.json").write_text(json.dumps(font_checks) + "\n")
     for name in ("dataset.json", "metrics.json", "tangut-structure.json"):
         shutil.copyfile(OUT / name, directory / name)
@@ -195,7 +239,8 @@ def build():
             )
         },
         "heuristic_provenance_sha256": digest(ROOT / "build/tangut-sans/sources.json"),
-        "rendering": "Noto, heuristic and Lorchin use original vector contours at a shared em origin. Learned outlines are zero contours of a 256px predicted field, with no stroke fitting, smoothing or hinting.",
+        "cleanup_sha256": digest(OUT / "cleanup/report.json"),
+        "rendering": "Noto, heuristic and Lorchin use original vector contours at a shared em origin. Learned outlines are zero contours of a 256px predicted field, without hinting. The fitted comparison smooths and fits those zero contours with bounded displacement and raster region checks; its parameters and results are recorded in cleanup-report.json.",
         "lorchin": "Comparison only. WTFPL repository license; exact upstream Tangut glyph revisions are unverified. The release history mentions HanaGothLiteTangut.otf extracted from KAGE fonts.",
     }
     (directory / "sources.json").write_text(json.dumps(record, indent=2) + "\n")

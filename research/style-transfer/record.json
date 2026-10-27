@@ -1,29 +1,33 @@
 {
   "scripts": {
     "style_baseline.py": "7050a14e5186c0a980724ef2fbd8efe8d87586811929e717bd75a47cccc27cdc",
+    "style_cleanup.py": "61222c0f8ae9b636507e0e32dd0a715da7cfff3a6adb8ee9cd36dd9ccb6db798",
     "style_common.py": "49f6ab5393fd81494a87f5687722018888c1a7e0cc9a611da2a0f6c74b9e36d9",
     "style_data.py": "9d751281a4806b07678e59f8403fa6ddfe8c56e1df70b3b88ea4dfee1e2ffc1a",
     "style_infer.py": "b271d72b464503d1ce298f7747586f713bb4daa56cfbf8c8c6966f9dc80e2b60",
     "style_metrics.py": "86ed29067fb1d8b184bb4ad80eb793ebee4d92f8de3ca42436c0bbd37e72e031",
     "style_network.py": "841dca168911b72290e32f90bde22e7dd7175c2502fcbbb838237a875d25ea9e",
-    "style_specimen.py": "953d6948117959a99335fffde1b0ea1a751bb1cf6efa4a950b8165bdcf289ad9",
+    "style_outline_fit.py": "29f05ed3162e8f336635602177566ebc5e9169911d9fdacfbdc430ee701a01b8",
+    "style_specimen.py": "f39eff33355f233cdd819f2cb01e849b7ed039b66c7e958678b97c7fda7ad88c",
     "style_tangut_structure.py": "b29835d1373267b2ab30e56e490f97892208c29e9c946f1e460ca8a8d77d0c11",
     "style_vectors.py": "87de10eb186fc09fc2af16a22a2bc00a58dbcbd59fd05cd440a5e111fa1c0803"
   },
   "report_files": {
     "baseline.json": "27a8db6e22a99e54410ea5ad8aef86d8b882e95838f9eba7fb6d6ab71cad3036",
-    "browser-checks.json": "a799ec6a4e7933558e6b6259d69ba92f91270b180ba65432dd2753e021a6a699",
+    "browser-checks.json": "713934eabad8bfdf11377a2397cd2cdc84df639633222f8c582b416f619a415b",
     "checks.json": "5d27c9d3337aaabfcf507813517a2b0e6147986448ccdaa11874adfa830f3937",
+    "cleanup-checks.json": "4cbab3d050325c973d898da1a0e3a56bef9ca9fc39108d7258cfdf6989ffa448",
+    "cleanup.json": "bf5fc9d0592c117fb97ddc21700c6b5ad29872a210d50c238e7caea42442a5dc",
     "dataset.json": "d0ce0b94720bb391f705826d4115633e334a1eb462f5fdd0d8a77c7888cbc962",
     "dual-style-inference.json": "7acc8c40f1b3085b6b1113e43fa3b7ec012da2e1c71155753bfd4b55d8299001",
     "dual-style-training.json": "ec23530583c360a1337f4ab67f86505d0d370289fd103be9542eb1fc0d808ff3",
     "metrics.json": "91fe64aa2084fffd7dc82d9608575480c5b80c67fb74f48652bf79b5e72d0137",
     "no-latent-inference.json": "e9bc867cc72a86ac21be71c5f77b8d4c0f1844fafd0243d7be1d1998548542ba",
     "no-latent-training.json": "f4bc7a05e3a2fe2b7c4414f6ddd21f92df6e093a3ef9d506ebffad5a4c98544a",
-    "sources.json": "3073ebccc0d7105fb261c908a43b06d54aec316387a98ea7b57dfc6c56deb367",
+    "sources.json": "f023b5465d0eb8b82686c6a61ff5555fd04534521b816208e5ced3ecadd1b5ca",
     "split.json": "e922e3246809be65fc7a0f947d3277ae726b924715ca482cc2445e43294b82f7",
     "tangut-structure.json": "5c6ae9c5fc5c962f13b58756bd5a73249770ea32f19c8c51b396832f83aef7ae"
   },
-  "html_template_sha256": "8b4071a85135fb2fdeb1256ed310f5e3497d2b8bc9482e110016dd8ac05e8fb2",
+  "html_template_sha256": "d4d742c2555a0a934b33704751de29be2e828190b7d2bfe4882c943fcea79d7b",
   "scope": "Exploratory paired CJK benchmark with unpaired Tangut transfer. Fixed one-seed comparison; no final font claim."
 }

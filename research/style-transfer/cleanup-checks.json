@@ -1,0 +1,8 @@
+{
+  "cases": 952,
+  "empty_and_invalid_fields": "pass",
+  "region_loss": "pass",
+  "raster_area": "400px for a 20 by 20 rectangle",
+  "report_sha256": "bf5fc9d0592c117fb97ddc21700c6b5ad29872a210d50c238e7caea42442a5dc",
+  "script_sha256": "fc0c9c0801ca1d057bcab18a161789866e0e12d052d08f5d95b47483c2080a0a"
+}

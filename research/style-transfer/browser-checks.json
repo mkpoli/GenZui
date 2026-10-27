@@ -19,6 +19,13 @@
           "mean_iou": 0.974239528122423,
           "max_difference_beyond_one_pixel": 0,
           "worst_pair": "glyphs/8533-serif.svg"
+        },
+        "cleanup-checks.json": {
+          "cases": 48,
+          "min_iou": 0.9861739439841407,
+          "mean_iou": 0.9906502190972488,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/17DD6-no-latent-fitted.svg"
         }
       }
     },
@@ -41,10 +48,17 @@
           "mean_iou": 0.9740951811574702,
           "max_difference_beyond_one_pixel": 0,
           "worst_pair": "glyphs/8533-serif.svg"
+        },
+        "cleanup-checks.json": {
+          "cases": 48,
+          "min_iou": 0.9860071134406589,
+          "mean_iou": 0.9906606024691746,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/17C2E-dual-style-fitted.svg"
         }
       }
     }
   ],
-  "html_sha256": "7915415bf7622f233ccf4b82c6bf55fe589da72661e3e64c6fb465902526127f",
-  "script_sha256": "449769e09747e416aef314cc442db237986af7f37d5b0f7aa4f0f5d7b0c76b45"
+  "html_sha256": "eac5509feb637370e5644d1713c470a24542a798aaca39259b22192a950e16c0",
+  "script_sha256": "e2c565952ac23151d8b11da02fe2df86831c2314e256b69c809e5f652ebb92de"
 }

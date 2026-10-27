@@ -87,6 +87,40 @@ Component counts change in 80, 82 and 9 glyphs respectively. Those changes
 include small joins and splits and require inspection. The proof can filter
 to the counter-closure cases.
 
+## Outline cleanup
+
+| Model | CJK test overlap, raw → fitted | Tangut path segments | Original retained |
+| --- | --- | --- | --- |
+| Shared-feature constraint | 71.40% → 71.34% | 323,457 → 19,842 | 1/140 |
+| Without constraint | 71.27% → 71.21% | 324,854 → 19,898 | 1/140 |
+
+The cleanup view compares the raw learned contour with fitted straight segments
+and cubic Bézier curves. It resamples each contour by arc length, smooths the
+samples, and fits curves by least squares. Four strengths are tried in descending
+order. A fit must stay within 1.1 pixels of the sampled source boundary, keep at
+least 94% ink overlap at 512px, and retain one-to-one correspondence of ink regions
+and enclosed counters at both 256px and 512px. If every fit fails, the original
+contour is retained. These raster checks do not prove continuous topology at
+other scales.
+
+The pass preserves the learned terminal and join design. Rounded ends, uneven
+stroke weights and already-closed counters remain. The full 952-case report and
+source bindings are in `cleanup.json`; `cleanup-checks.json` records integrity
+and geometric regression checks. Each source SVG, reference PNG, inference
+manifest, fitting script, scoring script and serializer is bound by SHA-256.
+
+Raster controls use an explicit zero-width pen with the fill brush.
+[aggdraw's implementation](https://github.com/pytroll/aggdraw/blob/main/aggdraw/_aggdraw.cxx)
+expands brush-only contours; the zero-width pen retains the original fill area.
+The checker verifies a 20×20 rectangle has 400 pixels of ink, as well as empty fields
+and component/counter loss. Browser checks compare 48 fitted SVGs with their
+raster controls in Chromium and Firefox.
+
+Related tracing reference: Peter Selinger,
+[Potrace: a polygon-based tracing algorithm](https://potrace.sourceforge.net/potrace.pdf)
+(2003). This experiment uses its own least-squares curve fitter, without Potrace
+code.
+
 ## Sources
 
 The [source manifest](../../sources/style-manifest.json) pins URLs, sizes and
@@ -129,7 +163,8 @@ Then run these commands in separate units with the same batch wrapper:
 
 For the Tangut comparison, first build the 0.002 font using the
 [font instructions](../tangut-sans.md#build-and-inspect), then run
-`style_tangut_structure.py` and `style_specimen.py` in batch units.
+`style_tangut_structure.py`, `style_cleanup.py`, `check_style_cleanup.py`, and
+`style_specimen.py` in batch units.
 `devrun node scripts/check_style_browser.mjs` checks the proof in Chromium and
 Firefox. The existing browser executable environment variables are supported.
 The offline proof is `build/style-transfer/proof/index.html`.
