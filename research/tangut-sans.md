@@ -4,6 +4,11 @@
 development companion to GenZui Sans. It uses Noto Serif Tangut's character
 structures, with square Gothic terminals and strokes from Noto Sans CJK JP.
 
+The geometric conversion still has visible stroke and junction defects.
+The [paired CJK style experiment](style-transfer/README.md) measures that
+baseline against actual Noto Sans drawings and compares learned conversion.
+Its Tangut outputs also remain experimental.
+
 The font contains the Tangut repertoire of Noto Serif Tangut 2.168: **6,145
 ideographs, 768 components and U+16FE0 TANGUT ITERATION MARK**. Space and NBSP
 bring the encoded total to 6,916. Later Tangut additions and Components

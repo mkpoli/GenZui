@@ -1,9 +1,11 @@
 .venv/
 .venv-sans/
 .venv-tangut/
+.venv-style/
 __pycache__/
 sources/upstream/*/*.ttf
 sources/upstream/*/*.otf
+sources/upstream/*/*.woff2
 data/unicode/*.txt
 build/
 dist/

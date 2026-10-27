@@ -1,0 +1,17 @@
+{
+  "checkpoint_step": 2200,
+  "checkpoint_sha256": "f02f0c447c6fb879b6f4668a87177b878988f6fcd7ca80e4a03aa75a4f728839",
+  "dataset_sha256": "d0ce0b94720bb391f705826d4115633e334a1eb462f5fdd0d8a77c7888cbc962",
+  "selection": "Highest validation IoU; test and Tangut excluded from selection",
+  "counts": {
+    "cjk": 2640,
+    "tangut": 140
+  },
+  "script_sha256": "b271d72b464503d1ce298f7747586f713bb4daa56cfbf8c8c6966f9dc80e2b60",
+  "output_sha256": {
+    "cjk-field.npy": "27f5d10aed1855007895e28e0b322e649188b13cfa4689413ffa3a5ad16ed01f",
+    "cjk-pred.npy": "6a1208eaa0928c5aecc42486f97ef0c5297b2aedfa5e311fd512a8e4344f6cbb",
+    "tangut-field.npy": "3b51cf23f90285e62d5155dae262b531398ab0db5046f778931e36a3b6d8c6ba",
+    "tangut-pred.npy": "5632eea50f0cfe45c2380297461151d346c4f6fac8f49c876f02f29f0e7b1c34"
+  }
+}

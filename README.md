@@ -173,6 +173,8 @@ Supplement are absent.
 Build the TTF, WOFF2 and offline comparison specimen with the
 [Tangut build instructions](research/tangut-sans.md#build-and-inspect).
 That document covers the method, source citations, licences and known limits.
+The [paired Serif/Sans experiment](research/style-transfer/README.md) measures
+conversion error against Noto Sans CJK and shows experimental Tangut transfer.
 
 ## Build the fonts
 

@@ -1,0 +1,27 @@
+Source font copyright notices
+
+serif
+© 2017-2024 Adobe (http://www.adobe.com/).
+
+sans
+© 2014-2021 Adobe (http://www.adobe.com/).
+
+heuristic
+
+
+tangut-serif
+Copyright 2021 Google LLC. All Rights Reserved.
+
+tangut-heuristic
+Copyright 2021 Google LLC. All Rights Reserved.
+© 2014-2021 Adobe (http://www.adobe.com/).
+Copyright 2022 The Noto Project Authors (https://github.com/notofonts/tangut)
+This Font Software is licensed under the SIL Open Font License,
+Version 1.1.
+Copyright 2026 GenZui project authors.
+
+lorchin
+Copyright (c) 2025 by Kage, Losketch. All rights reserved.
+
+Font source URLs, SHA-256 hashes and licenses: sources.json.
+Noto and derived GenZui glyph artwork: SIL OFL 1.1. Lorchin: upstream WTFPL.
