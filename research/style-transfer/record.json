@@ -14,7 +14,7 @@
   },
   "report_files": {
     "baseline.json": "27a8db6e22a99e54410ea5ad8aef86d8b882e95838f9eba7fb6d6ab71cad3036",
-    "browser-checks.json": "713934eabad8bfdf11377a2397cd2cdc84df639633222f8c582b416f619a415b",
+    "browser-checks.json": "61a8ebc75eb35e47961677b0d0d86464de5005f8cd24c9bd2b229e5d3dfed35e",
     "checks.json": "5d27c9d3337aaabfcf507813517a2b0e6147986448ccdaa11874adfa830f3937",
     "cleanup-checks.json": "4cbab3d050325c973d898da1a0e3a56bef9ca9fc39108d7258cfdf6989ffa448",
     "cleanup.json": "bf5fc9d0592c117fb97ddc21700c6b5ad29872a210d50c238e7caea42442a5dc",
@@ -24,10 +24,10 @@
     "metrics.json": "91fe64aa2084fffd7dc82d9608575480c5b80c67fb74f48652bf79b5e72d0137",
     "no-latent-inference.json": "e9bc867cc72a86ac21be71c5f77b8d4c0f1844fafd0243d7be1d1998548542ba",
     "no-latent-training.json": "f4bc7a05e3a2fe2b7c4414f6ddd21f92df6e093a3ef9d506ebffad5a4c98544a",
-    "sources.json": "f023b5465d0eb8b82686c6a61ff5555fd04534521b816208e5ced3ecadd1b5ca",
+    "sources.json": "39583a0a475d73213d315a3cb22a5592cdcf77b677f6d765e85c3fa1a45bd4f3",
     "split.json": "e922e3246809be65fc7a0f947d3277ae726b924715ca482cc2445e43294b82f7",
     "tangut-structure.json": "5c6ae9c5fc5c962f13b58756bd5a73249770ea32f19c8c51b396832f83aef7ae"
   },
-  "html_template_sha256": "d4d742c2555a0a934b33704751de29be2e828190b7d2bfe4882c943fcea79d7b",
+  "html_template_sha256": "87337a01d811f4c56f68155de40620ec01a04872dc2b2b3b647b7e98387c50ef",
   "scope": "Exploratory paired CJK benchmark with unpaired Tangut transfer. Fixed one-seed comparison; no final font claim."
 }

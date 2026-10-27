@@ -86,7 +86,7 @@
   "scripts": {
     "style_specimen.py": "f39eff33355f233cdd819f2cb01e849b7ed039b66c7e958678b97c7fda7ad88c",
     "style_vectors.py": "87de10eb186fc09fc2af16a22a2bc00a58dbcbd59fd05cd440a5e111fa1c0803",
-    "style-specimen.html": "d4d742c2555a0a934b33704751de29be2e828190b7d2bfe4882c943fcea79d7b"
+    "style-specimen.html": "87337a01d811f4c56f68155de40620ec01a04872dc2b2b3b647b7e98387c50ef"
   },
   "heuristic_provenance_sha256": "64eff22c6f052f01abdced46d4f977c57f175e6b111029ea6cf18477ec33f55f",
   "cleanup_sha256": "bf5fc9d0592c117fb97ddc21700c6b5ad29872a210d50c238e7caea42442a5dc",

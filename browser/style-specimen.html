@@ -13,7 +13,7 @@
 <div class="brand"><span>GENZUI · FONT RESEARCH</span><button id="theme" type="button">Dark theme</button></div>
 <h1>Learning Serif → Sans</h1>
 <div class="intro"><p>A paired CJK experiment for Tangut. Noto Serif supplies the input; the CJK target is the actual Noto Sans drawing. Tangut receives the same learned conversion.</p><p class="quiet">Pilot · 2,048 training pairs · 256 validation pairs · 256 test characters · 78 stress forms + 2 donor controls · 140 Tangut samples</p><p>The learned shapes improve CJK overlap but round corners and alter small gaps. Tangut has no Sans target here; its drawings need visual and structural review.</p></div>
-<div class="table-wrap"><table aria-label="CJK test results"><thead><tr><th>256 test characters</th><th>Overlap ↑</th><th>Boundary error ↓</th><th>Ink / target</th><th>Topology counts agree</th></tr></thead><tbody id="scores"></tbody></table></div>
+<div class="table-wrap"><table aria-label="CJK test results"><caption style="text-align:left;padding:0 12px 8px;color:var(--muted)">Conversion results before curve fitting</caption><thead><tr><th>256 test characters</th><th>Overlap ↑</th><th>Boundary error ↓</th><th>Ink / target</th><th>Topology counts agree</th></tr></thead><tbody id="scores"></tbody></table></div>
 <p class="quiet">Overlap is mean intersection-over-union. Boundary error is measured in a 1,000-unit em. Topology counts are a raster diagnostic for disconnected parts and enclosed white spaces; matching counts do not prove correct structure.</p>
 <div class="toolbar">
 <label>View<select id="view"><option value="cleanup">Outline cleanup</option><option value="methods">Style conversion</option></select></label>
