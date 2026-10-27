@@ -1,0 +1,191 @@
+{
+  "name": "no-latent",
+  "history": [
+    {
+      "step": 1,
+      "seconds": 21.5,
+      "loss": 5.01374,
+      "validation_iou": 0.614944,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 100,
+      "seconds": 30.8,
+      "loss": 0.41308,
+      "validation_iou": 0.649643,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 200,
+      "seconds": 34.0,
+      "loss": 0.41496,
+      "validation_iou": 0.644096,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 300,
+      "seconds": 37.1,
+      "loss": 0.29702,
+      "validation_iou": 0.67286,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 400,
+      "seconds": 40.2,
+      "loss": 0.20395,
+      "validation_iou": 0.683724,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 500,
+      "seconds": 43.3,
+      "loss": 0.22003,
+      "validation_iou": 0.693885,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 600,
+      "seconds": 46.3,
+      "loss": 0.13134,
+      "validation_iou": 0.692593,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 700,
+      "seconds": 49.5,
+      "loss": 0.12525,
+      "validation_iou": 0.704381,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 800,
+      "seconds": 52.8,
+      "loss": 0.12483,
+      "validation_iou": 0.696988,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 900,
+      "seconds": 56.0,
+      "loss": 0.09467,
+      "validation_iou": 0.702609,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1000,
+      "seconds": 59.2,
+      "loss": 0.10186,
+      "validation_iou": 0.694034,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1100,
+      "seconds": 62.3,
+      "loss": 0.08621,
+      "validation_iou": 0.70321,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1200,
+      "seconds": 65.4,
+      "loss": 0.08534,
+      "validation_iou": 0.708839,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1300,
+      "seconds": 68.6,
+      "loss": 0.07398,
+      "validation_iou": 0.712287,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1400,
+      "seconds": 71.8,
+      "loss": 0.08112,
+      "validation_iou": 0.70822,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1500,
+      "seconds": 75.0,
+      "loss": 0.07034,
+      "validation_iou": 0.711552,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1600,
+      "seconds": 78.5,
+      "loss": 0.07384,
+      "validation_iou": 0.711195,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1700,
+      "seconds": 82.6,
+      "loss": 0.07288,
+      "validation_iou": 0.714349,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1800,
+      "seconds": 87.1,
+      "loss": 0.07284,
+      "validation_iou": 0.717657,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 1900,
+      "seconds": 92.6,
+      "loss": 0.08265,
+      "validation_iou": 0.716361,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 2000,
+      "seconds": 96.1,
+      "loss": 0.07676,
+      "validation_iou": 0.714316,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 2100,
+      "seconds": 99.5,
+      "loss": 0.07936,
+      "validation_iou": 0.705171,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 2200,
+      "seconds": 103.5,
+      "loss": 0.0777,
+      "validation_iou": 0.718912,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 2300,
+      "seconds": 106.9,
+      "loss": 0.08657,
+      "validation_iou": 0.717226,
+      "peak_vram_mib": 3904
+    },
+    {
+      "step": 2400,
+      "seconds": 110.8,
+      "loss": 0.07852,
+      "validation_iou": 0.717329,
+      "peak_vram_mib": 3904
+    }
+  ],
+  "regularization": 0.0,
+  "identity_fraction": 0.2,
+  "max_steps": 2400,
+  "max_seconds": 900,
+  "torch": "2.11.0+cu128",
+  "device": "NVIDIA GeForce RTX 5070 Ti",
+  "seed": 20261027,
+  "dataset_sha256": "d0ce0b94720bb391f705826d4115633e334a1eb462f5fdd0d8a77c7888cbc962",
+  "script_sha256": "841dca168911b72290e32f90bde22e7dd7175c2502fcbbb838237a875d25ea9e",
+  "checkpoint_sha256": "10192aafde4fdf0d2f56b75194b332130b939a59537c76e94b9978b330afd468",
+  "determinism": "Fixed sampling and initialization seeds; CUDA benchmark mode may be nondeterministic"
+}

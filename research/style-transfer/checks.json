@@ -1,0 +1,12 @@
+{
+  "dataset_sha256": "d0ce0b94720bb391f705826d4115633e334a1eb462f5fdd0d8a77c7888cbc962",
+  "metrics_sha256": "91fe64aa2084fffd7dc82d9608575480c5b80c67fb74f48652bf79b5e72d0137",
+  "script_sha256": "2cec98367a946809ff72416d5922c89684dee4a67cc8f8c21aa33e38596f92bb",
+  "split_disjointness": "pass",
+  "source_bounds_and_coverage": "pass",
+  "artifact_bindings": "pass",
+  "validation_checkpoint_selection": "pass",
+  "strict_zero_threshold": "pass",
+  "metric_identity_translation_empty_controls": "pass",
+  "donor_controls_excluded_from_stress_aggregate": "pass"
+}

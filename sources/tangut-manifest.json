@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "path": "sources/upstream/NotoSerifTangut/NotoSerifTangut-Regular.ttf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/526169d273a5d9b22035d72ec509932fb7abd59a/unhinted/ttf/NotoSerifTangut/NotoSerifTangut-Regular.ttf",
+      "sha256": "788a67394f60f7cf1bd6f08aa3ac5d933e2612e82816a6ba718050724e32659e",
+      "size": 3096460
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/tangut/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d/OFL.txt",
+      "sha256": "bd8b32c064be2225d55f878a689063c6f169ccd9e2792d7051f0d74cf4816f1b",
+      "size": 4382
+    },
+    {
+      "path": "sources/upstream/NotoSansCJKjp/NotoSansCJKjp-Regular.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf",
+      "sha256": "68a3fc98800b2a27b371f2fb79991daf3633bd89309d4ffaa6946fd587f375b5",
+      "size": 16467736
+    },
+    {
+      "path": "sources/upstream/NotoSansCJKjp/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/LICENSE",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "size": 4301
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/tangut-source.tar.gz",
+      "url": "https://codeload.github.com/notofonts/tangut/tar.gz/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d",
+      "sha256": "431ebe3846f3661f4ba58cf3420d1186a385d02813828e7f4e75b29490ce76d7",
+      "size": 7134461
+    }
+  ]
+}

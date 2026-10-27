@@ -1,0 +1,95 @@
+{
+  "sources": [
+    {
+      "path": "sources/upstream/NotoSerifCJKjp/NotoSerifCJKjp-Regular.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/OTF/Japanese/NotoSerifCJKjp-Regular.otf",
+      "sha256": "d9854c7a8ef170b5a7932558856fd64eb8de0b007cd823fed6f9f514ad2803d3",
+      "size": 24573864
+    },
+    {
+      "path": "sources/upstream/NotoSerifCJKjp/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Serif/LICENSE",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "size": 4301
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/NotoSerifTangut-Regular.ttf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/526169d273a5d9b22035d72ec509932fb7abd59a/unhinted/ttf/NotoSerifTangut/NotoSerifTangut-Regular.ttf",
+      "sha256": "788a67394f60f7cf1bd6f08aa3ac5d933e2612e82816a6ba718050724e32659e",
+      "size": 3096460
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/tangut/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d/OFL.txt",
+      "sha256": "bd8b32c064be2225d55f878a689063c6f169ccd9e2792d7051f0d74cf4816f1b",
+      "size": 4382
+    },
+    {
+      "path": "sources/upstream/NotoSansCJKjp/NotoSansCJKjp-Regular.otf",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/OTF/Japanese/NotoSansCJKjp-Regular.otf",
+      "sha256": "68a3fc98800b2a27b371f2fb79991daf3633bd89309d4ffaa6946fd587f375b5",
+      "size": 16467736
+    },
+    {
+      "path": "sources/upstream/NotoSansCJKjp/OFL.txt",
+      "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/f8d157532fbfaeda587e826d4cd5b21a49186f7c/Sans/LICENSE",
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+      "size": 4301
+    },
+    {
+      "path": "sources/upstream/LorchinSans/LorchinSansP0.woff2",
+      "url": "https://github.com/Losketch/LorchinSans/releases/download/V2.500/LorchinSansP0.woff2",
+      "sha256": "327d753cb11630c0f769fdbab9f26d66c3edd2efc4920871252742a8f59e716c",
+      "size": 4263684
+    },
+    {
+      "path": "sources/upstream/LorchinSans/LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/Losketch/LorchinSans/3d833e682074fe5644cb77ff0b3225ead467f710/LICENSE",
+      "sha256": "44590fb49d2740d0ef8d88deab115873fca22fdaf3917016bfd4fb14fa80f985",
+      "size": 488
+    },
+    {
+      "path": "sources/upstream/NotoSerifTangut/tangut-source.tar.gz",
+      "url": "https://codeload.github.com/notofonts/tangut/tar.gz/50cf91d55a0f3ce3d9dd910eedc4f7094544f04d",
+      "sha256": "431ebe3846f3661f4ba58cf3420d1186a385d02813828e7f4e75b29490ce76d7",
+      "size": 7134461
+    }
+  ],
+  "display_fonts": {
+    "serif": {
+      "path": "sources/upstream/NotoSerifCJKjp/NotoSerifCJKjp-Regular.otf",
+      "sha256": "d9854c7a8ef170b5a7932558856fd64eb8de0b007cd823fed6f9f514ad2803d3"
+    },
+    "sans": {
+      "path": "sources/upstream/NotoSansCJKjp/NotoSansCJKjp-Regular.otf",
+      "sha256": "68a3fc98800b2a27b371f2fb79991daf3633bd89309d4ffaa6946fd587f375b5"
+    },
+    "heuristic": {
+      "path": "build/style-transfer/baseline.ttf",
+      "sha256": "d7d9d91f5d93f58f4a91ea6c5ba23c22980390b1e2918a50760ec955a1e5e539"
+    },
+    "tangut-serif": {
+      "path": "sources/upstream/NotoSerifTangut/NotoSerifTangut-Regular.ttf",
+      "sha256": "788a67394f60f7cf1bd6f08aa3ac5d933e2612e82816a6ba718050724e32659e"
+    },
+    "tangut-heuristic": {
+      "path": "build/tangut-sans/GenZuiSansTangut-Regular.ttf",
+      "sha256": "9cf4f134b5e7885c928d8d714e4fcf46dc236d9ce914bcacaa1d1dbb5cf16f2e"
+    },
+    "lorchin": {
+      "path": "sources/upstream/LorchinSans/LorchinSansP0.woff2",
+      "sha256": "327d753cb11630c0f769fdbab9f26d66c3edd2efc4920871252742a8f59e716c"
+    }
+  },
+  "dataset_sha256": "d0ce0b94720bb391f705826d4115633e334a1eb462f5fdd0d8a77c7888cbc962",
+  "metrics_sha256": "91fe64aa2084fffd7dc82d9608575480c5b80c67fb74f48652bf79b5e72d0137",
+  "scripts": {
+    "style_specimen.py": "f39eff33355f233cdd819f2cb01e849b7ed039b66c7e958678b97c7fda7ad88c",
+    "style_vectors.py": "87de10eb186fc09fc2af16a22a2bc00a58dbcbd59fd05cd440a5e111fa1c0803",
+    "style-specimen.html": "87337a01d811f4c56f68155de40620ec01a04872dc2b2b3b647b7e98387c50ef"
+  },
+  "heuristic_provenance_sha256": "64eff22c6f052f01abdced46d4f977c57f175e6b111029ea6cf18477ec33f55f",
+  "cleanup_sha256": "bf5fc9d0592c117fb97ddc21700c6b5ad29872a210d50c238e7caea42442a5dc",
+  "rendering": "Noto, heuristic and Lorchin use original vector contours at a shared em origin. Learned outlines are zero contours of a 256px predicted field, without hinting. The fitted comparison smooths and fits those zero contours with bounded displacement and raster region checks; its parameters and results are recorded in cleanup-report.json.",
+  "lorchin": "Comparison only. WTFPL repository license; exact upstream Tangut glyph revisions are unverified. The release history mentions HanaGothLiteTangut.otf extracted from KAGE fonts."
+}

@@ -6,3 +6,4 @@ Pillow>=11,<13
 numpy>=2,<3
 scipy>=1.15,<2
 scikit-image>=0.25,<0.27
+aggdraw==1.4.1

@@ -1,0 +1,64 @@
+{
+  "results": [
+    {
+      "browser": "chromium",
+      "controls": "pass",
+      "mobile": "no overflow",
+      "page_errors": [],
+      "vector": {
+        "vector-checks.json": {
+          "cases": 48,
+          "min_iou": 0.988125,
+          "mean_iou": 0.9946668190393816,
+          "max_difference_beyond_one_pixel": 0.00016068559185859668,
+          "worst_pair": "glyphs/17C2D-dual-style.svg"
+        },
+        "font-checks.json": {
+          "cases": 72,
+          "min_iou": 0.9277456647398844,
+          "mean_iou": 0.974239528122423,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/8533-serif.svg"
+        },
+        "cleanup-checks.json": {
+          "cases": 48,
+          "min_iou": 0.9861739439841407,
+          "mean_iou": 0.9906502190972488,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/17DD6-no-latent-fitted.svg"
+        }
+      }
+    },
+    {
+      "browser": "firefox",
+      "controls": "pass",
+      "mobile": "no overflow",
+      "page_errors": [],
+      "vector": {
+        "vector-checks.json": {
+          "cases": 48,
+          "min_iou": 0.9881826525929326,
+          "mean_iou": 0.9946760827454862,
+          "max_difference_beyond_one_pixel": 0.00016068559185859668,
+          "worst_pair": "glyphs/7F75-no-latent.svg"
+        },
+        "font-checks.json": {
+          "cases": 72,
+          "min_iou": 0.9325189929986594,
+          "mean_iou": 0.9740951811574702,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/8533-serif.svg"
+        },
+        "cleanup-checks.json": {
+          "cases": 48,
+          "min_iou": 0.9860071134406589,
+          "mean_iou": 0.9906606024691746,
+          "max_difference_beyond_one_pixel": 0,
+          "worst_pair": "glyphs/17C2E-dual-style-fitted.svg"
+        }
+      }
+    }
+  ],
+  "html_sha256": "c0e18272160715ed7ecd1f4a73f327880940d4d28dfaac6ddb36c5b410f497dd",
+  "script_sha256": "e2c565952ac23151d8b11da02fe2df86831c2314e256b69c809e5f652ebb92de"
+}
