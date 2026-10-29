@@ -17,6 +17,7 @@
 .sp-face img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px var(--sp-ring),0 0 0 2.5px var(--sp-line)}
 .sp-face svg{position:absolute;inset-inline-end:-4px;bottom:-3px;width:12px;height:12px;fill:var(--sp-heart);stroke:var(--sp-ring);stroke-width:2.5;paint-order:stroke;overflow:visible;transform-origin:50% 60%}
 .sp-end{display:flex;align-items:center;gap:16px}
+@media(max-width:1120px){.site-header>.sp-pill{width:38px;padding:0;justify-content:center}.site-header>.sp-pill .sp-label{display:none}}
 @media(max-width:760px){.site-header>.sp-pill{margin-inline-start:auto}}
 .prompt .sp-pill{order:2}
 @media(max-width:720px){.sp-pill{width:38px;padding:0;justify-content:center}.sp-label{display:none}}
