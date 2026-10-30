@@ -315,6 +315,12 @@ glyphs appear as images rendered from the pinned files, in
 .venv/bin/python scripts/compare_site.py    # writes build/site/compare.html
 ```
 
+## Sponsor
+
+I build GenZui on my own, with no funding behind it, and it's free for everyone. If it's useful to you, a tip on [Ko-fi](https://ko-fi.com/mkpoli) gives me time to keep improving it. Companies interested in sponsoring can write to mkpoli@mkpo.li.
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mkpoli)
+
 ## Licences and credits
 
 - **Font outlines and font binaries:** [SIL OFL 1.1](OFL.txt).
