@@ -31,7 +31,7 @@ DIALOG = (
     '<span class="sp-spark sp-s1">✦</span><span class="sp-spark sp-s2">✦</span><span class="sp-spark sp-s3">✦</span></div>'
     '<p class="sp-lead">I build GenZui on my own, with no funding behind it. It\'s free for everyone, and I\'d like to keep it that way.</p>'
     '<p class="sp-ask">If GenZui is useful to you, a tip on Ko-fi gives me time to keep improving it.</p>'
-    '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap Ko-fi below.</li><li>Pick any amount, one-time or monthly.</li>'
+    '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap Ko-fi below.</li><li>Pick any amount.</li>'
     '<li>Pay with PayPal or a card. No sign-up needed.</li></ol></div>'
     '<a class="sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener"><span class="sp-mark" aria-hidden="true">'
     '<svg viewBox="0 0 24 24"><path d="M4 9h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4ZM16 11h2a2.5 2.5 0 0 1 0 5h-2M7 3v3M11 2v3M15 3v3"/></svg></span>'
@@ -39,7 +39,7 @@ DIALOG = (
     '<svg class="sp-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>'
     '<a class="sp-company" href="mailto:mkpoli@mkpo.li?subject=Sponsorship%20on%20genzui.mkpo.li">'
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>'
-    '<span class="sp-copy"><strong>Company sponsorship</strong><small>Companies can sponsor too, with an ad on this site. Write to mkpoli@mkpo.li.</small></span></a>'
+    '<span class="sp-copy"><strong>Company sponsorship</strong><small>Companies can sponsor too. Write to mkpoli@mkpo.li.</small></span></a>'
     '<p class="sp-thanks">Thank you for using GenZui 💗</p>'
     '</div></dialog>')
 
