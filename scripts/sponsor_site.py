@@ -30,7 +30,7 @@ DIALOG = (
     f'<svg viewBox="0 0 24 24"><path d="{HEART}"/><ellipse cx="7.6" cy="9.6" rx="1.5" ry="2.1" transform="rotate(-30 7.6 9.6)"/></svg></span>'
     '<span class="sp-spark sp-s1">✦</span><span class="sp-spark sp-s2">✦</span><span class="sp-spark sp-s3">✦</span></div>'
     '<p class="sp-lead">I build GenZui on my own, with no funding behind it. It\'s free for everyone, and I\'d like to keep it that way.</p>'
-    '<p class="sp-ask">If GenZui is useful to you, a tip on Ko-fi gives me time to keep improving it.</p>'
+    '<p class="sp-ask">If GenZui is useful to you, a tip gives me time to keep improving it.</p>'
     '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap Ko-fi below.</li><li>Pick any amount.</li>'
     '<li>Pay with PayPal or a card. No sign-up needed.</li></ol></div>'
     '<a class="sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener">'
