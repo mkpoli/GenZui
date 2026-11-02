@@ -47,10 +47,9 @@
 .sp-steps{display:flex;flex-direction:column;gap:6px;padding:0;list-style:none;counter-reset:sp-step}
 .sp-steps li{display:flex;align-items:baseline;gap:8px;margin:0;padding:0;font-size:13px;line-height:1.45;counter-increment:sp-step}
 .sp-steps li::before{content:counter(sp-step);display:grid;place-items:center;flex:none;width:20px;height:20px;border-radius:50%;background:var(--sp-ink);color:var(--sp-soft);font-size:11px;font-weight:700;line-height:1;transform:translateY(-1px)}
-.sp-dialog a.sp-kofi,.sp-dialog a.sp-kofi:hover{display:flex;align-items:center;gap:12px;padding-block:12px;padding-inline:12px 18px;border-radius:999px;background:linear-gradient(135deg,#d81b60,#b0124f);color:#fff;text-decoration:none;box-shadow:0 6px 16px rgb(216 27 96/.32)}
-.sp-mark{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;background:rgb(255 255 255/.22)}
-.sp-mark svg,.sp-arrow,.sp-company svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.sp-mark svg{width:20px;height:20px}
+.sp-dialog a.sp-kofi,.sp-dialog a.sp-kofi:hover{display:flex;align-items:center;gap:12px;padding-block:12px;padding-inline:12px 18px;border-radius:999px;border:1px solid light-dark(#202020,rgb(255 255 255/.2));background:#202020;color:#fff;text-decoration:none;box-shadow:0 6px 16px rgb(32 32 32/.28)}
+.sp-dialog .sp-mark{display:block;flex:none;width:38px;height:30px;object-fit:contain}
+.sp-arrow,.sp-company svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .sp-arrow{flex:none;width:18px;height:18px}
 .sp-arrow:dir(rtl){transform:scaleX(-1)}
 .sp-copy{display:flex;flex:1;flex-direction:column;gap:1px;min-width:0}
@@ -73,7 +72,7 @@
   .sp-s3{animation-delay:1.6s}
   .sp-dialog[open]{animation:sp-arrive .32s cubic-bezier(.2,.8,.2,1)}
   .sp-kofi{transition:transform .18s ease,box-shadow .18s ease}
-  .sp-kofi:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgb(216 27 96/.42)}
+  .sp-kofi:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgb(32 32 32/.38)}
 }
 @keyframes sp-beat{0%,70%,100%{transform:scale(1)}78%{transform:scale(1.18)}86%{transform:scale(.96)}93%{transform:scale(1.1)}}
 @keyframes sp-bounce{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-2px) scale(1.18) rotate(-8deg)}}

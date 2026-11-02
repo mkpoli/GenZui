@@ -6,12 +6,12 @@ from sources import ROOT
 
 SITE = ROOT/'site'
 HEART = 'M12 21s-8.5-5.1-8.5-11.3A4.7 4.7 0 0 1 12 6.9a4.7 4.7 0 0 1 8.5 2.8C20.5 15.9 12 21 12 21Z'
-FILES = ('sponsor.css', 'sponsor.js', 'sponsor-face.webp', 'sponsor-portrait.webp')
+FILES = ('sponsor.css', 'sponsor.js', 'sponsor-face.webp', 'sponsor-portrait.webp', 'brand/kofi-symbol.svg')
 
 
 def _hashed(name):
     path = SITE/name
-    stem, _, ext = name.rpartition('.')
+    stem, _, ext = path.name.rpartition('.')
     return f'{stem}-{hashlib.sha256(path.read_bytes()).hexdigest()[:16]}.{ext}'
 
 
@@ -33,8 +33,8 @@ DIALOG = (
     '<p class="sp-ask">If GenZui is useful to you, a tip on Ko-fi gives me time to keep improving it.</p>'
     '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap Ko-fi below.</li><li>Pick any amount.</li>'
     '<li>Pay with PayPal or a card. No sign-up needed.</li></ol></div>'
-    '<a class="sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener"><span class="sp-mark" aria-hidden="true">'
-    '<svg viewBox="0 0 24 24"><path d="M4 9h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4ZM16 11h2a2.5 2.5 0 0 1 0 5h-2M7 3v3M11 2v3M15 3v3"/></svg></span>'
+    '<a class="sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener">'
+    f'<img class="sp-mark" src="{ASSETS["brand/kofi-symbol.svg"]}" alt="" width="34" height="27">'
     '<span class="sp-copy"><strong>Ko-fi</strong><small>One-time or monthly</small></span>'
     '<svg class="sp-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>'
     '<a class="sp-company" href="mailto:mkpoli@mkpo.li?subject=Sponsorship%20on%20genzui.mkpo.li">'
