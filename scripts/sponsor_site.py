@@ -6,7 +6,7 @@ from sources import ROOT
 
 SITE = ROOT/'site'
 HEART = 'M12 21s-8.5-5.1-8.5-11.3A4.7 4.7 0 0 1 12 6.9a4.7 4.7 0 0 1 8.5 2.8C20.5 15.9 12 21 12 21Z'
-FILES = ('sponsor.css', 'sponsor.js', 'sponsor-face.webp', 'sponsor-portrait.webp', 'brand/kofi-symbol.svg')
+FILES = ('sponsor.css', 'sponsor.js', 'sponsor-face.webp', 'sponsor-portrait.webp', 'brand/kofi-symbol.svg', 'brand/ofuse-icon.svg')
 
 
 def _hashed(name):
@@ -31,12 +31,17 @@ DIALOG = (
     '<span class="sp-spark sp-s1">✦</span><span class="sp-spark sp-s2">✦</span><span class="sp-spark sp-s3">✦</span></div>'
     '<p class="sp-lead">I build GenZui on my own, with no funding behind it. It\'s free for everyone, and I\'d like to keep it that way.</p>'
     '<p class="sp-ask">If GenZui is useful to you, a tip gives me time to keep improving it.</p>'
-    '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap Ko-fi below.</li><li>Pick any amount.</li>'
-    '<li>Pay with PayPal or a card. No sign-up needed.</li></ol></div>'
-    '<a class="sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener">'
+    '<div class="sp-how"><h3>How to tip</h3><ol class="sp-steps" role="list"><li>Tap either button below.</li><li>Pick an amount.</li>'
+    '<li>Pay by card. No sign-up needed.</li></ol></div>'
+    '<div class="sp-tips">'
+    '<a class="sp-tip sp-kofi" href="https://ko-fi.com/mkpoli" target="_blank" rel="noreferrer noopener">'
     f'<img class="sp-mark" src="{ASSETS["brand/kofi-symbol.svg"]}" alt="" width="34" height="27">'
     '<span class="sp-copy"><strong>Ko-fi</strong><small>One-time or monthly</small></span>'
     '<svg class="sp-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>'
+    '<a class="sp-tip sp-ofuse" href="https://ofuse.me/mkpoli" target="_blank" rel="noreferrer noopener">'
+    f'<img class="sp-mark" src="{ASSETS["brand/ofuse-icon.svg"]}" alt="" width="26" height="28">'
+    '<span class="sp-copy"><strong>OFUSE</strong><small>Tip with a message</small></span>'
+    '<svg class="sp-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>'
     '<a class="sp-company" href="mailto:mkpoli@mkpo.li?subject=Sponsorship%20on%20genzui.mkpo.li">'
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>'
     '<span class="sp-copy"><strong>Company sponsorship</strong><small>Companies can sponsor too. Write to mkpoli@mkpo.li.</small></span></a>'
