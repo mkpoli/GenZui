@@ -61,7 +61,7 @@
       if (here) row.setAttribute('aria-current', 'true');
       return row;
     });
-    const more = el('a', { role: 'menuitem', tabindex: '-1', class: 'site-select-more', href: 'https://scripts.mkpo.li/' + MORE_PATH }, [
+    const more = el('a', { role: 'menuitem', tabindex: '-1', class: 'site-select-more', href: 'https://moji.mkpo.li/' + MORE_PATH }, [
       el('span', { class: 'site-select-name' }, [MORE]), icon('site-select-arrow', 'M7 17L17 7M9 7h8v8'),
     ]);
     menu.append(...items, el('hr', { role: 'separator' }), more);
