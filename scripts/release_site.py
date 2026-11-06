@@ -21,6 +21,7 @@ from font_chunks import build as build_chunks
 from sans_site import BOLD_STEM as SANS_BOLD_STEM, OUT as SANS_OUT, STEM as SANS_STEM, build_page as build_sans_page, checked as sans_checked
 from sources import ROOT
 from sponsor_site import inject as add_sponsor, write_assets as write_sponsor_assets
+from site_select import inject as add_select, write_assets as write_select_assets
 
 OUT = ROOT/'build/release'
 URL = 'https://genzui.mkpo.li'
@@ -89,7 +90,7 @@ def metadata(page, route, title, description, image_alt, image='genzui-social-2x
             structured_data(route, title, description, site_name)]
     page = re.sub(r'<link rel="icon"[^>]*>', '', page)
     page = page.replace('</body>', '<script src="assets/proof-font.js"></script></body>')
-    return add_sponsor(page.replace('</head>', '\n'.join(tags) + '\n</head>'))
+    return add_sponsor(add_select(page.replace('</head>', '\n'.join(tags) + '\n</head>')))
 
 
 def external_fonts(page):
@@ -206,6 +207,7 @@ def build():
     guard_name = 'proof-font-'+hashlib.sha256(guard).hexdigest()[:16]+'.js'
     (OUT/'assets'/guard_name).write_bytes(guard)
     write_sponsor_assets(OUT/'assets')
+    write_select_assets(OUT/'assets')
     home_alt = build_card(OUT/'media')
     for release in (ROOT/'releases').iterdir():
         if release.is_dir() and re.fullmatch(r'(sans-)?v[0-9.]+', release.name):shutil.copytree(release, OUT/release.name)
