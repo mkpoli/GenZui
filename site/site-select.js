@@ -20,6 +20,7 @@
     return TEXT[tag.split('-')[0]] ? tag.split('-')[0] : 'en';
   };
   const [LABEL, MORE, MORE_PATH] = TEXT[language()];
+  const NAME_KEY = /^(ja|zh)/i.test(document.documentElement.lang) ? 'name' : 'sub';
   const NS = 'http://www.w3.org/2000/svg';
   const el = (tag, props = {}, kids = []) => {
     const node = document.createElement(tag);
@@ -41,7 +42,8 @@
 
   const upgrade = link => {
     const current = link.dataset.siteSelect;
-    const trigger = el('button', { type: 'button', class: 'site-select-trigger', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-label': LABEL });
+    const name = SITES.find(site => site.id === current)[NAME_KEY];
+    const trigger = el('button', { type: 'button', class: 'site-select-trigger', 'aria-haspopup': 'menu', 'aria-expanded': 'false', 'aria-label': `${name}: ${LABEL}` });
     const style = getComputedStyle(link);
     const logo = el('span', { class: 'site-select-logo' });
     Object.assign(logo.style, { display: style.display, alignItems: style.alignItems, gap: style.columnGap });
@@ -65,6 +67,7 @@
     menu.append(...items, el('hr', { role: 'separator' }), more);
     items.push(more);
     const wrap = el('span', { class: (link.className + ' site-select').trim() }, [trigger, menu]);
+    if (link.dataset.look) wrap.dataset.look = link.dataset.look;
     link.replaceWith(wrap);
     const first = items[SITES.findIndex(site => site.id === current)] || items[0];
 
