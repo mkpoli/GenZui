@@ -9,13 +9,13 @@ HEART = 'M12 21s-8.5-5.1-8.5-11.3A4.7 4.7 0 0 1 12 6.9a4.7 4.7 0 0 1 8.5 2.8C20.
 FILES = ('sponsor.css', 'sponsor.js', 'sponsor-face.webp', 'sponsor-portrait.webp', 'brand/kofi-symbol.svg', 'brand/ofuse-icon.svg')
 
 
-def _hashed(name):
+def hashed(name):
     path = SITE/name
     stem, _, ext = path.name.rpartition('.')
     return f'{stem}-{hashlib.sha256(path.read_bytes()).hexdigest()[:16]}.{ext}'
 
 
-ASSETS = {name: 'assets/'+_hashed(name) for name in FILES}
+ASSETS = {name: 'assets/'+hashed(name) for name in FILES}
 
 PILL = (f'<button type="button" class="sp-pill" aria-haspopup="dialog" aria-controls="sponsor-dialog" aria-label="Sponsor">'
         f'<span class="sp-face" aria-hidden="true"><img src="{ASSETS["sponsor-face.webp"]}" alt="" width="26" height="26">'

@@ -1,0 +1,38 @@
+/* The site select: the logo as a button and the popover menu it opens. Colours come from the
+   page's own tokens, with the family pages' palette as the fallback; data-look="hud" is the
+   landing's dark HUD. */
+:where(.site-select){display:inline-block}
+.site-select-trigger{display:inline-flex;align-items:center;gap:6px;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;text-align:start;text-transform:inherit;white-space:nowrap;cursor:pointer}
+.site-select-trigger:hover{color:var(--green,#1f634d)}
+.site-select-trigger:focus-visible{outline:2px solid var(--green,#1f634d);outline-offset:4px}
+.site-select-chev{flex:none;width:14px;height:14px;align-self:center;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.6;transition:transform .15s}
+.site-select-trigger[aria-expanded="true"] .site-select-chev{transform:rotate(180deg)}
+.site-select-menu{position:fixed;inset:auto;margin:0;min-width:240px;max-width:calc(100vw - 16px);padding:6px;border:1px solid var(--line,#d8dfd6);border-radius:12px;background:var(--paper,#fafbf8);color:var(--ink,#202721);box-shadow:0 18px 50px rgb(0 0 0/.2);font:500 15px/1.4 Inter,"Segoe UI",system-ui,-apple-system,sans-serif;letter-spacing:0;text-align:start;text-transform:none}
+.site-select-menu:popover-open{display:flex;flex-direction:column}
+.site-select-menu a,.site-select-menu a:hover{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:8px;color:inherit;text-decoration:none}
+.site-select-menu a:hover,.site-select-menu a:focus-visible{background:var(--pale,#eff4eb);outline:none}
+.site-select-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--green,#1f634d)}
+.site-select-menu img{flex:none;width:28px;height:28px}
+.site-select-name{flex:1;min-width:0}
+.site-select-name small{display:inline;margin-inline-start:.6em;font-size:12px;font-weight:400;letter-spacing:.04em;color:var(--muted,#667068)}
+.site-select-tick{flex:none;width:16px;height:16px;fill:none;stroke:var(--green,#1f634d);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;visibility:hidden}
+.site-select-menu a[aria-current="true"] .site-select-tick{visibility:visible}
+.site-select-menu hr{margin:6px 4px;border:0;border-top:1px solid var(--line,#d8dfd6)}
+.site-select-menu .site-select-more{font-size:13.5px;font-weight:400;color:var(--muted,#667068)}
+.site-select-menu .site-select-more:hover{color:var(--ink,#202721)}
+.site-select-arrow{flex:none;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.site-select[data-look="hud"] .site-select-trigger:hover,.site-select[data-look="hud"] .site-select-trigger:hover b{color:var(--glow)}
+.site-select[data-look="hud"] .site-select-trigger:hover .site-select-chev{opacity:1}
+.site-select[data-look="hud"] .site-select-trigger:focus-visible{outline-color:var(--glow)}
+.site-select-menu[data-look="hud"]{padding:4px;border-color:var(--glow);border-radius:0;background:var(--field);color:var(--white);box-shadow:0 0 0 1px rgb(63 174 132/.25),0 18px 50px rgb(0 0 0/.6);font:600 11px/1.3 var(--hud);letter-spacing:.2em;text-transform:uppercase}
+.site-select-menu[data-look="hud"] a,.site-select-menu[data-look="hud"] a:hover{border-radius:0}
+.site-select-menu[data-look="hud"] a:hover,.site-select-menu[data-look="hud"] a:focus-visible{background:var(--panel)}
+.site-select-menu[data-look="hud"] a:focus-visible{box-shadow:inset 2px 0 0 var(--glow)}
+.site-select-menu[data-look="hud"] img{border-radius:3px}
+.site-select-menu[data-look="hud"] .site-select-name small{display:inline;color:var(--mint);letter-spacing:.2em;font-weight:600;font-size:inherit}
+.site-select-menu[data-look="hud"] .site-select-tick{stroke:var(--glow)}
+.site-select-menu[data-look="hud"] hr{border-top-color:var(--line)}
+.site-select-menu[data-look="hud"] .site-select-more{font-size:10px;font-weight:600;color:var(--mint)}
+.site-select-menu[data-look="hud"] .site-select-more:hover{color:var(--white)}
+@media(prefers-reduced-motion:reduce){.site-select-chev{transition:none}}

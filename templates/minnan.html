@@ -11,7 +11,7 @@ a{color:var(--green);text-underline-offset:4px}a:hover{color:var(--ink)}
 header,main,footer{width:min(1120px,calc(100% - 64px));margin:auto}
 header{display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:1px solid var(--line)}
 .brand{font-size:21px;text-decoration:none;color:var(--ink)}.face{font-family:GenZui,serif;font-weight:400;font-synthesis:none}
-header span,.eyebrow,.code{font-size:11px;letter-spacing:1px;color:#667068}
+header>span:not(.site-select),header .brand .face,.eyebrow,.code{font-size:11px;letter-spacing:1px;color:#667068}
 .intro{padding:62px 0 42px}.eyebrow{display:block;margin-bottom:14px}h1{font-size:clamp(32px,5vw,56px);letter-spacing:-1.5px;line-height:1.15;margin:0 0 25px;font-weight:500}
 .intro p{max-width:650px;margin:0;color:#536056;font-size:17px}h2{font-size:26px;font-weight:500;margin:0 0 12px}h3{font-size:12px;font-weight:500;margin:0}
 section{padding:35px 0;border-top:1px solid var(--line)}.lead{max-width:730px;color:#536056}
@@ -25,12 +25,12 @@ section{padding:35px 0;border-top:1px solid var(--line)}.lead{max-width:730px;co
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}.wu-card{background:white;border:1px solid var(--line);padding:24px}.wu-card svg{display:block;width:min(100%,230px);margin:12px auto}.guides{fill:none;stroke:#d8dfd6;stroke-width:2}.centre{stroke-dasharray:12 12}.outline{fill:var(--ink)}.hooked{font-feature-settings:"ss01" 1}.context{font-size:var(--size);line-height:1.6;margin:10px 0;text-align:center}
 .notes{display:grid;grid-template-columns:1fr 1fr;gap:36px}.notes p{color:#536056}.notes h3{font-size:16px}.sources{font-size:13px;color:#667068}footer{padding:30px 0 50px;border-top:1px solid var(--line);display:flex;gap:30px;flex-wrap:wrap}
 a:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:4px}
-@media(max-width:700px){header,main,footer{width:calc(100% - 36px)}.intro{padding:38px 0}.tone-grid{grid-template-columns:repeat(4,1fr)}.pair,.notes{gap:12px}.wu-card{padding:14px}.sample{padding:20px 12px}.reading{font-size:min(var(--size),36px)}.context{font-size:min(var(--size),40px)}.ruby-sample{font-size:36px}.vertical-set{gap:4px}.notes{grid-template-columns:1fr}header span{max-width:140px;text-align:right}}
+@media(max-width:700px){header,main,footer{width:calc(100% - 36px)}.intro{padding:38px 0}.tone-grid{grid-template-columns:repeat(4,1fr)}.pair,.notes{gap:12px}.wu-card{padding:14px}.sample{padding:20px 12px}.reading{font-size:min(var(--size),36px)}.context{font-size:min(var(--size),40px)}.ruby-sample{font-size:36px}.vertical-set{gap:4px}.notes{grid-template-columns:1fr}header>span:not(.site-select){max-width:140px;text-align:right}}
 @media(max-width:420px){.tone-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.tone-card{padding-inline:10px}.tone-card .code{font-size:10px;letter-spacing:.3px}.context{font-size:min(var(--size),32px)}.controls label{flex-wrap:wrap;gap:10px}}
 </style>
 </head>
 <body>
-<header><a class="brand" href="serif.html"><span class="face" lang="ja">源萃</span> GenZui Serif</a><span>REGULAR / {{VERSION}}</span></header>
+<header><a class="brand" href="serif.html" data-site-select="genzui"><span class="face" lang="ja">源萃</span> GenZui Serif</a><span>REGULAR / {{VERSION}}</span></header>
 <main>
 <div class="intro"><span class="eyebrow">KANA EXTENDED-B / ARCHAIC HIRAGANA</span><h1>Minnan kana and archaic WU.</h1><p>Thirteen Minnan tone letters, two combining marks, and a revised archaic WU extend the historical-kana repertoire. The full font now contains 17,090 encoded characters.</p></div>
 <section aria-labelledby="tones-title"><h2 id="tones-title">The thirteen tone letters</h2><p class="lead">FRB Taiwanese Kana supplies the outlines. Each tone has a half-em advance in horizontal text. In vertical text it sits to the right of the preceding kana group.</p><div class="tone-grid">{{TONES}}</div></section>
